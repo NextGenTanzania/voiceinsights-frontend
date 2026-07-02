@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — VoiceInsights</title>
+<title>Dashboard — VoiceInsights Africa</title>
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="https://unpkg.com/lucide@latest"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -77,14 +77,27 @@
   const SENTIMENT_LABEL = { positive: 'Positive', neutral: 'Neutral', negative: 'Negative', distressed: 'Distress' };
 
   (async () => {
+    let stats;
     try {
-      const stats = await apiRequest('/api/dashboard/stats');
+      stats = await apiRequest('/api/dashboard/stats');
       document.getElementById('stat-surveys').textContent = stats.active_surveys;
       document.getElementById('stat-responses').textContent = stats.total_responses;
       document.getElementById('stat-rate').textContent = stats.total_responses ? stats.response_rate + '%' : '—';
       document.getElementById('stat-sentiment').textContent = stats.total_responses ? stats.positive_sentiment_pct + '%' : '—';
+    } catch (e) {
+      console.warn('Live stats unavailable:', e.message);
+      document.getElementById('stat-surveys').textContent = '—';
+      document.getElementById('stat-responses').textContent = '—';
+      document.getElementById('stat-rate').textContent = '—';
+      document.getElementById('stat-sentiment').textContent = '—';
+      return;
+    }
 
-      // Weekly responses chart — real data if any exists this window, else a flat zero line (no fake numbers).
+    // Charts are drawn separately — if Chart.js fails to load (e.g. blocked
+    // by a network/firewall), the stat numbers above stay correct regardless.
+    try {
+      if (typeof Chart === 'undefined') throw new Error('Chart.js did not load');
+
       const weekLabels = stats.weekly.length ? stats.weekly.map(w => w.week) : ['This week'];
       const weekData = stats.weekly.length ? stats.weekly.map(w => w.n) : [0];
       new Chart(document.getElementById('chartResponses'), {
@@ -104,11 +117,8 @@
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9FB3AB', boxWidth: 10, padding: 14 } } } }
       });
     } catch (e) {
-      console.warn('Live stats unavailable:', e.message);
-      document.getElementById('stat-surveys').textContent = '—';
-      document.getElementById('stat-responses').textContent = '—';
-      document.getElementById('stat-rate').textContent = '—';
-      document.getElementById('stat-sentiment').textContent = '—';
+      console.warn('Charts unavailable:', e.message);
+      document.getElementById('chartResponses').closest('.card').querySelector('.section-head').insertAdjacentHTML('afterend', '<div class="muted-note">Chart could not load (network blocked the chart library) — numbers above are still accurate.</div>');
     }
   })();
 </script>

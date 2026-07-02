@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Billing — VoiceInsights</title>
+<title>Billing — VoiceInsights Africa</title>
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -12,30 +12,44 @@
   <main class="main">
     <div id="topbar-mount"></div>
     <div class="content">
-      <div class="grid grid-2" style="margin-bottom:1.5rem;">
-        <div class="card">
-          <div class="card-title">Current Plan</div>
-          <h3 style="font-size:1.3rem;">Professional</h3>
-          <p>$19,200 / year &middot; Contract ends March 2027</p>
-          <button class="btn btn-ghost btn-sm">Change Plan</button>
-        </div>
-        <div class="card">
-          <div class="card-title">This Month's Usage</div>
-          <div class="stat-value">4,812 <span style="font-size:.9rem; color:var(--text-dim); font-family:var(--font-body);">/ 8,000 interviews</span></div>
-          <div class="progress" style="margin-top:.8rem;"><span style="width:60%"></span></div>
-        </div>
+
+      <div id="checkout-banner" style="display:none;" class="card"></div>
+
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-title">Current Plan</div>
+        <h3 id="current-plan-name" style="font-size:1.3rem;">Loading…</h3>
+        <div id="current-plan-status" class="muted-note" style="margin-top:.3rem;"></div>
       </div>
 
-      <div class="section-head"><h2 style="font-size:1.05rem;">Historia ya Billing (Invoices)</h2></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Invoice</th><th>Date</th><th>Amount</th><th>Status</th><th></th></tr></thead>
-          <tbody>
-            <tr><td>INV-2026-0042</td><td>March 1, 2026</td><td>$19,200</td><td><span class="badge badge-success">Paid</span></td><td><a class="btn btn-ghost btn-sm" href="#">Download PDF</a></td></tr>
-            <tr><td>INV-2025-0042</td><td>March 1, 2025</td><td>$16,800</td><td><span class="badge badge-success">Paid</span></td><td><a class="btn btn-ghost btn-sm" href="#">Download PDF</a></td></tr>
-          </tbody>
-        </table>
+      <div class="section-head"><h2 style="font-size:1.05rem;">Available Plans</h2></div>
+      <div class="grid grid-3" style="margin-bottom:1.5rem;">
+        <div class="card" id="plan-starter">
+          <h3 style="font-size:1.2rem;">Starter</h3>
+          <p style="margin-bottom:1rem;">Small NGOs starting out with voice research.</p>
+          <div class="stat-value" style="font-size:1.3rem; margin-bottom:1rem;">$2K – $8K<span style="font-size:.7rem; color:var(--text-dim); font-family:var(--font-body);">/year</span></div>
+          <button class="btn btn-ghost btn-sm plan-btn" data-plan="starter" style="width:100%; justify-content:center;">Choose Starter</button>
+        </div>
+        <div class="card" id="plan-professional" style="border-color:var(--accent);">
+          <span class="badge badge-accent" style="margin-bottom:.6rem;">Most popular</span>
+          <h3 style="font-size:1.2rem;">Professional</h3>
+          <p style="margin-bottom:1rem;">Mid-size organizations running multiple campaigns.</p>
+          <div class="stat-value" style="font-size:1.3rem; margin-bottom:1rem;">$10K – $32K<span style="font-size:.7rem; color:var(--text-dim); font-family:var(--font-body);">/year</span></div>
+          <button class="btn btn-primary btn-sm plan-btn" data-plan="professional" style="width:100%; justify-content:center;">Choose Professional</button>
+        </div>
+        <div class="card" id="plan-enterprise">
+          <h3 style="font-size:1.2rem;">Enterprise</h3>
+          <p style="margin-bottom:1rem;">Large INGOs and government, with on-prem hosting.</p>
+          <div class="stat-value" style="font-size:1.3rem; margin-bottom:1rem;">$40K+<span style="font-size:.7rem; color:var(--text-dim); font-family:var(--font-body);">/year</span></div>
+          <button class="btn btn-ghost btn-sm plan-btn" data-plan="enterprise" style="width:100%; justify-content:center;">Choose Enterprise</button>
+        </div>
       </div>
+      <div id="plan-error" class="muted-note" style="color:var(--danger); display:none;"></div>
+
+      <div class="section-head"><h2 style="font-size:1.05rem;">Payment</h2></div>
+      <div class="card">
+        <p style="color:var(--text);">Payments are processed securely by <b>Stripe</b> — VoiceInsights Africa never sees or stores your card details. You'll be redirected to a secure Stripe checkout page to complete payment, then brought straight back here.</p>
+      </div>
+
     </div>
   </main>
 </div>
@@ -43,6 +57,56 @@
 <script src="/assets/js/app.js"></script>
 <script>
   if (!requireLogin()) { /* redirected */ }
-  renderShell({ role:'client', active:'/app/billing.html', eyebrow:'Account', title:'Billing & Contract' });</script>
+  renderShell({ role:'client', active:'/app/billing.html', eyebrow:'Account', title:'Billing & Subscription' });
+
+  const PLAN_LABEL = { starter: 'Starter', professional: 'Professional', enterprise: 'Enterprise' };
+
+  // Show a banner if we just came back from Stripe Checkout.
+  const params = new URLSearchParams(window.location.search);
+  const checkoutResult = params.get('checkout');
+  if (checkoutResult === 'success') {
+    const banner = document.getElementById('checkout-banner');
+    banner.style.display = 'block';
+    banner.style.borderColor = 'var(--success)';
+    banner.innerHTML = '<div class="card-title" style="color:var(--success);">Payment received</div><p style="color:var(--text);">Your subscription is being activated — this page will update automatically within a few seconds.</p>';
+  } else if (checkoutResult === 'cancelled') {
+    const banner = document.getElementById('checkout-banner');
+    banner.style.display = 'block';
+    banner.style.borderColor = 'var(--warn)';
+    banner.innerHTML = '<div class="card-title" style="color:var(--warn);">Checkout cancelled</div><p style="color:var(--text);">No payment was made. Choose a plan below whenever you\'re ready.</p>';
+  }
+
+  async function loadCurrentPlan() {
+    try {
+      const { organization } = await apiRequest('/api/organizations/me');
+      document.getElementById('current-plan-name').textContent = PLAN_LABEL[organization.billing_tier] || organization.billing_tier;
+      document.getElementById('current-plan-status').textContent = `Status: ${organization.status}`;
+    } catch (e) {
+      document.getElementById('current-plan-name').textContent = '—';
+      document.getElementById('current-plan-status').textContent = 'Could not load plan: ' + e.message;
+    }
+  }
+  loadCurrentPlan();
+  if (checkoutResult === 'success') setTimeout(loadCurrentPlan, 4000);
+
+  document.querySelectorAll('.plan-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const plan = btn.dataset.plan;
+      const errorEl = document.getElementById('plan-error');
+      errorEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Redirecting to secure checkout…';
+      try {
+        const { url } = await apiRequest('/api/billing/create-checkout-session', { method: 'POST', body: { plan } });
+        window.location.href = url;
+      } catch (e) {
+        errorEl.textContent = 'Could not start checkout: ' + e.message + ' (this plan may not be configured with a Stripe Price ID yet).';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Choose ' + PLAN_LABEL[plan];
+      }
+    });
+  });
+</script>
 </body>
 </html>

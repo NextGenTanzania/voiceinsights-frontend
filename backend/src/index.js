@@ -9,6 +9,9 @@
 //   GET  /api/analytics/summary
 //   GET  /api/fraud/alerts
 //   GET  /api/reports/csv?campaign_id=...        (Excel-compatible export)
+//   GET  /api/organizations/me                    (current org's plan/status)
+//   POST /api/billing/create-checkout-session     (Stripe Checkout — real subscriptions)
+//   POST /api/billing/webhook                     (Stripe webhook — activates plan on payment)
 //   GET  /api/public/campaigns/:id/questions      (public — web widget reads the question list)
 //   POST /api/whatsapp/webhook                    (Twilio WhatsApp — multi-question)
 //   POST /api/voice/incoming                      (Twilio Voice — language select)
@@ -191,6 +194,22 @@ export default {
       // ---------- REPORTS (CSV / Excel export) ----------
       if (path === '/api/reports/csv' && method === 'GET') {
         return await handleCsvExport(request, env, url);
+      }
+
+      // ---------- ORGANIZATION / BILLING ----------
+      if (path === '/api/organizations/me' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const org = await env.DB.prepare('SELECT id, name, type, billing_tier, status FROM organizations WHERE id = ?').bind(claims.org).first();
+        if (!org) return error('Organization not found', 404);
+        return json({ organization: org });
+      }
+
+      if (path === '/api/billing/create-checkout-session' && method === 'POST') {
+        return await handleCreateCheckoutSession(request, env);
+      }
+
+      if (path === '/api/billing/webhook' && method === 'POST') {
+        return await handleStripeWebhook(request, env);
       }
 
       // ---------- PUBLIC: survey questions for the web widget ----------
@@ -580,6 +599,113 @@ async function handleCsvExport(request, env, url) {
     status: 200,
     headers: { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="voiceinsights-export.csv"', ...corsHeaders() },
   });
+}
+
+// ============================================================
+// BILLING — real Stripe Checkout subscriptions.
+// Uses raw REST calls (no SDK) since Cloudflare Workers don't run Node's
+// Stripe package cleanly. Requires env.STRIPE_SECRET_KEY,
+// env.STRIPE_WEBHOOK_SECRET, and one Price ID per plan (env.STRIPE_PRICE_STARTER,
+// env.STRIPE_PRICE_PROFESSIONAL, env.STRIPE_PRICE_ENTERPRISE) — created once
+// in the Stripe Dashboard under Products.
+// ============================================================
+const PLAN_PRICE_ENV = {
+  starter: 'STRIPE_PRICE_STARTER',
+  professional: 'STRIPE_PRICE_PROFESSIONAL',
+  enterprise: 'STRIPE_PRICE_ENTERPRISE',
+};
+
+async function handleCreateCheckoutSession(request, env) {
+  const claims = await requireAuth(request, env);
+  const { plan } = await request.json();
+  const priceEnvKey = PLAN_PRICE_ENV[plan];
+  if (!priceEnvKey || !env[priceEnvKey]) return error('Unknown or unconfigured plan: ' + plan, 400);
+
+  const org = await env.DB.prepare('SELECT * FROM organizations WHERE id = ?').bind(claims.org).first();
+  if (!org) return error('Organization not found', 404);
+
+  const url = new URL(request.url);
+  const origin = request.headers.get('Origin') || `${url.protocol}//${url.host}`;
+  // success/cancel land back on the frontend's billing page, not the API.
+  const siteOrigin = env.SITE_URL || origin;
+
+  const params = new URLSearchParams({
+    mode: 'subscription',
+    'line_items[0][price]': env[priceEnvKey],
+    'line_items[0][quantity]': '1',
+    success_url: `${siteOrigin}/app/billing.html?checkout=success`,
+    cancel_url: `${siteOrigin}/app/billing.html?checkout=cancelled`,
+    client_reference_id: claims.org,
+    'metadata[plan]': plan,
+    'metadata[organization_id]': claims.org,
+  });
+  if (claims.email) params.append('customer_email', claims.email);
+
+  const resp = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: params.toString(),
+  });
+  const session = await resp.json();
+  if (!resp.ok) return error('Stripe error: ' + (session.error?.message || 'checkout session failed'), 500);
+
+  return json({ url: session.url });
+}
+
+async function handleStripeWebhook(request, env) {
+  const signatureHeader = request.headers.get('Stripe-Signature') || '';
+  const rawBody = await request.text();
+
+  const valid = await verifyStripeSignature(rawBody, signatureHeader, env.STRIPE_WEBHOOK_SECRET);
+  if (!valid) return error('Invalid Stripe signature', 400);
+
+  const event = JSON.parse(rawBody);
+
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    const orgId = session.client_reference_id || session.metadata?.organization_id;
+    const plan = session.metadata?.plan;
+    if (orgId && plan) {
+      await env.DB.prepare(
+        `UPDATE organizations SET billing_tier = ?, status = 'active', updated_at = datetime('now') WHERE id = ?`
+      ).bind(plan, orgId).run();
+    }
+  }
+
+  // Subscription cancelled/payment failed -> mark suspended so the org sees it in Settings/Billing.
+  if (event.type === 'customer.subscription.deleted' || event.type === 'invoice.payment_failed') {
+    const sub = event.data.object;
+    const orgId = sub.metadata?.organization_id;
+    if (orgId) {
+      await env.DB.prepare(`UPDATE organizations SET status = 'suspended', updated_at = datetime('now') WHERE id = ?`).bind(orgId).run();
+    }
+  }
+
+  return json({ received: true });
+}
+
+// Stripe signs webhooks as: HMAC-SHA256(timestamp + "." + rawBody) using the
+// endpoint's signing secret. Header looks like: "t=169...,v1=abc123...".
+async function verifyStripeSignature(rawBody, signatureHeader, secret) {
+  if (!secret || !signatureHeader) return false;
+  const parts = Object.fromEntries(signatureHeader.split(',').map(p => p.split('=')));
+  const timestamp = parts.t;
+  const expectedSig = parts.v1;
+  if (!timestamp || !expectedSig) return false;
+
+  const signedPayload = `${timestamp}.${rawBody}`;
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  const sigBuf = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(signedPayload));
+  const computedSig = [...new Uint8Array(sigBuf)].map(b => b.toString(16).padStart(2, '0')).join('');
+
+  // Constant-time-ish compare
+  if (computedSig.length !== expectedSig.length) return false;
+  let diff = 0;
+  for (let i = 0; i < computedSig.length; i++) diff |= computedSig.charCodeAt(i) ^ expectedSig.charCodeAt(i);
+  return diff === 0;
 }
 
 // ============================================================

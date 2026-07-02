@@ -1,8 +1,8 @@
-/* VoiceInsights — shared app shell + mock data */
+/* VoiceInsights Africa — shared app shell + mock data */
 
 const VI = {
-  lang: localStorage.getItem('vi_lang') || 'sw',
-  user: { name: 'Kitentya Msuya', org: 'NEXT-GEN Holdings', role: 'org_admin', initials: 'KM' },
+  lang: localStorage.getItem('vi_lang') || 'en',
+  user: { name: 'Kitentya Msuya', org: 'VoiceInsights Africa', role: 'org_admin', initials: 'KM' },
 };
 
 function makeWaveform(bars = 24, animate = false) {
@@ -58,8 +58,8 @@ function iconSvg(name) {
 
 function renderShell({ role = 'client', active = '', title = '', eyebrow = '' }) {
   const nav = role === 'admin' ? NAV_ADMIN : NAV_APP;
-  const brandByme = role === 'admin' ? 'VoiceInsights' : 'VoiceInsights';
-  const brandSub = role === 'admin' ? 'Admin Console' : VI.user.org;
+  const brandName = 'VoiceInsights Africa';
+  const brandSub = role === 'admin' ? 'Admin Console' : 'Client Dashboard';
 
   const navHtml = nav.map(g => `
     <div class="nav-group">
@@ -76,7 +76,7 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
       <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
           <div class="mark">V</div>
-          <div class="name">${brandByme}<em>${brandSub}</em></div>
+          <div class="name">${brandName}<em>${brandSub}</em></div>
         </div>
         <div style="flex:1; display:flex; flex-direction:column; gap:1.5rem;">${navHtml}</div>
         <div class="sidebar-foot">

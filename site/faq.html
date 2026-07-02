@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — VoiceInsights Africa</title>
+<meta name="description" content="Common questions about how VoiceInsights Africa collects, protects, and analyzes voice data.">
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  .faq-item { border-bottom: 1px solid var(--border); padding: 1.5rem 0; }
+  .faq-item h3 { font-size: 1.05rem; margin-bottom: .6rem; color: var(--text); }
+  .faq-item p { margin: 0; }
+  .faq-group-title { margin-top: 3rem; margin-bottom: .5rem; }
+  .site-lang-switch { display:flex; border:1px solid var(--border-strong); border-radius:999px; overflow:hidden; }
+  .site-lang-switch button { padding:.4rem .7rem; background:transparent; border:none; color:var(--text-dim); cursor:pointer; font-family:var(--font-body); font-weight:700; font-size:.72rem; letter-spacing:.03em; }
+  .site-lang-switch button.active { background:var(--accent); color:var(--accent-ink); }
+</style>
+</head>
+<body>
+
+<nav class="pub-nav">
+  <a href="/index.html" style="display:flex;align-items:center;gap:.6rem;">
+    <div style="width:30px;height:30px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:var(--accent-ink);font-family:var(--font-display);font-weight:700;">V</div>
+    <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+  </a>
+  <div style="display:flex; gap:1.25rem; align-items:center;">
+    <a href="/safeguarding.html" data-i18n="nav.safeguarding" style="color:var(--text-muted); font-size:.88rem; font-weight:600;">Safeguarding</a>
+    <div class="site-lang-switch" id="site-lang-switch">
+      <button data-lang="en" class="active">EN</button>
+      <button data-lang="fr">FR</button>
+      <button data-lang="pt">PT</button>
+      <button data-lang="sw">SW</button>
+    </div>
+    <a href="/login.html" data-i18n="nav.demo" class="btn btn-primary btn-sm">Request Demo</a>
+  </div>
+</nav>
+
+<header class="pub-hero" style="padding-bottom:1rem;">
+  <span class="eyebrow" data-i18n="faq.eyebrow">Frequently Asked Questions</span>
+  <h1 style="font-size:clamp(2rem,4vw,3rem);" data-i18n="faq.h1">Everything you're probably wondering, answered plainly.</h1>
+  <p class="lead" data-i18n="faq.lead">If your question isn't here, email us — we'd rather explain it clearly than have you guess.</p>
+</header>
+
+<section class="pub-section" style="padding-top:0; max-width:820px;">
+
+  <h2 class="faq-group-title" style="color:var(--accent);" data-i18n="faq.g1.title">Data Collection</h2>
+
+  <div class="faq-item">
+    <h3 data-i18n="faq.g1.q1.q">What ways can respondents answer — do they need a smartphone?</h3>
+    <p data-i18n="faq.g1.q1.a">No. VoiceInsights Africa supports five channels so no one is excluded: <b>Phone Call</b> (any basic mobile number), <b>WhatsApp Voice Notes</b>, an <b>SMS text fallback</b> for feature phones with no data plan, a <b>Web Platform</b> link, and an <b>offline-first Mobile Enumerator App</b> for field workers visiting areas with no network coverage at all. A respondent only needs whichever channel is easiest for them.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3 data-i18n="faq.g1.q2.q">What happens in villages with no phone network?</h3>
+    <p data-i18n="faq.g1.q2.a">Field enumerators use our offline Mobile Application: they record responses on the device with zero connectivity, and everything syncs automatically the moment the device reconnects — no more carrying paper forms back to transcribe by hand.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3 data-i18n="faq.g1.q3.q">What languages does it understand?</h3>
+    <p data-i18n="faq.g1.q3.a">Kiswahili, English, and natural code-switching between the two (how most people actually speak). We're continuously improving accuracy for regional accents and dialects.</p>
+  </div>
+
+  <h2 class="faq-group-title" style="color:var(--accent-2);" data-i18n="faq.g2.title">Safety & Consent</h2>
+
+  <div class="faq-item">
+    <h3 data-i18n="faq.g2.q1.q">Do respondents know they're being recorded?</h3>
+    <p data-i18n="faq.g2.q1.a">Always. Every interaction opens with a spoken consent request explaining what's collected, why, and confirming the respondent can stop at any point. No data is collected without consent.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3 data-i18n="faq.g2.q2.q">What if a respondent says something distressing?</h3>
+    <p data-i18n="faq.g2.q2.a">The system watches for distress signals — for example, a respondent expressing fear for their safety — and immediately flags that response for urgent human review rather than letting it sit in a general dataset. See our <a href="/safeguarding.html" style="color:var(--accent-2);">Safeguarding page</a> for details.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3 data-i18n="faq.g2.q3.q">Who can see respondent data?</h3>
+    <p data-i18n="faq.g2.q3.a">Access is role-based. NGO managers see dashboards and summaries; M&E officers see full datasets for projects they're assigned to; system administrators have technical access only. Nobody sees more than their role requires.</p>
+  </div>
+
+  <h2 class="faq-group-title" style="color:var(--accent);" data-i18n="faq.g3.title">Legal & Regulatory</h2>
+
+  <div class="faq-item">
+    <h3 data-i18n="faq.g3.q1.q">Is this legal to use in Tanzania?</h3>
+    <p data-i18n="faq.g3.q1.a">Yes. The platform is built around Tanzania's Personal Data Protection Act (2022) — consent logging, data minimization, and encryption are core features, not add-ons.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3 data-i18n="faq.g3.q2.q">Do I need COSTECH or NBS approval to use this?</h3>
+    <p data-i18n="faq.g3.q2.a">It depends on your study type. Scientific research, national studies, and foreign-funded research often need COSTECH clearance; studies producing official statistics may need NBS review. At project setup, VoiceInsights Africa walks you through a compliance checklist to help identify what your specific study likely needs — see our <a href="/safeguarding.html" style="color:var(--accent-2);">Safeguarding & Compliance page</a>.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3 data-i18n="faq.g3.q3.q">Who owns the data we collect?</h3>
+    <p data-i18n="faq.g3.q3.a">You do. Your organization owns every response, transcript, and report generated through your account. VoiceInsights Africa processes it on your behalf and never sells or shares client data.</p>
+  </div>
+
+  <h2 class="faq-group-title" style="color:var(--accent-2);" data-i18n="faq.g4.title">Getting Started</h2>
+
+  <div class="faq-item">
+    <h3 data-i18n="faq.g4.q1.q">How quickly can we launch a project?</h3>
+    <p data-i18n="faq.g4.q1.a">Most organizations go from account setup to their first live campaign within a day — build your survey, choose your channels, and share the link or number with respondents.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3 data-i18n="faq.g4.q2.q">How is pricing structured?</h3>
+    <p data-i18n="faq.g4.q2.a">Annual subscription plans (Starter, Professional, Enterprise) based on your expected volume and features needed. See <a href="/index.html#pricing" style="color:var(--accent-2);">Pricing</a> or request a demo for a tailored quote.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3 data-i18n="faq.g4.q3.q">Can we try it before committing?</h3>
+    <p data-i18n="faq.g4.q3.a">Yes — request a demo and we'll walk through a live pilot on your own survey questions before any commercial discussion.</p>
+  </div>
+
+</section>
+
+<section class="pub-section" style="background:var(--surface); border-radius:20px; text-align:center;">
+  <h2 data-i18n="faq.cta.h2">Still have a question?</h2>
+  <p style="max-width:50ch; margin:1rem auto;" data-i18n="faq.cta.desc">We'd rather answer directly than have you guess. Reach out any time.</p>
+  <a href="mailto:nextgentanzania@gmail.com" class="btn btn-primary" data-i18n="faq.cta.button">Email Us</a>
+</section>
+
+<footer class="pub-footer">
+  <div>
+    <div style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</div>
+    <p style="max-width:38ch; margin-top:.8rem; line-height:1.7;">
+      <span data-i18n="footer.head_office">Head Office</span>: Ali Hassan Mwinyi Road, Kisutu, 3rd Floor,<br>
+      Haidary Plaza, P.O. Box 77139, Dar es Salaam, Tanzania.<br>
+      <span data-i18n="footer.email">Email</span>: <a href="mailto:nextgentanzania@gmail.com" style="color:var(--accent-2);">info@voiceinsightsafrica.com</a><br>
+      <span data-i18n="footer.contact">Contact</span>: +255 (0) 659 166 440
+    </p>
+  </div>
+</footer>
+
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script>
+  lucide.createIcons();
+  initSiteLanguage();
+</script>
+</body>
+</html>

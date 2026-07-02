@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analytics — VoiceInsights</title>
+<title>Analytics — VoiceInsights Africa</title>
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="https://unpkg.com/lucide@latest"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -42,20 +42,43 @@
   const SENTIMENT_LABEL = { positive: 'Positive', neutral: 'Neutral', negative: 'Negative', distressed: 'Distress' };
 
   (async () => {
+    let data;
     try {
-      const { sentiment, topics, quotes } = await apiRequest('/api/analytics/summary');
+      data = await apiRequest('/api/analytics/summary');
+    } catch (e) {
+      document.getElementById('insight-summary').textContent = 'Could not load analytics: ' + e.message;
+      return;
+    }
+    const { sentiment, topics, quotes } = data;
 
-      const totalResponses = sentiment.reduce((s, r) => s + r.n, 0);
-      const summaryEl = document.getElementById('insight-summary');
-      if (totalResponses === 0) {
-        summaryEl.textContent = 'No responses have come in yet. Once your campaigns start collecting voice responses, insights will appear here automatically.';
-      } else {
-        const top = [...sentiment].sort((a, b) => b.n - a.n)[0];
-        const topPct = Math.round((top.n / totalResponses) * 100);
-        const topTopic = topics[0];
-        summaryEl.textContent = `${totalResponses} response${totalResponses === 1 ? '' : 's'} analyzed so far. ${topPct}% are ${SENTIMENT_LABEL[top.overall_sentiment] || top.overall_sentiment}.` +
-          (topTopic ? ` Most discussed topic: "${topTopic.topic}" (${topTopic.count} mentions).` : '');
-      }
+    const totalResponses = sentiment.reduce((s, r) => s + r.n, 0);
+    const summaryEl = document.getElementById('insight-summary');
+    if (totalResponses === 0) {
+      summaryEl.textContent = 'No responses have come in yet. Once your campaigns start collecting voice responses, insights will appear here automatically.';
+    } else {
+      const top = [...sentiment].sort((a, b) => b.n - a.n)[0];
+      const topPct = Math.round((top.n / totalResponses) * 100);
+      const topTopic = topics[0];
+      summaryEl.textContent = `${totalResponses} response${totalResponses === 1 ? '' : 's'} analyzed so far. ${topPct}% are ${SENTIMENT_LABEL[top.overall_sentiment] || top.overall_sentiment}.` +
+        (topTopic ? ` Most discussed topic: "${topTopic.topic}" (${topTopic.count} mentions).` : '');
+    }
+
+    const quotesContainer = document.getElementById('quotes-container');
+    if (!quotes.length) {
+      quotesContainer.innerHTML = `<div class="card muted-note">No transcripts yet — quotes will appear here once responses come in.</div>`;
+    } else {
+      quotesContainer.innerHTML = quotes.map(q => `
+        <div class="card">
+          <span class="badge ${SENTIMENT_BADGE[q.overall_sentiment] || 'badge-neutral'}" style="margin-bottom:.7rem;">${SENTIMENT_LABEL[q.overall_sentiment] || 'Unrated'}</span>
+          <p style="color:var(--text);">"${q.raw_text}"</p>
+          <div class="muted-note">${new Date(q.started_at + 'Z').toLocaleDateString()}</div>
+        </div>`).join('');
+    }
+
+    // Charts are drawn separately — if Chart.js fails to load (network/firewall
+    // blocked the CDN), the text above (insights + quotes) stays correct.
+    try {
+      if (typeof Chart === 'undefined') throw new Error('Chart.js did not load');
 
       new Chart(document.getElementById('chartTopics'), {
         type: 'bar',
@@ -73,20 +96,8 @@
         },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9FB3AB', boxWidth: 10, padding: 14 } } } }
       });
-
-      const quotesContainer = document.getElementById('quotes-container');
-      if (!quotes.length) {
-        quotesContainer.innerHTML = `<div class="card muted-note">No transcripts yet — quotes will appear here once responses come in.</div>`;
-      } else {
-        quotesContainer.innerHTML = quotes.map(q => `
-          <div class="card">
-            <span class="badge ${SENTIMENT_BADGE[q.overall_sentiment] || 'badge-neutral'}" style="margin-bottom:.7rem;">${SENTIMENT_LABEL[q.overall_sentiment] || 'Unrated'}</span>
-            <p style="color:var(--text);">"${q.raw_text}"</p>
-            <div class="muted-note">${new Date(q.started_at + 'Z').toLocaleDateString()}</div>
-          </div>`).join('');
-      }
     } catch (e) {
-      document.getElementById('insight-summary').textContent = 'Could not load analytics: ' + e.message;
+      console.warn('Charts unavailable:', e.message);
     }
   })();
 </script>

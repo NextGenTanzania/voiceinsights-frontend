@@ -148,6 +148,41 @@ https://voiceinsights-frontend.pages.dev/respondent.html?campaign=<campaign_id>
 It walks through every question in the survey, uses the browser's own
 microphone (no app install), and has an EN/SW toggle built in.
 
+## 11. Real subscriptions (Stripe)
+
+1. Create a free account at **dashboard.stripe.com** (start in **Test mode** first).
+2. Go to **Product catalog → Add product**. Create three products — Starter,
+   Professional, Enterprise — each with a **recurring yearly price**. Copy each
+   product's **Price ID** (starts with `price_...`).
+3. Open `wrangler.toml` and paste those three Price IDs into:
+   ```
+   STRIPE_PRICE_STARTER = "price_..."
+   STRIPE_PRICE_PROFESSIONAL = "price_..."
+   STRIPE_PRICE_ENTERPRISE = "price_..."
+   ```
+4. In the Stripe Dashboard, go to **Developers → API keys**, copy the
+   **Secret key**, then run:
+   ```
+   wrangler secret put STRIPE_SECRET_KEY
+   ```
+5. Go to **Developers → Webhooks → Add endpoint**. Set the URL to:
+   ```
+   https://voiceinsights-api.<your-subdomain>.workers.dev/api/billing/webhook
+   ```
+   Select the event **`checkout.session.completed`** (and optionally
+   `customer.subscription.deleted`, `invoice.payment_failed`). Copy the
+   **Signing secret** (`whsec_...`) it gives you, then run:
+   ```
+   wrangler secret put STRIPE_WEBHOOK_SECRET
+   ```
+6. `wrangler deploy` to pick up the Price IDs from `wrangler.toml`.
+7. Test it: log in, go to **Billing**, click a plan — you'll be redirected to a
+   real Stripe Checkout page. Use Stripe's test card `4242 4242 4242 4242`,
+   any future expiry, any CVC. After paying, you're redirected back and the
+   organization's plan updates automatically via the webhook.
+8. When ready for real payments, switch Stripe out of Test mode and repeat
+   steps 2–5 with your **live** keys and Price IDs.
+
 ## API reference
 
 | Method | Path | Auth | Purpose |
@@ -163,6 +198,9 @@ microphone (no app install), and has an EN/SW toggle built in.
 | GET | `/api/analytics/summary` | Yes | Real sentiment/topics/quotes |
 | GET | `/api/fraud/alerts` | Yes | Real fraud-flagged responses |
 | GET | `/api/reports/csv?campaign_id=` | Yes | Excel-compatible export of every answer |
+| GET | `/api/organizations/me` | Yes | Current org's plan and status |
+| POST | `/api/billing/create-checkout-session` | Yes | Starts a real Stripe subscription checkout |
+| POST | `/api/billing/webhook` | No (Stripe-signed) | Activates the plan after payment |
 | GET | `/api/public/campaigns/:id/questions` | No (public) | Question list for the web widget |
 | POST | `/api/whatsapp/webhook` | No (Twilio-signed) | Inbound WhatsApp — multi-question |
 | POST | `/api/voice/incoming` | No (Twilio-signed) | Inbound call — language select |

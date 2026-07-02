@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us — VoiceInsights Africa</title>
+<meta name="description" content="Talk to our team about launching voice-powered research at scale.">
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  .site-lang-switch { display:flex; border:1px solid var(--border-strong); border-radius:999px; overflow:hidden; }
+  .site-lang-switch button { padding:.4rem .7rem; background:transparent; border:none; color:var(--text-dim); cursor:pointer; font-family:var(--font-body); font-weight:700; font-size:.72rem; letter-spacing:.03em; }
+  .site-lang-switch button.active { background:var(--accent); color:var(--accent-ink); }
+  .checkbox-row { display:flex; flex-wrap:wrap; gap:.6rem; }
+  .checkbox-pill { display:flex; align-items:center; gap:.4rem; padding:.5rem .8rem; border:1px solid var(--border-strong); border-radius:999px; cursor:pointer; font-size:.82rem; }
+  .checkbox-pill input { width:auto; }
+</style>
+</head>
+<body>
+
+<nav class="pub-nav">
+  <a href="/index.html" style="display:flex;align-items:center;gap:.6rem;">
+    <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+    <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+  </a>
+  <div class="pub-nav-links" style="display:flex; gap:1.4rem; align-items:center;">
+    <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
+    <a href="/solutions.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
+    <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
+    <a href="/case-studies.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Case Studies</a>
+    <a href="/index.html#pricing" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Pricing</a>
+    <a href="/safeguarding.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
+    <a href="/about.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">About</a>
+  </div>
+  <div style="display:flex; gap:.9rem; align-items:center;">
+    <div class="site-lang-switch" id="site-lang-switch">
+      <button data-lang="en" class="active">EN</button>
+      <button data-lang="fr">FR</button>
+      <button data-lang="pt">PT</button>
+      <button data-lang="sw">SW</button>
+    </div>
+    <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
+    <a href="/contact.html" class="btn btn-primary btn-sm">Book Demo</a>
+  </div>
+</nav>
+
+<header class="pub-hero" style="padding-bottom:1rem;">
+  <span class="eyebrow">Get in touch</span>
+  <h1 style="font-size:clamp(2rem,4vw,3rem);">Talk to our team.</h1>
+  <p class="lead">Need help launching voice-powered research at scale? Tell us about your project and we'll get back to you within one business day.</p>
+</header>
+
+<section class="pub-section" style="padding-top:0; max-width:720px;">
+  <div class="card" id="form-card">
+    <form id="contact-form">
+      <div class="field-row">
+        <div class="field"><label>Full Name *</label><input id="full_name" required></div>
+        <div class="field"><label>Work Email *</label><input id="work_email" type="email" required></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Organization</label><input id="organization"></div>
+        <div class="field"><label>Country</label><input id="country"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Organization Type</label>
+          <select id="organization_type">
+            <option value="">Select…</option>
+            <option>NGO</option><option>INGO</option><option>Government</option>
+            <option>Research Firm / University</option><option>UN Agency</option>
+            <option>Independent Researcher</option><option>Other</option>
+          </select>
+        </div>
+        <div class="field"><label>Expected Project Size</label>
+          <select id="project_size">
+            <option value="">Select…</option>
+            <option>Pilot (under 500 respondents)</option>
+            <option>Medium (500–5,000 respondents)</option>
+            <option>Large (5,000+ respondents)</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Expected Number of Respondents</label><input id="expected_respondents" placeholder="e.g. 2,000"></div>
+      <div class="field">
+        <label>Preferred Channels</label>
+        <div class="checkbox-row">
+          <label class="checkbox-pill"><input type="checkbox" value="Phone Call"> Phone Call</label>
+          <label class="checkbox-pill"><input type="checkbox" value="WhatsApp"> WhatsApp</label>
+          <label class="checkbox-pill"><input type="checkbox" value="SMS"> SMS</label>
+          <label class="checkbox-pill"><input type="checkbox" value="Web"> Web</label>
+          <label class="checkbox-pill"><input type="checkbox" value="Offline App"> Offline App</label>
+        </div>
+      </div>
+      <div class="field"><label>Tell us about your use case</label><textarea id="message" rows="4" placeholder="What are you trying to research or monitor?"></textarea></div>
+
+      <div id="contact-error" style="display:none; color:var(--danger); font-size:.85rem; margin-bottom:1rem;"></div>
+      <button class="btn btn-primary" type="submit" id="contact-submit-btn" style="width:100%; justify-content:center;">Request Demo</button>
+    </form>
+  </div>
+</section>
+
+<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
+  <div style="flex:1 1 220px;">
+    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
+    </div>
+    <p style="max-width:32ch; font-size:.85rem; line-height:1.7;">VoiceInsights Africa is an enterprise voice intelligence platform helping organizations collect, analyze, and transform multilingual voice data into decision-ready insights.</p>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Platform</div>
+    <a href="/app/dashboard.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Dashboard</a>
+    <a href="/respondent.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Interview Demo</a>
+    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Analytics</a>
+    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Reporting</a>
+    <a href="/api.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">API &amp; Integrations</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Solutions</div>
+    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Survey Automation</a>
+    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Monitoring & Evaluation</a>
+    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Beneficiary Feedback</a>
+    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Grievance Systems</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Trust</div>
+    <a href="/safeguarding.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Safeguarding</a>
+    <a href="/security.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Security</a>
+    <a href="/faq.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">FAQ</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Contact</div>
+    <a href="mailto:partnerships@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">partnerships@voiceinsightsafrica.com</a>
+    <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
+    <a href="/contact.html" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+  </div>
+</footer>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  lucide.createIcons();
+  document.querySelectorAll('#site-lang-switch button').forEach(b => {
+    b.addEventListener('click', () => { localStorage.setItem('vi_app_lang', b.dataset.lang); location.reload(); });
+    if (b.dataset.lang === getAppLang()) b.classList.add('active');
+  });
+
+  document.getElementById('contact-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('contact-submit-btn');
+    const errorEl = document.getElementById('contact-error');
+    errorEl.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    const channels = [...document.querySelectorAll('.checkbox-pill input:checked')].map(i => i.value);
+
+    try {
+      await apiRequest('/api/contact/submit', {
+        method: 'POST',
+        auth: false,
+        body: {
+          full_name: document.getElementById('full_name').value,
+          work_email: document.getElementById('work_email').value,
+          organization: document.getElementById('organization').value,
+          country: document.getElementById('country').value,
+          organization_type: document.getElementById('organization_type').value,
+          project_size: document.getElementById('project_size').value,
+          expected_respondents: document.getElementById('expected_respondents').value,
+          preferred_channels: channels,
+          message: document.getElementById('message').value,
+        },
+      });
+      document.getElementById('form-card').innerHTML = `
+        <div style="text-align:center; padding:1.5rem 0;">
+          <div style="font-size:2.5rem; margin-bottom:1rem;">✓</div>
+          <h2 style="font-size:1.2rem; margin-bottom:.5rem;">Thank you — message received.</h2>
+          <p class="muted-note">Our team will get back to you within one business day.</p>
+        </div>`;
+    } catch (err) {
+      errorEl.textContent = err.message.includes('Failed to fetch')
+        ? 'Could not reach the server. Check your connection and try again.'
+        : 'Error: ' + err.message;
+      errorEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Request Demo';
+    }
+  });
+</script>
+</body>
+</html>

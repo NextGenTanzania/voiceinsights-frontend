@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interviews — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  .interview-layout { display:grid; grid-template-columns: 340px 1fr; gap:1.25rem; align-items:start; }
+  .interview-row { padding:.9rem; border-bottom:1px solid var(--border); cursor:pointer; }
+  .interview-row:hover { background:var(--surface-2); }
+  .interview-row.active { background:var(--surface-2); border-left:3px solid var(--accent); }
+  @media (max-width: 900px) { .interview-layout { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="interview-layout">
+        <div class="card" style="padding:0; max-height:75vh; overflow-y:auto;">
+          <div id="interview-list"><div class="muted-note" style="padding:1.5rem;">Loading interviews…</div></div>
+        </div>
+        <div class="card" id="interview-detail">
+          <div class="muted-note">Select an interview on the left to see its audio, transcript, and AI summary.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/interviews.html', eyebrow:'Voice Data', title:'Interviews' });
+
+  const SENTIMENT_BADGE = { positive: 'badge-success', neutral: 'badge-neutral', negative: 'badge-danger', distressed: 'badge-warn' };
+  let interviews = [];
+
+  (async () => {
+    const listEl = document.getElementById('interview-list');
+    try {
+      const data = await apiRequest('/api/interviews');
+      interviews = data.interviews;
+      if (!interviews.length) {
+        listEl.innerHTML = `<div class="muted-note" style="padding:1.5rem;">No interviews yet.</div>`;
+        return;
+      }
+      listEl.innerHTML = interviews.map((iv, i) => `
+        <div class="interview-row" data-index="${i}">
+          <div style="display:flex; justify-content:space-between; margin-bottom:.3rem;">
+            <span style="font-weight:600; font-size:.85rem;">${iv.phone_number || 'Web respondent'}</span>
+            <span class="badge ${SENTIMENT_BADGE[iv.overall_sentiment] || 'badge-neutral'}" style="font-size:.65rem;">${iv.overall_sentiment || '—'}</span>
+          </div>
+          <div class="muted-note">${iv.campaign_name} · ${iv.channel} · ${new Date(iv.started_at + 'Z').toLocaleDateString()}</div>
+        </div>`).join('');
+      document.querySelectorAll('.interview-row').forEach(row => row.addEventListener('click', () => selectInterview(parseInt(row.dataset.index))));
+      selectInterview(0);
+    } catch (e) {
+      listEl.innerHTML = `<div class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</div>`;
+    }
+  })();
+
+  function selectInterview(i) {
+    document.querySelectorAll('.interview-row').forEach((r, idx) => r.classList.toggle('active', idx === i));
+    const iv = interviews[i];
+    let summary = { summary: '', topics: [] };
+    try { summary = JSON.parse(iv.summary_json || '{}'); } catch (_) {}
+
+    const audioHtml = iv.audio_r2_key
+      ? `<audio controls style="width:100%; margin:.8rem 0;" src="${API_BASE_URL}/api/audio/${encodeURIComponent(iv.audio_r2_key)}?token=${encodeURIComponent(localStorage.getItem('vi_token'))}"></audio>`
+      : `<div class="muted-note" style="margin:.8rem 0;">No audio recorded for this response (text-based channel).</div>`;
+
+    document.getElementById('interview-detail').innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.8rem;">
+        <h2 style="font-size:1.1rem;">${iv.phone_number || 'Web respondent'}</h2>
+        <span class="badge ${SENTIMENT_BADGE[iv.overall_sentiment] || 'badge-neutral'}">${iv.overall_sentiment || 'unrated'}</span>
+      </div>
+      <div class="muted-note" style="margin-bottom:.5rem;">${iv.campaign_name} · ${iv.channel} · fraud score: ${iv.fraud_score != null ? iv.fraud_score.toFixed(2) : '—'}</div>
+      ${audioHtml}
+      <div class="muted-note" style="text-transform:uppercase; font-size:.7rem; margin-bottom:.4rem;">Transcript (first answer)</div>
+      <p style="color:var(--text); margin-bottom:1rem;">${iv.first_transcript ? '"' + iv.first_transcript + '"' : 'No transcript available.'}</p>
+      <div class="card" style="background:var(--surface-2);">
+        <div class="card-title">AI Summary</div>
+        <p style="color:var(--text); margin-bottom:.5rem;">${summary.summary || 'No summary generated yet.'}</p>
+        ${summary.topics && summary.topics.length ? `<div>${summary.topics.map(t => `<span class="badge badge-neutral" style="margin-right:.3rem;">${t}</span>`).join('')}</div>` : ''}
+      </div>
+      <a href="/app/transcripts.html?response=${iv.response_id}" class="btn btn-ghost btn-sm" style="margin-top:1rem;">View Full Transcript →</a>
+    `;
+  }
+</script>
+</body>
+</html>

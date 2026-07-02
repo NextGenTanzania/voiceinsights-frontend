@@ -21,6 +21,13 @@
         <div id="current-plan-status" class="muted-note" style="margin-top:.3rem;"></div>
       </div>
 
+      <div class="section-head"><h2 style="font-size:1.05rem;">Usage This Period</h2></div>
+      <div class="grid grid-3" style="margin-bottom:1.5rem;">
+        <div class="card"><div class="card-title">Interviews Processed</div><div class="stat-value" id="usage-responses">–</div></div>
+        <div class="card"><div class="card-title">Active Surveys</div><div class="stat-value" id="usage-surveys">–</div></div>
+        <div class="card"><div class="card-title">Storage (Audio)</div><div class="stat-value" id="usage-storage">–</div><div class="muted-note" style="margin-top:.3rem;">Estimated from recordings processed</div></div>
+      </div>
+
       <div class="section-head"><h2 style="font-size:1.05rem;">Available Plans</h2></div>
       <div class="grid grid-3" style="margin-bottom:1.5rem;">
         <div class="card" id="plan-starter">
@@ -54,6 +61,7 @@
   </main>
 </div>
 <script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/app.js"></script>
 <script>
   if (!requireLogin()) { /* redirected */ }
@@ -88,6 +96,21 @@
   }
   loadCurrentPlan();
   if (checkoutResult === 'success') setTimeout(loadCurrentPlan, 4000);
+
+  async function loadUsageMetrics() {
+    try {
+      const stats = await apiRequest('/api/dashboard/stats');
+      document.getElementById('usage-responses').textContent = stats.total_responses;
+      document.getElementById('usage-surveys').textContent = stats.active_surveys;
+      const estimatedMB = (stats.total_responses * 0.5).toFixed(1); // rough estimate, ~0.5MB per short voice note
+      document.getElementById('usage-storage').textContent = estimatedMB + ' MB';
+    } catch (e) {
+      document.getElementById('usage-responses').textContent = '—';
+      document.getElementById('usage-surveys').textContent = '—';
+      document.getElementById('usage-storage').textContent = '—';
+    }
+  }
+  loadUsageMetrics();
 
   document.querySelectorAll('.plan-btn').forEach(btn => {
     btn.addEventListener('click', async () => {

@@ -12,6 +12,16 @@
 //   GET  /api/organizations/me                    (current org's plan/status)
 //   POST /api/billing/create-checkout-session     (Stripe Checkout — real subscriptions)
 //   POST /api/billing/webhook                     (Stripe webhook — activates plan on payment)
+//   POST /api/contact/submit                      (public — website Contact form, saves a lead)
+//   GET  /api/leads                                (auth — view submitted leads)
+//   GET  /api/respondents                          (auth — participant list)
+//   GET  /api/interviews                           (auth — response list with transcript + audio)
+//   GET  /api/audio/:key                           (auth — streams audio from R2)
+//   GET  /api/transcripts/:response_id             (auth — full Q&A transcript, chat-style)
+//   GET  /api/compliance                           (auth — COSTECH/NBS/Ethics status per survey)
+//   PUT  /api/compliance/:survey_id                (auth — update compliance status)
+//   GET  /api/consent-logs                         (auth — respondent consent log)
+//   POST /api/assistant/ask                        (auth — VIA Assistant, AI Q&A over your own data)
 //   GET  /api/public/campaigns/:id/questions      (public — web widget reads the question list)
 //   POST /api/whatsapp/webhook                    (Twilio WhatsApp — multi-question)
 //   POST /api/voice/incoming                      (Twilio Voice — language select)
@@ -210,6 +220,169 @@ export default {
 
       if (path === '/api/billing/webhook' && method === 'POST') {
         return await handleStripeWebhook(request, env);
+      }
+
+      // ---------- CONTACT / LEADS (sales pipeline) ----------
+      if (path === '/api/contact/submit' && method === 'POST') {
+        const body = await request.json();
+        if (!body.full_name || !body.work_email) return error('full_name and work_email are required');
+        const id = newId('lead');
+        await env.DB.prepare(
+          `INSERT INTO leads (id, full_name, work_email, organization, country, organization_type, project_size, expected_respondents, preferred_channels, message)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        ).bind(
+          id, body.full_name, body.work_email, body.organization || null, body.country || null,
+          body.organization_type || null, body.project_size || null, body.expected_respondents || null,
+          Array.isArray(body.preferred_channels) ? body.preferred_channels.join(', ') : (body.preferred_channels || null),
+          body.message || null
+        ).run();
+        return json({ ok: true, id }, 201);
+      }
+
+      if (path === '/api/leads' && method === 'GET') {
+        await requireAuth(request, env);
+        const { results } = await env.DB.prepare('SELECT * FROM leads ORDER BY created_at DESC LIMIT 200').all();
+        return json({ leads: results });
+      }
+
+      // ---------- RESPONDENTS ----------
+      if (path === '/api/respondents' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const { results } = await env.DB.prepare(
+          `SELECT r.id, r.phone_number, r.region, r.gender, r.age_bracket, r.consent_given, r.created_at,
+                  (SELECT COUNT(*) FROM responses resp WHERE resp.respondent_id = r.id) AS response_count
+           FROM respondents r WHERE r.organization_id = ? ORDER BY r.created_at DESC LIMIT 200`
+        ).bind(claims.org).all();
+        return json({ respondents: results });
+      }
+
+      // ---------- INTERVIEWS (responses with transcript + audio) ----------
+      if (path === '/api/interviews' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const { results } = await env.DB.prepare(
+          `SELECT r.id as response_id, r.channel, r.overall_sentiment, r.fraud_score, r.status, r.started_at,
+                  resp.phone_number, c.name as campaign_name,
+                  (SELECT a.audio_r2_key FROM answers a WHERE a.response_id = r.id AND a.audio_r2_key IS NOT NULL ORDER BY a.created_at ASC LIMIT 1) as audio_r2_key,
+                  (SELECT t.raw_text FROM transcripts t JOIN answers a2 ON t.answer_id = a2.id WHERE a2.response_id = r.id ORDER BY t.created_at ASC LIMIT 1) as first_transcript,
+                  (SELECT ai.content_json FROM ai_insights ai WHERE ai.response_id = r.id AND ai.insight_type = 'summary' ORDER BY ai.created_at DESC LIMIT 1) as summary_json
+           FROM responses r
+           JOIN campaigns c ON r.campaign_id = c.id
+           JOIN respondents resp ON r.respondent_id = resp.id
+           WHERE c.organization_id = ?
+           ORDER BY r.started_at DESC LIMIT 100`
+        ).bind(claims.org).all();
+        return json({ interviews: results });
+      }
+
+      // ---------- AUDIO STREAMING (from R2) ----------
+      const audioMatch = path.match(/^\/api\/audio\/(.+)$/);
+      if (audioMatch && method === 'GET') {
+        await requireAuth(request, env);
+        const key = decodeURIComponent(audioMatch[1]);
+        const obj = await env.AUDIO_BUCKET.get(key);
+        if (!obj) return error('Audio not found', 404);
+        return new Response(obj.body, {
+          headers: { 'Content-Type': obj.httpMetadata?.contentType || 'audio/ogg', ...corsHeaders() },
+        });
+      }
+
+      // ---------- TRANSCRIPTS (full Q&A, chat-style) ----------
+      const transcriptMatch = path.match(/^\/api\/transcripts\/([a-zA-Z0-9_]+)$/);
+      if (transcriptMatch && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const responseId = transcriptMatch[1];
+        const { results } = await env.DB.prepare(
+          `SELECT q.question_text, q.order_index, t.raw_text, a.audio_r2_key, a.created_at
+           FROM answers a
+           JOIN questions q ON a.question_id = q.id
+           LEFT JOIN transcripts t ON t.answer_id = a.id
+           JOIN responses r ON a.response_id = r.id
+           JOIN campaigns c ON r.campaign_id = c.id
+           WHERE a.response_id = ? AND c.organization_id = ?
+           ORDER BY q.order_index ASC`
+        ).bind(responseId, claims.org).all();
+        return json({ turns: results });
+      }
+
+      // ---------- COMPLIANCE ----------
+      if (path === '/api/compliance' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const { results } = await env.DB.prepare(
+          `SELECT s.id as survey_id, s.title, s.module_type, s.status as survey_status,
+                  COALESCE(sc.costech_status, 'not_required') as costech_status,
+                  COALESCE(sc.nbs_status, 'not_required') as nbs_status,
+                  COALESCE(sc.ethics_status, 'not_required') as ethics_status,
+                  COALESCE(sc.minors_involved, 0) as minors_involved,
+                  COALESCE(sc.safeguarding_risk, 'low') as safeguarding_risk
+           FROM surveys s
+           LEFT JOIN survey_compliance sc ON sc.survey_id = s.id
+           WHERE s.organization_id = ? ORDER BY s.created_at DESC`
+        ).bind(claims.org).all();
+        return json({ surveys: results });
+      }
+
+      const complianceUpdateMatch = path.match(/^\/api\/compliance\/([a-zA-Z0-9_]+)$/);
+      if (complianceUpdateMatch && method === 'PUT') {
+        const claims = await requireAuth(request, env);
+        const surveyId = complianceUpdateMatch[1];
+        const body = await request.json();
+        await env.DB.prepare(
+          `INSERT INTO survey_compliance (survey_id, costech_status, nbs_status, ethics_status, minors_involved, safeguarding_risk, notes, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))
+           ON CONFLICT(survey_id) DO UPDATE SET
+             costech_status=excluded.costech_status, nbs_status=excluded.nbs_status, ethics_status=excluded.ethics_status,
+             minors_involved=excluded.minors_involved, safeguarding_risk=excluded.safeguarding_risk, notes=excluded.notes, updated_at=datetime('now')`
+        ).bind(
+          surveyId, body.costech_status || 'not_required', body.nbs_status || 'not_required', body.ethics_status || 'not_required',
+          body.minors_involved ? 1 : 0, body.safeguarding_risk || 'low', body.notes || null
+        ).run();
+        return json({ ok: true });
+      }
+
+      // ---------- CONSENT LOGS ----------
+      if (path === '/api/consent-logs' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const { results } = await env.DB.prepare(
+          `SELECT id, phone_number, consent_given, created_at FROM respondents WHERE organization_id = ? ORDER BY created_at DESC LIMIT 200`
+        ).bind(claims.org).all();
+        return json({ logs: results });
+      }
+
+      // ---------- VIA ASSISTANT (AI Q&A over your own data) ----------
+      if (path === '/api/assistant/ask' && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        const { question } = await request.json();
+        if (!question) return error('question is required');
+
+        // Gather lightweight context: recent sentiment counts + a handful of quotes.
+        const { results: sentimentRows } = await env.DB.prepare(
+          `SELECT r.overall_sentiment, COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id
+           WHERE c.organization_id = ? GROUP BY r.overall_sentiment`
+        ).bind(claims.org).all();
+        const { results: quoteRows } = await env.DB.prepare(
+          `SELECT t.raw_text, r.overall_sentiment, r.channel FROM transcripts t
+           JOIN answers a ON t.answer_id = a.id JOIN responses r ON a.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id
+           WHERE c.organization_id = ? ORDER BY t.created_at DESC LIMIT 15`
+        ).bind(claims.org).all();
+
+        const context = `Sentiment breakdown: ${JSON.stringify(sentimentRows)}\n\nRecent transcripts:\n${quoteRows.map(q => `- (${q.overall_sentiment}, ${q.channel}) "${q.raw_text}"`).join('\n')}`;
+
+        const claudeResp = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-6',
+            max_tokens: 500,
+            messages: [{
+              role: 'user',
+              content: `You are VIA, an analytics assistant inside a research dashboard. Answer the user's question using ONLY the data context below. If the data doesn't support an answer, say so honestly — do not invent numbers.\n\nDATA CONTEXT:\n${context}\n\nUSER QUESTION: ${question}`,
+            }],
+          }),
+        });
+        if (!claudeResp.ok) return error('Assistant is temporarily unavailable', 500);
+        const data = await claudeResp.json();
+        const answer = (data.content || []).map(c => c.text || '').join('');
+        return json({ answer });
       }
 
       // ---------- PUBLIC: survey questions for the web widget ----------

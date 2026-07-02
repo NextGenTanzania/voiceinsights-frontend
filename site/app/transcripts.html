@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transcripts — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  .chat-turn { margin-bottom: 1.25rem; }
+  .chat-bubble-q { background:var(--surface-2); border-radius:12px 12px 12px 2px; padding:.8rem 1rem; max-width:70ch; }
+  .chat-bubble-a { background:var(--surface-3); border-radius:12px 12px 2px 12px; padding:.8rem 1rem; max-width:70ch; margin-left:auto; margin-top:.5rem; }
+  .chat-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; color:var(--text-dim); margin-bottom:.3rem; }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content" style="max-width:820px;">
+      <div id="transcript-container">
+        <div class="muted-note">Loading transcript…</div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/interviews.html', eyebrow:'Voice Data', title:'Transcript' });
+
+  const responseId = new URLSearchParams(window.location.search).get('response');
+  const container = document.getElementById('transcript-container');
+
+  (async () => {
+    if (!responseId) {
+      container.innerHTML = `<div class="muted-note">No interview selected. Go to <a href="/app/interviews.html" style="color:var(--accent-2);">Interviews</a> and pick one to view its full transcript.</div>`;
+      return;
+    }
+    try {
+      const { turns } = await apiRequest(`/api/transcripts/${responseId}`);
+      if (!turns.length) {
+        container.innerHTML = `<div class="muted-note">No answers recorded for this interview yet.</div>`;
+        return;
+      }
+      container.innerHTML = turns.map(turn => `
+        <div class="chat-turn">
+          <div class="chat-label">Question ${turn.order_index + 1}</div>
+          <div class="chat-bubble-q">${turn.question_text}</div>
+          <div class="chat-label" style="text-align:right; margin-top:.5rem;">Respondent</div>
+          <div class="chat-bubble-a">${turn.raw_text ? '"' + turn.raw_text + '"' : '<span class="muted-note">No transcript for this answer.</span>'}</div>
+        </div>`).join('');
+    } catch (e) {
+      container.innerHTML = `<div class="muted-note" style="color:var(--danger);">Could not load transcript: ${e.message}</div>`;
+    }
+  })();
+</script>
+</body>
+</html>

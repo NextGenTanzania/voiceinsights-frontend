@@ -6,46 +6,76 @@
 <title>Log in — VoiceInsights Africa</title>
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  .site-lang-switch { display:flex; border:1px solid var(--border-strong); border-radius:999px; overflow:hidden; }
+  .site-lang-switch button { padding:.4rem .7rem; background:transparent; border:none; color:var(--text-dim); cursor:pointer; font-family:var(--font-body); font-weight:700; font-size:.72rem; letter-spacing:.03em; }
+  .site-lang-switch button.active { background:var(--accent); color:var(--accent-ink); }
+</style>
 </head>
-<body style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem;">
+<body style="min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem;">
+  <div class="site-lang-switch" id="site-lang-switch" style="margin-bottom:1.5rem;">
+    <button data-lang="en">EN</button>
+    <button data-lang="fr">FR</button>
+    <button data-lang="pt">PT</button>
+    <button data-lang="sw">SW</button>
+  </div>
+
   <div style="width:100%; max-width:400px;">
     <div style="display:flex;align-items:center;gap:.6rem; margin-bottom:2.5rem; justify-content:center;">
-      <div style="width:34px;height:34px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:var(--accent-ink);font-family:var(--font-display);font-weight:700;">V</div>
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:42px; width:auto;">
       <span style="font-family:var(--font-display); font-weight:600; font-size:1.2rem;">VoiceInsights Africa</span>
     </div>
 
     <div class="card">
-      <h2 style="font-size:1.3rem; margin-bottom:.3rem;">Welcome back</h2>
-      <p style="margin-bottom:1.5rem;">Log in to your organization's account.</p>
+      <h2 id="t-welcome" style="font-size:1.3rem; margin-bottom:.3rem;">Welcome back</h2>
+      <p id="t-subtitle" style="margin-bottom:1.5rem;">Log in to your organization's account.</p>
 
       <form id="login-form">
         <div class="field">
-          <label>Email address</label>
+          <label id="t-email-label">Email address</label>
           <input id="email" type="email" placeholder="admin@nextgentanzania.com" required>
         </div>
         <div class="field">
-          <label>Password</label>
+          <label id="t-password-label">Password</label>
           <input id="password" type="password" placeholder="••••••••" required>
         </div>
         <div id="login-error" style="display:none; color:var(--danger); font-size:.82rem; margin-bottom:1rem;"></div>
         <button class="btn btn-primary" style="width:100%; justify-content:center;" type="submit" id="login-btn">Log in &rarr;</button>
       </form>
 
-      <div class="muted-note" style="margin-top:1rem;">Demo login: <b style="color:var(--text-muted)">admin@nextgentanzania.com</b> / <b style="color:var(--text-muted)">VoiceInsights2026!</b><br>(works once you've deployed the backend and run schema.sql)</div>
+      <div class="muted-note" style="margin-top:1rem;">Demo login: <b style="color:var(--text-muted)">admin@nextgentanzania.com</b> / <b style="color:var(--text-muted)">VoiceInsights2026!</b></div>
 
       <div style="margin-top:1.2rem; display:flex; justify-content:space-between; font-size:.82rem;">
-        <a href="#" style="color:var(--text-dim);">Forgot password?</a>
-        <a href="/index.html" style="color:var(--accent-2);">Request Demo</a>
+        <a href="#" id="t-forgot" style="color:var(--text-dim);">Forgot password?</a>
+        <a href="/index.html" id="t-demo-cta" style="color:var(--accent-2);">Request Demo</a>
       </div>
     </div>
 
     <p style="text-align:center; margin-top:1.5rem; font-size:.78rem; color:var(--text-dim);">
-      Internal team? <a href="/admin/dashboard.html" style="color:var(--text-muted);">Log in Admin Console</a>
+      <span id="t-internal-team">Internal team? </span><a href="/admin/dashboard.html" id="t-admin-link" style="color:var(--text-muted);">Log in Admin Console</a>
     </p>
   </div>
 <script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/app.js"></script>
 <script>
+  function applyLoginTranslations() {
+    document.getElementById('t-welcome').textContent = t('login.welcome', 'Welcome back');
+    document.getElementById('t-subtitle').textContent = t('login.subtitle', "Log in to your organization's account.");
+    document.getElementById('t-email-label').textContent = t('login.email_label', 'Email address');
+    document.getElementById('t-password-label').textContent = t('login.password_label', 'Password');
+    document.getElementById('login-btn').innerHTML = t('login.submit', 'Log in &rarr;');
+    document.getElementById('t-forgot').textContent = t('login.forgot', 'Forgot password?');
+    document.getElementById('t-demo-cta').textContent = t('login.demo_cta', 'Request Demo');
+    document.getElementById('t-internal-team').textContent = t('login.internal_team', 'Internal team? ');
+    document.getElementById('t-admin-link').textContent = t('login.admin_login_link', 'Log in Admin Console');
+    document.querySelectorAll('#site-lang-switch button').forEach(b => b.classList.toggle('active', b.dataset.lang === getAppLang()));
+  }
+  applyLoginTranslations();
+  document.querySelectorAll('#site-lang-switch button').forEach(b => {
+    b.addEventListener('click', () => setAppLang(b.dataset.lang));
+  });
+
   document.getElementById('login-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('login-btn');
@@ -67,7 +97,7 @@
         ? 'Cannot reach the backend. Have you deployed it and set API_BASE_URL in config.js?'
         : err.message;
       errBox.style.display = 'block';
-      btn.textContent = 'Log in →';
+      btn.innerHTML = t('login.submit', 'Log in &rarr;');
       btn.disabled = false;
     }
   });

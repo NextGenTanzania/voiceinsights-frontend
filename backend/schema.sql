@@ -132,6 +132,34 @@ CREATE TABLE IF NOT EXISTS sessions (
 );
 CREATE INDEX IF NOT EXISTS idx_sessions_key ON sessions(session_key, channel, status);
 
+-- Contact/demo-request form submissions from the public website (sales pipeline).
+CREATE TABLE IF NOT EXISTS leads (
+  id                    TEXT PRIMARY KEY,
+  full_name             TEXT NOT NULL,
+  work_email            TEXT NOT NULL,
+  organization          TEXT,
+  country               TEXT,
+  organization_type     TEXT,
+  project_size          TEXT,
+  expected_respondents  TEXT,
+  preferred_channels    TEXT,
+  message               TEXT,
+  status                TEXT NOT NULL DEFAULT 'new',  -- new | contacted | converted | closed
+  created_at            TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Regulatory / compliance status per survey (COSTECH, NBS, Ethics) — one row per survey.
+CREATE TABLE IF NOT EXISTS survey_compliance (
+  survey_id           TEXT PRIMARY KEY REFERENCES surveys(id),
+  costech_status      TEXT NOT NULL DEFAULT 'not_required',  -- not_required | pending | approved
+  nbs_status          TEXT NOT NULL DEFAULT 'not_required',
+  ethics_status       TEXT NOT NULL DEFAULT 'not_required',
+  minors_involved     INTEGER NOT NULL DEFAULT 0,
+  safeguarding_risk   TEXT NOT NULL DEFAULT 'low',           -- low | medium | high
+  notes               TEXT,
+  updated_at          TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 CREATE TABLE IF NOT EXISTS audit_logs (
   id                  TEXT PRIMARY KEY,
   organization_id     TEXT,

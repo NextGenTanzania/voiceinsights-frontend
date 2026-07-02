@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leads — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Organization</th><th>Type</th><th>Country</th><th>Channels</th><th>Submitted</th></tr></thead>
+          <tbody id="leads-tbody">
+            <tr><td colspan="7" class="muted-note" style="padding:1.5rem;">Loading leads…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'admin', active:'/admin/leads.html', eyebrow:'Sales Pipeline', title:'Website Leads' });
+
+  (async () => {
+    const tbody = document.getElementById('leads-tbody');
+    try {
+      const { leads } = await apiRequest('/api/leads');
+      if (!leads.length) {
+        tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem;">No leads submitted yet — they'll appear here as soon as someone fills out the Contact form.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = leads.map(l => `
+        <tr>
+          <td>${l.full_name}</td>
+          <td>${l.work_email}</td>
+          <td>${l.organization || '—'}</td>
+          <td><span class="badge badge-neutral">${l.organization_type || '—'}</span></td>
+          <td>${l.country || '—'}</td>
+          <td>${l.preferred_channels || '—'}</td>
+          <td>${new Date(l.created_at + 'Z').toLocaleString()}</td>
+        </tr>`).join('');
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+    }
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="section-head">
+        <div class="pill-tabs" style="margin:0; border:none;">
+          <a class="ptab active" data-filter="all">All</a>
+          <a class="ptab" data-filter="active">Active</a>
+          <a class="ptab" data-filter="draft">Draft</a>
+          <a class="ptab" data-filter="closed">Completed</a>
+        </div>
+        <a href="/app/survey-builder.html" class="btn btn-primary btn-sm">+ New Project</a>
+      </div>
+      <div class="grid grid-3" id="projects-grid" style="margin-top:1rem;">
+        <div class="muted-note" style="padding:1.5rem;">Loading projects…</div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/projects.html', eyebrow:'Overview', title:'Projects' });
+
+  const STATUS_BADGE = { active: 'badge-success', draft: 'badge-warn', closed: 'badge-neutral', paused: 'badge-neutral' };
+  let allSurveys = [];
+
+  function render(filter) {
+    const grid = document.getElementById('projects-grid');
+    const filtered = filter === 'all' ? allSurveys : allSurveys.filter(s => s.status === filter);
+    if (!filtered.length) {
+      grid.innerHTML = `<div class="muted-note" style="padding:1.5rem;">No projects in this view.</div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map(s => `
+      <div class="feature-card">
+        <span class="badge ${STATUS_BADGE[s.status] || 'badge-neutral'}" style="margin-bottom:.8rem;">${s.status}</span>
+        <h3 style="font-size:1.05rem;">${s.title}</h3>
+        <p style="font-size:.85rem;">${s.description || 'No description yet.'}</p>
+        <div class="muted-note" style="margin-top:.8rem;">${s.module_type} · Created ${new Date(s.created_at + 'Z').toLocaleDateString()}</div>
+        <a href="/app/survey-builder.html" class="btn btn-ghost btn-sm" style="margin-top:1rem;">Open</a>
+      </div>`).join('');
+  }
+
+  document.querySelectorAll('.ptab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      render(tab.dataset.filter);
+    });
+  });
+
+  (async () => {
+    try {
+      const { surveys } = await apiRequest('/api/surveys');
+      allSurveys = surveys;
+      render('all');
+    } catch (e) {
+      document.getElementById('projects-grid').innerHTML = `<div class="muted-note" style="color:var(--danger);">Could not load: ${e.message}</div>`;
+    }
+  })();
+</script>
+</body>
+</html>

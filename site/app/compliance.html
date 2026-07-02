@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compliance — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="pill-tabs">
+        <a class="ctab active" data-tab="regulatory">Regulatory Status</a>
+        <a class="ctab" data-tab="consent">Consent Logs</a>
+      </div>
+
+      <div id="panel-regulatory">
+        <p class="muted-note" style="margin-bottom:1rem;">Set the regulatory checklist for each survey. This is guidance to help you track requirements — not a substitute for legal advice specific to your project.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Survey</th><th>COSTECH</th><th>NBS</th><th>Ethics / IRB</th><th>Minors Involved</th><th>Safeguarding Risk</th><th></th></tr></thead>
+            <tbody id="compliance-tbody">
+              <tr><td colspan="7" class="muted-note" style="padding:1.5rem;">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="panel-consent" style="display:none;">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Respondent</th><th>Consent</th><th>Timestamp</th></tr></thead>
+            <tbody id="consent-tbody">
+              <tr><td colspan="3" class="muted-note" style="padding:1.5rem;">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/compliance.html', eyebrow:'Trust & Compliance', title:'Compliance' });
+
+  document.querySelectorAll('.ctab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-regulatory').style.display = tab.dataset.tab === 'regulatory' ? 'block' : 'none';
+      document.getElementById('panel-consent').style.display = tab.dataset.tab === 'consent' ? 'block' : 'none';
+    });
+  });
+
+  const STATUS_OPTIONS = ['not_required', 'pending', 'approved'];
+  const STATUS_BADGE = { not_required: 'badge-neutral', pending: 'badge-warn', approved: 'badge-success' };
+  const STATUS_LABEL = { not_required: 'Not Required', pending: 'Pending', approved: 'Approved' };
+
+  function statusSelect(surveyId, field, current) {
+    return `<select class="compliance-field" data-survey="${surveyId}" data-field="${field}" style="padding:.35rem .5rem; font-size:.78rem;">
+      ${STATUS_OPTIONS.map(o => `<option value="${o}" ${o === current ? 'selected' : ''}>${STATUS_LABEL[o]}</option>`).join('')}
+    </select>`;
+  }
+
+  async function loadCompliance() {
+    const tbody = document.getElementById('compliance-tbody');
+    try {
+      const { surveys } = await apiRequest('/api/compliance');
+      if (!surveys.length) {
+        tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem;">No surveys yet.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = surveys.map(s => `
+        <tr>
+          <td>${s.title}</td>
+          <td>${statusSelect(s.survey_id, 'costech_status', s.costech_status)}</td>
+          <td>${statusSelect(s.survey_id, 'nbs_status', s.nbs_status)}</td>
+          <td>${statusSelect(s.survey_id, 'ethics_status', s.ethics_status)}</td>
+          <td><input type="checkbox" class="compliance-field" data-survey="${s.survey_id}" data-field="minors_involved" ${s.minors_involved ? 'checked' : ''}></td>
+          <td>
+            <select class="compliance-field" data-survey="${s.survey_id}" data-field="safeguarding_risk" style="padding:.35rem .5rem; font-size:.78rem;">
+              <option value="low" ${s.safeguarding_risk === 'low' ? 'selected' : ''}>Low</option>
+              <option value="medium" ${s.safeguarding_risk === 'medium' ? 'selected' : ''}>Medium</option>
+              <option value="high" ${s.safeguarding_risk === 'high' ? 'selected' : ''}>High</option>
+            </select>
+          </td>
+          <td><button class="btn btn-ghost btn-sm save-compliance-btn" data-survey="${s.survey_id}">Save</button></td>
+        </tr>`).join('');
+
+      document.querySelectorAll('.save-compliance-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const surveyId = btn.dataset.survey;
+          const fields = document.querySelectorAll(`.compliance-field[data-survey="${surveyId}"]`);
+          const payload = {};
+          fields.forEach(f => {
+            payload[f.dataset.field] = f.type === 'checkbox' ? f.checked : f.value;
+          });
+          btn.textContent = 'Saving…'; btn.disabled = true;
+          try {
+            await apiRequest(`/api/compliance/${surveyId}`, { method: 'PUT', body: payload });
+            btn.textContent = 'Saved ✓';
+          } catch (e) {
+            btn.textContent = 'Error';
+          } finally {
+            setTimeout(() => { btn.textContent = 'Save'; btn.disabled = false; }, 1500);
+          }
+        });
+      });
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+    }
+  }
+
+  async function loadConsent() {
+    const tbody = document.getElementById('consent-tbody');
+    try {
+      const { logs } = await apiRequest('/api/consent-logs');
+      if (!logs.length) {
+        tbody.innerHTML = `<tr><td colspan="3" class="muted-note" style="padding:1.5rem;">No consent records yet.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = logs.map(l => `
+        <tr>
+          <td>${l.phone_number || 'Web respondent'}</td>
+          <td>${l.consent_given ? '<span class="badge badge-success">Given</span>' : '<span class="badge badge-neutral">Not recorded</span>'}</td>
+          <td>${new Date(l.created_at + 'Z').toLocaleString()}</td>
+        </tr>`).join('');
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="3" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+    }
+  }
+
+  loadCompliance();
+  loadConsent();
+</script>
+</body>
+</html>

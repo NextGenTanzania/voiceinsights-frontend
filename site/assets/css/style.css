@@ -139,9 +139,10 @@ p { margin: 0 0 1em; color: var(--text-muted); }
 /* ---------- Cards / stats ---------- */
 .grid { display: grid; gap: 1rem; }
 .grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-5 { grid-template-columns: repeat(5, 1fr); }
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
 .grid-2 { grid-template-columns: repeat(2, 1fr); }
-@media (max-width: 1100px) { .grid-4 { grid-template-columns: repeat(2,1fr); } .grid-3 { grid-template-columns: repeat(2,1fr);} }
+@media (max-width: 1100px) { .grid-4 { grid-template-columns: repeat(2,1fr); } .grid-3 { grid-template-columns: repeat(2,1fr);} .grid-5 { grid-template-columns: repeat(2,1fr); } }
 
 .card {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
@@ -186,11 +187,13 @@ input::placeholder, textarea::placeholder { color: var(--text-dim); }
 .pill-tabs a { padding: .6rem .3rem; font-size: .87rem; font-weight: 600; color: var(--text-dim); border-bottom: 2px solid transparent; margin-right: 1.2rem; }
 .pill-tabs a.active { color: var(--text); border-color: var(--accent); }
 .muted-note { font-size: .8rem; color: var(--text-dim); }
+.pill-tabs a.dash-tab { cursor: pointer; }
 .progress { height: 6px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }
 .progress span { display: block; height: 100%; background: var(--accent-2); }
 
 /* ---------- Marketing (public) pages ---------- */
-.pub-nav { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 5vw; }
+.pub-nav { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 5vw; max-width: 1200px; margin: 0 auto; flex-wrap: wrap; gap: 1rem; }
+.pub-nav-links { flex-wrap: wrap; }
 .pub-hero { padding: 3rem 5vw 5rem; max-width: 1200px; margin: 0 auto; }
 .pub-hero .eyebrow { color: var(--accent-2); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 1rem; display:block; }
 .pub-hero h1 { font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.04; max-width: 14ch; }
@@ -199,11 +202,33 @@ input::placeholder, textarea::placeholder { color: var(--text-dim); }
 .pub-section h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); max-width: 20ch; }
 .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.6rem; }
 .feature-card .num { font-family: var(--font-mono); color: var(--accent-2); font-size: .78rem; margin-bottom: .8rem; display:block; }
-footer.pub-footer { padding: 3rem 5vw; border-top: 1px solid var(--border); margin-top: 2rem; display:flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+footer.pub-footer { padding: 3rem 5vw; max-width: 1200px; margin: 2rem auto 0; border-top: 1px solid var(--border); display:flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
 
 @media (max-width: 900px) {
   .sidebar { position: fixed; left: -260px; z-index: 40; transition: left .2s ease; box-shadow: 20px 0 40px rgba(0,0,0,.4); }
   .sidebar.open { left: 0; }
   .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
   .field-row { flex-direction: column; gap: 0; }
+}
+
+/* ---------- Public marketing pages: mobile ---------- */
+@media (max-width: 860px) {
+  .pub-nav {
+    flex-direction: column; align-items: flex-start; gap: .9rem; padding: 1rem 6vw;
+  }
+  .pub-nav-links { order: 3; width: 100%; gap: .9rem 1.2rem; font-size: .8rem; }
+  .pub-nav > div:last-child { width: 100%; justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+  .pub-hero { padding: 2rem 6vw 3rem; }
+  .pub-hero h1 { font-size: clamp(1.9rem, 8vw, 2.6rem); max-width: none; }
+  .pub-hero .lead { font-size: 1rem; max-width: none; }
+  .hero-grid { grid-template-columns: 1fr !important; }
+  .pub-section { padding: 2.5rem 6vw; }
+  .pub-section h2 { font-size: clamp(1.4rem, 6vw, 1.9rem); max-width: none; }
+  footer.pub-footer { padding: 2.5rem 6vw; flex-direction: column; gap: 1.75rem; }
+  .site-lang-switch button { padding: .35rem .55rem; font-size: .68rem; }
+  .feature-card { padding: 1.25rem; }
+}
+@media (max-width: 480px) {
+  .pub-hero h1 { font-size: 1.7rem; }
+  .btn { font-size: .85rem; padding: .6em 1.05em; }
 }

@@ -21,7 +21,12 @@ export function error(message, status = 400) {
 
 export async function requireAuth(request, env) {
   const auth = request.headers.get('Authorization') || '';
-  const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
+  let token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
+  // Fallback: allow ?token=... for contexts that can't set headers, like <audio src="...">.
+  if (!token) {
+    const url = new URL(request.url);
+    token = url.searchParams.get('token');
+  }
   if (!token) throw { status: 401, message: 'Missing Authorization header' };
   const { verifyJWT } = await import('./auth.js');
   try {

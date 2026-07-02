@@ -10,9 +10,24 @@ was using.
 |---|---|
 | Login (real password check, JWT) | ✅ Fully working once deployed |
 | Survey Builder → saves to database | ✅ Fully working once deployed |
-| Dashboard live counts | ✅ Fully working once deployed |
-| WhatsApp voice pipeline (transcription + AI analysis) | ✅ Code complete — **requires your own Twilio + OpenAI + Anthropic API keys** |
-| Billing, Admin Console pages | ⏳ Still mock data — not wired yet (next phase) |
+| Dashboard, Campaigns, Analytics, Fraud Alerts | ✅ Fully working once deployed (real data) |
+| CSV / Excel export (Reports page) | ✅ Fully working once deployed |
+| **WhatsApp** — multi-question voice pipeline | ✅ Code complete — needs your Twilio + OpenAI + Anthropic keys |
+| **Phone Call** — multi-question IVR with language select | ✅ Code complete — needs your Twilio Voice number |
+| **SMS** — feature-phone text fallback, multi-question | ✅ Code complete — needs your Twilio SMS-capable number |
+| **Web Link** — multi-question voice recorder, EN/SW toggle | ✅ Code complete — works immediately, no Twilio needed |
+| Billing, some Admin Console pages | ⏳ Still mock data — next phase |
+
+All four data-collection channels (WhatsApp, Phone Call, SMS, Web Link) share one
+session-based pipeline: a respondent is walked through the survey's questions
+**one at a time**, in order — same brain, four doors in.
+
+**Note on languages:** each survey question is authored once, in whichever
+language you write it. The Web Link page has an EN/SW toggle for its own UI
+text (buttons, labels); Phone Call asks the caller to choose English or
+Swahili at the start of the call. Extending this so the *same* question has
+translated variants per language is a natural next step — flag it if you want
+it built.
 
 ## 1. Install prerequisites
 
@@ -97,6 +112,42 @@ Commit and push — Cloudflare Pages will redeploy automatically, and
    transcribed, analyzed, and stored automatically, and you'll get an
    automatic WhatsApp reply confirming receipt.
 
+## 8. Connect Phone Call (Twilio Voice)
+
+1. In the Twilio Console, buy or use an existing **phone number** with Voice capability
+   (Phone Numbers → Manage → Buy a number).
+2. Open that number's configuration, under **Voice Configuration → A call comes in**, set:
+   ```
+   https://voiceinsights-api.<your-subdomain>.workers.dev/api/voice/incoming
+   ```
+   Method: `POST`
+3. Call that number — VoiceInsights will ask you to choose a language, then walk
+   you through each survey question, recording your answer after each one.
+
+## 9. Connect SMS (feature-phone fallback)
+
+Use the same phone number as Phone Call (most Twilio numbers support both), or a
+separate SMS-only number.
+
+1. Under that number's configuration, **Messaging Configuration → A message comes in**, set:
+   ```
+   https://voiceinsights-api.<your-subdomain>.workers.dev/api/sms/webhook
+   ```
+   Method: `POST`
+2. Text that number — VoiceInsights replies with each survey question in turn;
+   the respondent answers by texting back, no smartphone or data plan required.
+
+## 10. Web Link / in-app recorder
+
+No setup needed — this works as soon as the backend is deployed and `config.js`
+points to it. Share this link with respondents (optionally tag it to a specific
+campaign):
+```
+https://voiceinsights-frontend.pages.dev/respondent.html?campaign=<campaign_id>
+```
+It walks through every question in the survey, uses the browser's own
+microphone (no app install), and has an EN/SW toggle built in.
+
 ## API reference
 
 | Method | Path | Auth | Purpose |
@@ -107,9 +158,18 @@ Commit and push — Cloudflare Pages will redeploy automatically, and
 | POST | `/api/surveys` | Yes | Create a survey |
 | GET | `/api/surveys/:id` | Yes | Survey + its questions |
 | POST | `/api/surveys/:id/questions` | Yes | Add a question |
-| GET/POST | `/api/campaigns` | Yes | List / create campaigns |
-| GET | `/api/dashboard/stats` | Yes | Live counts for the dashboard |
-| POST | `/api/whatsapp/webhook` | No (Twilio-signed) | Inbound WhatsApp voice notes |
+| GET/POST | `/api/campaigns` | Yes | List / create campaigns (with reached counts) |
+| GET | `/api/dashboard/stats` | Yes | Live counts for the dashboard, by channel |
+| GET | `/api/analytics/summary` | Yes | Real sentiment/topics/quotes |
+| GET | `/api/fraud/alerts` | Yes | Real fraud-flagged responses |
+| GET | `/api/reports/csv?campaign_id=` | Yes | Excel-compatible export of every answer |
+| GET | `/api/public/campaigns/:id/questions` | No (public) | Question list for the web widget |
+| POST | `/api/whatsapp/webhook` | No (Twilio-signed) | Inbound WhatsApp — multi-question |
+| POST | `/api/voice/incoming` | No (Twilio-signed) | Inbound call — language select |
+| POST | `/api/voice/language` | No (Twilio-signed) | Asks Q1, starts recording |
+| POST | `/api/voice/recording` | No (Twilio-signed) | Recording callback, loops questions |
+| POST | `/api/sms/webhook` | No (Twilio-signed) | Inbound SMS — feature-phone fallback |
+| POST | `/api/web/submit` | No (public) | Web-link / in-app recorder, multi-question |
 
 ## Next steps (not built yet)
 

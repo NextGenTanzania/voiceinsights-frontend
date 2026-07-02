@@ -28,8 +28,10 @@
   </main>
 </div>
 <script src="/assets/js/config.js"></script>
+<script src="/assets/js/config.js"></script>
 <script src="/assets/js/app.js"></script>
 <script>
+  if (!requireLogin()) { /* redirected */ }
   renderShell({ role:'admin', active:'/admin/call-monitoring.html', eyebrow:'Voice Engine', title:'Call Monitoring' });
   const calls = [
     ['+255 7XX-XX2841','World Vision TZ','WhatsApp','2:14'],

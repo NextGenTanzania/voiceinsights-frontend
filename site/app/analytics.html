@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analytics — VoiceInsights Africa</title>
+<title>Analytics — VoiceInsights</title>
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
@@ -15,28 +15,18 @@
     <div class="content">
 
       <div class="card" style="margin-bottom:1.5rem; background:linear-gradient(135deg, var(--surface), var(--surface-3));">
-        <div class="card-title">Insight Generator — Overview wa Kiotomatiki (AI)</div>
-        <p style="color:var(--text); font-size:1.02rem; margin-bottom:.3rem;">64% of respondents report better yields compared to last season.</p>
-        <p style="color:var(--text); font-size:1.02rem;">22% cite fertilizer cost as the main challenge holding them back.</p>
+        <div class="card-title">Insight Generator — Automated Overview (AI)</div>
+        <p id="insight-summary" style="color:var(--text); font-size:1.02rem;">Loading insights…</p>
       </div>
 
       <div class="grid grid-2" style="margin-bottom:1.5rem;">
         <div class="card"><div class="card-title">Emerging Topics (Topic Tags)</div><canvas id="chartTopics" height="180"></canvas></div>
-        <div class="card"><div class="card-title">Sentiment Over Time</div><canvas id="chartSentimentTrend" height="180"></canvas></div>
+        <div class="card"><div class="card-title">Sentiment Breakdown</div><canvas id="chartSentiment" height="180"></canvas></div>
       </div>
 
       <div class="section-head"><h2 style="font-size:1.05rem;">Key Quotes (From Transcripts)</h2></div>
-      <div class="grid grid-2">
-        <div class="card">
-          <span class="badge badge-success" style="margin-bottom:.7rem;">Positive</span>
-          <p style="color:var(--text);">"Yields have increased thanks to the improved seeds we received this season."</p>
-          <div class="muted-note">Morogoro &middot; Farmer, age 41</div>
-        </div>
-        <div class="card">
-          <span class="badge badge-danger" style="margin-bottom:.7rem;">Negative / Distress</span>
-          <p style="color:var(--text);">"Pricing ya mbolea imepanda sana, sijui nitalimaje msimu ujao."</p>
-          <div class="muted-note">Singida &middot; Farmer, age 55</div>
-        </div>
+      <div class="grid grid-2" id="quotes-container">
+        <div class="card muted-note">Loading quotes…</div>
       </div>
     </div>
   </main>
@@ -44,22 +34,61 @@
 <script src="/assets/js/config.js"></script>
 <script src="/assets/js/app.js"></script>
 <script>
+  if (!requireLogin()) { /* redirected */ }
   renderShell({ role:'client', active:'/app/analytics.html', eyebrow:'Language Intelligence', title:'Analytics' });
-  new Chart(document.getElementById('chartTopics'), {
-    type: 'bar',
-    data: { labels: ['Yields','Fertilizer Cost','Water Access','Credit / Loans','Market'],
-      datasets:[{ data:[64,22,18,14,9], backgroundColor:'#4FA490' }] },
-    options: { indexAxis:'y', plugins:{legend:{display:false}}, scales:{x:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}}, y:{grid:{display:false},ticks:{color:'#9FB3AB'}}} }
-  });
-  new Chart(document.getElementById('chartSentimentTrend'), {
-    type: 'line',
-    data: { labels:['Week 1','Week 2','Week 3','Week 4','Week 5','Week 6'],
-      datasets:[
-        { label:'Positive', data:[52,55,58,60,63,61], borderColor:'#6FBF8B', tension:.35 },
-        { label:'Hasi', data:[18,16,14,12,11,10], borderColor:'#D9634A', tension:.35 },
-      ]},
-    options: { plugins:{legend:{position:'bottom', labels:{color:'#9FB3AB'}}}, scales:{x:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}}, y:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}}} }
-  });
+
+  const SENTIMENT_COLOR = { positive: '#6FBF8B', neutral: '#9FB3AB', negative: '#D9634A', distressed: '#E4C23A' };
+  const SENTIMENT_BADGE = { positive: 'badge-success', neutral: 'badge-neutral', negative: 'badge-danger', distressed: 'badge-warn' };
+  const SENTIMENT_LABEL = { positive: 'Positive', neutral: 'Neutral', negative: 'Negative', distressed: 'Distress' };
+
+  (async () => {
+    try {
+      const { sentiment, topics, quotes } = await apiRequest('/api/analytics/summary');
+
+      const totalResponses = sentiment.reduce((s, r) => s + r.n, 0);
+      const summaryEl = document.getElementById('insight-summary');
+      if (totalResponses === 0) {
+        summaryEl.textContent = 'No responses have come in yet. Once your campaigns start collecting voice responses, insights will appear here automatically.';
+      } else {
+        const top = [...sentiment].sort((a, b) => b.n - a.n)[0];
+        const topPct = Math.round((top.n / totalResponses) * 100);
+        const topTopic = topics[0];
+        summaryEl.textContent = `${totalResponses} response${totalResponses === 1 ? '' : 's'} analyzed so far. ${topPct}% are ${SENTIMENT_LABEL[top.overall_sentiment] || top.overall_sentiment}.` +
+          (topTopic ? ` Most discussed topic: "${topTopic.topic}" (${topTopic.count} mentions).` : '');
+      }
+
+      new Chart(document.getElementById('chartTopics'), {
+        type: 'bar',
+        data: { labels: topics.length ? topics.map(t => t.topic) : ['No topics yet'],
+          datasets: [{ data: topics.length ? topics.map(t => t.count) : [0], backgroundColor: '#4FA490' }] },
+        options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB' } }, y: { grid: { display: false }, ticks: { color: '#9FB3AB' } } } }
+      });
+
+      new Chart(document.getElementById('chartSentiment'), {
+        type: 'doughnut',
+        data: {
+          labels: sentiment.length ? sentiment.map(s => SENTIMENT_LABEL[s.overall_sentiment] || s.overall_sentiment || 'Unknown') : ['No data yet'],
+          datasets: [{ data: sentiment.length ? sentiment.map(s => s.n) : [1],
+            backgroundColor: sentiment.length ? sentiment.map(s => SENTIMENT_COLOR[s.overall_sentiment] || '#9FB3AB') : ['#243731'], borderWidth: 0 }],
+        },
+        options: { plugins: { legend: { position: 'bottom', labels: { color: '#9FB3AB', boxWidth: 10, padding: 14 } } } }
+      });
+
+      const quotesContainer = document.getElementById('quotes-container');
+      if (!quotes.length) {
+        quotesContainer.innerHTML = `<div class="card muted-note">No transcripts yet — quotes will appear here once responses come in.</div>`;
+      } else {
+        quotesContainer.innerHTML = quotes.map(q => `
+          <div class="card">
+            <span class="badge ${SENTIMENT_BADGE[q.overall_sentiment] || 'badge-neutral'}" style="margin-bottom:.7rem;">${SENTIMENT_LABEL[q.overall_sentiment] || 'Unrated'}</span>
+            <p style="color:var(--text);">"${q.raw_text}"</p>
+            <div class="muted-note">${new Date(q.started_at + 'Z').toLocaleDateString()}</div>
+          </div>`).join('');
+      }
+    } catch (e) {
+      document.getElementById('insight-summary').textContent = 'Could not load analytics: ' + e.message;
+    }
+  })();
 </script>
 </body>
 </html>

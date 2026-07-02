@@ -2,57 +2,202 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Survey — VoiceInsights Africa</title>
+<title>Survey — VoiceInsights</title>
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.5rem;">
   <div style="width:100%; max-width:420px;">
-    <div style="text-align:center; margin-bottom:2rem;">
-      <div style="width:38px;height:38px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:var(--accent-ink);font-family:var(--font-display);font-weight:700; margin:0 auto .8rem;">V</div>
-      <div class="muted-note">VoiceInsights Africa Survey &middot; Hauhitaji akaunti</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+      <div style="display:flex; align-items:center; gap:.6rem;">
+        <div style="width:34px;height:34px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:var(--accent-ink);font-family:var(--font-display);font-weight:700;">V</div>
+        <span class="muted-note" id="header-label">No account needed</span>
+      </div>
+      <div class="lang-toggle">
+        <button data-lang="en" class="active">EN</button>
+        <button data-lang="sw">SW</button>
+      </div>
     </div>
 
     <div class="card" id="q-card">
-      <div class="muted-note" style="margin-bottom:.5rem;">Question 2 of 8</div>
-      <div class="progress" style="margin-bottom:1.4rem;"><span style="width:25%"></span></div>
+      <div class="muted-note" id="progress-label" style="margin-bottom:.5rem;">Loading…</div>
+      <div class="progress" style="margin-bottom:1.4rem;"><span id="progress-bar" style="width:0%"></span></div>
 
-      <h2 style="font-size:1.25rem; line-height:1.35;">How has your harvest this season compared to last season?</h2>
-      <p style="font-size:.85rem;">Tap the button below then speak your answer.</p>
+      <h2 id="question-text" style="font-size:1.25rem; line-height:1.35;">Loading survey…</h2>
+      <p id="instruction-text" style="font-size:.85rem;"></p>
 
       <div style="display:flex; flex-direction:column; align-items:center; gap:1rem; margin: 2rem 0;">
-        <button id="rec-btn" style="width:76px; height:76px; border-radius:50%; background:var(--accent); border:none; color:var(--accent-ink); cursor:pointer; display:flex; align-items:center; justify-content:center;">
+        <button id="rec-btn" style="width:76px; height:76px; border-radius:50%; background:var(--accent); border:none; color:var(--accent-ink); cursor:pointer; display:flex; align-items:center; justify-content:center;" disabled>
           <i data-lucide="mic" style="width:28px; height:28px;"></i>
         </button>
         <div id="rec-wave" style="min-height:28px;"></div>
-        <div class="muted-note" id="rec-status">Tap to record your answer</div>
+        <div class="muted-note" id="rec-status"></div>
+        <audio id="playback" controls style="display:none; width:100%; margin-top:.5rem;"></audio>
       </div>
 
-      <div style="display:flex; gap:.6rem;">
-        <button class="btn btn-ghost" style="flex:1; justify-content:center;">Back</button>
-        <button class="btn btn-primary" style="flex:1; justify-content:center;">Continue &rarr;</button>
-      </div>
+      <button class="btn btn-primary" id="submit-btn" style="width:100%; justify-content:center;" disabled>Submit Answer</button>
     </div>
 
-    <p style="text-align:center; margin-top:1.5rem; font-size:.75rem; color:var(--text-dim);">Your answers are stored securely and used for research purposes only.</p>
+    <p style="text-align:center; margin-top:1.5rem; font-size:.75rem; color:var(--text-dim);" id="footer-note">Your answers are stored securely and used for research purposes only.</p>
   </div>
+<script src="/assets/js/config.js"></script>
 <script src="/assets/js/app.js"></script>
 <script>
   lucide.createIcons();
+
+  const STRINGS = {
+    en: {
+      header: 'No account needed', instruction: 'Tap the button below and speak your answer. Tap again to stop, then submit.',
+      tapToRecord: 'Tap to record your answer', recording: 'Recording… tap again to stop', ready: 'Recording ready — review below, then submit ✓',
+      submit: 'Submit Answer', submitting: 'Submitting…', next: 'Next Answer', done: 'Thank you for your responses!',
+      doneNote: 'Your answers have been recorded and analyzed. We appreciate your time.',
+      footer: 'Your answers are stored securely and used for research purposes only.',
+      micDenied: 'Microphone access denied — please allow microphone access and try again.',
+      loadError: 'Could not load this survey. The link may be invalid or expired.',
+      progress: (i, n) => `Question ${i} of ${n}`,
+    },
+    sw: {
+      header: 'Hauhitaji akaunti', instruction: 'Bonyeza kitufe hapa chini kisha zungumza jibu lako. Bonyeza tena kusitisha, kisha tuma.',
+      tapToRecord: 'Gusa kurekodi jibu lako', recording: 'Inarekodi… gusa tena kusitisha', ready: 'Rekodi tayari — kagua chini, kisha tuma ✓',
+      submit: 'Tuma Jibu', submitting: 'Inatuma…', next: 'Jibu Lifuatalo', done: 'Asante kwa majibu yako!',
+      doneNote: 'Majibu yako yamehifadhiwa na kuchambuliwa. Tunashukuru kwa muda wako.',
+      footer: 'Majibu yako yanahifadhiwa kwa usalama na kutumika kwa madhumuni ya utafiti pekee.',
+      micDenied: 'Ruhusa ya kipaza sauti imekataliwa — tafadhali ruhusu kipaza sauti na ujaribu tena.',
+      loadError: 'Imeshindwa kupakia utafiti huu. Kiungo kinaweza kuwa batili au kimeisha muda.',
+      progress: (i, n) => `Swali la ${i} kati ya ${n}`,
+    },
+  };
+  let lang = 'en';
+  function t(key, ...args) { const v = STRINGS[lang][key]; return typeof v === 'function' ? v(...args) : v; }
+
+  document.querySelectorAll('.lang-toggle button').forEach(b => {
+    b.addEventListener('click', () => {
+      lang = b.dataset.lang;
+      document.querySelectorAll('.lang-toggle button').forEach(x => x.classList.toggle('active', x === b));
+      applyStrings();
+    });
+  });
+  function applyStrings() {
+    document.getElementById('header-label').textContent = t('header');
+    document.getElementById('instruction-text').textContent = t('instruction');
+    document.getElementById('rec-status').textContent = recording ? t('recording') : (audioBlob ? t('ready') : t('tapToRecord'));
+    document.getElementById('submit-btn').textContent = questions.length ? t('submit') : t('submit');
+    document.getElementById('footer-note').textContent = t('footer');
+    if (questions.length) updateProgressLabel();
+  }
+
+  // ---------- Survey loading ----------
+  const params = new URLSearchParams(window.location.search);
+  const campaignId = params.get('campaign') || '';
+  const sessionKey = 'web_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+
+  let questions = [], currentIndex = 0, audioBlob = null, recording = false, mediaRecorder, chunks = [], waveTimer;
+
   const btn = document.getElementById('rec-btn');
   const status = document.getElementById('rec-status');
   const wave = document.getElementById('rec-wave');
-  let recording = false;
-  btn.addEventListener('click', () => {
-    recording = !recording;
-    if (recording) {
-      status.textContent = 'Recording... tap again to stop';
-      wave.innerHTML = makeWaveform(20, true);
-      btn.style.background = 'var(--danger)';
+  const submitBtn = document.getElementById('submit-btn');
+  const playback = document.getElementById('playback');
+  const qText = document.getElementById('question-text');
+  const progressLabel = document.getElementById('progress-label');
+  const progressBar = document.getElementById('progress-bar');
+
+  function updateProgressLabel() {
+    progressLabel.textContent = t('progress', currentIndex + 1, questions.length);
+    progressBar.style.width = Math.round(((currentIndex) / questions.length) * 100) + '%';
+  }
+
+  (async () => {
+    try {
+      const url = `${API_BASE_URL}/api/public/campaigns/${campaignId || 'camp_default'}/questions`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to load');
+      questions = data.questions || [];
+      if (!questions.length) throw new Error('No questions configured');
+      qText.textContent = questions[0].question_text;
+      updateProgressLabel();
+      btn.disabled = false;
+      applyStrings();
+    } catch (e) {
+      qText.textContent = t('loadError');
+      progressLabel.textContent = '';
+    }
+  })();
+
+  btn.addEventListener('click', async () => {
+    if (!recording) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        chunks = [];
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+        mediaRecorder.onstop = () => {
+          audioBlob = new Blob(chunks, { type: 'audio/webm' });
+          playback.src = URL.createObjectURL(audioBlob);
+          playback.style.display = 'block';
+          submitBtn.disabled = false;
+          stream.getTracks().forEach(tr => tr.stop());
+        };
+        mediaRecorder.start();
+        recording = true;
+        status.textContent = t('recording');
+        wave.innerHTML = makeWaveform(20, true);
+        clearInterval(waveTimer);
+        waveTimer = setInterval(() => { wave.innerHTML = makeWaveform(20, true); }, 900);
+        btn.style.background = 'var(--danger)';
+      } catch (err) {
+        status.textContent = t('micDenied');
+      }
     } else {
-      status.textContent = 'Answer saved ✓';
+      mediaRecorder.stop();
+      recording = false;
+      clearInterval(waveTimer);
+      status.textContent = t('ready');
       wave.innerHTML = '';
       btn.style.background = 'var(--accent)';
+    }
+  });
+
+  submitBtn.addEventListener('click', async () => {
+    if (!audioBlob) return;
+    submitBtn.disabled = true;
+    submitBtn.textContent = t('submitting');
+    try {
+      const form = new FormData();
+      form.append('audio', audioBlob, 'answer.webm');
+      form.append('session_key', sessionKey);
+      form.append('language', lang);
+      if (campaignId) form.append('campaign_id', campaignId);
+
+      const res = await fetch(`${API_BASE_URL}/api/web/submit`, { method: 'POST', body: form });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Submission failed');
+
+      audioBlob = null;
+      playback.style.display = 'none';
+
+      if (data.is_complete) {
+        document.getElementById('q-card').innerHTML = `
+          <div style="text-align:center; padding: 1.5rem 0;">
+            <div style="font-size:2.5rem; margin-bottom:1rem;">✓</div>
+            <h2 style="font-size:1.2rem; margin-bottom:.5rem;">${t('done')}</h2>
+            <p class="muted-note">${t('doneNote')}</p>
+          </div>`;
+      } else {
+        currentIndex++;
+        qText.textContent = data.next_question.question_text;
+        updateProgressLabel();
+        status.textContent = t('tapToRecord');
+        submitBtn.textContent = t('submit');
+        submitBtn.disabled = true;
+      }
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = t('submit');
+      status.textContent = err.message.includes('Failed to fetch')
+        ? 'Could not reach the server. Check your connection and try again.'
+        : 'Error: ' + err.message;
     }
   });
 </script>

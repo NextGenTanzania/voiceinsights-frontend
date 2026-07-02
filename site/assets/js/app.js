@@ -1,4 +1,4 @@
-/* VoiceInsights Africa — shared app shell + mock data */
+/* VoiceInsights — shared app shell + mock data */
 
 const VI = {
   lang: localStorage.getItem('vi_lang') || 'sw',

@@ -113,6 +113,25 @@ CREATE TABLE IF NOT EXISTS ai_insights (
   created_at          TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
+-- Tracks an in-progress multi-question conversation for a respondent on a
+-- given channel (WhatsApp phone number, Voice CallSid, or a web session key).
+-- Lets WhatsApp/Voice/SMS/Web all walk through the SAME survey question-by-question.
+CREATE TABLE IF NOT EXISTS sessions (
+  id                  TEXT PRIMARY KEY,
+  session_key         TEXT NOT NULL,      -- phone number, CallSid, or web session token
+  channel             TEXT NOT NULL,      -- whatsapp | phone_call | sms | web_link
+  campaign_id         TEXT NOT NULL REFERENCES campaigns(id),
+  survey_id           TEXT NOT NULL REFERENCES surveys(id),
+  respondent_id       TEXT NOT NULL REFERENCES respondents(id),
+  response_id         TEXT NOT NULL REFERENCES responses(id),
+  current_index       INTEGER NOT NULL DEFAULT 0,
+  language            TEXT NOT NULL DEFAULT 'sw',
+  status              TEXT NOT NULL DEFAULT 'in_progress',  -- in_progress | completed
+  created_at          TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at          TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_sessions_key ON sessions(session_key, channel, status);
+
 CREATE TABLE IF NOT EXISTS audit_logs (
   id                  TEXT PRIMARY KEY,
   organization_id     TEXT,
@@ -151,3 +170,17 @@ VALUES (
   'Kitentya Luth Msuya',
   'org_admin'
 );
+
+-- Default survey + campaign + question so the WhatsApp pipeline has somewhere
+-- to save incoming voice notes right out of the box (no manual setup needed).
+INSERT OR IGNORE INTO surveys (id, organization_id, created_by, title, description, module_type, language, status)
+VALUES ('survey_default', 'org_demo', 'user_demo_admin', 'WhatsApp Inbound Interviews', 'Auto-created survey that catches all incoming WhatsApp voice notes.', 'call_research', 'en', 'active');
+
+INSERT OR IGNORE INTO questions (id, survey_id, order_index, question_text, question_type)
+VALUES
+  ('q_default', 'survey_default', 0, 'Please share your feedback in your own words.', 'open_voice'),
+  ('q_default_2', 'survey_default', 1, 'What is the main challenge you are facing right now?', 'open_voice'),
+  ('q_default_3', 'survey_default', 2, 'Is there anything else you would like us to know?', 'open_voice');
+
+INSERT OR IGNORE INTO campaigns (id, survey_id, organization_id, name, channel, status)
+VALUES ('camp_default', 'survey_default', 'org_demo', 'WhatsApp Default Line', 'whatsapp', 'running');

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Campaigns — VoiceInsights Africa</title>
+<title>Campaigns — VoiceInsights</title>
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -12,25 +12,27 @@
   <main class="main">
     <div id="topbar-mount"></div>
     <div class="content">
-      <div class="section-head"><div></div><button class="btn btn-primary btn-sm">+ Campaigns Mpya</button></div>
+      <div class="section-head"><div></div><button class="btn btn-primary btn-sm" id="new-campaign-btn">+ New Campaign</button></div>
 
       <div class="grid grid-3" style="margin-bottom:1.5rem;">
-        <div class="card"><div class="card-title">Active Campaigns</div><div class="stat-value">4</div></div>
-        <div class="card"><div class="card-title">Targeted Respondents</div><div class="stat-value">6,200</div></div>
-        <div class="card"><div class="card-title">Reached Today</div><div class="stat-value">318</div></div>
+        <div class="card"><div class="card-title">Active Campaigns</div><div class="stat-value" id="stat-active">–</div></div>
+        <div class="card"><div class="card-title">Targeted Respondents</div><div class="stat-value" id="stat-targeted">–</div></div>
+        <div class="card"><div class="card-title">Total Reached</div><div class="stat-value" id="stat-reached">–</div></div>
       </div>
 
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Campaigns</th><th>Channel</th><th>Targeted</th><th>Reached</th><th>Progress</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td>Baseline — Morogoro Agriculture</td><td><span class="badge badge-neutral">WhatsApp</span></td><td>2,000</td><td>1,480</td><td style="width:150px;"><div class="progress"><span style="width:74%"></span></div></td><td><span class="badge badge-success">Active</span></td></tr>
-            <tr><td>Beneficiary Feedback — Zanzibar</td><td><span class="badge badge-neutral">Phone Call</span></td><td>900</td><td>405</td><td style="width:150px;"><div class="progress"><span style="width:45%"></span></div></td><td><span class="badge badge-success">Active</span></td></tr>
-            <tr><td>Business Owner Interviews — Phase 1</td><td><span class="badge badge-neutral">Phone Call</span></td><td>500</td><td>500</td><td style="width:150px;"><div class="progress"><span style="width:100%"></span></div></td><td><span class="badge badge-neutral">Completed</span></td></tr>
-            <tr><td>Business Owner Interviews — Phase 2</td><td><span class="badge badge-neutral">Phone Call</span></td><td>500</td><td>60</td><td style="width:150px;"><div class="progress"><span style="width:12%"></span></div></td><td><span class="badge badge-warn">Started</span></td></tr>
-            <tr><td>Endline — Singida Education</td><td><span class="badge badge-neutral">Web Link</span></td><td>1,200</td><td>0</td><td style="width:150px;"><div class="progress"><span style="width:0%"></span></div></td><td><span class="badge badge-warn">Scheduled</span></td></tr>
+          <thead><tr><th>Campaign</th><th>Channel</th><th>Targeted</th><th>Reached</th><th>Progress</th><th>Status</th></tr></thead>
+          <tbody id="campaigns-tbody">
+            <tr><td colspan="6" class="muted-note" style="padding:1.5rem;">Loading campaigns…</td></tr>
           </tbody>
         </table>
+      </div>
+
+      <div class="card" style="margin-top:1.5rem; background:linear-gradient(135deg, var(--surface), var(--surface-3));">
+        <div class="card-title">No network in the field?</div>
+        <p style="color:var(--text); margin-bottom:1rem;">The Enumerator App works with zero signal — field workers record answers offline all day, then sync everything in one tap once they're back in range.</p>
+        <a href="/enumerator.html" class="btn btn-primary btn-sm">Open Enumerator App →</a>
       </div>
     </div>
   </main>
@@ -39,6 +41,52 @@
 <script src="/assets/js/app.js"></script>
 <script>
   if (!requireLogin()) { /* redirected */ }
-  renderShell({ role:'client', active:'/app/campaigns.html', eyebrow:'Execution', title:'Campaigns' });</script>
+  renderShell({ role:'client', active:'/app/campaigns.html', eyebrow:'Execution', title:'Campaigns' });
+
+  const STATUS_BADGE = {
+    running: 'badge-success', scheduled: 'badge-warn', paused: 'badge-neutral', completed: 'badge-neutral',
+  };
+  const CHANNEL_LABEL = { whatsapp: 'WhatsApp', phone_call: 'Phone Call', web_link: 'Web Link', app: 'App' };
+
+  (async () => {
+    const tbody = document.getElementById('campaigns-tbody');
+    try {
+      const { campaigns } = await apiRequest('/api/campaigns');
+      if (!campaigns.length) {
+        tbody.innerHTML = `<tr><td colspan="6" class="muted-note" style="padding:1.5rem;">No campaigns yet. Create a survey, then link it to a campaign to start collecting responses.</td></tr>`;
+        document.getElementById('stat-active').textContent = '0';
+        document.getElementById('stat-targeted').textContent = '0';
+        document.getElementById('stat-reached').textContent = '0';
+        return;
+      }
+      let totalTargeted = 0, totalReached = 0, activeCount = 0;
+      tbody.innerHTML = campaigns.map(c => {
+        const targeted = c.target_respondents || 0;
+        const reached = c.reached_count || 0;
+        totalTargeted += targeted; totalReached += reached;
+        if (c.status === 'running') activeCount++;
+        const pct = targeted > 0 ? Math.min(100, Math.round((reached / targeted) * 100)) : (reached > 0 ? 100 : 0);
+        const badgeClass = STATUS_BADGE[c.status] || 'badge-neutral';
+        return `<tr>
+          <td>${c.name}</td>
+          <td><span class="badge badge-neutral">${CHANNEL_LABEL[c.channel] || c.channel}</span></td>
+          <td>${targeted || '—'}</td>
+          <td>${reached}</td>
+          <td style="width:150px;"><div class="progress"><span style="width:${pct}%"></span></div></td>
+          <td><span class="badge ${badgeClass}">${c.status}</span></td>
+        </tr>`;
+      }).join('');
+      document.getElementById('stat-active').textContent = activeCount;
+      document.getElementById('stat-targeted').textContent = totalTargeted.toLocaleString();
+      document.getElementById('stat-reached').textContent = totalReached.toLocaleString();
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="6" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load campaigns: ${e.message}</td></tr>`;
+    }
+  })();
+
+  document.getElementById('new-campaign-btn').addEventListener('click', () => {
+    window.location.href = '/app/surveys.html';
+  });
+</script>
 </body>
 </html>

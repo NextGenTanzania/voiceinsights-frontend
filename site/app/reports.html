@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reports — VoiceInsights Africa</title>
+<title>Reports — VoiceInsights</title>
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -12,21 +12,21 @@
   <main class="main">
     <div id="topbar-mount"></div>
     <div class="content">
-      <div class="section-head"><div></div><button class="btn btn-primary btn-sm">+ Tengeneza Reports</button></div>
+      <div class="section-head"><div></div><button class="btn btn-primary btn-sm" id="export-btn">⬇ Export All Responses (CSV)</button></div>
 
       <div class="grid grid-3" style="margin-bottom:1.5rem;">
-        <div class="feature-card"><span class="num">PDF</span><h3 style="font-size:1rem;">Reports ya Mfadhili</h3><p style="font-size:.85rem;">Overview tayari kutumwa kwa donor, na charts na nukuu muhimu.</p></div>
-        <div class="feature-card"><span class="num">XLSX</span><h3 style="font-size:1rem;">Excel for Analysts</h3><p style="font-size:.85rem;">Raw data with all responses and tagging for further analysis.</p></div>
-        <div class="feature-card"><span class="num">PPTX</span><h3 style="font-size:1rem;">Overview wa Watendaji</h3><p style="font-size:.85rem;">A short slide deck to present to leadership or the board.</p></div>
+        <div class="feature-card"><span class="num">CSV / Excel</span><h3 style="font-size:1rem;">Raw Data Export</h3><p style="font-size:.85rem;">Every response, transcript, sentiment, and fraud score — opens directly in Excel or Google Sheets. Real data, generated live.</p></div>
+        <div class="feature-card"><span class="num">PDF</span><h3 style="font-size:1rem;">Donor Report</h3><p style="font-size:.85rem;">Open the CSV export in Excel or Sheets, format it, then use "Save as PDF" — keeps full control of branding and layout.</p></div>
+        <div class="feature-card"><span class="num">Dashboard</span><h3 style="font-size:1rem;">Live Share Link</h3><p style="font-size:.85rem;">Share the Analytics page directly with stakeholders instead of a static file — always up to date.</p></div>
       </div>
+
+      <div id="export-status" class="muted-note" style="margin-bottom:1rem;"></div>
 
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Reports</th><th>Campaigns</th><th>Format</th><th>Generated</th><th>By</th><th></th></tr></thead>
+          <thead><tr><th>Report</th><th>Format</th><th>Notes</th></tr></thead>
           <tbody>
-            <tr><td>Baseline Report — Morogoro Q2</td><td>Baseline Kilimo Morogoro</td><td><span class="badge badge-neutral">PDF</span></td><td>Juni 28, 2026</td><td>K. Msuya</td><td><a class="btn btn-ghost btn-sm" href="#">Download</a></td></tr>
-            <tr><td>Raw Data Export — Zanzibar</td><td>Beneficiary Feedback Zanzibar</td><td><span class="badge badge-neutral">XLSX</span></td><td>Juni 24, 2026</td><td>System (Auto)</td><td><a class="btn btn-ghost btn-sm" href="#">Download</a></td></tr>
-            <tr><td>Board Summary — Phase 1</td><td>Business Owners Phase 1</td><td><span class="badge badge-neutral">PPTX</span></td><td>Juni 18, 2026</td><td>K. Msuya</td><td><a class="btn btn-ghost btn-sm" href="#">Download</a></td></tr>
+            <tr><td>All Responses — Raw Export</td><td><span class="badge badge-neutral">CSV</span></td><td class="muted-note">Includes every question, transcript, sentiment, and fraud score across all campaigns</td></tr>
           </tbody>
         </table>
       </div>
@@ -37,6 +37,39 @@
 <script src="/assets/js/app.js"></script>
 <script>
   if (!requireLogin()) { /* redirected */ }
-  renderShell({ role:'client', active:'/app/reports.html', eyebrow:'Reporting Engine', title:'Reports' });</script>
+  renderShell({ role:'client', active:'/app/reports.html', eyebrow:'Reporting Engine', title:'Reports' });
+
+  document.getElementById('export-btn').addEventListener('click', async () => {
+    const btn = document.getElementById('export-btn');
+    const statusEl = document.getElementById('export-status');
+    btn.disabled = true;
+    btn.textContent = 'Preparing export…';
+    try {
+      const token = localStorage.getItem('vi_token');
+      const res = await fetch(`${API_BASE_URL}/api/reports/csv`, { headers: { Authorization: `Bearer ${token}` } });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Export failed (${res.status})`);
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `voiceinsights-export-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      statusEl.textContent = 'Export downloaded ✓';
+      statusEl.style.color = 'var(--success)';
+    } catch (e) {
+      statusEl.textContent = 'Error: ' + e.message;
+      statusEl.style.color = 'var(--danger)';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '⬇ Export All Responses (CSV)';
+    }
+  });
+</script>
 </body>
 </html>

@@ -2,49 +2,287 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Enumerator App (Phase 2) — VoiceInsights Africa</title>
+<title>Enumerator App — VoiceInsights</title>
+<meta name="description" content="Offline-first field data collection. Works with zero network — syncs when you're back in range.">
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem;">
-  <div style="width:100%; max-width:340px; text-align:center;">
-    <div class="badge badge-accent" style="margin-bottom:1.5rem;">Phase 2 &middot; Coming Soon</div>
+<body style="min-height:100vh; padding:1.25rem;">
+  <div style="max-width:480px; margin:0 auto;">
 
-    <!-- phone frame -->
-    <div style="border:8px solid var(--surface-2); border-radius:32px; padding:1.2rem; background:var(--surface); box-shadow: 0 30px 60px rgba(0,0,0,.4);">
-      <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:1.5rem;">
-        <div style="width:26px;height:26px;border-radius:7px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:var(--accent-ink);font-family:var(--font-display);font-weight:700; font-size:.8rem;">V</div>
-        <span style="font-size:.85rem; font-weight:600;">Enumerator App</span>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem;">
+      <div style="display:flex; align-items:center; gap:.6rem;">
+        <div style="width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:var(--accent-ink);font-family:var(--font-display);font-weight:700;">V</div>
+        <span style="font-family:var(--font-display); font-weight:600;">Enumerator App</span>
+      </div>
+      <span class="badge" id="net-badge">…</span>
+    </div>
+
+    <!-- ============== HOME SCREEN ============== -->
+    <div id="screen-home">
+      <div class="card" style="margin-bottom:1rem;">
+        <div class="card-title">Today's Campaign</div>
+        <div id="campaign-name" style="font-family:var(--font-display); font-size:1.1rem; font-weight:600;">Loading…</div>
+        <div class="muted-note" id="campaign-note" style="margin-top:.3rem;"></div>
       </div>
 
-      <div style="text-align:left;">
-        <div class="muted-note" style="margin-bottom:.5rem;">Today's Tasks — Kilosa District</div>
-        <div class="card" style="margin-bottom:.6rem; padding:.9rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:.85rem; font-weight:600;">Household #0231</span>
-            <span class="badge badge-warn">Livejafikiwa</span>
-          </div>
-          <div class="muted-note" style="margin-top:.3rem;">Baseline — Morogoro Agriculture</div>
+      <button class="btn btn-primary" id="new-household-btn" style="width:100%; justify-content:center; margin-bottom:1rem;" disabled>
+        + Start New Household
+      </button>
+
+      <div class="section-head"><h2 style="font-size:1rem;">Pending Sync (<span id="pending-count">0</span>)</h2></div>
+      <div id="pending-list" style="margin-bottom:1rem;"></div>
+
+      <button class="btn btn-ghost" id="sync-btn" style="width:100%; justify-content:center;" disabled>
+        ⬆ Sync Now
+      </button>
+      <div id="sync-log" class="muted-note" style="margin-top:.75rem; white-space:pre-line;"></div>
+
+      <p class="muted-note" style="text-align:center; margin-top:2rem; font-size:.75rem;">
+        Everything is saved on this device first. Nothing uploads until you tap "Sync Now" — safe to use with zero signal all day.
+      </p>
+    </div>
+
+    <!-- ============== RECORDING SCREEN ============== -->
+    <div id="screen-record" style="display:none;">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.6rem;">
+          <span class="muted-note" id="rec-progress-label">Question 1 of 1</span>
+          <button class="btn btn-ghost btn-sm" id="cancel-household-btn">Cancel</button>
         </div>
-        <div class="card" style="margin-bottom:.6rem; padding:.9rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:.85rem; font-weight:600;">Household #0232</span>
-            <span class="badge badge-success">Completed</span>
-          </div>
-          <div class="muted-note" style="margin-top:.3rem;">Baseline — Morogoro Agriculture</div>
+        <div class="progress" style="margin-bottom:1.2rem;"><span id="rec-progress-bar" style="width:0%"></span></div>
+
+        <label>Household Label (optional)</label>
+        <input id="household-label" placeholder="e.g. Mama Amina, Kaya #14" style="margin-bottom:1.2rem;">
+
+        <h2 id="rec-question-text" style="font-size:1.2rem; line-height:1.35;">Loading question…</h2>
+
+        <div style="display:flex; flex-direction:column; align-items:center; gap:1rem; margin: 1.8rem 0;">
+          <button id="rec-btn" style="width:76px; height:76px; border-radius:50%; background:var(--accent); border:none; color:var(--accent-ink); cursor:pointer; display:flex; align-items:center; justify-content:center;">
+            <i data-lucide="mic" style="width:28px; height:28px;"></i>
+          </button>
+          <div id="rec-wave" style="min-height:28px;"></div>
+          <div class="muted-note" id="rec-status">Tap to record the respondent's answer</div>
+          <audio id="playback" controls style="display:none; width:100%; margin-top:.5rem;"></audio>
         </div>
-        <div class="card" style="padding:.9rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:.85rem; font-weight:600;">Household #0233</span>
-            <span class="badge badge-neutral">Offline — Will Sync</span>
-          </div>
-          <div class="muted-note" style="margin-top:.3rem;">Will sync once network is available</div>
-        </div>
+
+        <button class="btn btn-primary" id="save-answer-btn" style="width:100%; justify-content:center;" disabled>Save & Next</button>
       </div>
     </div>
 
-    <p style="margin-top:1.8rem; font-size:.85rem;">A mobile app for field workers — works even without internet (offline-first), syncing data once a connection is available.</p>
-    <a href="/app/dashboard.html" class="btn btn-ghost btn-sm">&larr; Back to Dashboard</a>
   </div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/offline-db.js"></script>
+<script>
+  lucide.createIcons();
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {/* offline on very first visit — fine */});
+  }
+
+  const campaignId = new URLSearchParams(window.location.search).get('campaign') || 'camp_default';
+  const netBadge = document.getElementById('net-badge');
+  const newHouseholdBtn = document.getElementById('new-household-btn');
+  const syncBtn = document.getElementById('sync-btn');
+  const syncLog = document.getElementById('sync-log');
+  const pendingList = document.getElementById('pending-list');
+  const pendingCount = document.getElementById('pending-count');
+  const campaignNameEl = document.getElementById('campaign-name');
+  const campaignNoteEl = document.getElementById('campaign-note');
+
+  let questions = [];
+
+  function updateNetBadge() {
+    const online = navigator.onLine;
+    netBadge.textContent = online ? 'Online' : 'Offline';
+    netBadge.className = 'badge ' + (online ? 'badge-success' : 'badge-neutral');
+    syncBtn.disabled = !online;
+  }
+  window.addEventListener('online', updateNetBadge);
+  window.addEventListener('offline', updateNetBadge);
+  updateNetBadge();
+
+  async function loadQuestions() {
+    if (navigator.onLine) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/public/campaigns/${campaignId}/questions`);
+        const data = await res.json();
+        if (res.ok) {
+          questions = data.questions || [];
+          await OfflineDB.cacheQuestions(campaignId, data.campaign.name, questions);
+          campaignNameEl.textContent = data.campaign.name;
+          campaignNoteEl.textContent = `${questions.length} questions · synced just now`;
+          newHouseholdBtn.disabled = questions.length === 0;
+          return;
+        }
+      } catch (e) { /* fall through to cache */ }
+    }
+    const cached = await OfflineDB.getCachedQuestions(campaignId);
+    if (cached) {
+      questions = cached.questions;
+      campaignNameEl.textContent = cached.campaignName;
+      campaignNoteEl.textContent = `${questions.length} questions · offline copy from earlier sync`;
+      newHouseholdBtn.disabled = questions.length === 0;
+    } else {
+      campaignNameEl.textContent = 'No campaign cached yet';
+      campaignNoteEl.textContent = 'Open this app once while online to download the survey questions.';
+    }
+  }
+
+  async function refreshPendingList() {
+    const households = await OfflineDB.getAllHouseholds();
+    const pending = households.filter(h => !h.synced);
+    pendingCount.textContent = pending.length;
+    syncBtn.disabled = !navigator.onLine || pending.length === 0;
+    if (!pending.length) {
+      pendingList.innerHTML = `<div class="muted-note">No households waiting — you're all synced.</div>`;
+      return;
+    }
+    pendingList.innerHTML = pending.map(h => `
+      <div class="card" style="margin-bottom:.6rem; padding:.9rem; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:.9rem; font-weight:600;">${h.label || 'Unlabeled household'}</div>
+          <div class="muted-note">${h.answers.length} answer${h.answers.length === 1 ? '' : 's'} · ${new Date(h.createdAt).toLocaleString()}</div>
+        </div>
+        <span class="badge badge-warn">Pending</span>
+      </div>`).join('');
+  }
+
+  loadQuestions();
+  refreshPendingList();
+
+  // ---------------- Recording screen ----------------
+  const screenHome = document.getElementById('screen-home');
+  const screenRecord = document.getElementById('screen-record');
+  const btn = document.getElementById('rec-btn');
+  const status = document.getElementById('rec-status');
+  const wave = document.getElementById('rec-wave');
+  const playback = document.getElementById('playback');
+  const saveAnswerBtn = document.getElementById('save-answer-btn');
+  const progressLabel = document.getElementById('rec-progress-label');
+  const progressBar = document.getElementById('rec-progress-bar');
+  const qText = document.getElementById('rec-question-text');
+  const labelInput = document.getElementById('household-label');
+
+  let currentHousehold = null, currentIndex = 0, mediaRecorder, chunks = [], audioBlob = null, recording = false, waveTimer;
+
+  newHouseholdBtn.addEventListener('click', () => {
+    currentHousehold = { id: 'hh_' + Date.now() + '_' + Math.random().toString(36).slice(2), label: '', answers: [], createdAt: Date.now(), synced: false };
+    currentIndex = 0;
+    labelInput.value = '';
+    showQuestion();
+    screenHome.style.display = 'none';
+    screenRecord.style.display = 'block';
+  });
+
+  document.getElementById('cancel-household-btn').addEventListener('click', () => {
+    if (confirm('Discard this household? Nothing recorded so far will be saved.')) {
+      screenRecord.style.display = 'none';
+      screenHome.style.display = 'block';
+      refreshPendingList();
+    }
+  });
+
+  function showQuestion() {
+    const q = questions[currentIndex];
+    qText.textContent = q.question_text;
+    progressLabel.textContent = `Question ${currentIndex + 1} of ${questions.length}`;
+    progressBar.style.width = Math.round((currentIndex / questions.length) * 100) + '%';
+    audioBlob = null;
+    playback.style.display = 'none';
+    saveAnswerBtn.disabled = true;
+    status.textContent = 'Tap to record the respondent\'s answer';
+    lucide.createIcons();
+  }
+
+  btn.addEventListener('click', async () => {
+    if (!recording) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        chunks = [];
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+        mediaRecorder.onstop = () => {
+          audioBlob = new Blob(chunks, { type: 'audio/webm' });
+          playback.src = URL.createObjectURL(audioBlob);
+          playback.style.display = 'block';
+          saveAnswerBtn.disabled = false;
+          stream.getTracks().forEach(t => t.stop());
+        };
+        mediaRecorder.start();
+        recording = true;
+        status.textContent = 'Recording… tap again to stop';
+        wave.innerHTML = makeWaveform(20, true);
+        clearInterval(waveTimer);
+        waveTimer = setInterval(() => { wave.innerHTML = makeWaveform(20, true); }, 900);
+        btn.style.background = 'var(--danger)';
+      } catch (err) {
+        status.textContent = 'Microphone access denied.';
+      }
+    } else {
+      mediaRecorder.stop();
+      recording = false;
+      clearInterval(waveTimer);
+      status.textContent = 'Recording ready — Save & Next when ready';
+      wave.innerHTML = '';
+      btn.style.background = 'var(--accent)';
+    }
+  });
+
+  saveAnswerBtn.addEventListener('click', async () => {
+    if (!audioBlob) return;
+    const q = questions[currentIndex];
+    currentHousehold.label = labelInput.value.trim();
+    currentHousehold.answers.push({ questionIndex: currentIndex, questionId: q.id, blob: audioBlob });
+
+    currentIndex++;
+    if (currentIndex >= questions.length) {
+      await OfflineDB.saveHousehold(currentHousehold);
+      screenRecord.style.display = 'none';
+      screenHome.style.display = 'block';
+      refreshPendingList();
+    } else {
+      showQuestion();
+    }
+  });
+
+  // ---------------- Sync ----------------
+  syncBtn.addEventListener('click', async () => {
+    if (!navigator.onLine) return;
+    syncBtn.disabled = true;
+    const households = (await OfflineDB.getAllHouseholds()).filter(h => !h.synced);
+    let done = 0, failed = 0;
+    syncLog.textContent = `Syncing ${households.length} household(s)…`;
+
+    for (const h of households) {
+      const sessionKey = h.id; // stable per household, so the backend groups all its answers into one response
+      let ok = true;
+      const sorted = [...h.answers].sort((a, b) => a.questionIndex - b.questionIndex);
+      for (const ans of sorted) {
+        try {
+          const form = new FormData();
+          form.append('audio', ans.blob, 'answer.webm');
+          form.append('session_key', sessionKey);
+          form.append('campaign_id', campaignId);
+          form.append('language', 'sw');
+          const res = await fetch(`${API_BASE_URL}/api/web/submit`, { method: 'POST', body: form });
+          if (!res.ok) { ok = false; break; }
+        } catch (e) { ok = false; break; }
+      }
+      if (ok) {
+        h.synced = true;
+        await OfflineDB.saveHousehold(h);
+        done++;
+      } else {
+        failed++;
+      }
+      syncLog.textContent = `Synced ${done}/${households.length}${failed ? `, ${failed} failed (will retry next sync)` : ''}…`;
+    }
+
+    syncLog.textContent = `Done. ${done} household(s) synced${failed ? `, ${failed} failed — try again when signal improves.` : '.'}`;
+    refreshPendingList();
+    updateNetBadge();
+  });
+</script>
 </body>
 </html>

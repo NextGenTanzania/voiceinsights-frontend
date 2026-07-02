@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clients — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="section-head"><div></div><button class="btn btn-primary btn-sm">+ Sajili Client Mpya</button></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Organization</th><th>Type</th><th>Plan</th><th>Users</th><th>Contract Ends</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>NEXT-GEN Holdings (Internal)</td><td>Local NGO</td><td>Enterprise</td><td>6</td><td>—</td><td><span class="badge badge-success">Active</span></td></tr>
+            <tr><td>World Vision Tanzania</td><td>INGO</td><td>Enterprise</td><td>22</td><td>Nov 2026</td><td><span class="badge badge-success">Active</span></td></tr>
+            <tr><td>UNICEF Tanzania</td><td>INGO</td><td>Enterprise</td><td>34</td><td>Jan 2027</td><td><span class="badge badge-success">Active</span></td></tr>
+            <tr><td>Amani Foundation</td><td>Local NGO</td><td>Starter</td><td>3</td><td>Sept 2026</td><td><span class="badge badge-success">Active</span></td></tr>
+            <tr><td>Rootical Tanzania</td><td>Research Firm</td><td>Professional</td><td>8</td><td>March 2027</td><td><span class="badge badge-warn">Billing Yamechelewa</span></td></tr>
+            <tr><td>Ministry of Agriculture (Pilot)</td><td>Government</td><td>Enterprise</td><td>12</td><td>Des 2026</td><td><span class="badge badge-neutral">Pilot</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'admin', active:'/admin/clients.html', eyebrow:'Client Management', title:'All Clients' });</script>
+</body>
+</html>

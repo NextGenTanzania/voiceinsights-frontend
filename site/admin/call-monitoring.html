@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Call Monitoring — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="grid grid-3" style="margin-bottom:1.5rem;">
+        <div class="card"><div class="card-title">Phone Call/Ujumbe Live Sasa</div><div class="stat-value" style="color:var(--success)">14</div></div>
+        <div class="card"><div class="card-title">Medium wa Duration wa Mahojiano</div><div class="stat-value">6:42</div></div>
+        <div class="card"><div class="card-title">Kushindwa Mainnganisha (24h)</div><div class="stat-value" style="color:var(--danger)">3.2%</div></div>
+      </div>
+      <div class="section-head"><h2 style="font-size:1.05rem;">Interviews In Progress Right Now</h2></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Respondent (Anonymized)</th><th>Client</th><th>Channel</th><th>Duration</th><th>Waveform</th><th>Status</th></tr></thead>
+          <tbody id="live-calls"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  renderShell({ role:'admin', active:'/admin/call-monitoring.html', eyebrow:'Voice Engine', title:'Call Monitoring' });
+  const calls = [
+    ['+255 7XX-XX2841','World Vision TZ','WhatsApp','2:14'],
+    ['+255 6XX-XX9013','NEXT-GEN Holdings','Phone Call','4:52'],
+    ['+255 7XX-XX3357','UNICEF TZ','Phone Call','1:08'],
+    ['+255 7XX-XX7726','Amani Foundation','WhatsApp','0:41'],
+  ];
+  document.getElementById('live-calls').innerHTML = calls.map(c => `
+    <tr><td>${c[0]}</td><td>${c[1]}</td><td><span class="badge badge-neutral">${c[2]}</span></td><td style="font-family:var(--font-mono);">${c[3]}</td>
+    <td style="width:140px;">${makeWaveform(16, true)}</td><td><span class="badge badge-success">Live</span></td></tr>`).join('');
+</script>
+</body>
+</html>

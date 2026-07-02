@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit Logs — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="field" style="max-width:340px; margin-bottom:1.2rem;">
+        <input placeholder="Search by user, action, or client...">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Time</th><th>User</th><th>Action</th><th>Resource</th><th>IP</th></tr></thead>
+          <tbody>
+            <tr><td style="font-family:var(--font-mono); font-size:.8rem;">2026-07-02 09:14:02</td><td>k.msuya@nextgentanzania.com</td><td>survey.create</td><td>Baseline — Morogoro Agriculture</td><td>102.219.4.18</td></tr>
+            <tr><td style="font-family:var(--font-mono); font-size:.8rem;">2026-07-02 08:59:41</td><td>amina@nextgentanzania.com</td><td>report.export</td><td>INV-2026-0042</td><td>102.219.4.22</td></tr>
+            <tr><td style="font-family:var(--font-mono); font-size:.8rem;">2026-07-01 21:40:10</td><td>system</td><td>fraud.flag_raised</td><td>#RESP-88213</td><td>—</td></tr>
+            <tr><td style="font-family:var(--font-mono); font-size:.8rem;">2026-07-01 15:10:33</td><td>me.officer@worldvision.org</td><td>data.export_bulk (12,000 rows)</td><td>Campaign #WV-2026-04</td><td>41.72.10.5</td></tr>
+            <tr><td style="font-family:var(--font-mono); font-size:.8rem;">2026-07-01 10:02:15</td><td>admin@voiceinsights.africa</td><td>client.create</td><td>Amani Foundation</td><td>102.219.4.1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'admin', active:'/admin/audit-logs.html', eyebrow:'Security', title:'Audit Logs' });</script>
+</body>
+</html>

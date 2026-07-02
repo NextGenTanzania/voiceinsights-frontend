@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem;">
+  <div style="width:100%; max-width:400px;">
+    <div style="display:flex;align-items:center;gap:.6rem; margin-bottom:2.5rem; justify-content:center;">
+      <div style="width:34px;height:34px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:var(--accent-ink);font-family:var(--font-display);font-weight:700;">V</div>
+      <span style="font-family:var(--font-display); font-weight:600; font-size:1.2rem;">VoiceInsights <span style="color:var(--accent-2)">Africa</span></span>
+    </div>
+
+    <div class="card">
+      <h2 style="font-size:1.3rem; margin-bottom:.3rem;">Welcome back</h2>
+      <p style="margin-bottom:1.5rem;">Log in to your organization's account.</p>
+
+      <form id="login-form">
+        <div class="field">
+          <label>Email address</label>
+          <input id="email" type="email" placeholder="admin@nextgentanzania.com" required>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input id="password" type="password" placeholder="••••••••" required>
+        </div>
+        <div id="login-error" style="display:none; color:var(--danger); font-size:.82rem; margin-bottom:1rem;"></div>
+        <button class="btn btn-primary" style="width:100%; justify-content:center;" type="submit" id="login-btn">Log in &rarr;</button>
+      </form>
+
+      <div class="muted-note" style="margin-top:1rem;">Demo login: <b style="color:var(--text-muted)">admin@nextgentanzania.com</b> / <b style="color:var(--text-muted)">VoiceInsights2026!</b><br>(works once you've deployed the backend and run schema.sql)</div>
+
+      <div style="margin-top:1.2rem; display:flex; justify-content:space-between; font-size:.82rem;">
+        <a href="#" style="color:var(--text-dim);">Forgot password?</a>
+        <a href="/index.html" style="color:var(--accent-2);">Request Demo</a>
+      </div>
+    </div>
+
+    <p style="text-align:center; margin-top:1.5rem; font-size:.78rem; color:var(--text-dim);">
+      Internal team? <a href="/admin/dashboard.html" style="color:var(--text-muted);">Log in Admin Console</a>
+    </p>
+  </div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('login-btn');
+    const errBox = document.getElementById('login-error');
+    errBox.style.display = 'none';
+    btn.textContent = 'Logging in…';
+    btn.disabled = true;
+    try {
+      const data = await apiRequest('/api/auth/login', {
+        method: 'POST',
+        auth: false,
+        body: { email: document.getElementById('email').value, password: document.getElementById('password').value },
+      });
+      localStorage.setItem('vi_token', data.token);
+      localStorage.setItem('vi_user', JSON.stringify(data.user));
+      window.location.href = '/app/dashboard.html';
+    } catch (err) {
+      errBox.textContent = err.message.includes('Failed to fetch')
+        ? 'Cannot reach the backend. Have you deployed it and set API_BASE_URL in config.js?'
+        : err.message;
+      errBox.style.display = 'block';
+      btn.textContent = 'Log in →';
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

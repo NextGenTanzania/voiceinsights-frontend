@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+
+      <div class="card" style="margin-bottom:1.5rem; background:linear-gradient(135deg, var(--surface), var(--surface-3));">
+        <div class="card-title">Insight Generator — Overview wa Kiotomatiki (AI)</div>
+        <p style="color:var(--text); font-size:1.02rem; margin-bottom:.3rem;">64% of respondents report better yields compared to last season.</p>
+        <p style="color:var(--text); font-size:1.02rem;">22% cite fertilizer cost as the main challenge holding them back.</p>
+      </div>
+
+      <div class="grid grid-2" style="margin-bottom:1.5rem;">
+        <div class="card"><div class="card-title">Emerging Topics (Topic Tags)</div><canvas id="chartTopics" height="180"></canvas></div>
+        <div class="card"><div class="card-title">Sentiment Over Time</div><canvas id="chartSentimentTrend" height="180"></canvas></div>
+      </div>
+
+      <div class="section-head"><h2 style="font-size:1.05rem;">Key Quotes (From Transcripts)</h2></div>
+      <div class="grid grid-2">
+        <div class="card">
+          <span class="badge badge-success" style="margin-bottom:.7rem;">Positive</span>
+          <p style="color:var(--text);">"Yields have increased thanks to the improved seeds we received this season."</p>
+          <div class="muted-note">Morogoro &middot; Farmer, age 41</div>
+        </div>
+        <div class="card">
+          <span class="badge badge-danger" style="margin-bottom:.7rem;">Negative / Distress</span>
+          <p style="color:var(--text);">"Pricing ya mbolea imepanda sana, sijui nitalimaje msimu ujao."</p>
+          <div class="muted-note">Singida &middot; Farmer, age 55</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  renderShell({ role:'client', active:'/app/analytics.html', eyebrow:'Language Intelligence', title:'Analytics' });
+  new Chart(document.getElementById('chartTopics'), {
+    type: 'bar',
+    data: { labels: ['Yields','Fertilizer Cost','Water Access','Credit / Loans','Market'],
+      datasets:[{ data:[64,22,18,14,9], backgroundColor:'#4FA490' }] },
+    options: { indexAxis:'y', plugins:{legend:{display:false}}, scales:{x:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}}, y:{grid:{display:false},ticks:{color:'#9FB3AB'}}} }
+  });
+  new Chart(document.getElementById('chartSentimentTrend'), {
+    type: 'line',
+    data: { labels:['Week 1','Week 2','Week 3','Week 4','Week 5','Week 6'],
+      datasets:[
+        { label:'Positive', data:[52,55,58,60,63,61], borderColor:'#6FBF8B', tension:.35 },
+        { label:'Hasi', data:[18,16,14,12,11,10], borderColor:'#D9634A', tension:.35 },
+      ]},
+    options: { plugins:{legend:{position:'bottom', labels:{color:'#9FB3AB'}}}, scales:{x:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}}, y:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}}} }
+  });
+</script>
+</body>
+</html>

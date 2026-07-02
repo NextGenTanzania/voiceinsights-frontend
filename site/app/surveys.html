@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surveys — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="section-head">
+        <div></div>
+        <a href="/app/survey-builder.html" class="btn btn-primary btn-sm">+ Survey Mpya</a>
+      </div>
+      <div class="pill-tabs">
+        <a class="active">All (12)</a><a>Active (7)</a><a>Draft (3)</a><a>Completed (2)</a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name la Survey</th><th>Type</th><th>Language</th><th>Questions</th><th>Campaigns Zinazounganishwa</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Baseline — Morogoro Region Agriculture</td><td>Impact Monitoring</td><td>SW</td><td>14</td><td>1</td><td><span class="badge badge-success">Active</span></td><td><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html">Open</a></td></tr>
+            <tr><td>Beneficiary Feedback — Zanzibar</td><td>Beneficiary Feedback</td><td>SW</td><td>8</td><td>1</td><td><span class="badge badge-success">Active</span></td><td><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html">Open</a></td></tr>
+            <tr><td>Anonymous Grievances — Dar es Salaam</td><td>Grievance</td><td>SW/EN</td><td>6</td><td>1</td><td><span class="badge badge-neutral">Completed</span></td><td><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html">Open</a></td></tr>
+            <tr><td>Endline — Singida Education</td><td>Impact Monitoring</td><td>SW</td><td>18</td><td>1</td><td><span class="badge badge-warn">Draft</span></td><td><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html">Open</a></td></tr>
+            <tr><td>Small Business Owner Interviews</td><td>Call-Based Research</td><td>SW</td><td>10</td><td>2</td><td><span class="badge badge-success">Active</span></td><td><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html">Open</a></td></tr>
+            <tr><td>Market Survey — Fertilizer</td><td>Survey</td><td>SW</td><td>12</td><td>1</td><td><span class="badge badge-warn">Draft</span></td><td><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html">Open</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/surveys.html', eyebrow:'Survey Management', title:'All Surveys' });</script>
+</body>
+</html>

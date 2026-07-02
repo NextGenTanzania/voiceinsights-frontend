@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+
+      <div class="grid grid-4" style="margin-bottom:1.5rem;">
+        <div class="card">
+          <div class="card-title">Active Surveys</div>
+          <div class="stat-value">7 <span class="stat-delta up">+2</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Total Calls / Messages</div>
+          <div class="stat-value">4,812 <span class="stat-delta up">+318</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Response Rate</div>
+          <div class="stat-value">68% <span class="stat-delta up">+4%</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Positive Sentiment</div>
+          <div class="stat-value">61% <span class="stat-delta down">-2%</span></div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="margin-bottom:1.5rem; align-items:stretch;">
+        <div class="card">
+          <div class="section-head"><div class="card-title" style="margin:0;">Responses per Week</div></div>
+          <canvas id="chartResponses" height="140"></canvas>
+        </div>
+        <div class="card">
+          <div class="section-head"><div class="card-title" style="margin:0;">Sentiment Breakdown</div></div>
+          <canvas id="chartSentiment" height="140"></canvas>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <h2 style="font-size:1.1rem;">Campaigns za Hivi Karibuni</h2>
+        <a href="/app/campaigns.html" class="btn btn-ghost btn-sm">View all</a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Campaigns</th><th>Survey</th><th>Channel</th><th>Progress</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Baseline — Morogoro Region Agriculture</td><td>Impact Monitoring</td><td>WhatsApp</td><td style="width:160px;"><div class="progress"><span style="width:74%"></span></div></td><td><span class="badge badge-success">Active</span></td></tr>
+            <tr><td>Beneficiary Feedback — Zanzibar</td><td>Beneficiary Feedback</td><td>Phone Call</td><td style="width:160px;"><div class="progress"><span style="width:45%"></span></div></td><td><span class="badge badge-success">Active</span></td></tr>
+            <tr><td>Anonymous Grievances — Dar es Salaam</td><td>Grievance</td><td>WhatsApp</td><td style="width:160px;"><div class="progress"><span style="width:100%"></span></div></td><td><span class="badge badge-neutral">Completed</span></td></tr>
+            <tr><td>Endline — Singida Education</td><td>Impact Monitoring</td><td>Web Link</td><td style="width:160px;"><div class="progress"><span style="width:12%"></span></div></td><td><span class="badge badge-warn">Recently started</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected to login */ }
+  const storedUser = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  if (storedUser) { VI.user.name = storedUser.full_name; VI.user.initials = storedUser.full_name.split(' ').map(w=>w[0]).slice(0,2).join(''); }
+
+  renderShell({ role: 'client', active: '/app/dashboard.html', eyebrow: 'Overview', title: 'Hello, ' + VI.user.name.split(' ')[0] });
+
+  // Pull real counts from the backend; falls back silently to the mock numbers already in the HTML if the backend isn't deployed yet.
+  (async () => {
+    try {
+      const { active_surveys, total_responses } = await apiRequest('/api/dashboard/stats');
+      document.querySelectorAll('.stat-value')[0].childNodes[0].textContent = active_surveys + ' ';
+      document.querySelectorAll('.stat-value')[1].childNodes[0].textContent = total_responses + ' ';
+    } catch (e) {
+      console.warn('Live stats unavailable, showing demo data:', e.message);
+    }
+  })();
+
+
+  new Chart(document.getElementById('chartResponses'), {
+    type: 'line',
+    data: { labels: ['Week 1','Week 2','Week 3','Week 4','Week 5','Week 6'],
+      datasets: [{ data: [320,410,380,520,610,690], borderColor: '#E4A23A', backgroundColor: 'rgba(228,162,58,.12)', fill: true, tension: .35 }] },
+    options: { plugins: { legend: { display:false } }, scales: { x: { grid:{color:'rgba(244,239,230,.06)'}, ticks:{color:'#9FB3AB'} }, y: { grid:{color:'rgba(244,239,230,.06)'}, ticks:{color:'#9FB3AB'} } } }
+  });
+  new Chart(document.getElementById('chartSentiment'), {
+    type: 'doughnut',
+    data: { labels: ['Positive','Medium','Hasi','Dhiki/Haraka'], datasets: [{ data: [61,24,10,5], backgroundColor:['#6FBF8B','#9FB3AB','#D9634A','#E4C23A'], borderWidth:0 }] },
+    options: { plugins: { legend: { position:'bottom', labels:{ color:'#9FB3AB', boxWidth:10, padding:14 } } } }
+  });
+</script>
+</body>
+</html>

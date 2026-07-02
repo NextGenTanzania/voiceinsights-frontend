@@ -1,0 +1,30 @@
+name = "voiceinsights-api"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+
+# ---- D1 Database ----
+# Created with: wrangler d1 create voiceinsights-db
+# Then paste the database_id it gives you below.
+[[d1_databases]]
+binding = "DB"
+database_name = "voiceinsights-db"
+database_id = "f317a162-ccd8-44ab-8e83-cc931f6b65cb"
+
+# ---- R2 Bucket (audio storage) ----
+# Created with: wrangler r2 bucket create voiceinsights-audio
+[[r2_buckets]]
+binding = "AUDIO_BUCKET"
+bucket_name = "voiceinsights-audio"
+
+# ---- Non-secret variables ----
+[vars]
+DEFAULT_ORG_ID = "org_demo"
+DEFAULT_CAMPAIGN_ID = "camp_default"
+DEFAULT_QUESTION_ID = "q_default"
+
+# ---- Secrets (do NOT put real values here — set via `wrangler secret put`) ----
+# JWT_SECRET          -> wrangler secret put JWT_SECRET
+# OPENAI_API_KEY      -> wrangler secret put OPENAI_API_KEY
+# ANTHROPIC_API_KEY   -> wrangler secret put ANTHROPIC_API_KEY
+# TWILIO_ACCOUNT_SID  -> wrangler secret put TWILIO_ACCOUNT_SID
+# TWILIO_AUTH_TOKEN   -> wrangler secret put TWILIO_AUTH_TOKEN

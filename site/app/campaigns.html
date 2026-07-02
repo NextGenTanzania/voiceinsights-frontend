@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campaigns — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="section-head"><div></div><button class="btn btn-primary btn-sm">+ Campaigns Mpya</button></div>
+
+      <div class="grid grid-3" style="margin-bottom:1.5rem;">
+        <div class="card"><div class="card-title">Active Campaigns</div><div class="stat-value">4</div></div>
+        <div class="card"><div class="card-title">Targeted Respondents</div><div class="stat-value">6,200</div></div>
+        <div class="card"><div class="card-title">Reached Today</div><div class="stat-value">318</div></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Campaigns</th><th>Channel</th><th>Targeted</th><th>Reached</th><th>Progress</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Baseline — Morogoro Agriculture</td><td><span class="badge badge-neutral">WhatsApp</span></td><td>2,000</td><td>1,480</td><td style="width:150px;"><div class="progress"><span style="width:74%"></span></div></td><td><span class="badge badge-success">Active</span></td></tr>
+            <tr><td>Beneficiary Feedback — Zanzibar</td><td><span class="badge badge-neutral">Phone Call</span></td><td>900</td><td>405</td><td style="width:150px;"><div class="progress"><span style="width:45%"></span></div></td><td><span class="badge badge-success">Active</span></td></tr>
+            <tr><td>Business Owner Interviews — Phase 1</td><td><span class="badge badge-neutral">Phone Call</span></td><td>500</td><td>500</td><td style="width:150px;"><div class="progress"><span style="width:100%"></span></div></td><td><span class="badge badge-neutral">Completed</span></td></tr>
+            <tr><td>Business Owner Interviews — Phase 2</td><td><span class="badge badge-neutral">Phone Call</span></td><td>500</td><td>60</td><td style="width:150px;"><div class="progress"><span style="width:12%"></span></div></td><td><span class="badge badge-warn">Started</span></td></tr>
+            <tr><td>Endline — Singida Education</td><td><span class="badge badge-neutral">Web Link</span></td><td>1,200</td><td>0</td><td style="width:150px;"><div class="progress"><span style="width:0%"></span></div></td><td><span class="badge badge-warn">Scheduled</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/campaigns.html', eyebrow:'Execution', title:'Campaigns' });</script>
+</body>
+</html>

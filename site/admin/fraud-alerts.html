@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fraud Alerts — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="card" style="margin-bottom:1.5rem; border-color:var(--danger);">
+        <div class="card-title" style="color:var(--danger);">Fraud Engine — Status ya Sasa</div>
+        <p style="color:var(--text);">Four fraud patterns are monitored: repeated answers, suspicious speed, matching patterns, and synthetic (fake) audio.</p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Respondent</th><th>Client</th><th>Type ya Tahadhari</th><th>Fraud Score</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>#RESP-88213</td><td>Rootical TZ</td><td>Repeated answers (identical patterns)</td><td style="color:var(--danger); font-family:var(--font-mono);">0.91</td><td><span class="badge badge-danger">Unreviewed</span></td><td><a class="btn btn-ghost btn-sm">Review</a></td></tr>
+            <tr><td>#RESP-88190</td><td>World Vision TZ</td><td>Unusual speed (speed anomaly)</td><td style="color:var(--warn); font-family:var(--font-mono);">0.68</td><td><span class="badge badge-warn">Under Review</span></td><td><a class="btn btn-ghost btn-sm">Review</a></td></tr>
+            <tr><td>#RESP-88104</td><td>Amani Foundation</td><td>Matching voice (synthetic audio suspicion)</td><td style="color:var(--danger); font-family:var(--font-mono);">0.83</td><td><span class="badge badge-danger">Unreviewed</span></td><td><a class="btn btn-ghost btn-sm">Review</a></td></tr>
+            <tr><td>#RESP-87920</td><td>NEXT-GEN Holdings</td><td>Matching script (repeated script)</td><td style="color:var(--text-dim); font-family:var(--font-mono);">0.44</td><td><span class="badge badge-neutral">Cleared (False Positive)</span></td><td><a class="btn btn-ghost btn-sm">Review</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'admin', active:'/admin/fraud-alerts.html', eyebrow:'Trust & Safety', title:'Fraud Alerts' });</script>
+</body>
+</html>

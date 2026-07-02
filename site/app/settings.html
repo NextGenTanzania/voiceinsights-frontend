@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content" style="max-width:700px;">
+      <div class="pill-tabs">
+        <a class="active">Organization</a><a>Users</a><a>Notifications</a><a>Security</a>
+      </div>
+      <div class="card" style="margin-bottom:1.25rem;">
+        <div class="field"><label>Name la Organization</label><input value="NEXT-GEN Holdings Company Limited"></div>
+        <div class="field-row">
+          <div class="field"><label>Type ya Organization</label><select><option>Local NGO</option><option>INGO</option><option>Government</option><option>Research Firm</option></select></div>
+          <div class="field"><label>Language Chaguo-msingi</label><select><option>Swahili</option><option>English</option></select></div>
+        </div>
+        <button class="btn btn-primary btn-sm">Save Changes</button>
+      </div>
+
+      <div class="section-head"><h2 style="font-size:1.05rem;">Users wa Timu</h2><button class="btn btn-ghost btn-sm">+ Invite User</button></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Role</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Kitentya Msuya</td><td>luth@nextgentanzania.com</td><td><span class="badge badge-accent">Org Admin</span></td><td><a class="btn btn-ghost btn-sm">Edit</a></td></tr>
+            <tr><td>Amina Rashid</td><td>amina@nextgentanzania.com</td><td><span class="badge badge-neutral">M&amp;E Officer</span></td><td><a class="btn btn-ghost btn-sm">Edit</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/settings.html', eyebrow:'Account', title:'Settings' });</script>
+</body>
+</html>

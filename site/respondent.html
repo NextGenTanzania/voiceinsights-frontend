@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Survey — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.5rem;">
+  <div style="width:100%; max-width:420px;">
+    <div style="text-align:center; margin-bottom:2rem;">
+      <div style="width:38px;height:38px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:var(--accent-ink);font-family:var(--font-display);font-weight:700; margin:0 auto .8rem;">V</div>
+      <div class="muted-note">VoiceInsights Africa Survey &middot; Hauhitaji akaunti</div>
+    </div>
+
+    <div class="card" id="q-card">
+      <div class="muted-note" style="margin-bottom:.5rem;">Question 2 of 8</div>
+      <div class="progress" style="margin-bottom:1.4rem;"><span style="width:25%"></span></div>
+
+      <h2 style="font-size:1.25rem; line-height:1.35;">How has your harvest this season compared to last season?</h2>
+      <p style="font-size:.85rem;">Tap the button below then speak your answer.</p>
+
+      <div style="display:flex; flex-direction:column; align-items:center; gap:1rem; margin: 2rem 0;">
+        <button id="rec-btn" style="width:76px; height:76px; border-radius:50%; background:var(--accent); border:none; color:var(--accent-ink); cursor:pointer; display:flex; align-items:center; justify-content:center;">
+          <i data-lucide="mic" style="width:28px; height:28px;"></i>
+        </button>
+        <div id="rec-wave" style="min-height:28px;"></div>
+        <div class="muted-note" id="rec-status">Tap to record your answer</div>
+      </div>
+
+      <div style="display:flex; gap:.6rem;">
+        <button class="btn btn-ghost" style="flex:1; justify-content:center;">Back</button>
+        <button class="btn btn-primary" style="flex:1; justify-content:center;">Continue &rarr;</button>
+      </div>
+    </div>
+
+    <p style="text-align:center; margin-top:1.5rem; font-size:.75rem; color:var(--text-dim);">Your answers are stored securely and used for research purposes only.</p>
+  </div>
+<script src="/assets/js/app.js"></script>
+<script>
+  lucide.createIcons();
+  const btn = document.getElementById('rec-btn');
+  const status = document.getElementById('rec-status');
+  const wave = document.getElementById('rec-wave');
+  let recording = false;
+  btn.addEventListener('click', () => {
+    recording = !recording;
+    if (recording) {
+      status.textContent = 'Recording... tap again to stop';
+      wave.innerHTML = makeWaveform(20, true);
+      btn.style.background = 'var(--danger)';
+    } else {
+      status.textContent = 'Answer saved ✓';
+      wave.innerHTML = '';
+      btn.style.background = 'var(--accent)';
+    }
+  });
+</script>
+</body>
+</html>

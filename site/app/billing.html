@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Billing — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="grid grid-2" style="margin-bottom:1.5rem;">
+        <div class="card">
+          <div class="card-title">Current Plan</div>
+          <h3 style="font-size:1.3rem;">Professional</h3>
+          <p>TZS 48,000,000 / mwaka &middot; Contract ends March 2027</p>
+          <button class="btn btn-ghost btn-sm">Change Plan</button>
+        </div>
+        <div class="card">
+          <div class="card-title">This Month's Usage</div>
+          <div class="stat-value">4,812 <span style="font-size:.9rem; color:var(--text-dim); font-family:var(--font-body);">/ 8,000 interviews</span></div>
+          <div class="progress" style="margin-top:.8rem;"><span style="width:60%"></span></div>
+        </div>
+      </div>
+
+      <div class="section-head"><h2 style="font-size:1.05rem;">Historia ya Billing (Invoices)</h2></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Invoice</th><th>Date</th><th>Amount</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>INV-2026-0042</td><td>Machi 1, 2026</td><td>TZS 48,000,000</td><td><span class="badge badge-success">Paid</span></td><td><a class="btn btn-ghost btn-sm" href="#">Download PDF</a></td></tr>
+            <tr><td>INV-2025-0042</td><td>Machi 1, 2025</td><td>TZS 42,000,000</td><td><span class="badge badge-success">Paid</span></td><td><a class="btn btn-ghost btn-sm" href="#">Download PDF</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/billing.html', eyebrow:'Account', title:'Billing & Contract' });</script>
+</body>
+</html>

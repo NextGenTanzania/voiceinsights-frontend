@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Model Performance — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="grid grid-4" style="margin-bottom:1.5rem;">
+        <div class="card"><div class="card-title">STT Accuracy (Swahili)</div><div class="stat-value">89%</div></div>
+        <div class="card"><div class="card-title">Sentiment Agreement Rate</div><div class="stat-value">92%</div></div>
+        <div class="card"><div class="card-title">Medium wa Duration wa Usindikaji</div><div class="stat-value">4.1s</div></div>
+        <div class="card"><div class="card-title">Fraud False-Positive Rate</div><div class="stat-value">7%</div></div>
+      </div>
+
+      <div class="section-head"><h2 style="font-size:1.05rem;">Active Engines</h2></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Engine</th><th>Current Model</th><th>Version</th><th>Accuracy</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Speech Recognition</td><td>Whisper Large-v3 (foundation)</td><td>V1</td><td>89%</td><td><span class="badge badge-success">Live</span></td></tr>
+            <tr><td>Language Intelligence</td><td>Claude Sonnet</td><td>V1</td><td>—</td><td><span class="badge badge-success">Live</span></td></tr>
+            <tr><td>Sentiment Engine</td><td>Claude Sonnet + rule-based</td><td>V1</td><td>92%</td><td><span class="badge badge-success">Live</span></td></tr>
+            <tr><td>Fraud Engine</td><td>Rule-based heuristics</td><td>V0.9</td><td>—</td><td><span class="badge badge-warn">Improving</span></td></tr>
+            <tr><td>Insight Generator</td><td>Claude Sonnet</td><td>V1</td><td>—</td><td><span class="badge badge-success">Live</span></td></tr>
+            <tr><td>Swahili Fine-tuned STT</td><td>Proprietary (Planned V2)</td><td>—</td><td>—</td><td><span class="badge badge-neutral">Livejaanza</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'admin', active:'/admin/model-performance.html', eyebrow:'AI Engine', title:'Model Performance' });</script>
+</body>
+</html>

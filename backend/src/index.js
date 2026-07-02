@@ -121,10 +121,37 @@ export default {
         const responses = await env.DB.prepare(
           `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ?`
         ).bind(claims.org).first();
+        const completed = await env.DB.prepare(
+          `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? AND r.status = 'completed'`
+        ).bind(claims.org).first();
+        const positive = await env.DB.prepare(
+          `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? AND r.overall_sentiment = 'positive'`
+        ).bind(claims.org).first();
         const byChannel = await env.DB.prepare(
           `SELECT r.channel, COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? GROUP BY r.channel`
         ).bind(claims.org).all();
-        return json({ active_surveys: surveys.n, total_responses: responses.n, by_channel: byChannel.results });
+        const { results: weeklyRows } = await env.DB.prepare(
+          `SELECT strftime('%Y-%W', r.started_at) as week, COUNT(*) as n
+           FROM responses r JOIN campaigns c ON r.campaign_id = c.id
+           WHERE c.organization_id = ? AND r.started_at >= datetime('now', '-42 days')
+           GROUP BY week ORDER BY week ASC`
+        ).bind(claims.org).all();
+        const { results: sentimentRows } = await env.DB.prepare(
+          `SELECT r.overall_sentiment, COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id
+           WHERE c.organization_id = ? GROUP BY r.overall_sentiment`
+        ).bind(claims.org).all();
+        const responseRate = responses.n > 0 ? Math.round((completed.n / responses.n) * 100) : 0;
+        const positiveSentimentPct = responses.n > 0 ? Math.round((positive.n / responses.n) * 100) : 0;
+        return json({
+          active_surveys: surveys.n,
+          total_responses: responses.n,
+          completed_responses: completed.n,
+          response_rate: responseRate,
+          positive_sentiment_pct: positiveSentimentPct,
+          by_channel: byChannel.results,
+          weekly: weeklyRows,
+          sentiment_breakdown: sentimentRows,
+        });
       }
 
       // ---------- ANALYTICS ----------

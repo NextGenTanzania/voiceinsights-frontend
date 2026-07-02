@@ -18,35 +18,35 @@
       <div class="grid grid-4" style="margin-bottom:1.5rem;">
         <div class="card">
           <div class="card-title">Active Surveys</div>
-          <div class="stat-value">7 <span class="stat-delta up">+2</span></div>
+          <div class="stat-value" id="stat-surveys">–</div>
         </div>
         <div class="card">
           <div class="card-title">Total Calls / Messages</div>
-          <div class="stat-value">4,812 <span class="stat-delta up">+318</span></div>
+          <div class="stat-value" id="stat-responses">–</div>
         </div>
         <div class="card">
           <div class="card-title">Response Rate</div>
-          <div class="stat-value">68% <span class="stat-delta up">+4%</span></div>
+          <div class="stat-value" id="stat-rate">–</div>
         </div>
         <div class="card">
           <div class="card-title">Positive Sentiment</div>
-          <div class="stat-value">61% <span class="stat-delta down">-2%</span></div>
+          <div class="stat-value" id="stat-sentiment">–</div>
         </div>
       </div>
 
       <div class="grid grid-2" style="margin-bottom:1.5rem; align-items:stretch;">
         <div class="card">
           <div class="section-head"><div class="card-title" style="margin:0;">Responses per Week</div></div>
-          <canvas id="chartResponses" height="140"></canvas>
+          <div style="position:relative; height:220px;"><canvas id="chartResponses"></canvas></div>
         </div>
         <div class="card">
           <div class="section-head"><div class="card-title" style="margin:0;">Sentiment Breakdown</div></div>
-          <canvas id="chartSentiment" height="140"></canvas>
+          <div style="position:relative; height:220px;"><canvas id="chartSentiment"></canvas></div>
         </div>
       </div>
 
       <div class="section-head">
-        <h2 style="font-size:1.1rem;">Campaigns za Hivi Karibuni</h2>
+        <h2 style="font-size:1.1rem;">Recent Campaigns</h2>
         <a href="/app/campaigns.html" class="btn btn-ghost btn-sm">View all</a>
       </div>
       <div class="table-wrap">
@@ -73,29 +73,44 @@
 
   renderShell({ role: 'client', active: '/app/dashboard.html', eyebrow: 'Overview', title: 'Hello, ' + VI.user.name.split(' ')[0] });
 
-  // Pull real counts from the backend; falls back silently to the mock numbers already in the HTML if the backend isn't deployed yet.
+  const SENTIMENT_COLOR = { positive: '#6FBF8B', neutral: '#9FB3AB', negative: '#D9634A', distressed: '#E4C23A' };
+  const SENTIMENT_LABEL = { positive: 'Positive', neutral: 'Neutral', negative: 'Negative', distressed: 'Distress' };
+
   (async () => {
     try {
-      const { active_surveys, total_responses } = await apiRequest('/api/dashboard/stats');
-      document.querySelectorAll('.stat-value')[0].childNodes[0].textContent = active_surveys + ' ';
-      document.querySelectorAll('.stat-value')[1].childNodes[0].textContent = total_responses + ' ';
+      const stats = await apiRequest('/api/dashboard/stats');
+      document.getElementById('stat-surveys').textContent = stats.active_surveys;
+      document.getElementById('stat-responses').textContent = stats.total_responses;
+      document.getElementById('stat-rate').textContent = stats.total_responses ? stats.response_rate + '%' : '—';
+      document.getElementById('stat-sentiment').textContent = stats.total_responses ? stats.positive_sentiment_pct + '%' : '—';
+
+      // Weekly responses chart — real data if any exists this window, else a flat zero line (no fake numbers).
+      const weekLabels = stats.weekly.length ? stats.weekly.map(w => w.week) : ['This week'];
+      const weekData = stats.weekly.length ? stats.weekly.map(w => w.n) : [0];
+      new Chart(document.getElementById('chartResponses'), {
+        type: 'line',
+        data: { labels: weekLabels, datasets: [{ data: weekData, borderColor: '#E4A23A', backgroundColor: 'rgba(228,162,58,.12)', fill: true, tension: .35 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+          scales: { x: { grid: { color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB' } }, y: { beginAtZero: true, grid: { color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', precision: 0 } } } }
+      });
+
+      const sentimentData = stats.sentiment_breakdown.length ? stats.sentiment_breakdown : [{ overall_sentiment: null, n: 1 }];
+      new Chart(document.getElementById('chartSentiment'), {
+        type: 'doughnut',
+        data: {
+          labels: sentimentData.map(s => SENTIMENT_LABEL[s.overall_sentiment] || 'No data yet'),
+          datasets: [{ data: sentimentData.map(s => s.n), backgroundColor: sentimentData.map(s => SENTIMENT_COLOR[s.overall_sentiment] || '#243731'), borderWidth: 0 }],
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9FB3AB', boxWidth: 10, padding: 14 } } } }
+      });
     } catch (e) {
-      console.warn('Live stats unavailable, showing demo data:', e.message);
+      console.warn('Live stats unavailable:', e.message);
+      document.getElementById('stat-surveys').textContent = '—';
+      document.getElementById('stat-responses').textContent = '—';
+      document.getElementById('stat-rate').textContent = '—';
+      document.getElementById('stat-sentiment').textContent = '—';
     }
   })();
-
-
-  new Chart(document.getElementById('chartResponses'), {
-    type: 'line',
-    data: { labels: ['Week 1','Week 2','Week 3','Week 4','Week 5','Week 6'],
-      datasets: [{ data: [320,410,380,520,610,690], borderColor: '#E4A23A', backgroundColor: 'rgba(228,162,58,.12)', fill: true, tension: .35 }] },
-    options: { plugins: { legend: { display:false } }, scales: { x: { grid:{color:'rgba(244,239,230,.06)'}, ticks:{color:'#9FB3AB'} }, y: { grid:{color:'rgba(244,239,230,.06)'}, ticks:{color:'#9FB3AB'} } } }
-  });
-  new Chart(document.getElementById('chartSentiment'), {
-    type: 'doughnut',
-    data: { labels: ['Positive','Medium','Hasi','Dhiki/Haraka'], datasets: [{ data: [61,24,10,5], backgroundColor:['#6FBF8B','#9FB3AB','#D9634A','#E4C23A'], borderWidth:0 }] },
-    options: { plugins: { legend: { position:'bottom', labels:{ color:'#9FB3AB', boxWidth:10, padding:14 } } } }
-  });
 </script>
 </body>
 </html>

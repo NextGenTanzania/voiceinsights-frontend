@@ -20,8 +20,8 @@
       </div>
 
       <div class="grid grid-2" style="margin-bottom:1.5rem;">
-        <div class="card"><div class="card-title">Emerging Topics (Topic Tags)</div><canvas id="chartTopics" height="180"></canvas></div>
-        <div class="card"><div class="card-title">Sentiment Breakdown</div><canvas id="chartSentiment" height="180"></canvas></div>
+        <div class="card"><div class="card-title">Emerging Topics (Topic Tags)</div><div style="position:relative; height:220px;"><canvas id="chartTopics"></canvas></div></div>
+        <div class="card"><div class="card-title">Sentiment Breakdown</div><div style="position:relative; height:220px;"><canvas id="chartSentiment"></canvas></div></div>
       </div>
 
       <div class="section-head"><h2 style="font-size:1.05rem;">Key Quotes (From Transcripts)</h2></div>
@@ -61,7 +61,7 @@
         type: 'bar',
         data: { labels: topics.length ? topics.map(t => t.topic) : ['No topics yet'],
           datasets: [{ data: topics.length ? topics.map(t => t.count) : [0], backgroundColor: '#4FA490' }] },
-        options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB' } }, y: { grid: { display: false }, ticks: { color: '#9FB3AB' } } } }
+        options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB' } }, y: { grid: { display: false }, ticks: { color: '#9FB3AB' } } } }
       });
 
       new Chart(document.getElementById('chartSentiment'), {
@@ -71,7 +71,7 @@
           datasets: [{ data: sentiment.length ? sentiment.map(s => s.n) : [1],
             backgroundColor: sentiment.length ? sentiment.map(s => SENTIMENT_COLOR[s.overall_sentiment] || '#9FB3AB') : ['#243731'], borderWidth: 0 }],
         },
-        options: { plugins: { legend: { position: 'bottom', labels: { color: '#9FB3AB', boxWidth: 10, padding: 14 } } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9FB3AB', boxWidth: 10, padding: 14 } } } }
       });
 
       const quotesContainer = document.getElementById('quotes-container');

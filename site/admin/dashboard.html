@@ -21,8 +21,8 @@
       </div>
 
       <div class="grid grid-2" style="margin-bottom:1.5rem;">
-        <div class="card"><div class="card-title">Usage by Client (This Week)</div><canvas id="chartUsage" height="170"></canvas></div>
-        <div class="card"><div class="card-title">Model Accuracy — Swahili STT</div><canvas id="chartAccuracy" height="170"></canvas></div>
+        <div class="card"><div class="card-title">Usage by Client (This Week)</div><div style="position:relative; height:220px;"><canvas id="chartUsage"></canvas></div></div>
+        <div class="card"><div class="card-title">Model Accuracy — Swahili STT</div><div style="position:relative; height:220px;"><canvas id="chartAccuracy"></canvas></div></div>
       </div>
 
       <div class="section-head"><h2 style="font-size:1.05rem;">Recent Events</h2></div>
@@ -47,10 +47,10 @@
   renderShell({ role:'admin', active:'/admin/dashboard.html', eyebrow:'Internal Operations', title:'System Overview' });
   new Chart(document.getElementById('chartUsage'), { type:'bar',
     data:{ labels:['NEXT-GEN','World Vision','Amani Fdn','Rootical','UNICEF TZ'], datasets:[{data:[812,690,410,205,980], backgroundColor:'#E4A23A'}]},
-    options:{ plugins:{legend:{display:false}}, scales:{x:{grid:{display:false},ticks:{color:'#9FB3AB'}}, y:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}}} } });
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false},ticks:{color:'#9FB3AB'}}, y:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}}} } });
   new Chart(document.getElementById('chartAccuracy'), { type:'line',
     data:{ labels:['Feb','Machi','Aprili','Mei','Juni'], datasets:[{data:[81,83,85,87,89], borderColor:'#4FA490', tension:.35}]},
-    options:{ plugins:{legend:{display:false}}, scales:{x:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}}, y:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}, min:70,max:100} } } });
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}}, y:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}, min:70,max:100} } } });
 </script>
 </body>
 </html>

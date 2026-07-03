@@ -19,7 +19,7 @@
     <div id="topbar-mount"></div>
     <div class="content" style="max-width:820px;">
       <div id="transcript-container">
-        <div class="muted-note">Loading transcript…</div>
+        <div class="muted-note" id="tr-loading">Loading transcript…</div>
       </div>
     </div>
   </main>
@@ -30,30 +30,31 @@
 <script>
   if (!requireLogin()) { /* redirected */ }
   renderShell({ role:'client', active:'/app/interviews.html', eyebrow:'Voice Data', title:'Transcript' });
+  document.getElementById('tr-loading').textContent = t('tr.loading', 'Loading transcript…');
 
   const responseId = new URLSearchParams(window.location.search).get('response');
   const container = document.getElementById('transcript-container');
 
   (async () => {
     if (!responseId) {
-      container.innerHTML = `<div class="muted-note">No interview selected. Go to <a href="/app/interviews.html" style="color:var(--accent-2);">Interviews</a> and pick one to view its full transcript.</div>`;
+      container.innerHTML = `<div class="muted-note">${t('tr.none_selected', 'No interview selected. Go to')} <a href="/app/interviews.html" style="color:var(--accent-2);">${t('app.nav.interviews', 'Interviews')}</a> ${t('tr.pick_one', 'and pick one to view its full transcript.')}</div>`;
       return;
     }
     try {
       const { turns } = await apiRequest(`/api/transcripts/${responseId}`);
       if (!turns.length) {
-        container.innerHTML = `<div class="muted-note">No answers recorded for this interview yet.</div>`;
+        container.innerHTML = `<div class="muted-note">${t('tr.no_answers', 'No answers recorded for this interview yet.')}</div>`;
         return;
       }
       container.innerHTML = turns.map(turn => `
         <div class="chat-turn">
-          <div class="chat-label">Question ${turn.order_index + 1}</div>
+          <div class="chat-label">${t('tr.question', 'Question')} ${turn.order_index + 1}</div>
           <div class="chat-bubble-q">${turn.question_text}</div>
-          <div class="chat-label" style="text-align:right; margin-top:.5rem;">Respondent</div>
-          <div class="chat-bubble-a">${turn.raw_text ? '"' + turn.raw_text + '"' : '<span class="muted-note">No transcript for this answer.</span>'}</div>
+          <div class="chat-label" style="text-align:right; margin-top:.5rem;">${t('tr.respondent', 'Respondent')}</div>
+          <div class="chat-bubble-a">${turn.raw_text ? '"' + turn.raw_text + '"' : '<span class="muted-note">' + t('tr.no_transcript_answer', 'No transcript for this answer.') + '</span>'}</div>
         </div>`).join('');
     } catch (e) {
-      container.innerHTML = `<div class="muted-note" style="color:var(--danger);">Could not load transcript: ${e.message}</div>`;
+      container.innerHTML = `<div class="muted-note" style="color:var(--danger);">${t('tr.error', 'Could not load transcript:')} ${e.message}</div>`;
     }
   })();
 </script>

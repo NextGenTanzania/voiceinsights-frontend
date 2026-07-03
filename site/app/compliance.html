@@ -13,17 +13,17 @@
     <div id="topbar-mount"></div>
     <div class="content">
       <div class="pill-tabs">
-        <a class="ctab active" data-tab="regulatory">Regulatory Status</a>
-        <a class="ctab" data-tab="consent">Consent Logs</a>
+        <a class="ctab active" data-tab="regulatory" data-i18n="comp.tab_reg">Regulatory Status</a>
+        <a class="ctab" data-tab="consent" data-i18n="comp.tab_consent">Consent Logs</a>
       </div>
 
       <div id="panel-regulatory">
-        <p class="muted-note" style="margin-bottom:1rem;">Set the regulatory checklist for each survey. This is guidance to help you track requirements — not a substitute for legal advice specific to your project.</p>
+        <p class="muted-note" style="margin-bottom:1rem;" data-i18n="comp.intro">Set the regulatory checklist for each survey. This is guidance to help you track requirements — not a substitute for legal advice specific to your project.</p>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Survey</th><th>COSTECH</th><th>NBS</th><th>Ethics / IRB</th><th>Minors Involved</th><th>Safeguarding Risk</th><th></th></tr></thead>
+            <thead><tr><th data-i18n="comp.th_survey">Survey</th><th>COSTECH</th><th>NBS</th><th data-i18n="comp.th_ethics">Ethics / IRB</th><th data-i18n="comp.th_minors">Minors Involved</th><th data-i18n="comp.th_risk">Safeguarding Risk</th><th></th></tr></thead>
             <tbody id="compliance-tbody">
-              <tr><td colspan="7" class="muted-note" style="padding:1.5rem;">Loading…</td></tr>
+              <tr><td colspan="7" class="muted-note" style="padding:1.5rem;" id="comp-loading">Loading…</td></tr>
             </tbody>
           </table>
         </div>
@@ -32,9 +32,9 @@
       <div id="panel-consent" style="display:none;">
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Respondent</th><th>Consent</th><th>Timestamp</th></tr></thead>
+            <thead><tr><th data-i18n="comp.th_respondent">Respondent</th><th data-i18n="comp.th_consent">Consent</th><th data-i18n="comp.th_timestamp">Timestamp</th></tr></thead>
             <tbody id="consent-tbody">
-              <tr><td colspan="3" class="muted-note" style="padding:1.5rem;">Loading…</td></tr>
+              <tr><td colspan="3" class="muted-note" style="padding:1.5rem;" id="consent-loading">Loading…</td></tr>
             </tbody>
           </table>
         </div>
@@ -48,6 +48,9 @@
 <script>
   if (!requireLogin()) { /* redirected */ }
   renderShell({ role:'client', active:'/app/compliance.html', eyebrow:'Trust & Compliance', title:'Compliance' });
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n'), el.textContent); });
+  document.getElementById('comp-loading').textContent = t('comp.loading', 'Loading…');
+  document.getElementById('consent-loading').textContent = t('comp.loading', 'Loading…');
 
   document.querySelectorAll('.ctab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -60,7 +63,7 @@
 
   const STATUS_OPTIONS = ['not_required', 'pending', 'approved'];
   const STATUS_BADGE = { not_required: 'badge-neutral', pending: 'badge-warn', approved: 'badge-success' };
-  const STATUS_LABEL = { not_required: 'Not Required', pending: 'Pending', approved: 'Approved' };
+  const STATUS_LABEL = { not_required: t('comp.status_not_required', 'Not Required'), pending: t('comp.status_pending', 'Pending'), approved: t('comp.status_approved', 'Approved') };
 
   function statusSelect(surveyId, field, current) {
     return `<select class="compliance-field" data-survey="${surveyId}" data-field="${field}" style="padding:.35rem .5rem; font-size:.78rem;">
@@ -73,7 +76,7 @@
     try {
       const { surveys } = await apiRequest('/api/compliance');
       if (!surveys.length) {
-        tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem;">No surveys yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem;">${t('comp.no_surveys', 'No surveys yet.')}</td></tr>`;
         return;
       }
       tbody.innerHTML = surveys.map(s => `
@@ -85,12 +88,12 @@
           <td><input type="checkbox" class="compliance-field" data-survey="${s.survey_id}" data-field="minors_involved" ${s.minors_involved ? 'checked' : ''}></td>
           <td>
             <select class="compliance-field" data-survey="${s.survey_id}" data-field="safeguarding_risk" style="padding:.35rem .5rem; font-size:.78rem;">
-              <option value="low" ${s.safeguarding_risk === 'low' ? 'selected' : ''}>Low</option>
-              <option value="medium" ${s.safeguarding_risk === 'medium' ? 'selected' : ''}>Medium</option>
-              <option value="high" ${s.safeguarding_risk === 'high' ? 'selected' : ''}>High</option>
+              <option value="low" ${s.safeguarding_risk === 'low' ? 'selected' : ''}>${t('comp.risk_low', 'Low')}</option>
+              <option value="medium" ${s.safeguarding_risk === 'medium' ? 'selected' : ''}>${t('comp.risk_medium', 'Medium')}</option>
+              <option value="high" ${s.safeguarding_risk === 'high' ? 'selected' : ''}>${t('comp.risk_high', 'High')}</option>
             </select>
           </td>
-          <td><button class="btn btn-ghost btn-sm save-compliance-btn" data-survey="${s.survey_id}">Save</button></td>
+          <td><button class="btn btn-ghost btn-sm save-compliance-btn" data-survey="${s.survey_id}">${t('comp.save', 'Save')}</button></td>
         </tr>`).join('');
 
       document.querySelectorAll('.save-compliance-btn').forEach(btn => {
@@ -101,19 +104,19 @@
           fields.forEach(f => {
             payload[f.dataset.field] = f.type === 'checkbox' ? f.checked : f.value;
           });
-          btn.textContent = 'Saving…'; btn.disabled = true;
+          btn.textContent = t('comp.saving', 'Saving…'); btn.disabled = true;
           try {
             await apiRequest(`/api/compliance/${surveyId}`, { method: 'PUT', body: payload });
-            btn.textContent = 'Saved ✓';
+            btn.textContent = t('comp.saved', 'Saved ✓');
           } catch (e) {
-            btn.textContent = 'Error';
+            btn.textContent = t('comp.error_short', 'Error');
           } finally {
-            setTimeout(() => { btn.textContent = 'Save'; btn.disabled = false; }, 1500);
+            setTimeout(() => { btn.textContent = t('comp.save', 'Save'); btn.disabled = false; }, 1500);
           }
         });
       });
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem; color:var(--danger);">${t('comp.error', 'Could not load:')} ${e.message}</td></tr>`;
     }
   }
 
@@ -122,17 +125,17 @@
     try {
       const { logs } = await apiRequest('/api/consent-logs');
       if (!logs.length) {
-        tbody.innerHTML = `<tr><td colspan="3" class="muted-note" style="padding:1.5rem;">No consent records yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="3" class="muted-note" style="padding:1.5rem;">${t('comp.no_consent', 'No consent records yet.')}</td></tr>`;
         return;
       }
       tbody.innerHTML = logs.map(l => `
         <tr>
-          <td>${l.phone_number || 'Web respondent'}</td>
-          <td>${l.consent_given ? '<span class="badge badge-success">Given</span>' : '<span class="badge badge-neutral">Not recorded</span>'}</td>
+          <td>${l.phone_number || t('iv.web_respondent', 'Web respondent')}</td>
+          <td>${l.consent_given ? '<span class="badge badge-success">' + t('resp.given', 'Given') + '</span>' : '<span class="badge badge-neutral">' + t('comp.not_recorded', 'Not recorded') + '</span>'}</td>
           <td>${new Date(l.created_at + 'Z').toLocaleString()}</td>
         </tr>`).join('');
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="3" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="3" class="muted-note" style="padding:1.5rem; color:var(--danger);">${t('comp.error', 'Could not load:')} ${e.message}</td></tr>`;
     }
   }
 

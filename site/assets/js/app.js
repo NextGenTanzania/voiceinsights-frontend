@@ -182,15 +182,15 @@ function renderViaAssistant() {
   panel.style.cssText = 'position:fixed; bottom:5.5rem; right:1.75rem; width:360px; max-width:88vw; max-height:65vh; background:var(--surface); border:1px solid var(--border-strong); border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.5); display:none; flex-direction:column; z-index:50; overflow:hidden;';
   panel.innerHTML = `
     <div style="padding:.9rem 1rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
-      <div><strong style="font-family:var(--font-display);">VIA Assistant</strong><div class="muted-note" style="font-size:.7rem;">Ask about your data</div></div>
+      <div><strong style="font-family:var(--font-display);">VIA Assistant</strong><div class="muted-note" style="font-size:.7rem;">${t('via.subtitle', 'Ask about your data')}</div></div>
       <button id="via-close" style="background:none; border:none; color:var(--text-dim); cursor:pointer; font-size:1.1rem;">×</button>
     </div>
     <div id="via-messages" style="flex:1; overflow-y:auto; padding:1rem; display:flex; flex-direction:column; gap:.7rem; min-height:200px;">
-      <div class="muted-note">Try: "What's the overall sentiment so far?" or "Summarize recent responses."</div>
+      <div class="muted-note">${t('via.hint', "Try: \"What's the overall sentiment so far?\" or \"Summarize recent responses.\"")}</div>
     </div>
     <div style="padding:.75rem; border-top:1px solid var(--border); display:flex; gap:.5rem;">
-      <input id="via-input" placeholder="Ask a question…" style="flex:1;">
-      <button id="via-send" class="btn btn-primary btn-sm">Ask</button>
+      <input id="via-input" placeholder="${t('via.placeholder', 'Ask a question…')}" style="flex:1;">
+      <button id="via-send" class="btn btn-primary btn-sm">${t('via.ask', 'Ask')}</button>
     </div>`;
   document.body.appendChild(panel);
 
@@ -219,7 +219,7 @@ function renderViaAssistant() {
     sendBtn.disabled = true;
     const thinking = document.createElement('div');
     thinking.className = 'muted-note';
-    thinking.textContent = 'VIA is thinking…';
+    thinking.textContent = t('via.thinking', 'VIA is thinking…');
     messagesEl.appendChild(thinking);
     messagesEl.scrollTop = messagesEl.scrollHeight;
     try {
@@ -228,7 +228,7 @@ function renderViaAssistant() {
       addMessage(answer, 'assistant');
     } catch (e) {
       thinking.remove();
-      addMessage('Sorry, I could not process that: ' + e.message, 'assistant');
+      addMessage(t('via.error', 'Sorry, I could not process that:') + ' ' + e.message, 'assistant');
     } finally {
       sendBtn.disabled = false;
     }
@@ -236,5 +236,15 @@ function renderViaAssistant() {
   sendBtn.addEventListener('click', ask);
   inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') ask(); });
 }
+
+function highlightActiveTopNav() {
+  const current = window.location.pathname.replace(/\/index\.html$/, '/').replace(/\/$/, '') || '/';
+  document.querySelectorAll('.pub-nav-links a').forEach(a => {
+    const href = a.getAttribute('href') || '';
+    const hrefPath = href.split('#')[0].replace(/\/index\.html$/, '/').replace(/\/$/, '') || '/';
+    if (hrefPath && hrefPath === current) a.classList.add('active-nav-link');
+  });
+}
+document.addEventListener('DOMContentLoaded', highlightActiveTopNav);
 
 document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });

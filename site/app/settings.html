@@ -13,30 +13,30 @@
     <div id="topbar-mount"></div>
     <div class="content" style="max-width:700px;">
       <div class="pill-tabs">
-        <a class="stab active" data-tab="org">Organization</a>
-        <a class="stab" data-tab="users">Users</a>
-        <a class="stab" data-tab="security">Security &amp; API</a>
+        <a class="stab active" data-tab="org" data-i18n="set.tab_org">Organization</a>
+        <a class="stab" data-tab="users" data-i18n="set.tab_users">Users</a>
+        <a class="stab" data-tab="security" data-i18n="set.tab_security">Security &amp; API</a>
       </div>
 
       <div id="panel-org">
         <div class="card" style="margin-bottom:1.25rem;">
-          <div class="field"><label>Organization Name</label><input value="VoiceInsights Africa"></div>
+          <div class="field"><label data-i18n="set.org_name">Organization Name</label><input value="VoiceInsights Africa"></div>
           <div class="field-row">
-            <div class="field"><label>Organization Type</label><select><option>Local NGO</option><option>INGO</option><option>Government</option><option>Research Firm</option></select></div>
-            <div class="field"><label>Default Language</label><select><option>English</option><option>Kiswahili</option></select></div>
+            <div class="field"><label data-i18n="set.org_type">Organization Type</label><select><option>Local NGO</option><option>INGO</option><option>Government</option><option>Research Firm</option></select></div>
+            <div class="field"><label data-i18n="set.default_lang">Default Language</label><select><option>English</option><option>Kiswahili</option></select></div>
           </div>
-          <button class="btn btn-primary btn-sm">Save Changes</button>
+          <button class="btn btn-primary btn-sm" data-i18n="set.save">Save Changes</button>
         </div>
       </div>
 
       <div id="panel-users" style="display:none;">
-        <div class="section-head"><h2 style="font-size:1.05rem;">Team Members</h2><button class="btn btn-ghost btn-sm">+ Invite User</button></div>
+        <div class="section-head"><h2 style="font-size:1.05rem;" data-i18n="set.team">Team Members</h2><button class="btn btn-ghost btn-sm" data-i18n="set.invite">+ Invite User</button></div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th></th></tr></thead>
+            <thead><tr><th data-i18n="set.th_name">Name</th><th data-i18n="set.th_email">Email</th><th data-i18n="set.th_role">Role</th><th></th></tr></thead>
             <tbody>
-              <tr><td>Kitentya Luth Msuya</td><td>admin@nextgentanzania.com</td><td><span class="badge badge-accent">Org Admin</span></td><td><a class="btn btn-ghost btn-sm">Edit</a></td></tr>
-              <tr><td>Amina Rashid</td><td>meofficer@nextgentanzania.com</td><td><span class="badge badge-neutral">M&amp;E Officer</span></td><td><a class="btn btn-ghost btn-sm">Edit</a></td></tr>
+              <tr><td>Kitentya Luth Msuya</td><td>admin@nextgentanzania.com</td><td><span class="badge badge-accent" data-i18n="set.org_admin">Org Admin</span></td><td><a class="btn btn-ghost btn-sm" data-i18n="set.edit">Edit</a></td></tr>
+              <tr><td>Amina Rashid</td><td>meofficer@nextgentanzania.com</td><td><span class="badge badge-neutral" data-i18n="set.me_officer">M&amp;E Officer</span></td><td><a class="btn btn-ghost btn-sm" data-i18n="set.edit">Edit</a></td></tr>
             </tbody>
           </table>
         </div>
@@ -44,15 +44,28 @@
 
       <div id="panel-security" style="display:none;">
         <div class="card" style="margin-bottom:1.25rem;">
-          <div class="card-title">API Key</div>
-          <p class="muted-note" style="margin-bottom:.8rem;">Use this key for custom integrations (see the <a href="/api.html" style="color:var(--accent-2);">API &amp; Integrations</a> page). Treat it like a password — anyone with this key can act as your organization.</p>
-          <div id="api-key-display" style="font-family:var(--font-mono); background:var(--surface-2); padding:.7rem 1rem; border-radius:var(--radius-sm); font-size:.85rem; margin-bottom:.8rem; word-break:break-all;">No API key generated yet.</div>
-          <button class="btn btn-ghost btn-sm" id="regen-key-btn">Generate New Key</button>
+          <div class="card-title" data-i18n="set.api_key">API Key</div>
+          <p class="muted-note" style="margin-bottom:.8rem;" data-i18n="set.api_key_desc">Use this key for custom integrations (see the <a href="/api.html" style="color:var(--accent-2);">API &amp; Integrations</a> page). Treat it like a password — anyone with this key can act as your organization.</p>
+          <div id="api-key-display" style="font-family:var(--font-mono); background:var(--surface-2); padding:.7rem 1rem; border-radius:var(--radius-sm); font-size:.85rem; margin-bottom:.8rem; word-break:break-all;" data-i18n="set.no_key">No API key generated yet.</div>
+          <button class="btn btn-ghost btn-sm" id="regen-key-btn" data-i18n="set.regen">Generate New Key</button>
         </div>
 
         <div class="card">
-          <div class="card-title">Two-Factor Authentication</div>
-          <p class="muted-note">2FA is on our near-term roadmap — not available yet. <a href="/contact.html" style="color:var(--accent-2);">Contact us</a> if this is a requirement for your organization's security policy.</p>
+          <div class="card-title" data-i18n="set.2fa">Two-Factor Authentication</div>
+          <p class="muted-note" style="margin-bottom:1rem;" id="tfa-status-note">Checking status…</p>
+          <div id="tfa-setup-flow" style="display:none;">
+            <div style="text-align:center; margin-bottom:1rem;">
+              <img id="tfa-qr" src="" alt="2FA QR code" style="background:#fff; padding:.6rem; border-radius:8px; width:180px; height:180px;">
+            </div>
+            <p class="muted-note" style="margin-bottom:.5rem;" data-i18n="set.2fa_scan">Scan this with Google Authenticator, Authy, or 1Password, then enter the 6-digit code it shows.</p>
+            <div class="field-row">
+              <div class="field"><input id="tfa-code-input" placeholder="123456" maxlength="6" style="font-family:var(--font-mono); letter-spacing:.2em; text-align:center;"></div>
+              <button class="btn btn-primary btn-sm" id="tfa-confirm-btn" style="align-self:flex-end;" data-i18n="set.confirm_enable">Confirm &amp; Enable</button>
+            </div>
+            <div id="tfa-setup-error" style="display:none; color:var(--danger); font-size:.82rem; margin-top:.5rem;"></div>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="tfa-enable-btn" style="display:none;" data-i18n="set.2fa_enable_btn">Enable 2FA</button>
+          <button class="btn btn-ghost btn-sm" id="tfa-disable-btn" style="display:none; border-color:var(--danger); color:var(--danger);" data-i18n="set.2fa_disable_btn">Disable 2FA</button>
         </div>
       </div>
     </div>
@@ -64,6 +77,7 @@
 <script>
   if (!requireLogin()) { /* redirected */ }
   renderShell({ role:'client', active:'/app/settings.html', eyebrow:'Account', title:'Settings' });
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n'), el.textContent); });
 
   document.querySelectorAll('.stab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -78,21 +92,91 @@
   async function loadApiKey() {
     try {
       const { organization } = await apiRequest('/api/organizations/me');
-      document.getElementById('api-key-display').textContent = organization.api_key || 'No API key generated yet.';
+      document.getElementById('api-key-display').textContent = organization.api_key || t('set.no_key', 'No API key generated yet.');
     } catch (e) { /* silent */ }
   }
   loadApiKey();
 
   document.getElementById('regen-key-btn').addEventListener('click', async () => {
     const btn = document.getElementById('regen-key-btn');
-    btn.disabled = true; btn.textContent = 'Generating…';
+    btn.disabled = true; btn.textContent = t('set.generating', 'Generating…');
     try {
       const { api_key } = await apiRequest('/api/organizations/regenerate-key', { method: 'POST' });
       document.getElementById('api-key-display').textContent = api_key;
     } catch (e) {
-      alert('Could not generate key: ' + e.message);
+      alert(t('set.gen_error', 'Could not generate key:') + ' ' + e.message);
     } finally {
-      btn.disabled = false; btn.textContent = 'Generate New Key';
+      btn.disabled = false; btn.textContent = t('set.regen', 'Generate New Key');
+    }
+  });
+
+  // ---------- Two-Factor Authentication ----------
+  const tfaStatusNote = document.getElementById('tfa-status-note');
+  const tfaEnableBtn = document.getElementById('tfa-enable-btn');
+  const tfaDisableBtn = document.getElementById('tfa-disable-btn');
+  const tfaSetupFlow = document.getElementById('tfa-setup-flow');
+
+  async function refreshTfaStatus() {
+    try {
+      const { enabled } = await apiRequest('/api/2fa/status');
+      tfaSetupFlow.style.display = 'none';
+      if (enabled) {
+        tfaStatusNote.textContent = t('set.2fa_on', 'Enabled — your account requires a code from your authenticator app at login.');
+        tfaEnableBtn.style.display = 'none';
+        tfaDisableBtn.style.display = 'inline-flex';
+      } else {
+        tfaStatusNote.textContent = t('set.2fa_off', 'Not enabled. Add an authenticator app for an extra layer of login security.');
+        tfaEnableBtn.style.display = 'inline-flex';
+        tfaDisableBtn.style.display = 'none';
+      }
+    } catch (e) {
+      tfaStatusNote.textContent = t('set.2fa_off', 'Not enabled. Add an authenticator app for an extra layer of login security.');
+      tfaEnableBtn.style.display = 'inline-flex';
+    }
+  }
+  refreshTfaStatus();
+
+  tfaEnableBtn.addEventListener('click', async () => {
+    tfaEnableBtn.disabled = true;
+    try {
+      const { otpauth_uri } = await apiRequest('/api/2fa/setup', { method: 'POST' });
+      document.getElementById('tfa-qr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(otpauth_uri);
+      tfaSetupFlow.style.display = 'block';
+      tfaEnableBtn.style.display = 'none';
+    } catch (e) {
+      alert(t('set.2fa_setup_error', 'Could not start 2FA setup:') + ' ' + e.message);
+    } finally {
+      tfaEnableBtn.disabled = false;
+    }
+  });
+
+  document.getElementById('tfa-confirm-btn').addEventListener('click', async () => {
+    const codeInput = document.getElementById('tfa-code-input');
+    const errBox = document.getElementById('tfa-setup-error');
+    errBox.style.display = 'none';
+    const btn = document.getElementById('tfa-confirm-btn');
+    btn.disabled = true; btn.textContent = t('set.verifying', 'Verifying…');
+    try {
+      await apiRequest('/api/2fa/verify-setup', { method: 'POST', body: { code: codeInput.value } });
+      await refreshTfaStatus();
+    } catch (e) {
+      errBox.textContent = e.message;
+      errBox.style.display = 'block';
+    } finally {
+      btn.disabled = false; btn.textContent = t('set.confirm_enable', 'Confirm & Enable');
+    }
+  });
+
+  tfaDisableBtn.addEventListener('click', async () => {
+    if (!confirm(t('set.2fa_confirm_disable', 'Disable two-factor authentication for your account?'))) return;
+    tfaDisableBtn.disabled = true;
+    try {
+      await apiRequest('/api/2fa/disable', { method: 'POST' });
+      await refreshTfaStatus();
+    } catch (e) {
+      alert(e.message);
+    } finally {
+      tfaDisableBtn.disabled = false;
     }
   });
 </script>

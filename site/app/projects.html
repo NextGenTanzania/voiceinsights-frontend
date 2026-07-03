@@ -14,15 +14,15 @@
     <div class="content">
       <div class="section-head">
         <div class="pill-tabs" style="margin:0; border:none;">
-          <a class="ptab active" data-filter="all">All</a>
-          <a class="ptab" data-filter="active">Active</a>
-          <a class="ptab" data-filter="draft">Draft</a>
-          <a class="ptab" data-filter="closed">Completed</a>
+          <a class="ptab active" data-filter="all" data-i18n="proj.tab_all">All</a>
+          <a class="ptab" data-filter="active" data-i18n="proj.tab_active">Active</a>
+          <a class="ptab" data-filter="draft" data-i18n="proj.tab_draft">Draft</a>
+          <a class="ptab" data-filter="closed" data-i18n="proj.tab_completed">Completed</a>
         </div>
-        <a href="/app/survey-builder.html" class="btn btn-primary btn-sm">+ New Project</a>
+        <a href="/app/survey-builder.html" class="btn btn-primary btn-sm" data-i18n="proj.new">+ New Project</a>
       </div>
       <div class="grid grid-3" id="projects-grid" style="margin-top:1rem;">
-        <div class="muted-note" style="padding:1.5rem;">Loading projects…</div>
+        <div class="muted-note" style="padding:1.5rem;" id="proj-loading">Loading projects…</div>
       </div>
     </div>
   </main>
@@ -33,6 +33,8 @@
 <script>
   if (!requireLogin()) { /* redirected */ }
   renderShell({ role:'client', active:'/app/projects.html', eyebrow:'Overview', title:'Projects' });
+  document.getElementById('proj-loading').textContent = t('proj.loading', 'Loading projects…');
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n'), el.textContent); });
 
   const STATUS_BADGE = { active: 'badge-success', draft: 'badge-warn', closed: 'badge-neutral', paused: 'badge-neutral' };
   let allSurveys = [];
@@ -41,16 +43,16 @@
     const grid = document.getElementById('projects-grid');
     const filtered = filter === 'all' ? allSurveys : allSurveys.filter(s => s.status === filter);
     if (!filtered.length) {
-      grid.innerHTML = `<div class="muted-note" style="padding:1.5rem;">No projects in this view.</div>`;
+      grid.innerHTML = `<div class="muted-note" style="padding:1.5rem;">${t('proj.empty', 'No projects in this view.')}</div>`;
       return;
     }
     grid.innerHTML = filtered.map(s => `
       <div class="feature-card">
         <span class="badge ${STATUS_BADGE[s.status] || 'badge-neutral'}" style="margin-bottom:.8rem;">${s.status}</span>
         <h3 style="font-size:1.05rem;">${s.title}</h3>
-        <p style="font-size:.85rem;">${s.description || 'No description yet.'}</p>
-        <div class="muted-note" style="margin-top:.8rem;">${s.module_type} · Created ${new Date(s.created_at + 'Z').toLocaleDateString()}</div>
-        <a href="/app/survey-builder.html" class="btn btn-ghost btn-sm" style="margin-top:1rem;">Open</a>
+        <p style="font-size:.85rem;">${s.description || t('proj.no_desc', 'No description yet.')}</p>
+        <div class="muted-note" style="margin-top:.8rem;">${s.module_type} · ${t('proj.created', 'Created')} ${new Date(s.created_at + 'Z').toLocaleDateString()}</div>
+        <a href="/app/survey-builder.html" class="btn btn-ghost btn-sm" style="margin-top:1rem;">${t('proj.open', 'Open')}</a>
       </div>`).join('');
   }
 

@@ -43,7 +43,16 @@
         <button class="btn btn-primary" style="width:100%; justify-content:center;" type="submit" id="login-btn">Log in &rarr;</button>
       </form>
 
-      <div class="muted-note" style="margin-top:1rem;">Org Admin demo: <b style="color:var(--text-muted)">admin@nextgentanzania.com</b> / <b style="color:var(--text-muted)">VoiceInsights2026!</b><br>M&amp;E Officer demo (restricted view): <b style="color:var(--text-muted)">meofficer@nextgentanzania.com</b> / <b style="color:var(--text-muted)">MEOfficer2026!</b></div>
+      <form id="tfa-form" style="display:none;">
+        <div class="field">
+          <label id="t-tfa-label">Authenticator code</label>
+          <input id="tfa-code" placeholder="123456" maxlength="6" style="font-family:var(--font-mono); letter-spacing:.2em; text-align:center;" required>
+        </div>
+        <div id="tfa-error" style="display:none; color:var(--danger); font-size:.82rem; margin-bottom:1rem;"></div>
+        <button class="btn btn-primary" style="width:100%; justify-content:center;" type="submit" id="tfa-submit-btn">Verify</button>
+      </form>
+
+      <div class="muted-note" style="margin-top:1rem;" id="demo-creds-note">Org Admin demo: <b style="color:var(--text-muted)">admin@nextgentanzania.com</b> / <b style="color:var(--text-muted)">VoiceInsights2026!</b><br>M&amp;E Officer demo (restricted view): <b style="color:var(--text-muted)">meofficer@nextgentanzania.com</b> / <b style="color:var(--text-muted)">MEOfficer2026!</b></div>
 
       <div style="margin-top:1.2rem; display:flex; justify-content:space-between; font-size:.82rem;">
         <a href="#" id="t-forgot" style="color:var(--text-dim);">Forgot password?</a>
@@ -69,6 +78,8 @@
     document.getElementById('t-demo-cta').textContent = t('login.demo_cta', 'Request Demo');
     document.getElementById('t-internal-team').textContent = t('login.internal_team', 'Internal team? ');
     document.getElementById('t-admin-link').textContent = t('login.admin_login_link', 'Log in Admin Console');
+    document.getElementById('t-tfa-label').textContent = t('login.tfa_label', 'Authenticator code');
+    document.getElementById('tfa-submit-btn').textContent = t('login.verify', 'Verify');
     document.querySelectorAll('#site-lang-switch button').forEach(b => b.classList.toggle('active', b.dataset.lang === getAppLang()));
   }
   applyLoginTranslations();
@@ -89,6 +100,14 @@
         auth: false,
         body: { email: document.getElementById('email').value, password: document.getElementById('password').value },
       });
+      if (data.requires_2fa) {
+        pendingToken = data.pending_token;
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('demo-creds-note').style.display = 'none';
+        document.getElementById('tfa-form').style.display = 'block';
+        document.getElementById('tfa-code').focus();
+        return;
+      }
       localStorage.setItem('vi_token', data.token);
       localStorage.setItem('vi_user', JSON.stringify(data.user));
       window.location.href = '/app/dashboard.html';
@@ -98,6 +117,31 @@
         : err.message;
       errBox.style.display = 'block';
       btn.innerHTML = t('login.submit', 'Log in &rarr;');
+      btn.disabled = false;
+    }
+  });
+
+  let pendingToken = null;
+  document.getElementById('tfa-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('tfa-submit-btn');
+    const errBox = document.getElementById('tfa-error');
+    errBox.style.display = 'none';
+    btn.textContent = t('login.verifying', 'Verifying…');
+    btn.disabled = true;
+    try {
+      const data = await apiRequest('/api/auth/verify-2fa', {
+        method: 'POST',
+        auth: false,
+        body: { pending_token: pendingToken, code: document.getElementById('tfa-code').value },
+      });
+      localStorage.setItem('vi_token', data.token);
+      localStorage.setItem('vi_user', JSON.stringify(data.user));
+      window.location.href = '/app/dashboard.html';
+    } catch (err) {
+      errBox.textContent = err.message;
+      errBox.style.display = 'block';
+      btn.textContent = t('login.verify', 'Verify');
       btn.disabled = false;
     }
   });

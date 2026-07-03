@@ -14,9 +14,12 @@
     <div class="content">
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Name</th><th>Email</th><th>Organization</th><th>Type</th><th>Country</th><th>Channels</th><th>Submitted</th></tr></thead>
+          <thead><tr>
+            <th data-i18n="lead.th_name">Name</th><th data-i18n="lead.th_email">Email</th><th data-i18n="lead.th_org">Organization</th>
+            <th data-i18n="lead.th_type">Type</th><th data-i18n="lead.th_country">Country</th><th data-i18n="lead.th_channels">Channels</th><th data-i18n="lead.th_submitted">Submitted</th>
+          </tr></thead>
           <tbody id="leads-tbody">
-            <tr><td colspan="7" class="muted-note" style="padding:1.5rem;">Loading leads…</td></tr>
+            <tr><td colspan="7" class="muted-note" style="padding:1.5rem;" id="lead-loading">Loading leads…</td></tr>
           </tbody>
         </table>
       </div>
@@ -29,13 +32,15 @@
 <script>
   if (!requireLogin()) { /* redirected */ }
   renderShell({ role:'admin', active:'/admin/leads.html', eyebrow:'Sales Pipeline', title:'Website Leads' });
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n'), el.textContent); });
+  document.getElementById('lead-loading').textContent = t('lead.loading', 'Loading leads…');
 
   (async () => {
     const tbody = document.getElementById('leads-tbody');
     try {
       const { leads } = await apiRequest('/api/leads');
       if (!leads.length) {
-        tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem;">No leads submitted yet — they'll appear here as soon as someone fills out the Contact form.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem;">${t('lead.empty', "No leads submitted yet — they'll appear here as soon as someone fills out the Contact form.")}</td></tr>`;
         return;
       }
       tbody.innerHTML = leads.map(l => `
@@ -49,7 +54,7 @@
           <td>${new Date(l.created_at + 'Z').toLocaleString()}</td>
         </tr>`).join('');
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem; color:var(--danger);">${t('lead.error', 'Could not load:')} ${e.message}</td></tr>`;
     }
   })();
 </script>

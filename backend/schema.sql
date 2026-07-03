@@ -149,6 +149,14 @@ CREATE TABLE IF NOT EXISTS leads (
 );
 
 -- Regulatory / compliance status per survey (COSTECH, NBS, Ethics) — one row per survey.
+-- Two-Factor Authentication (TOTP) per user — compatible with Google Authenticator, Authy, etc.
+CREATE TABLE IF NOT EXISTS user_2fa (
+  user_id      TEXT PRIMARY KEY REFERENCES users(id),
+  secret       TEXT NOT NULL,
+  enabled      INTEGER NOT NULL DEFAULT 0,
+  created_at   TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 -- API keys per organization (for future custom integrations).
 CREATE TABLE IF NOT EXISTS organization_api_keys (
   organization_id  TEXT PRIMARY KEY REFERENCES organizations(id),

@@ -35,7 +35,7 @@
 // a "session" walks a respondent through a survey's questions in order,
 // one question at a time, regardless of which door they came in through.
 
-import { hashPassword, verifyPassword, signJWT, newId } from './auth.js';
+import { hashPassword, verifyPassword, signJWT, verifyJWT, newId, generateTotpSecret, verifyTotpCode, totpAuthUri } from './auth.js';
 import { json, error, corsHeaders, requireAuth } from './utils.js';
 
 export default {
@@ -55,9 +55,70 @@ export default {
         if (!user) return error('Invalid email or password', 401);
         const ok = await verifyPassword(password, user.password_salt, user.password_hash);
         if (!ok) return error('Invalid email or password', 401);
+
+        const twoFa = await env.DB.prepare('SELECT enabled FROM user_2fa WHERE user_id = ?').bind(user.id).first();
+        if (twoFa && twoFa.enabled) {
+          const pendingToken = await signJWT({ sub: user.id, pending2fa: true }, env.JWT_SECRET, 5 * 60);
+          return json({ requires_2fa: true, pending_token: pendingToken });
+        }
+
         const token = await signJWT({ sub: user.id, org: user.organization_id, role: user.role, email: user.email }, env.JWT_SECRET);
         await env.DB.prepare('UPDATE users SET last_login_at = datetime("now") WHERE id = ?').bind(user.id).run();
         return json({ token, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, organization_id: user.organization_id } });
+      }
+
+      if (path === '/api/auth/verify-2fa' && method === 'POST') {
+        const { pending_token, code } = await request.json();
+        if (!pending_token || !code) return error('pending_token and code are required');
+        let claims;
+        try { claims = await verifyJWT(pending_token, env.JWT_SECRET); } catch (e) { return error('This login attempt has expired — please log in again', 401); }
+        if (!claims.pending2fa) return error('Invalid token', 401);
+
+        const twoFa = await env.DB.prepare('SELECT secret FROM user_2fa WHERE user_id = ? AND enabled = 1').bind(claims.sub).first();
+        if (!twoFa) return error('2FA is not enabled for this account', 400);
+        const valid = await verifyTotpCode(twoFa.secret, code.trim());
+        if (!valid) return error('Incorrect code — check your authenticator app and try again', 401);
+
+        const user = await env.DB.prepare('SELECT * FROM users WHERE id = ?').bind(claims.sub).first();
+        const token = await signJWT({ sub: user.id, org: user.organization_id, role: user.role, email: user.email }, env.JWT_SECRET);
+        await env.DB.prepare('UPDATE users SET last_login_at = datetime("now") WHERE id = ?').bind(user.id).run();
+        return json({ token, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, organization_id: user.organization_id } });
+      }
+
+      // ---------- TWO-FACTOR AUTHENTICATION (TOTP) ----------
+      if (path === '/api/2fa/status' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const row = await env.DB.prepare('SELECT enabled FROM user_2fa WHERE user_id = ?').bind(claims.sub).first();
+        return json({ enabled: !!(row && row.enabled) });
+      }
+
+      if (path === '/api/2fa/setup' && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        const secret = generateTotpSecret();
+        await env.DB.prepare(
+          `INSERT INTO user_2fa (user_id, secret, enabled) VALUES (?, ?, 0)
+           ON CONFLICT(user_id) DO UPDATE SET secret = excluded.secret, enabled = 0`
+        ).bind(claims.sub, secret).run();
+        const uri = totpAuthUri(secret, claims.email || claims.sub);
+        return json({ secret, otpauth_uri: uri });
+      }
+
+      if (path === '/api/2fa/verify-setup' && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        const { code } = await request.json();
+        if (!code) return error('code is required');
+        const row = await env.DB.prepare('SELECT secret FROM user_2fa WHERE user_id = ?').bind(claims.sub).first();
+        if (!row) return error('Run 2FA setup first', 400);
+        const valid = await verifyTotpCode(row.secret, code.trim());
+        if (!valid) return error('Incorrect code — check your authenticator app and try again', 401);
+        await env.DB.prepare('UPDATE user_2fa SET enabled = 1 WHERE user_id = ?').bind(claims.sub).run();
+        return json({ ok: true });
+      }
+
+      if (path === '/api/2fa/disable' && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        await env.DB.prepare('DELETE FROM user_2fa WHERE user_id = ?').bind(claims.sub).run();
+        return json({ ok: true });
       }
 
       if (path === '/api/auth/me' && method === 'GET') {
@@ -83,6 +144,14 @@ export default {
           `INSERT INTO surveys (id, organization_id, created_by, title, description, module_type, language, status)
            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
         ).bind(id, claims.org, claims.sub, body.title, body.description || '', body.module_type || 'survey', body.language || 'en', body.status || 'draft').run();
+
+        if (env.NOTIFY_TO_EMAIL) {
+          await sendEmail(env, {
+            to: env.NOTIFY_TO_EMAIL,
+            subject: `📋 New project created: ${body.title}`,
+            html: `<p>A new project was created by <b>${claims.email || claims.sub}</b>.</p><p><b>Title:</b> ${body.title}<br><b>Type:</b> ${body.module_type || 'survey'}<br><b>Status:</b> ${body.status || 'draft'}</p>`,
+          });
+        }
         return json({ survey: { id, title: body.title, status: body.status || 'draft' } }, 201);
       }
 
@@ -260,6 +329,20 @@ export default {
           Array.isArray(body.preferred_channels) ? body.preferred_channels.join(', ') : (body.preferred_channels || null),
           body.message || null
         ).run();
+
+        if (env.NOTIFY_TO_EMAIL) {
+          await sendEmail(env, {
+            to: env.NOTIFY_TO_EMAIL,
+            subject: `🎯 New lead: ${body.full_name}${body.organization ? ' (' + body.organization + ')' : ''}`,
+            html: `<p><b>${body.full_name}</b> (${body.work_email}) submitted the Contact form.</p>
+                   <p><b>Organization:</b> ${body.organization || '—'} (${body.organization_type || '—'})<br>
+                   <b>Country:</b> ${body.country || '—'}<br>
+                   <b>Project size:</b> ${body.project_size || '—'}<br>
+                   <b>Expected respondents:</b> ${body.expected_respondents || '—'}<br>
+                   <b>Channels:</b> ${Array.isArray(body.preferred_channels) ? body.preferred_channels.join(', ') : (body.preferred_channels || '—')}</p>
+                   <p><b>Message:</b> ${body.message || '—'}</p>`,
+          });
+        }
         return json({ ok: true, id }, 201);
       }
 
@@ -518,6 +601,16 @@ async function submitAnswer(env, session, { audioBuf, mediaType, textAnswer }) {
     await env.DB.prepare(
       `INSERT INTO ai_insights (id, response_id, insight_type, content_json, model_used) VALUES (?, ?, 'fraud_flag', ?, 'fraud-engine-v1')`
     ).bind(newId('ai'), session.response_id, JSON.stringify(fraudResult)).run();
+
+    if (fraudResult.score >= 0.7 && env.NOTIFY_TO_EMAIL) {
+      await sendEmail(env, {
+        to: env.NOTIFY_TO_EMAIL,
+        subject: `⚠️ High fraud score detected (${fraudResult.score.toFixed(2)})`,
+        html: `<p>A response scored <b>${fraudResult.score.toFixed(2)}</b> on the fraud engine.</p>
+               <p><b>Reasons:</b> ${(fraudResult.reasons || []).join(', ') || 'unspecified'}</p>
+               <p>Review it in Admin → Fraud Alerts.</p>`,
+      });
+    }
   }
 
   await env.DB.prepare(
@@ -903,6 +996,29 @@ async function verifyStripeSignature(rawBody, signatureHeader, secret) {
   let diff = 0;
   for (let i = 0; i < computedSig.length; i++) diff |= computedSig.charCodeAt(i) ^ expectedSig.charCodeAt(i);
   return diff === 0;
+}
+
+// ============================================================
+// Email notifications via Resend (optional — silently does nothing if
+// RESEND_API_KEY isn't set, so the platform works fine without it).
+// ============================================================
+async function sendEmail(env, { to, subject, html }) {
+  if (!env.RESEND_API_KEY) return; // not configured — skip silently
+  try {
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: env.NOTIFY_FROM_EMAIL || 'VoiceInsights Africa <onboarding@resend.dev>',
+        to: [to],
+        subject,
+        html,
+      }),
+    });
+  } catch (e) {
+    // Never let a notification failure break the main request.
+    console.error('Email notification failed:', e.message);
+  }
 }
 
 // ============================================================

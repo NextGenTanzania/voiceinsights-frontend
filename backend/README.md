@@ -148,7 +148,39 @@ https://voiceinsights-frontend.pages.dev/respondent.html?campaign=<campaign_id>
 It walks through every question in the survey, uses the browser's own
 microphone (no app install), and has an EN/SW toggle built in.
 
-## 11. Real subscriptions (Stripe)
+## 11. Two-Factor Authentication (2FA)
+
+No setup needed — this works immediately after `wrangler d1 execute` +
+`wrangler deploy`, using only the `JWT_SECRET` you already set. Any user can
+turn it on themselves from **Settings → Security & API → Enable 2FA**, scan
+the QR code with Google Authenticator / Authy / 1Password, and confirm with
+the 6-digit code. It's fully compatible with real authenticator apps (RFC
+6238 TOTP) — verified against the standard `pyotp` library during development.
+
+## 12. Email notifications (Resend)
+
+Optional — the platform works fine without this, notifications just won't send.
+
+1. Create a free account at **resend.com** (no credit card needed).
+2. Go to **API Keys → Create API Key**, name it "VoiceInsights", permission
+   "Sending access". Copy the key (starts with `re_...`).
+3. Run:
+   ```
+   wrangler secret put RESEND_API_KEY
+   ```
+   and paste it.
+4. That's it — `wrangler.toml` already has `NOTIFY_FROM_EMAIL` set to
+   Resend's shared test address (`onboarding@resend.dev`, no domain setup
+   needed) and `NOTIFY_TO_EMAIL` set to your inbox. You'll get an email when:
+   - A high-confidence fraud alert (score ≥ 0.7) is detected
+   - A new project/survey is created
+   - Someone submits the website Contact form
+5. When you're ready to send from your own domain
+   (`notifications@voiceinsightsafrica.com`), verify that domain in Resend
+   (Domains → Add Domain, then add the DNS records they give you), then
+   update `NOTIFY_FROM_EMAIL` in `wrangler.toml` and redeploy.
+
+## 13. Real subscriptions (Stripe)
 
 1. Create a free account at **dashboard.stripe.com** (start in **Test mode** first).
 2. Go to **Product catalog → Add product**. Create three products — Starter,

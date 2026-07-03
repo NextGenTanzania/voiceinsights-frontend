@@ -36,50 +36,50 @@
 </nav>
 
 <header class="pub-hero" style="padding-bottom:1rem;">
-  <span class="eyebrow">Security</span>
-  <h1 style="font-size:clamp(2rem,4vw,3rem);">The technical detail behind our safeguarding commitments.</h1>
-  <p class="lead">This page covers the technical implementation. For the policy and compliance view, see <a href="/safeguarding.html" style="color:var(--accent-2);">Safeguarding &amp; Compliance</a>.</p>
+  <span class="eyebrow" data-i18n="sec.eyebrow">Security</span>
+  <h1 style="font-size:clamp(2rem,4vw,3rem);" data-i18n="sec.h1">The technical detail behind our safeguarding commitments.</h1>
+  <p class="lead" data-i18n="sec.lead">This page covers the technical implementation. For the policy and compliance view, see <a href="/safeguarding.html" style="color:var(--accent-2);">Safeguarding &amp; Compliance</a>.</p>
 </header>
 
 <section class="pub-section" style="padding-top:0;">
   <div class="grid grid-2" style="gap:1.25rem;">
     <div class="feature-card">
-      <h3 style="font-size:1.05rem;">Encryption in transit</h3>
-      <p>All traffic between respondents, field devices, and our servers is encrypted over TLS/HTTPS. There is no unencrypted path into the platform.</p>
+      <h3 style="font-size:1.05rem;" data-i18n="sec.c1.title">Encryption in transit</h3>
+      <p data-i18n="sec.c1.desc">All traffic between respondents, field devices, and our servers is encrypted over TLS/HTTPS. There is no unencrypted path into the platform.</p>
     </div>
     <div class="feature-card">
-      <h3 style="font-size:1.05rem;">Encryption at rest</h3>
-      <p>Audio recordings and transcripts are stored in access-controlled object storage and a managed database, both encrypted at rest by our infrastructure provider.</p>
+      <h3 style="font-size:1.05rem;" data-i18n="sec.c2.title">Encryption at rest</h3>
+      <p data-i18n="sec.c2.desc">Audio recordings and transcripts are stored in access-controlled object storage and a managed database, both encrypted at rest by our infrastructure provider.</p>
     </div>
     <div class="feature-card">
-      <h3 style="font-size:1.05rem;">Infrastructure</h3>
-      <p>VoiceInsights Africa runs on Cloudflare's global edge network (Workers, D1, R2) — the same class of infrastructure used by major global platforms — with Twilio for telephony and messaging delivery.</p>
+      <h3 style="font-size:1.05rem;" data-i18n="sec.c3.title">Infrastructure</h3>
+      <p data-i18n="sec.c3.desc">VoiceInsights Africa runs on Cloudflare's global edge network (Workers, D1, R2) — the same class of infrastructure used by major global platforms — with Twilio for telephony and messaging delivery.</p>
     </div>
     <div class="feature-card">
-      <h3 style="font-size:1.05rem;">Role-based access control</h3>
-      <p>Every account has a defined role — organization admin, M&E officer, or system administrator — that scopes exactly what data they can see and act on.</p>
+      <h3 style="font-size:1.05rem;" data-i18n="sec.c4.title">Role-based access control</h3>
+      <p data-i18n="sec.c4.desc">Every account has a defined role — organization admin, M&E officer, or system administrator — that scopes exactly what data they can see and act on.</p>
     </div>
     <div class="feature-card">
-      <h3 style="font-size:1.05rem;">Authentication</h3>
-      <p>Passwords are hashed with PBKDF2 and never stored in plain text. Sessions use signed, time-limited tokens.</p>
+      <h3 style="font-size:1.05rem;" data-i18n="sec.c5.title">Authentication</h3>
+      <p data-i18n="sec.c5.desc">Passwords are hashed with PBKDF2 and never stored in plain text. Sessions use signed, time-limited tokens.</p>
     </div>
     <div class="feature-card">
-      <h3 style="font-size:1.05rem;">Fraud & anomaly detection</h3>
-      <p>Automated checks flag near-duplicate responses and suspicious submission speed on every incoming answer, across every channel.</p>
+      <h3 style="font-size:1.05rem;" data-i18n="sec.c6.title">Fraud &amp; anomaly detection</h3>
+      <p data-i18n="sec.c6.desc">Automated checks flag near-duplicate responses and suspicious submission speed on every incoming answer, across every channel.</p>
     </div>
   </div>
 </section>
 
 <section class="pub-section" style="padding-top:0; background:var(--surface); border-radius:20px;">
-  <span class="eyebrow" style="color:var(--accent-2);">Data ownership</span>
-  <h2 style="max-width:36ch;">Your organization owns your data — full stop.</h2>
-  <p style="max-width:60ch; margin-top:1rem;">Every response, transcript, and report generated through your account belongs to your organization. VoiceInsights Africa processes it on your behalf and never sells or shares client data with third parties.</p>
+  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="sec.own.eyebrow">Data ownership</span>
+  <h2 style="max-width:36ch;" data-i18n="sec.own.h2">Your organization owns your data — full stop.</h2>
+  <p style="max-width:60ch; margin-top:1rem;" data-i18n="sec.own.desc">Every response, transcript, and report generated through your account belongs to your organization. VoiceInsights Africa processes it on your behalf and never sells or shares client data with third parties.</p>
 </section>
 
 <section class="pub-section" style="text-align:center;">
-  <h2>Need a security questionnaire completed?</h2>
-  <p style="max-width:50ch; margin:1rem auto;">We're happy to complete vendor security assessments and NDAs for procurement processes.</p>
-  <a href="/contact.html" class="btn btn-primary">Contact Us</a>
+  <h2 data-i18n="sec.cta.h2">Need a security questionnaire completed?</h2>
+  <p style="max-width:50ch; margin:1rem auto;" data-i18n="sec.cta.desc">We're happy to complete vendor security assessments and NDAs for procurement processes.</p>
+  <a href="/contact.html" class="btn btn-primary" data-i18n="sec.cta.button">Contact Us</a>
 </section>
 
 <footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">

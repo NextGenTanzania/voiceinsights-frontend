@@ -44,7 +44,7 @@
   if (!requireLogin()) { /* redirected */ }
   renderShell({ role:'client', active:'/app/analytics.html', eyebrow:'Language Intelligence', title:'Analytics' });
 
-  const SENTIMENT_COLOR = { positive: '#2FD08A', neutral: '#9DB4CC', negative: '#E0654F', distressed: '#F0C24B' };
+  const SENTIMENT_COLOR = { positive: '#6FBF8B', neutral: '#9FB3AB', negative: '#D9634A', distressed: '#E4C23A' };
   const SENTIMENT_BADGE = { positive: 'badge-success', neutral: 'badge-neutral', negative: 'badge-danger', distressed: 'badge-warn' };
   const SENTIMENT_LABEL = { positive: 'Positive', neutral: 'Neutral', negative: 'Negative', distressed: 'Distress' };
 
@@ -90,8 +90,8 @@
       new Chart(document.getElementById('chartTopics'), {
         type: 'bar',
         data: { labels: topics.length ? topics.map(t => t.topic) : ['No topics yet'],
-          datasets: [{ data: topics.length ? topics.map(t => t.count) : [0], backgroundColor: '#3B82F6' }] },
-        options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(205,225,245,.06)' }, ticks: { color: '#9DB4CC' } }, y: { grid: { display: false }, ticks: { color: '#9DB4CC' } } } }
+          datasets: [{ data: topics.length ? topics.map(t => t.count) : [0], backgroundColor: '#4FA490' }] },
+        options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB' } }, y: { grid: { display: false }, ticks: { color: '#9FB3AB' } } } }
       });
 
       new Chart(document.getElementById('chartSentiment'), {
@@ -99,16 +99,16 @@
         data: {
           labels: sentiment.length ? sentiment.map(s => SENTIMENT_LABEL[s.overall_sentiment] || s.overall_sentiment || 'Unknown') : ['No data yet'],
           datasets: [{ data: sentiment.length ? sentiment.map(s => s.n) : [1],
-            backgroundColor: sentiment.length ? sentiment.map(s => SENTIMENT_COLOR[s.overall_sentiment] || '#9DB4CC') : ['#1B3454'], borderWidth: 0 }],
+            backgroundColor: sentiment.length ? sentiment.map(s => SENTIMENT_COLOR[s.overall_sentiment] || '#9FB3AB') : ['#243731'], borderWidth: 0 }],
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9DB4CC', boxWidth: 10, padding: 14 } } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9FB3AB', boxWidth: 10, padding: 14 } } } }
       });
 
       new Chart(document.getElementById('chartRegions'), {
         type: 'bar',
         data: { labels: regions.length ? regions.map(r => r.region) : ['No data yet'],
-          datasets: [{ data: regions.length ? regions.map(r => r.n) : [0], backgroundColor: '#3B82F6' }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#9DB4CC' } }, y: { beginAtZero: true, grid: { color: 'rgba(205,225,245,.06)' }, ticks: { color: '#9DB4CC', precision: 0 } } } }
+          datasets: [{ data: regions.length ? regions.map(r => r.n) : [0], backgroundColor: '#4FA490' }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#9FB3AB' } }, y: { beginAtZero: true, grid: { color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', precision: 0 } } } }
       });
     } catch (e) {
       console.warn('Charts unavailable:', e.message);

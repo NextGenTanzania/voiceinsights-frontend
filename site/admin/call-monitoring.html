@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Call Monitoring — Admin Console</title>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Call &amp; Voice Monitoring — Admin Console</title>
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -13,36 +15,58 @@
     <div id="topbar-mount"></div>
     <div class="content">
       <div class="grid grid-3" style="margin-bottom:1.5rem;">
-        <div class="card"><div class="card-title">Phone Call/Ujumbe Live Sasa</div><div class="stat-value" style="color:var(--success)">14</div></div>
-        <div class="card"><div class="card-title">Medium wa Duration wa Mahojiano</div><div class="stat-value">6:42</div></div>
-        <div class="card"><div class="card-title">Kushindwa Mainnganisha (24h)</div><div class="stat-value" style="color:var(--danger)">3.2%</div></div>
+        <div class="card"><div class="card-title">Voice Responses (Phone + WhatsApp)</div><div class="stat-value" id="stat-voice-total">–</div></div>
+        <div class="card"><div class="card-title">Last 24 Hours</div><div class="stat-value" id="stat-voice-24h">–</div></div>
+        <div class="card"><div class="card-title">With Audio Recorded</div><div class="stat-value" id="stat-with-audio">–</div></div>
       </div>
-      <div class="section-head"><h2 style="font-size:1.05rem;">Interviews In Progress Right Now</h2></div>
+      <div class="section-head"><h2 style="font-size:1.05rem;">Recent Voice Interviews</h2></div>
+      <p class="muted-note" style="margin-bottom:1rem;">This shows real completed and in-progress voice responses across all organizations' phone and WhatsApp channels — not a live call feed (VoiceInsights doesn't yet track calls in true real time).</p>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Respondent (Anonymized)</th><th>Client</th><th>Channel</th><th>Duration</th><th>Waveform</th><th>Status</th></tr></thead>
-          <tbody id="live-calls"></tbody>
+          <thead><tr><th>Respondent</th><th>Campaign</th><th>Channel</th><th>Sentiment</th><th>Audio</th><th>When</th></tr></thead>
+          <tbody id="calls-tbody"><tr><td colspan="6" class="muted-note" style="padding:1.5rem;">Loading…</td></tr></tbody>
         </table>
       </div>
     </div>
   </main>
 </div>
 <script src="/assets/js/config.js"></script>
-<script src="/assets/js/config.js"></script>
 <script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/app.js"></script>
 <script>
   if (!requireLogin()) { /* redirected */ }
-  renderShell({ role:'admin', active:'/admin/call-monitoring.html', eyebrow:'Voice Engine', title:'Call Monitoring' });
-  const calls = [
-    ['+255 7XX-XX2841','World Vision TZ','WhatsApp','2:14'],
-    ['+255 6XX-XX9013','NEXT-GEN Holdings','Phone Call','4:52'],
-    ['+255 7XX-XX3357','UNICEF TZ','Phone Call','1:08'],
-    ['+255 7XX-XX7726','Amani Foundation','WhatsApp','0:41'],
-  ];
-  document.getElementById('live-calls').innerHTML = calls.map(c => `
-    <tr><td>${c[0]}</td><td>${c[1]}</td><td><span class="badge badge-neutral">${c[2]}</span></td><td style="font-family:var(--font-mono);">${c[3]}</td>
-    <td style="width:140px;">${makeWaveform(16, true)}</td><td><span class="badge badge-success">Live</span></td></tr>`).join('');
+  renderShell({ role:'admin', active:'/admin/call-monitoring.html', eyebrow:'Voice Engine', title:'Call & Voice Monitoring' });
+
+  const SENTIMENT_BADGE = { positive: 'badge-success', neutral: 'badge-neutral', negative: 'badge-danger', distressed: 'badge-warn' };
+
+  (async () => {
+    const tbody = document.getElementById('calls-tbody');
+    try {
+      const { interviews } = await apiRequest('/api/interviews');
+      const voiceOnly = interviews.filter(iv => iv.channel === 'phone_call' || iv.channel === 'whatsapp');
+
+      document.getElementById('stat-voice-total').textContent = voiceOnly.length;
+      const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
+      document.getElementById('stat-voice-24h').textContent = voiceOnly.filter(iv => new Date(iv.started_at + 'Z').getTime() > dayAgo).length;
+      document.getElementById('stat-with-audio').textContent = voiceOnly.filter(iv => iv.audio_r2_key).length;
+
+      if (!voiceOnly.length) {
+        tbody.innerHTML = `<tr><td colspan="6" class="muted-note" style="padding:1.5rem;">No phone or WhatsApp voice responses yet. This fills in automatically as those channels are used.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = voiceOnly.map(iv => `
+        <tr>
+          <td>${iv.phone_number || '—'}</td>
+          <td>${iv.campaign_name}</td>
+          <td><span class="badge badge-neutral">${iv.channel === 'whatsapp' ? 'WhatsApp' : 'Phone Call'}</span></td>
+          <td><span class="badge ${SENTIMENT_BADGE[iv.overall_sentiment] || 'badge-neutral'}">${iv.overall_sentiment || 'unrated'}</span></td>
+          <td>${iv.audio_r2_key ? '🎙️ Yes' : '—'}</td>
+          <td class="muted-note">${new Date(iv.started_at + 'Z').toLocaleString()}</td>
+        </tr>`).join('');
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="6" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+    }
+  })();
 </script>
 </body>
 </html>

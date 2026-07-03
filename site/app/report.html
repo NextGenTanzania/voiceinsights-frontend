@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Intelligence Report — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  .report-doc { max-width: 900px; margin: 0 auto; }
+  .r-page { background: var(--surface); border-radius: 16px; padding: 3rem; margin-bottom: 1.5rem; page-break-after: always; }
+  .r-eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent-2); font-weight: 700; }
+  .r-cover { min-height: 520px; display:flex; flex-direction:column; justify-content:space-between; background:
+    radial-gradient(circle at 85% 15%, rgba(228,162,58,.10), transparent 45%),
+    radial-gradient(circle at 10% 90%, rgba(79,164,144,.10), transparent 45%); }
+  .r-cover-wave span { display:inline-block; width:4px; margin-right:3px; background: var(--accent); border-radius:2px; vertical-align:middle; }
+  .r-kpis { display:grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin: 1.75rem 0; }
+  .r-kpi { background: var(--surface-2); border-radius: 12px; padding: 1.1rem; text-align:center; }
+  .r-findings { list-style: none; padding: 0; margin: 1rem 0; }
+  .r-findings li { padding: .8rem 0 .8rem 2rem; border-bottom: 1px solid var(--border); position: relative; font-size: 1rem; color: var(--text); }
+  .r-findings li::before { content: '→'; position:absolute; left:0; color: var(--accent); font-weight:700; }
+  .r-insight-box { border-left: 3px solid var(--accent); background: var(--surface-2); border-radius: 0 10px 10px 0; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+  .r-insight-box .r-insight-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color: var(--accent); font-weight:700; margin-bottom:.4rem; }
+  .r-chart-box { background: var(--surface-2); border-radius: 12px; padding: 1rem; height: 260px; position: relative; }
+  .r-two-col { display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .r-quote-card { background: var(--surface-2); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+  .r-quote-card p { font-style: italic; font-size: 1.05rem; color: var(--text); margin: .5rem 0 0; }
+  .r-rec-col { background: var(--surface-2); border-radius: 12px; padding: 1.25rem; }
+  .r-rec-col h4 { font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; margin-bottom: .8rem; }
+  .r-rec-col ul { margin: 0; padding-left: 1.2rem; color: var(--text); font-size: .9rem; line-height: 1.6; }
+  .toolbar { max-width: 900px; margin: 0 auto 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+  @media print {
+    #sidebar-mount, #topbar-mount, .toolbar { display: none !important; }
+    body, .main, .content { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+    .r-page { box-shadow: none; border-radius: 0; background: #fff; page-break-after: always; }
+    .r-kpi, .r-chart-box, .r-insight-box, .r-quote-card, .r-rec-col { background: #f4f4f4 !important; }
+    * { color: #111 !important; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+
+      <div class="toolbar">
+        <div class="muted-note" id="report-status">Generating your report…</div>
+        <div style="display:flex; gap:.6rem;">
+          <select id="mode-select" style="padding:.5rem .8rem; font-size:.82rem;">
+            <option value="full">Full Report (all sections)</option>
+            <option value="brief">Executive Brief (summary only)</option>
+          </select>
+          <button class="btn btn-primary btn-sm" id="print-btn">🖨 Download as PDF</button>
+        </div>
+      </div>
+
+      <div class="report-doc" id="report-doc" style="display:none;">
+
+        <!-- PAGE 1 — COVER -->
+        <div class="r-page r-cover">
+          <div style="display:flex; align-items:center; gap:.6rem;">
+            <img src="/assets/img/logo-icon.png" style="height:32px;" alt="">
+            <span style="font-family:var(--font-display); font-weight:600; font-size:1.15rem;">VoiceInsights Africa</span>
+          </div>
+          <div style="text-align:center;">
+            <div class="r-eyebrow" style="margin-bottom:1rem;">Voice Research Intelligence Report</div>
+            <h1 style="font-size:2.4rem; max-width:20ch; margin:0 auto .8rem;" id="cover-title">Research &amp; Monitoring Intelligence</h1>
+            <div class="muted-note" style="font-size:1rem;" id="cover-subtitle">—</div>
+            <div id="cover-wave" class="r-cover-wave" style="margin-top:2.5rem; height:50px;"></div>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:.8rem; color:var(--text-dim); border-top:1px solid var(--border); padding-top:1.25rem;">
+            <div><b style="color:var(--text-muted);">Prepared for</b><br><span id="cover-org">—</span></div>
+            <div><b style="color:var(--text-muted);">Report ID</b><br><span id="cover-id">—</span></div>
+            <div><b style="color:var(--text-muted);">Generated</b><br><span id="cover-date">—</span></div>
+            <div><b style="color:var(--text-muted);">Prepared by</b><br>AI analysis + human review</div>
+          </div>
+        </div>
+
+        <!-- PAGE 2 — EXECUTIVE SUMMARY -->
+        <div class="r-page">
+          <div class="r-eyebrow">Executive Summary</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">The 60-second version.</h2>
+          <div class="r-kpis">
+            <div class="r-kpi"><div class="stat-value" id="kpi-responses" style="font-size:1.7rem;">–</div><div class="muted-note">Respondents</div></div>
+            <div class="r-kpi"><div class="stat-value" id="kpi-rate" style="font-size:1.7rem;">–</div><div class="muted-note">Response Rate</div></div>
+            <div class="r-kpi"><div class="stat-value" id="kpi-female" style="font-size:1.7rem;">–</div><div class="muted-note">Female Participation</div></div>
+            <div class="r-kpi"><div class="stat-value" id="kpi-negative" style="font-size:1.7rem;">–</div><div class="muted-note">Negative / Distress</div></div>
+          </div>
+          <h3 style="font-size:1rem; margin-top:1.5rem;">Key Findings</h3>
+          <ul class="r-findings" id="key-findings"><li class="muted-note">Loading…</li></ul>
+          <div class="r-insight-box">
+            <div class="r-insight-label">AI Insight</div>
+            <div id="ai-summary-insight" class="muted-note">Generating…</div>
+          </div>
+        </div>
+
+        <!-- PAGE 3 — DEMOGRAPHICS -->
+        <div class="r-page" data-section="full">
+          <div class="r-eyebrow">Demographic Intelligence</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">Who responded.</h2>
+          <div class="r-two-col" style="margin-top:1.5rem;">
+            <div class="r-chart-box"><canvas id="chartGender"></canvas></div>
+            <div class="r-chart-box"><canvas id="chartAge"></canvas></div>
+          </div>
+          <div class="r-chart-box" style="height:220px; margin-top:1.5rem;"><canvas id="chartRegion"></canvas></div>
+        </div>
+
+        <!-- PAGE 4 — CORE INSIGHTS -->
+        <div class="r-page" data-section="full">
+          <div class="r-eyebrow">Core Insights</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">What people are telling us.</h2>
+          <div class="r-chart-box" style="height:280px; margin-top:1.5rem;"><canvas id="chartTopics"></canvas></div>
+        </div>
+
+        <!-- PAGE 5 — SENTIMENT -->
+        <div class="r-page" data-section="full">
+          <div class="r-eyebrow">Sentiment &amp; Emotion</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">How people feel.</h2>
+          <div class="r-chart-box" style="max-width:420px; margin:1.5rem auto;"><canvas id="chartSentiment"></canvas></div>
+          <div class="r-insight-box">
+            <div class="r-insight-label">AI Insight</div>
+            <div id="ai-sentiment-insight" class="muted-note">Generating…</div>
+          </div>
+        </div>
+
+        <!-- PAGE 6 — VOICES -->
+        <div class="r-page" data-section="full">
+          <div class="r-eyebrow">Voices from the Field</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">In their own words.</h2>
+          <div id="report-quotes" style="margin-top:1.5rem;"></div>
+        </div>
+
+        <!-- PAGE 7 — RECOMMENDATIONS -->
+        <div class="r-page">
+          <div class="r-eyebrow">Recommendations</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">What should happen next.</h2>
+          <div class="r-two-col" style="margin-top:1.5rem; grid-template-columns: 1fr 1fr 1fr;">
+            <div class="r-rec-col"><h4 style="color:var(--accent);">Immediate (30 days)</h4><ul id="rec-immediate"><li class="muted-note">Loading…</li></ul></div>
+            <div class="r-rec-col"><h4 style="color:var(--accent-2);">Strategic (6–12 months)</h4><ul id="rec-strategic"><li class="muted-note">Loading…</li></ul></div>
+            <div class="r-rec-col"><h4 style="color:var(--text-muted);">Policy (Long-term)</h4><ul id="rec-policy"><li class="muted-note">Loading…</li></ul></div>
+          </div>
+        </div>
+
+
+        <!-- PAGE 8 — METHODOLOGY / TRUST -->
+        <div class="r-page" style="page-break-after: auto;">
+          <div class="r-eyebrow">Methodology &amp; Trust</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">How this data was collected.</h2>
+          <div class="r-two-col" style="margin-top:1.5rem;">
+            <div>
+              <h4 style="font-size:.9rem; color:var(--text-muted);">Data Collection</h4>
+              <ul style="color:var(--text); font-size:.9rem; line-height:1.8;">
+                <li>Sample size: <span id="meta-sample">–</span> respondents</li>
+                <li>Response rate: <span id="meta-rate">–</span></li>
+                <li>Channels: Phone, WhatsApp, SMS, Web, Offline App</li>
+                <li>AI transcription &amp; sentiment analysis on every response</li>
+              </ul>
+            </div>
+            <div>
+              <h4 style="font-size:.9rem; color:var(--text-muted);">Compliance &amp; Safeguarding</h4>
+              <ul style="color:var(--text); font-size:.9rem; line-height:1.8;">
+                <li>Verbal consent obtained before every interview</li>
+                <li>Fraud detection applied to all responses</li>
+                <li>Data encrypted in transit and at rest</li>
+                <li>See our full <a href="/safeguarding.html" style="color:var(--accent-2);">Safeguarding &amp; Compliance policy</a></li>
+              </ul>
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--border); margin-top:2rem; padding-top:1.25rem; text-align:center;" class="muted-note">
+            Generated by VoiceInsights Africa · voiceinsightsafrica.com · This report combines automated AI analysis with your organization's own data. Verify critical figures before external publication.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/reports.html', eyebrow:'Reports', title:'Research Intelligence Report' });
+
+  document.getElementById('print-btn').addEventListener('click', () => window.print());
+  document.getElementById('mode-select').addEventListener('change', (e) => {
+    const showFull = e.target.value === 'full';
+    document.querySelectorAll('[data-section="full"]').forEach(el => el.style.display = showFull ? 'block' : 'none');
+  });
+
+  const SENTIMENT_COLOR = { positive: '#6FBF8B', neutral: '#9FB3AB', negative: '#D9634A', distressed: '#E4C23A' };
+  const SENTIMENT_LABEL = { positive: 'Positive', neutral: 'Neutral', negative: 'Negative', distressed: 'Distress' };
+  const CHART_COLORS = ['#E4A23A', '#4FA490', '#D9634A', '#E4C23A', '#6FBF8B', '#9FB3AB'];
+
+  function makeChart(canvasId, type, labels, data, colors, horizontal) {
+    if (typeof Chart === 'undefined') return;
+    new Chart(document.getElementById(canvasId), {
+      type,
+      data: { labels: labels.length ? labels : ['No data yet'], datasets: [{ data: data.length ? data : [1], backgroundColor: colors, borderWidth: type === 'doughnut' ? 0 : undefined }] },
+      options: {
+        indexAxis: horizontal ? 'y' : 'x',
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: type === 'doughnut', position: 'bottom', labels: { color: '#9FB3AB', boxWidth: 10, padding: 10, font: { size: 10 } } } },
+        scales: type === 'bar' ? { x: { grid: { display: !horizontal, color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', font: { size: 10 } } }, y: { beginAtZero: true, grid: { display: horizontal, color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', precision: 0, font: { size: 10 } } } } : undefined,
+      },
+    });
+  }
+
+  (async () => {
+    try {
+      const [stats, analytics, org, intelligence] = await Promise.all([
+        apiRequest('/api/dashboard/stats'),
+        apiRequest('/api/analytics/summary'),
+        apiRequest('/api/organizations/me'),
+        apiRequest('/api/reports/intelligence').catch(() => ({ key_findings: [], recommendations: { immediate: [], strategic: [], policy: [] } })),
+      ]);
+
+      const total = stats.total_responses;
+      const female = analytics.gender.find(g => /female/i.test(g.gender));
+      const negative = analytics.sentiment.filter(s => s.overall_sentiment === 'negative' || s.overall_sentiment === 'distressed').reduce((s, r) => s + r.n, 0);
+
+      document.getElementById('cover-org').textContent = org.organization.name;
+      document.getElementById('cover-title').textContent = org.organization.name + ' — Voice Data Report';
+      document.getElementById('cover-subtitle').textContent = `${new Date().toLocaleDateString(undefined, { month: 'long', year: 'numeric' })} · ${total} respondents across ${analytics.regions.length || 0} regions`;
+      document.getElementById('cover-id').textContent = 'VIA-' + new Date().getFullYear() + '-' + Math.random().toString(36).slice(2, 7).toUpperCase();
+      document.getElementById('cover-date').textContent = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById('cover-wave').innerHTML = makeWaveform(48, false);
+
+      document.getElementById('kpi-responses').textContent = total;
+      document.getElementById('kpi-rate').textContent = total ? stats.response_rate + '%' : '—';
+      document.getElementById('kpi-female').textContent = total && female ? Math.round((female.n / total) * 100) + '%' : '—';
+      document.getElementById('kpi-negative').textContent = total ? Math.round((negative / total) * 100) + '%' : '—';
+      document.getElementById('meta-sample').textContent = total;
+      document.getElementById('meta-rate').textContent = total ? stats.response_rate + '%' : '—';
+
+      const findingsEl = document.getElementById('key-findings');
+      findingsEl.innerHTML = (intelligence.key_findings && intelligence.key_findings.length)
+        ? intelligence.key_findings.map(f => `<li>${f}</li>`).join('')
+        : '<li class="muted-note">Not enough data yet for AI-generated findings.</li>';
+
+      document.getElementById('ai-summary-insight').textContent = intelligence.key_findings && intelligence.key_findings[0]
+        ? intelligence.key_findings.join(' ') : 'Insights will appear here once enough responses are collected.';
+      document.getElementById('ai-sentiment-insight').textContent = intelligence.key_findings && intelligence.key_findings.length > 1
+        ? intelligence.key_findings[intelligence.key_findings.length - 1] : 'Sentiment insight will appear here once enough responses are collected.';
+
+      ['immediate', 'strategic', 'policy'].forEach(key => {
+        const el = document.getElementById('rec-' + key);
+        const items = (intelligence.recommendations && intelligence.recommendations[key]) || [];
+        el.innerHTML = items.length ? items.map(i => `<li>${i}</li>`).join('') : '<li class="muted-note">—</li>';
+      });
+
+      makeChart('chartGender', 'doughnut', analytics.gender.map(g => g.gender), analytics.gender.map(g => g.n), CHART_COLORS);
+      makeChart('chartAge', 'bar', analytics.age.map(a => a.age_bracket), analytics.age.map(a => a.n), '#E4A23A', true);
+      makeChart('chartRegion', 'bar', analytics.regions.map(r => r.region), analytics.regions.map(r => r.n), '#4FA490', false);
+      makeChart('chartTopics', 'bar', analytics.topics.map(t => t.topic), analytics.topics.map(t => t.count), '#4FA490', true);
+      makeChart('chartSentiment', 'doughnut',
+        analytics.sentiment.map(s => SENTIMENT_LABEL[s.overall_sentiment] || s.overall_sentiment || 'Unknown'),
+        analytics.sentiment.map(s => s.n),
+        analytics.sentiment.map(s => SENTIMENT_COLOR[s.overall_sentiment] || '#9FB3AB'));
+
+      const quotesEl = document.getElementById('report-quotes');
+      quotesEl.innerHTML = analytics.quotes.length
+        ? analytics.quotes.slice(0, 6).map(q => `
+          <div class="r-quote-card">
+            <span class="badge ${q.overall_sentiment === 'positive' ? 'badge-success' : q.overall_sentiment === 'negative' ? 'badge-danger' : 'badge-neutral'}">${SENTIMENT_LABEL[q.overall_sentiment] || 'Unrated'}</span>
+            <p>"${q.raw_text}"</p>
+          </div>`).join('')
+        : '<p class="muted-note">No transcripts yet.</p>';
+
+      document.getElementById('report-status').textContent = 'Ready.';
+      document.getElementById('report-doc').style.display = 'block';
+    } catch (e) {
+      document.getElementById('report-status').textContent = 'Could not load report data: ' + e.message;
+    }
+  })();
+</script>
+</body>
+</html>

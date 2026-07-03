@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donor Impact Report — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  .report-doc { max-width: 900px; margin: 0 auto; }
+  .r-page { background: var(--surface); border-radius: 16px; padding: 3rem; margin-bottom: 1.5rem; page-break-after: always; }
+  .r-eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent-2); font-weight: 700; }
+  .r-kpis { display:grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin: 1.75rem 0; }
+  .r-kpi { background: var(--surface-2); border-radius: 12px; padding: 1.1rem; text-align:center; }
+  .r-chart-box { background: var(--surface-2); border-radius: 12px; padding: 1rem; height: 260px; position: relative; }
+  .r-two-col { display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .r-quote-card { background: var(--surface-2); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+  .r-quote-card p { font-style: italic; font-size: 1.05rem; color: var(--text); margin: .5rem 0 0; }
+  .scorecard-add-row input { padding:.4rem .6rem; font-size:.82rem; }
+  .change-positive { color: var(--success); font-weight: 700; }
+  .change-negative { color: var(--danger); font-weight: 700; }
+  .toolbar { max-width: 900px; margin: 0 auto 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+  @media print {
+    #sidebar-mount, #topbar-mount, .toolbar, .no-print { display: none !important; }
+    body, .main, .content { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+    .r-page { box-shadow: none; border-radius: 0; background: #fff; page-break-after: always; }
+    .r-kpi, .r-chart-box, .r-quote-card { background: #f4f4f4 !important; }
+    * { color: #111 !important; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+
+      <div class="toolbar">
+        <div class="muted-note" id="report-status">Loading…</div>
+        <button class="btn btn-primary btn-sm" id="print-btn">🖨 Download as PDF</button>
+      </div>
+
+      <div class="report-doc" id="report-doc" style="display:none;">
+
+        <!-- COVER -->
+        <div class="r-page" style="min-height:420px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:.6rem;">
+            <img src="/assets/img/logo-icon.png" style="height:32px;" alt="">
+            <span style="font-family:var(--font-display); font-weight:600; font-size:1.15rem;">VoiceInsights Africa</span>
+          </div>
+          <div style="text-align:center;">
+            <div class="r-eyebrow" style="margin-bottom:1rem;">Donor Impact Report</div>
+            <h1 style="font-size:2.2rem; max-width:22ch; margin:0 auto .8rem;" id="cover-title">Programme Impact Assessment</h1>
+            <div class="muted-note" style="font-size:1rem;" id="cover-subtitle">—</div>
+          </div>
+          <div style="font-size:.8rem; color:var(--text-dim); border-top:1px solid var(--border); padding-top:1.25rem;" id="cover-date">—</div>
+        </div>
+
+        <!-- PROJECT BACKGROUND -->
+        <div class="r-page">
+          <div class="r-eyebrow">Project Background &amp; Methodology</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">What this report covers.</h2>
+          <p style="color:var(--text); margin-top:1rem;">This report summarizes voice-based data collected via VoiceInsights Africa across phone, WhatsApp, SMS, web, and offline field channels. Every response was transcribed and analyzed by AI, with fraud detection applied to every submission.</p>
+          <div class="r-kpis" style="margin-top:1.5rem;">
+            <div class="r-kpi"><div class="stat-value" id="kpi-responses" style="font-size:1.6rem;">–</div><div class="muted-note">Respondents</div></div>
+            <div class="r-kpi"><div class="stat-value" id="kpi-rate" style="font-size:1.6rem;">–</div><div class="muted-note">Response Rate</div></div>
+            <div class="r-kpi"><div class="stat-value" id="kpi-channels" style="font-size:1.6rem;">5</div><div class="muted-note">Collection Channels</div></div>
+            <div class="r-kpi"><div class="stat-value" id="kpi-regions" style="font-size:1.6rem;">–</div><div class="muted-note">Regions Reached</div></div>
+          </div>
+        </div>
+
+        <!-- DEMOGRAPHICS -->
+        <div class="r-page">
+          <div class="r-eyebrow">Demographics</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">Who was reached.</h2>
+          <div class="r-two-col" style="margin-top:1.5rem;">
+            <div class="r-chart-box"><canvas id="chartGender"></canvas></div>
+            <div class="r-chart-box"><canvas id="chartAge"></canvas></div>
+          </div>
+        </div>
+
+        <!-- INDICATOR SCORECARDS -->
+        <div class="r-page">
+          <div class="r-eyebrow">Outcome Indicators</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">Baseline vs. Current — measurable change.</h2>
+          <p class="muted-note no-print" style="margin-top:.5rem;">Add your project's M&amp;E indicators below (these usually come from your logframe, not automatically from voice data). They'll be saved and included in every future report.</p>
+          <div class="table-wrap" style="margin-top:1.25rem;">
+            <table>
+              <thead><tr><th>Indicator</th><th>Baseline</th><th>Current</th><th>Change</th><th class="no-print"></th></tr></thead>
+              <tbody id="indicators-tbody">
+                <tr><td colspan="5" class="muted-note" style="padding:1rem;">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="scorecard-add-row no-print" style="display:flex; gap:.5rem; margin-top:1rem; flex-wrap:wrap;">
+            <input id="new-ind-name" placeholder="Indicator name (e.g. Food Security)" style="flex:2; min-width:180px;">
+            <input id="new-ind-baseline" placeholder="Baseline (e.g. 41%)" style="flex:1; min-width:100px;">
+            <input id="new-ind-current" placeholder="Current (e.g. 67%)" style="flex:1; min-width:100px;">
+            <button class="btn btn-ghost btn-sm" id="add-ind-btn">+ Add Indicator</button>
+          </div>
+        </div>
+
+        <!-- VOICES -->
+        <div class="r-page">
+          <div class="r-eyebrow">Beneficiary Voices</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">In their own words.</h2>
+          <div id="report-quotes" style="margin-top:1.5rem;"></div>
+        </div>
+
+        <!-- AI INSIGHTS + RISKS -->
+        <div class="r-page">
+          <div class="r-eyebrow">AI Insights &amp; Risk Notes</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">What the data shows.</h2>
+          <ul id="key-findings" style="margin-top:1rem; color:var(--text); line-height:1.9;"><li class="muted-note">Loading…</li></ul>
+          <h3 style="font-size:1rem; margin-top:1.5rem;">Recommendations</h3>
+          <div class="r-two-col" style="margin-top:1rem;">
+            <div><h4 style="font-size:.85rem; color:var(--accent);">Immediate</h4><ul id="rec-immediate" style="color:var(--text); font-size:.9rem;"><li class="muted-note">—</li></ul></div>
+            <div><h4 style="font-size:.85rem; color:var(--accent-2);">Strategic</h4><ul id="rec-strategic" style="color:var(--text); font-size:.9rem;"><li class="muted-note">—</li></ul></div>
+          </div>
+        </div>
+
+        <!-- APPENDIX -->
+        <div class="r-page" style="page-break-after: auto;">
+          <div class="r-eyebrow">Appendix — Compliance &amp; Safeguarding</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">Trust &amp; ethics.</h2>
+          <ul style="color:var(--text); font-size:.9rem; line-height:1.8; margin-top:1rem;">
+            <li>Consent obtained verbally before every interview</li>
+            <li>Fraud detection applied to all responses</li>
+            <li>Data encrypted in transit and at rest</li>
+            <li>See our full <a href="/safeguarding.html" style="color:var(--accent-2);">Safeguarding &amp; Compliance policy</a></li>
+          </ul>
+          <div style="border-top:1px solid var(--border); margin-top:2rem; padding-top:1rem; text-align:center;" class="muted-note">
+            Generated by VoiceInsights Africa · voiceinsightsafrica.com
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/reports.html', eyebrow:'Reports', title:'Donor Impact Report' });
+
+  document.getElementById('print-btn').addEventListener('click', () => window.print());
+
+  const SENTIMENT_LABEL = { positive: 'Positive', neutral: 'Neutral', negative: 'Negative', distressed: 'Distress' };
+  const CHART_COLORS = ['#E4A23A', '#4FA490', '#D9634A', '#E4C23A', '#6FBF8B', '#9FB3AB'];
+
+  function makeChart(canvasId, type, labels, data, colors, horizontal) {
+    if (typeof Chart === 'undefined') return;
+    new Chart(document.getElementById(canvasId), {
+      type,
+      data: { labels: labels.length ? labels : ['No data yet'], datasets: [{ data: data.length ? data : [1], backgroundColor: colors, borderWidth: type === 'doughnut' ? 0 : undefined }] },
+      options: {
+        indexAxis: horizontal ? 'y' : 'x', responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: type === 'doughnut', position: 'bottom', labels: { color: '#9FB3AB', boxWidth: 10, padding: 10, font: { size: 10 } } } },
+        scales: type === 'bar' ? { x: { grid: { display: !horizontal, color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', font: { size: 10 } } }, y: { beginAtZero: true, grid: { display: horizontal, color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', precision: 0, font: { size: 10 } } } } : undefined,
+      },
+    });
+  }
+
+  function computeChange(baseline, current) {
+    const b = parseFloat(baseline), c = parseFloat(current);
+    if (isNaN(b) || isNaN(c)) return '—';
+    const diff = c - b;
+    const sign = diff > 0 ? '+' : '';
+    const cls = diff > 0 ? 'change-positive' : diff < 0 ? 'change-negative' : '';
+    return `<span class="${cls}">${sign}${diff.toFixed(1)}</span>`;
+  }
+
+  async function loadIndicators() {
+    const tbody = document.getElementById('indicators-tbody');
+    try {
+      const { indicators } = await apiRequest('/api/indicators');
+      if (!indicators.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="muted-note" style="padding:1rem;">No indicators added yet — add your project\'s M&E indicators below.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = indicators.map(i => `
+        <tr>
+          <td>${i.name}</td>
+          <td>${i.baseline_value || '—'}</td>
+          <td>${i.current_value || '—'}</td>
+          <td>${computeChange(i.baseline_value, i.current_value)}</td>
+          <td class="no-print"><button class="btn btn-ghost btn-sm del-ind-btn" data-id="${i.id}">Remove</button></td>
+        </tr>`).join('');
+      document.querySelectorAll('.del-ind-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          await apiRequest(`/api/indicators/${btn.dataset.id}`, { method: 'DELETE' });
+          loadIndicators();
+        });
+      });
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="5" class="muted-note" style="padding:1rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+    }
+  }
+  loadIndicators();
+
+  document.getElementById('add-ind-btn').addEventListener('click', async () => {
+    const name = document.getElementById('new-ind-name').value;
+    const baseline = document.getElementById('new-ind-baseline').value;
+    const current = document.getElementById('new-ind-current').value;
+    if (!name) return;
+    await apiRequest('/api/indicators', { method: 'POST', body: { name, baseline_value: baseline, current_value: current } });
+    document.getElementById('new-ind-name').value = '';
+    document.getElementById('new-ind-baseline').value = '';
+    document.getElementById('new-ind-current').value = '';
+    loadIndicators();
+  });
+
+  (async () => {
+    try {
+      const [stats, analytics, org, intelligence] = await Promise.all([
+        apiRequest('/api/dashboard/stats'),
+        apiRequest('/api/analytics/summary'),
+        apiRequest('/api/organizations/me'),
+        apiRequest('/api/reports/intelligence').catch(() => ({ key_findings: [], recommendations: { immediate: [], strategic: [] } })),
+      ]);
+
+      document.getElementById('cover-title').textContent = org.organization.name + ' — Programme Impact Assessment';
+      document.getElementById('cover-subtitle').textContent = `${new Date().toLocaleDateString(undefined, { month: 'long', year: 'numeric' })} · ${stats.total_responses} respondents`;
+      document.getElementById('cover-date').textContent = 'Generated ' + new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+
+      document.getElementById('kpi-responses').textContent = stats.total_responses;
+      document.getElementById('kpi-rate').textContent = stats.total_responses ? stats.response_rate + '%' : '—';
+      document.getElementById('kpi-regions').textContent = analytics.regions.length;
+
+      makeChart('chartGender', 'doughnut', analytics.gender.map(g => g.gender), analytics.gender.map(g => g.n), CHART_COLORS);
+      makeChart('chartAge', 'bar', analytics.age.map(a => a.age_bracket), analytics.age.map(a => a.n), '#E4A23A', true);
+
+      const quotesEl = document.getElementById('report-quotes');
+      quotesEl.innerHTML = analytics.quotes.length
+        ? analytics.quotes.slice(0, 4).map(q => `
+          <div class="r-quote-card">
+            <span class="badge ${q.overall_sentiment === 'positive' ? 'badge-success' : q.overall_sentiment === 'negative' ? 'badge-danger' : 'badge-neutral'}">${SENTIMENT_LABEL[q.overall_sentiment] || 'Unrated'}</span>
+            <p>"${q.raw_text}"</p>
+          </div>`).join('')
+        : '<p class="muted-note">No transcripts yet.</p>';
+
+      document.getElementById('key-findings').innerHTML = (intelligence.key_findings && intelligence.key_findings.length)
+        ? intelligence.key_findings.map(f => `<li>${f}</li>`).join('')
+        : '<li class="muted-note">Not enough data yet for AI-generated findings.</li>';
+      ['immediate', 'strategic'].forEach(key => {
+        const el = document.getElementById('rec-' + key);
+        const items = (intelligence.recommendations && intelligence.recommendations[key]) || [];
+        el.innerHTML = items.length ? items.map(i => `<li>${i}</li>`).join('') : '<li class="muted-note">—</li>';
+      });
+
+      document.getElementById('report-status').textContent = 'Ready.';
+      document.getElementById('report-doc').style.display = 'block';
+    } catch (e) {
+      document.getElementById('report-status').textContent = 'Could not load report data: ' + e.message;
+    }
+  })();
+</script>
+</body>
+</html>

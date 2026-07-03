@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intelligence Brief — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  .report-doc { max-width: 820px; margin: 0 auto; }
+  .r-page { background: var(--surface); border-radius: 16px; padding: 3.5rem 3rem; margin-bottom: 1.5rem; page-break-after: always; min-height: 480px; display:flex; flex-direction:column; justify-content:center; }
+  .r-eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent-2); font-weight: 700; }
+  .brief-headline { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; margin: 1rem 0; }
+  .r-chart-box { background: var(--surface-2); border-radius: 12px; padding: 1rem; height: 240px; position: relative; }
+  .r-two-col { display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .r-three-col { display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+  .matrix-table td, .matrix-table th { padding: .8rem 1rem; }
+  .urgency-high { color: var(--danger); font-weight: 700; }
+  .urgency-medium { color: var(--warn); font-weight: 700; }
+  .urgency-low { color: var(--text-dim); }
+  .toolbar { max-width: 820px; margin: 0 auto 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+  @media print {
+    #sidebar-mount, #topbar-mount, .toolbar { display: none !important; }
+    body, .main, .content { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+    .r-page { box-shadow: none; border-radius: 0; background: #fff; }
+    .r-chart-box, .matrix-table { background: #f4f4f4 !important; }
+    * { color: #111 !important; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+
+      <div class="toolbar">
+        <div class="muted-note" id="report-status">Generating your brief…</div>
+        <div style="display:flex; gap:.6rem;">
+          <a href="/app/report.html" class="btn btn-ghost btn-sm">← Full Report</a>
+          <button class="btn btn-primary btn-sm" id="print-btn">🖨 Download as PDF</button>
+        </div>
+      </div>
+
+      <div class="report-doc" id="report-doc" style="display:none;">
+
+        <!-- PAGE 1 — HEADLINE FINDING -->
+        <div class="r-page">
+          <div class="r-eyebrow">Intelligence Brief · <span id="brief-org">—</span></div>
+          <h1 class="brief-headline" id="brief-headline">Loading headline finding…</h1>
+          <div class="muted-note" id="brief-meta">—</div>
+        </div>
+
+        <!-- PAGE 2 — CHARTS ONLY -->
+        <div class="r-page" style="justify-content:flex-start;">
+          <div class="r-eyebrow">At a Glance</div>
+          <div class="r-three-col" style="margin-top:1.5rem;">
+            <div class="r-chart-box"><canvas id="chartGender"></canvas></div>
+            <div class="r-chart-box"><canvas id="chartAge"></canvas></div>
+            <div class="r-chart-box"><canvas id="chartSentiment"></canvas></div>
+          </div>
+          <div class="r-chart-box" style="height:200px; margin-top:1.5rem;"><canvas id="chartRegion"></canvas></div>
+        </div>
+
+        <!-- PAGE 3 — AI INTERPRETATION -->
+        <div class="r-page" style="justify-content:flex-start;">
+          <div class="r-eyebrow">What Changed? Why? What Next?</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">AI Interpretation</h2>
+          <div id="brief-interpretation" style="margin-top:1.5rem; font-size:1.05rem; line-height:1.9; color:var(--text);">Loading…</div>
+        </div>
+
+        <!-- PAGE 4 — ACTION MATRIX -->
+        <div class="r-page" style="justify-content:flex-start;">
+          <div class="r-eyebrow">Action Matrix</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">Where to act first.</h2>
+          <div class="table-wrap" style="margin-top:1.5rem;">
+            <table class="matrix-table">
+              <thead><tr><th>Issue</th><th>Urgency</th><th>Priority</th></tr></thead>
+              <tbody id="matrix-tbody"><tr><td colspan="3" class="muted-note">Loading…</td></tr></tbody>
+            </table>
+          </div>
+          <div style="border-top:1px solid var(--border); margin-top:2.5rem; padding-top:1rem; text-align:center;" class="muted-note">
+            VoiceInsights Africa · voiceinsightsafrica.com
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/reports.html', eyebrow:'Reports', title:'Intelligence Brief' });
+  document.getElementById('print-btn').addEventListener('click', () => window.print());
+
+  const SENTIMENT_COLOR = { positive: '#6FBF8B', neutral: '#9FB3AB', negative: '#D9634A', distressed: '#E4C23A' };
+  const SENTIMENT_LABEL = { positive: 'Positive', neutral: 'Neutral', negative: 'Negative', distressed: 'Distress' };
+  const CHART_COLORS = ['#E4A23A', '#4FA490', '#D9634A', '#E4C23A', '#6FBF8B', '#9FB3AB'];
+
+  function makeChart(canvasId, type, labels, data, colors, horizontal) {
+    if (typeof Chart === 'undefined') return;
+    new Chart(document.getElementById(canvasId), {
+      type,
+      data: { labels: labels.length ? labels : ['No data yet'], datasets: [{ data: data.length ? data : [1], backgroundColor: colors, borderWidth: type === 'doughnut' ? 0 : undefined }] },
+      options: {
+        indexAxis: horizontal ? 'y' : 'x',
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: type === 'doughnut', position: 'bottom', labels: { color: '#9FB3AB', boxWidth: 8, padding: 8, font: { size: 9 } } } },
+        scales: type === 'bar' ? { x: { grid: { display: !horizontal, color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', font: { size: 9 } } }, y: { beginAtZero: true, grid: { display: horizontal, color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', precision: 0, font: { size: 9 } } } } : undefined,
+      },
+    });
+  }
+
+  (async () => {
+    try {
+      const [stats, analytics, org, intelligence] = await Promise.all([
+        apiRequest('/api/dashboard/stats'),
+        apiRequest('/api/analytics/summary'),
+        apiRequest('/api/organizations/me'),
+        apiRequest('/api/reports/intelligence').catch(() => ({ key_findings: [], recommendations: { immediate: [], strategic: [], policy: [] } })),
+      ]);
+
+      document.getElementById('brief-org').textContent = org.organization.name;
+      document.getElementById('brief-meta').textContent = `${stats.total_responses} respondents · Generated ${new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}`;
+
+      const headline = (intelligence.key_findings && intelligence.key_findings[0]) || 'Not enough data yet for a headline finding.';
+      document.getElementById('brief-headline').textContent = headline;
+
+      const interpEl = document.getElementById('brief-interpretation');
+      const findings = intelligence.key_findings || [];
+      interpEl.innerHTML = findings.length
+        ? findings.map(f => `<p style="margin-bottom:1rem;">→ ${f}</p>`).join('')
+        : '<p class="muted-note">AI interpretation will appear here once enough responses are collected.</p>';
+
+      makeChart('chartGender', 'doughnut', analytics.gender.map(g => g.gender), analytics.gender.map(g => g.n), CHART_COLORS);
+      makeChart('chartAge', 'bar', analytics.age.map(a => a.age_bracket), analytics.age.map(a => a.n), '#E4A23A', true);
+      makeChart('chartSentiment', 'doughnut',
+        analytics.sentiment.map(s => SENTIMENT_LABEL[s.overall_sentiment] || s.overall_sentiment || 'Unknown'),
+        analytics.sentiment.map(s => s.n),
+        analytics.sentiment.map(s => SENTIMENT_COLOR[s.overall_sentiment] || '#9FB3AB'));
+      makeChart('chartRegion', 'bar', analytics.regions.map(r => r.region), analytics.regions.map(r => r.n), '#4FA490', false);
+
+      // Action matrix: derive urgency/priority from topic frequency + sentiment (transparent heuristic, not fabricated).
+      const matrixBody = document.getElementById('matrix-tbody');
+      const topTopics = analytics.topics.slice(0, 5);
+      if (!topTopics.length) {
+        matrixBody.innerHTML = `<tr><td colspan="3" class="muted-note">No issues identified yet — the matrix will populate as responses come in.</td></tr>`;
+      } else {
+        const maxCount = Math.max(...topTopics.map(t => t.count));
+        matrixBody.innerHTML = topTopics.map(t => {
+          const ratio = t.count / maxCount;
+          const urgency = ratio > 0.66 ? 'High' : ratio > 0.33 ? 'Medium' : 'Low';
+          const urgencyClass = ratio > 0.66 ? 'urgency-high' : ratio > 0.33 ? 'urgency-medium' : 'urgency-low';
+          const priority = ratio > 0.66 ? 'Critical' : ratio > 0.33 ? 'Moderate' : 'Monitor';
+          return `<tr><td>${t.topic}</td><td class="${urgencyClass}">${urgency}</td><td>${priority}</td></tr>`;
+        }).join('');
+      }
+
+      document.getElementById('report-status').textContent = 'Ready.';
+      document.getElementById('report-doc').style.display = 'block';
+    } catch (e) {
+      document.getElementById('report-status').textContent = 'Could not load brief data: ' + e.message;
+    }
+  })();
+</script>
+</body>
+</html>

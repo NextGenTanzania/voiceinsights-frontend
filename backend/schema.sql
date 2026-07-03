@@ -148,7 +148,28 @@ CREATE TABLE IF NOT EXISTS leads (
   created_at            TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
--- Regulatory / compliance status per survey (COSTECH, NBS, Ethics) — one row per survey.
+-- Impact indicators for Donor Reports — baseline vs current, tracked manually
+-- (these typically come from an external M&E framework, not just voice data).
+CREATE TABLE IF NOT EXISTS impact_indicators (
+  id                TEXT PRIMARY KEY,
+  organization_id   TEXT NOT NULL REFERENCES organizations(id),
+  name              TEXT NOT NULL,
+  baseline_value    TEXT,
+  current_value     TEXT,
+  unit              TEXT,
+  order_index       INTEGER NOT NULL DEFAULT 0,
+  updated_at        TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Extra profile fields for team members (phone, region) — kept separate from
+-- the core users table so it's safe to add without an ALTER TABLE.
+CREATE TABLE IF NOT EXISTS user_profile (
+  user_id       TEXT PRIMARY KEY REFERENCES users(id),
+  phone         TEXT,
+  region        TEXT,
+  invite_method TEXT
+);
+
 -- Two-Factor Authentication (TOTP) per user — compatible with Google Authenticator, Authy, etc.
 CREATE TABLE IF NOT EXISTS user_2fa (
   user_id      TEXT PRIMARY KEY REFERENCES users(id),
@@ -196,23 +217,34 @@ CREATE INDEX IF NOT EXISTS idx_respondents_phone ON respondents(phone_number);
 
 -- ============================================================
 -- Seed data: one demo organization + one login you can use immediately
--- Email: admin@nextgentanzania.com
--- Password: VoiceInsights2026!
--- (CHANGE THIS PASSWORD after first login in production)
+-- Email: kitentya.luth@voiceinsightsafrica.com
+-- Password: Azaniasec@123
 -- ============================================================
 INSERT OR IGNORE INTO organizations (id, name, type, billing_tier)
-VALUES ('org_demo', 'NEXT-GEN Holdings Company Limited', 'local_ngo', 'professional');
+VALUES ('org_demo', 'VoiceInsights Africa', 'local_ngo', 'professional');
+
+-- Force the org name even on a database that already had the old seed row.
+UPDATE organizations SET name = 'VoiceInsights Africa' WHERE id = 'org_demo' AND name != 'VoiceInsights Africa';
 
 INSERT OR IGNORE INTO users (id, organization_id, email, password_hash, password_salt, full_name, role)
 VALUES (
   'user_demo_admin',
   'org_demo',
-  'admin@nextgentanzania.com',
-  'f9a560af904ea1aaf949276e3c2adc89346921a60090783f74274ceb71c9f1eb',
-  '429f4023fe215e10540a0fc3df1b4365',
+  'kitentya.luth@voiceinsightsafrica.com',
+  '2f717f95d592f79ab0e328ae7dfc74a8c63b173388a7f656ca8b69c4816d0024',
+  'bfb95dcdc3381a3d6353395d33c177ea',
   'Kitentya Luth Msuya',
   'org_admin'
 );
+
+-- Force the real admin credentials even if this row already existed from an
+-- earlier deploy (INSERT OR IGNORE above would skip it on a database that
+-- already has this user) — safe to re-run any number of times.
+UPDATE users SET
+  email = 'kitentya.luth@voiceinsightsafrica.com',
+  password_hash = '2f717f95d592f79ab0e328ae7dfc74a8c63b173388a7f656ca8b69c4816d0024',
+  password_salt = 'bfb95dcdc3381a3d6353395d33c177ea'
+WHERE id = 'user_demo_admin';
 
 -- Second demo login with a restricted role, to test role-based UI differences.
 -- Email: meofficer@nextgentanzania.com   Password: MEOfficer2026!

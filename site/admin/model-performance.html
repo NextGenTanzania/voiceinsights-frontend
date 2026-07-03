@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Model Performance — Admin Console</title>
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -12,24 +14,25 @@
   <main class="main">
     <div id="topbar-mount"></div>
     <div class="content">
+      <p class="muted-note" style="margin-bottom:1rem;">These are real operational figures from your own data — not benchmark accuracy scores (we don't yet have a labeled ground-truth dataset to measure transcription/sentiment accuracy against).</p>
       <div class="grid grid-4" style="margin-bottom:1.5rem;">
-        <div class="card"><div class="card-title">STT Accuracy (Swahili)</div><div class="stat-value">89%</div></div>
-        <div class="card"><div class="card-title">Sentiment Agreement Rate</div><div class="stat-value">92%</div></div>
-        <div class="card"><div class="card-title">Medium wa Duration wa Usindikaji</div><div class="stat-value">4.1s</div></div>
-        <div class="card"><div class="card-title">Fraud False-Positive Rate</div><div class="stat-value">7%</div></div>
+        <div class="card"><div class="card-title">Responses Processed</div><div class="stat-value" id="stat-responses">–</div></div>
+        <div class="card"><div class="card-title">Transcripts Generated</div><div class="stat-value" id="stat-transcripts">–</div></div>
+        <div class="card"><div class="card-title">Avg. Processing Time</div><div class="stat-value" id="stat-latency">–</div></div>
+        <div class="card"><div class="card-title">Fraud Flags Raised</div><div class="stat-value" id="stat-fraud">–</div></div>
       </div>
 
       <div class="section-head"><h2 style="font-size:1.05rem;">Active Engines</h2></div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Engine</th><th>Current Model</th><th>Version</th><th>Accuracy</th><th>Status</th></tr></thead>
+          <thead><tr><th>Engine</th><th>Current Model</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td>Speech Recognition</td><td>Whisper Large-v3 (foundation)</td><td>V1</td><td>89%</td><td><span class="badge badge-success">Live</span></td></tr>
-            <tr><td>Language Intelligence</td><td>Claude Sonnet</td><td>V1</td><td>—</td><td><span class="badge badge-success">Live</span></td></tr>
-            <tr><td>Sentiment Engine</td><td>Claude Sonnet + rule-based</td><td>V1</td><td>92%</td><td><span class="badge badge-success">Live</span></td></tr>
-            <tr><td>Fraud Engine</td><td>Rule-based heuristics</td><td>V0.9</td><td>—</td><td><span class="badge badge-warn">Improving</span></td></tr>
-            <tr><td>Insight Generator</td><td>Claude Sonnet</td><td>V1</td><td>—</td><td><span class="badge badge-success">Live</span></td></tr>
-            <tr><td>Swahili Fine-tuned STT</td><td>Proprietary (Planned V2)</td><td>—</td><td>—</td><td><span class="badge badge-neutral">Livejaanza</span></td></tr>
+            <tr><td>Speech Recognition</td><td>OpenAI Whisper (whisper-1)</td><td><span class="badge badge-success">Live</span></td></tr>
+            <tr><td>Language Intelligence &amp; Summarization</td><td>Claude Sonnet</td><td><span class="badge badge-success">Live</span></td></tr>
+            <tr><td>Sentiment Engine</td><td>Claude Sonnet (structured output)</td><td><span class="badge badge-success">Live</span></td></tr>
+            <tr><td>Fraud Engine</td><td>Rule-based heuristics (near-duplicate text, submission speed)</td><td><span class="badge badge-success">Live</span></td></tr>
+            <tr><td>Report Intelligence</td><td>Claude Sonnet (key findings + recommendations)</td><td><span class="badge badge-success">Live</span></td></tr>
+            <tr><td>Swahili Fine-tuned STT</td><td>Proprietary model, trained on collected voice data</td><td><span class="badge badge-neutral">Planned</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -41,6 +44,19 @@
 <script src="/assets/js/app.js"></script>
 <script>
   if (!requireLogin()) { /* redirected */ }
-  renderShell({ role:'admin', active:'/admin/model-performance.html', eyebrow:'AI Engine', title:'Model Performance' });</script>
+  renderShell({ role:'admin', active:'/admin/model-performance.html', eyebrow:'AI Engine', title:'Model Performance' });
+
+  (async () => {
+    try {
+      const stats = await apiRequest('/api/admin/model-stats');
+      document.getElementById('stat-responses').textContent = stats.total_responses;
+      document.getElementById('stat-transcripts').textContent = stats.total_transcripts;
+      document.getElementById('stat-latency').textContent = stats.avg_processing_seconds != null ? stats.avg_processing_seconds.toFixed(1) + 's' : '—';
+      document.getElementById('stat-fraud').textContent = stats.fraud_flags;
+    } catch (e) {
+      ['stat-responses', 'stat-transcripts', 'stat-latency', 'stat-fraud'].forEach(id => document.getElementById(id).textContent = '—');
+    }
+  })();
+</script>
 </body>
 </html>

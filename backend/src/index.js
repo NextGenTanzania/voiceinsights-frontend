@@ -3,6 +3,10 @@
 // Routes:
 //   POST /api/auth/login
 //   GET  /api/auth/me
+//   POST /api/auth/change-password
+//   GET  /api/users                                (auth — list team members)
+//   POST /api/users/invite                          (org_admin — invite a new team member)
+//   POST /api/users/:id/deactivate                  (org_admin — deactivate a team member)
 //   GET  /api/surveys | POST /api/surveys | GET /api/surveys/:id | POST /api/surveys/:id/questions
 //   GET/POST /api/campaigns
 //   GET  /api/dashboard/stats
@@ -23,6 +27,8 @@
 //   PUT  /api/compliance/:survey_id                (auth — update compliance status)
 //   GET  /api/consent-logs                         (auth — respondent consent log)
 //   POST /api/assistant/ask                        (auth — VIA Assistant, AI Q&A over your own data)
+//   GET  /api/reports/intelligence                  (auth — AI key findings + recommendations for the report)
+//   GET/POST /api/indicators | PUT/DELETE /api/indicators/:id (auth — baseline vs current for Donor Report)
 //   GET  /api/public/campaigns/:id/questions      (public — web widget reads the question list)
 //   POST /api/whatsapp/webhook                    (Twilio WhatsApp — multi-question)
 //   POST /api/voice/incoming                      (Twilio Voice — language select)
@@ -126,6 +132,91 @@ export default {
         const user = await env.DB.prepare('SELECT id, email, full_name, role, organization_id FROM users WHERE id = ?').bind(claims.sub).first();
         if (!user) return error('User not found', 404);
         return json({ user });
+      }
+
+      if (path === '/api/auth/change-password' && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        const { current_password, new_password } = await request.json();
+        if (!current_password || !new_password) return error('current_password and new_password are required');
+        if (new_password.length < 8) return error('New password must be at least 8 characters', 400);
+        const user = await env.DB.prepare('SELECT * FROM users WHERE id = ?').bind(claims.sub).first();
+        const ok = await verifyPassword(current_password, user.password_salt, user.password_hash);
+        if (!ok) return error('Current password is incorrect', 401);
+        const { hash, salt } = await hashPassword(new_password);
+        await env.DB.prepare('UPDATE users SET password_hash = ?, password_salt = ? WHERE id = ?').bind(hash, salt, claims.sub).run();
+        return json({ ok: true });
+      }
+
+      // ---------- USER MANAGEMENT (invite team members) ----------
+      if (path === '/api/users' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const { results } = await env.DB.prepare(
+          `SELECT u.id, u.email, u.full_name, u.role, u.is_active, u.last_login_at, u.created_at, up.region, up.phone
+           FROM users u LEFT JOIN user_profile up ON up.user_id = u.id
+           WHERE u.organization_id = ? ORDER BY u.created_at DESC`
+        ).bind(claims.org).all();
+        return json({ users: results });
+      }
+
+      if (path === '/api/users/invite' && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        if (claims.role !== 'org_admin') return error('Only an Org Admin can invite users', 403);
+        const { email, full_name, role, region, phone, invite_method } = await request.json();
+        if (!email || !full_name) return error('email and full_name are required');
+        if ((invite_method === 'sms' || invite_method === 'whatsapp') && !phone) return error('Phone number is required for SMS/WhatsApp invites', 400);
+        const existing = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(email).first();
+        if (existing) return error('A user with this email already exists', 409);
+
+        const tempPassword = [...crypto.getRandomValues(new Uint8Array(9))].map(b => b.toString(36)).join('').slice(0, 12);
+        const { hash, salt } = await hashPassword(tempPassword);
+        const userId = newId('user');
+        await env.DB.prepare(
+          `INSERT INTO users (id, organization_id, email, password_hash, password_salt, full_name, role, is_active)
+           VALUES (?, ?, ?, ?, ?, ?, ?, 1)`
+        ).bind(userId, claims.org, email, hash, salt, full_name, role || 'me_officer').run();
+
+        if (region || phone) {
+          await env.DB.prepare(
+            `INSERT INTO user_profile (user_id, phone, region, invite_method) VALUES (?, ?, ?, ?)`
+          ).bind(userId, phone || null, region || null, invite_method || 'email').run();
+        }
+
+        const loginUrl = `${env.SITE_URL || 'https://voiceinsights-frontend.pages.dev'}/login.html`;
+        let delivered = 'email';
+
+        if (invite_method === 'sms' || invite_method === 'whatsapp') {
+          const smsBody = `Hi ${full_name}, you've been invited to VoiceInsights Africa. Login: ${loginUrl} | Email: ${email} | Temp password: ${tempPassword}. Please change your password after first login.`;
+          const result = await sendTwilioMessage(env, { to: phone, body: smsBody, whatsapp: invite_method === 'whatsapp' });
+          if (result.ok) {
+            delivered = invite_method;
+          } else {
+            // Twilio not configured or failed — fall back to email so the invite isn't lost.
+            delivered = 'email (Twilio unavailable — sent by email instead)';
+          }
+        }
+
+        if (delivered.startsWith('email')) {
+          await sendEmail(env, {
+            to: email,
+            subject: `You've been invited to VoiceInsights Africa`,
+            html: `<p>Hi ${full_name},</p>
+                   <p>You've been added as a team member on VoiceInsights Africa${region ? ` for the ${region} region` : ''}.</p>
+                   <p><b>Login:</b> <a href="${loginUrl}">${loginUrl}</a><br>
+                   <b>Email:</b> ${email}<br>
+                   <b>Temporary password:</b> ${tempPassword}</p>
+                   <p>Please log in and change your password from Settings as soon as possible.</p>`,
+          });
+        }
+
+        return json({ ok: true, delivered_via: delivered, user: { id: userId, email, full_name, role: role || 'me_officer', region: region || null } }, 201);
+      }
+
+      const deactivateMatch = path.match(/^\/api\/users\/([a-zA-Z0-9_]+)\/deactivate$/);
+      if (deactivateMatch && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        if (claims.role !== 'org_admin') return error('Only an Org Admin can deactivate users', 403);
+        await env.DB.prepare('UPDATE users SET is_active = 0 WHERE id = ? AND organization_id = ?').bind(deactivateMatch[1], claims.org).run();
+        return json({ ok: true });
       }
 
       // ---------- SURVEYS ----------
@@ -262,7 +353,17 @@ export default {
            FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
            WHERE c.organization_id = ? GROUP BY region ORDER BY n DESC LIMIT 10`
         ).bind(claims.org).all();
-        return json({ sentiment: sentimentRows, topics, quotes: quoteRows, regions: regionRows });
+        const { results: genderRows } = await env.DB.prepare(
+          `SELECT COALESCE(NULLIF(TRIM(resp.gender), ''), 'Unspecified') as gender, COUNT(*) as n
+           FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
+           WHERE c.organization_id = ? GROUP BY gender ORDER BY n DESC`
+        ).bind(claims.org).all();
+        const { results: ageRows } = await env.DB.prepare(
+          `SELECT COALESCE(NULLIF(TRIM(resp.age_bracket), ''), 'Unspecified') as age_bracket, COUNT(*) as n
+           FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
+           WHERE c.organization_id = ? GROUP BY age_bracket ORDER BY age_bracket ASC`
+        ).bind(claims.org).all();
+        return json({ sentiment: sentimentRows, topics, quotes: quoteRows, regions: regionRows, gender: genderRows, age: ageRows });
       }
 
       // ---------- FRAUD ALERTS ----------
@@ -461,7 +562,6 @@ export default {
         const { question } = await request.json();
         if (!question) return error('question is required');
 
-        // Gather lightweight context: recent sentiment counts + a handful of quotes.
         const { results: sentimentRows } = await env.DB.prepare(
           `SELECT r.overall_sentiment, COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id
            WHERE c.organization_id = ? GROUP BY r.overall_sentiment`
@@ -478,7 +578,7 @@ export default {
           method: 'POST',
           headers: { 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            model: 'claude-sonnet-4-6',
+            model: 'claude-sonnet-5',
             max_tokens: 500,
             messages: [{
               role: 'user',
@@ -490,6 +590,140 @@ export default {
         const data = await claudeResp.json();
         const answer = (data.content || []).map(c => c.text || '').join('');
         return json({ answer });
+      }
+
+      // ---------- AI REPORT INTELLIGENCE (Key Findings + Recommendations for the PDF report) ----------
+      if (path === '/api/reports/intelligence' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+
+        const { results: sentimentRows } = await env.DB.prepare(
+          `SELECT r.overall_sentiment, COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id
+           WHERE c.organization_id = ? GROUP BY r.overall_sentiment`
+        ).bind(claims.org).all();
+        const { results: genderRows } = await env.DB.prepare(
+          `SELECT COALESCE(NULLIF(TRIM(resp.gender), ''), 'Unspecified') as gender, COUNT(*) as n
+           FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
+           WHERE c.organization_id = ? GROUP BY gender`
+        ).bind(claims.org).all();
+        const { results: regionRows } = await env.DB.prepare(
+          `SELECT COALESCE(NULLIF(TRIM(resp.region), ''), 'Unspecified') as region, COUNT(*) as n
+           FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
+           WHERE c.organization_id = ? GROUP BY region ORDER BY n DESC LIMIT 8`
+        ).bind(claims.org).all();
+        const { results: insightRows } = await env.DB.prepare(
+          `SELECT ai.content_json FROM ai_insights ai JOIN responses r ON ai.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id
+           WHERE c.organization_id = ? AND ai.insight_type = 'summary' ORDER BY ai.created_at DESC LIMIT 100`
+        ).bind(claims.org).all();
+        const topicCounts = {};
+        for (const row of insightRows) {
+          try { const parsed = JSON.parse(row.content_json); for (const t of parsed.topics || []) topicCounts[t] = (topicCounts[t] || 0) + 1; } catch (_) {}
+        }
+        const topics = Object.entries(topicCounts).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([topic, count]) => ({ topic, count }));
+        const totalResponses = sentimentRows.reduce((s, r) => s + r.n, 0);
+
+        if (totalResponses === 0) {
+          return json({
+            key_findings: ['No responses have been collected yet — key findings will appear here once data comes in.'],
+            recommendations: { immediate: [], strategic: [], policy: [] },
+          });
+        }
+
+        const context = `Total responses: ${totalResponses}
+Sentiment breakdown: ${JSON.stringify(sentimentRows)}
+Gender breakdown: ${JSON.stringify(genderRows)}
+Top regions: ${JSON.stringify(regionRows)}
+Top topics mentioned: ${JSON.stringify(topics)}`;
+
+        const claudeResp = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-5',
+            max_tokens: 900,
+            messages: [{
+              role: 'user',
+              content: `You are a research analyst producing an executive report for an NGO/donor audience. Using ONLY the data below, write:
+1. "key_findings": exactly 3 short, punchy bullet-point findings (each under 20 words) a CEO could read in 60 seconds. Cite real numbers/percentages from the data where possible.
+2. "recommendations": an object with three arrays — "immediate" (next 30 days, 2 items), "strategic" (6-12 months, 2 items), "policy" (long-term, 1-2 items).
+
+Do not invent statistics not supported by the data. If the data is too sparse for a strong claim, say so plainly instead of fabricating specifics.
+
+DATA:
+${context}
+
+Respond with ONLY valid JSON in this exact shape, no markdown, no preamble:
+{"key_findings": ["...", "...", "..."], "recommendations": {"immediate": ["...", "..."], "strategic": ["...", "..."], "policy": ["..."]}}`,
+            }],
+          }),
+        });
+        if (!claudeResp.ok) return error('Report intelligence is temporarily unavailable', 500);
+        const data = await claudeResp.json();
+        const raw = (data.content || []).map(c => c.text || '').join('').trim().replace(/^```json\n?|\n?```$/g, '');
+        let parsed;
+        try { parsed = JSON.parse(raw); } catch (e) { return error('Could not parse AI response', 500); }
+        return json(parsed);
+      }
+
+      // ---------- IMPACT INDICATORS (baseline vs current, for Donor Impact Report) ----------
+      if (path === '/api/indicators' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const { results } = await env.DB.prepare(
+          'SELECT * FROM impact_indicators WHERE organization_id = ? ORDER BY order_index ASC, updated_at ASC'
+        ).bind(claims.org).all();
+        return json({ indicators: results });
+      }
+
+      if (path === '/api/indicators' && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        const { name, baseline_value, current_value, unit } = await request.json();
+        if (!name) return error('name is required');
+        const id = newId('ind');
+        const countRow = await env.DB.prepare('SELECT COUNT(*) as n FROM impact_indicators WHERE organization_id = ?').bind(claims.org).first();
+        await env.DB.prepare(
+          `INSERT INTO impact_indicators (id, organization_id, name, baseline_value, current_value, unit, order_index) VALUES (?, ?, ?, ?, ?, ?, ?)`
+        ).bind(id, claims.org, name, baseline_value || null, current_value || null, unit || null, countRow.n).run();
+        return json({ ok: true, id }, 201);
+      }
+
+      const indicatorMatch = path.match(/^\/api\/indicators\/([a-zA-Z0-9_]+)$/);
+      if (indicatorMatch && method === 'PUT') {
+        const claims = await requireAuth(request, env);
+        const { name, baseline_value, current_value, unit } = await request.json();
+        await env.DB.prepare(
+          `UPDATE impact_indicators SET name = ?, baseline_value = ?, current_value = ?, unit = ?, updated_at = datetime('now') WHERE id = ? AND organization_id = ?`
+        ).bind(name, baseline_value || null, current_value || null, unit || null, indicatorMatch[1], claims.org).run();
+        return json({ ok: true });
+      }
+      if (indicatorMatch && method === 'DELETE') {
+        const claims = await requireAuth(request, env);
+        await env.DB.prepare('DELETE FROM impact_indicators WHERE id = ? AND organization_id = ?').bind(indicatorMatch[1], claims.org).run();
+        return json({ ok: true });
+      }
+
+      // ---------- ADMIN: MODEL PERFORMANCE (real operational stats, no fabricated accuracy) ----------
+      if (path === '/api/admin/model-stats' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const responses = await env.DB.prepare(
+          `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ?`
+        ).bind(claims.org).first();
+        const transcripts = await env.DB.prepare(
+          `SELECT COUNT(*) as n FROM transcripts t JOIN answers a ON t.answer_id = a.id JOIN responses r ON a.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ?`
+        ).bind(claims.org).first();
+        const fraudFlags = await env.DB.prepare(
+          `SELECT COUNT(*) as n, AVG(r.fraud_score) as avg_score FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? AND r.fraud_score >= 0.5`
+        ).bind(claims.org).first();
+        const avgLatency = await env.DB.prepare(
+          `SELECT AVG((julianday(t.created_at) - julianday(a.created_at)) * 86400) as avg_seconds
+           FROM transcripts t JOIN answers a ON t.answer_id = a.id JOIN responses r ON a.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id
+           WHERE c.organization_id = ?`
+        ).bind(claims.org).first();
+        return json({
+          total_responses: responses.n,
+          total_transcripts: transcripts.n,
+          fraud_flags: fraudFlags.n,
+          avg_fraud_score: fraudFlags.avg_score,
+          avg_processing_seconds: avgLatency.avg_seconds,
+        });
       }
 
       // ---------- PUBLIC: survey questions for the web widget ----------
@@ -594,7 +828,7 @@ async function submitAnswer(env, session, { audioBuf, mediaType, textAnswer }) {
   ).bind(newId('tr'), answerId, transcript, session.language, sttEngine).run();
 
   await env.DB.prepare(
-    `INSERT INTO ai_insights (id, response_id, insight_type, content_json, model_used) VALUES (?, ?, 'summary', ?, 'claude-sonnet-4-6')`
+    `INSERT INTO ai_insights (id, response_id, insight_type, content_json, model_used) VALUES (?, ?, 'summary', ?, 'claude-sonnet-5')`
   ).bind(newId('ai'), session.response_id, JSON.stringify(analysis)).run();
 
   if (fraudResult.score >= 0.5) {
@@ -648,7 +882,7 @@ async function analyzeText(env, transcript) {
     method: 'POST',
     headers: { 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
+      model: 'claude-sonnet-5',
       max_tokens: 400,
       messages: [{
         role: 'user',
@@ -1018,6 +1252,32 @@ async function sendEmail(env, { to, subject, html }) {
   } catch (e) {
     // Never let a notification failure break the main request.
     console.error('Email notification failed:', e.message);
+  }
+}
+
+// ============================================================
+// Outbound SMS / WhatsApp via Twilio (for invites and future alerts).
+// Silently no-ops if Twilio isn't configured — caller should fall back to email.
+// ============================================================
+async function sendTwilioMessage(env, { to, body, whatsapp = false }) {
+  if (!env.TWILIO_ACCOUNT_SID || !env.TWILIO_AUTH_TOKEN || !env.TWILIO_PHONE_NUMBER) {
+    return { ok: false, reason: 'twilio_not_configured' };
+  }
+  try {
+    const auth = btoa(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`);
+    const from = whatsapp ? `whatsapp:${env.TWILIO_WHATSAPP_NUMBER || env.TWILIO_PHONE_NUMBER}` : env.TWILIO_PHONE_NUMBER;
+    const toFormatted = whatsapp ? `whatsapp:${to}` : to;
+    const params = new URLSearchParams({ To: toFormatted, From: from, Body: body });
+    const resp = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${env.TWILIO_ACCOUNT_SID}/Messages.json`, {
+      method: 'POST',
+      headers: { Authorization: `Basic ${auth}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString(),
+    });
+    if (!resp.ok) { const errText = await resp.text(); console.error('Twilio send failed:', errText); return { ok: false, reason: 'twilio_error' }; }
+    return { ok: true };
+  } catch (e) {
+    console.error('Twilio send exception:', e.message);
+    return { ok: false, reason: 'exception' };
   }
 }
 

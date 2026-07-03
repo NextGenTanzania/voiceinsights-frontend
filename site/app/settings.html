@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Settings — VoiceInsights Africa</title>
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -30,13 +32,44 @@
       </div>
 
       <div id="panel-users" style="display:none;">
-        <div class="section-head"><h2 style="font-size:1.05rem;" data-i18n="set.team">Team Members</h2><button class="btn btn-ghost btn-sm" data-i18n="set.invite">+ Invite User</button></div>
+        <div class="section-head"><h2 style="font-size:1.05rem;" data-i18n="set.team">Team Members</h2><button class="btn btn-ghost btn-sm" id="invite-toggle-btn" data-i18n="set.invite">+ Invite User</button></div>
+
+        <div class="card" id="invite-form-card" style="display:none; margin-bottom:1.25rem;">
+          <div class="field-row">
+            <div class="field"><label data-i18n="set.invite_name">Full Name</label><input id="invite-name" placeholder="e.g. Amina Rashid"></div>
+            <div class="field"><label data-i18n="set.invite_email">Email</label><input id="invite-email" type="email" placeholder="name@example.com"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label data-i18n="set.invite_role">Role</label>
+              <select id="invite-role">
+                <option value="me_officer" data-i18n="set.me_officer">M&amp;E Officer</option>
+                <option value="org_admin" data-i18n="set.org_admin">Org Admin</option>
+              </select>
+            </div>
+            <div class="field"><label data-i18n="set.invite_region">Region</label><input id="invite-region" placeholder="e.g. Zanzibar, Mwanza"></div>
+          </div>
+          <div class="field">
+            <label data-i18n="set.invite_method_label">Invitation Method</label>
+            <div class="field-row" style="gap:.6rem;">
+              <label class="checkbox-pill" style="cursor:pointer;"><input type="radio" name="invite-method" value="email" checked style="width:auto; margin-right:.4rem;"><span data-i18n="set.invite_via_email">📧 Email</span></label>
+              <label class="checkbox-pill" style="cursor:pointer;"><input type="radio" name="invite-method" value="sms" style="width:auto; margin-right:.4rem;"><span data-i18n="set.invite_via_sms">📱 SMS</span></label>
+              <label class="checkbox-pill" style="cursor:pointer;"><input type="radio" name="invite-method" value="whatsapp" style="width:auto; margin-right:.4rem;"><span data-i18n="set.invite_via_whatsapp">🟢 WhatsApp</span></label>
+            </div>
+          </div>
+          <div class="field" id="invite-phone-field" style="display:none;">
+            <label data-i18n="set.invite_phone">Phone Number (with country code)</label>
+            <input id="invite-phone" placeholder="+255…">
+          </div>
+          <div id="invite-error" style="display:none; color:var(--danger); font-size:.82rem; margin-bottom:.8rem;"></div>
+          <div id="invite-success" style="display:none; color:var(--success); font-size:.82rem; margin-bottom:.8rem;"></div>
+          <button class="btn btn-primary btn-sm" id="invite-send-btn" data-i18n="set.invite_send">Send Invite</button>
+        </div>
+
         <div class="table-wrap">
           <table>
-            <thead><tr><th data-i18n="set.th_name">Name</th><th data-i18n="set.th_email">Email</th><th data-i18n="set.th_role">Role</th><th></th></tr></thead>
-            <tbody>
-              <tr><td>Kitentya Luth Msuya</td><td>admin@nextgentanzania.com</td><td><span class="badge badge-accent" data-i18n="set.org_admin">Org Admin</span></td><td><a class="btn btn-ghost btn-sm" data-i18n="set.edit">Edit</a></td></tr>
-              <tr><td>Amina Rashid</td><td>meofficer@nextgentanzania.com</td><td><span class="badge badge-neutral" data-i18n="set.me_officer">M&amp;E Officer</span></td><td><a class="btn btn-ghost btn-sm" data-i18n="set.edit">Edit</a></td></tr>
+            <thead><tr><th data-i18n="set.th_name">Name</th><th data-i18n="set.th_email">Email</th><th data-i18n="set.th_role">Role</th><th data-i18n="set.invite_region">Region</th><th data-i18n="set.th_status">Status</th><th data-i18n="set.th_last_login">Last Login</th></tr></thead>
+            <tbody id="users-tbody">
+              <tr><td colspan="6" class="muted-note" style="padding:1.5rem;" id="users-loading">Loading team…</td></tr>
             </tbody>
           </table>
         </div>
@@ -103,8 +136,9 @@
     try {
       const { api_key } = await apiRequest('/api/organizations/regenerate-key', { method: 'POST' });
       document.getElementById('api-key-display').textContent = api_key;
+      showToast('New API key generated.', 'success');
     } catch (e) {
-      alert(t('set.gen_error', 'Could not generate key:') + ' ' + e.message);
+      showToast(t('set.gen_error', 'Could not generate key:') + ' ' + e.message, 'error');
     } finally {
       btn.disabled = false; btn.textContent = t('set.regen', 'Generate New Key');
     }
@@ -144,7 +178,7 @@
       tfaSetupFlow.style.display = 'block';
       tfaEnableBtn.style.display = 'none';
     } catch (e) {
-      alert(t('set.2fa_setup_error', 'Could not start 2FA setup:') + ' ' + e.message);
+      showToast(t('set.2fa_setup_error', 'Could not start 2FA setup:') + ' ' + e.message, 'error');
     } finally {
       tfaEnableBtn.disabled = false;
     }
@@ -159,6 +193,7 @@
     try {
       await apiRequest('/api/2fa/verify-setup', { method: 'POST', body: { code: codeInput.value } });
       await refreshTfaStatus();
+      showToast('Two-factor authentication enabled.', 'success');
     } catch (e) {
       errBox.textContent = e.message;
       errBox.style.display = 'block';
@@ -173,10 +208,81 @@
     try {
       await apiRequest('/api/2fa/disable', { method: 'POST' });
       await refreshTfaStatus();
+      showToast('Two-factor authentication disabled.', 'success');
     } catch (e) {
-      alert(e.message);
+      showToast(e.message, 'error');
     } finally {
       tfaDisableBtn.disabled = false;
+    }
+  });
+
+  // ---------- Team / Invite User ----------
+  const STATUS_BADGE_MAP = { org_admin: 'badge-accent', me_officer: 'badge-neutral' };
+  const ROLE_LABEL = { org_admin: t('set.org_admin', 'Org Admin'), me_officer: t('set.me_officer', 'M&E Officer') };
+
+  async function loadUsers() {
+    const tbody = document.getElementById('users-tbody');
+    try {
+      const { users } = await apiRequest('/api/users');
+      tbody.innerHTML = users.map(u => `
+        <tr>
+          <td>${u.full_name}</td>
+          <td>${u.email}</td>
+          <td><span class="badge ${STATUS_BADGE_MAP[u.role] || 'badge-neutral'}">${ROLE_LABEL[u.role] || u.role}</span></td>
+          <td>${u.region || '—'}</td>
+          <td>${u.is_active ? '<span class="badge badge-success">' + t('set.active', 'Active') + '</span>' : '<span class="badge badge-neutral">' + t('set.inactive', 'Inactive') + '</span>'}</td>
+          <td class="muted-note">${u.last_login_at ? new Date(u.last_login_at + 'Z').toLocaleDateString() : t('set.never_logged_in', 'Never logged in')}</td>
+        </tr>`).join('');
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="6" class="muted-note" style="padding:1.5rem; color:var(--danger);">${t('set.users_error', 'Could not load team:')} ${e.message}</td></tr>`;
+    }
+  }
+  loadUsers();
+
+  const inviteToggleBtn = document.getElementById('invite-toggle-btn');
+  const inviteFormCard = document.getElementById('invite-form-card');
+  inviteToggleBtn.addEventListener('click', () => {
+    inviteFormCard.style.display = inviteFormCard.style.display === 'none' ? 'block' : 'none';
+  });
+
+  document.querySelectorAll('input[name="invite-method"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      const selected = document.querySelector('input[name="invite-method"]:checked').value;
+      document.getElementById('invite-phone-field').style.display = (selected === 'sms' || selected === 'whatsapp') ? 'block' : 'none';
+    });
+  });
+
+  document.getElementById('invite-send-btn').addEventListener('click', async () => {
+    const errBox = document.getElementById('invite-error');
+    const okBox = document.getElementById('invite-success');
+    errBox.style.display = 'none'; okBox.style.display = 'none';
+    const btn = document.getElementById('invite-send-btn');
+    btn.disabled = true; btn.textContent = t('set.sending', 'Sending…');
+    const method = document.querySelector('input[name="invite-method"]:checked').value;
+    try {
+      const result = await apiRequest('/api/users/invite', {
+        method: 'POST',
+        body: {
+          full_name: document.getElementById('invite-name').value,
+          email: document.getElementById('invite-email').value,
+          role: document.getElementById('invite-role').value,
+          region: document.getElementById('invite-region').value,
+          phone: document.getElementById('invite-phone').value,
+          invite_method: method,
+        },
+      });
+      okBox.textContent = t('set.invite_sent', 'Invite sent — they will receive their login details by email.') + ` (${result.delivered_via})`;
+      okBox.style.display = 'block';
+      document.getElementById('invite-name').value = '';
+      document.getElementById('invite-email').value = '';
+      document.getElementById('invite-region').value = '';
+      document.getElementById('invite-phone').value = '';
+      await loadUsers();
+    } catch (e) {
+      errBox.textContent = e.message;
+      errBox.style.display = 'block';
+    } finally {
+      btn.disabled = false; btn.textContent = t('set.invite_send', 'Send Invite');
     }
   });
 </script>

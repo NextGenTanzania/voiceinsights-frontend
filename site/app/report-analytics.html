@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics Snapshot — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  .report-doc { max-width: 960px; margin: 0 auto; }
+  .r-page { background: var(--surface); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; page-break-after: always; }
+  .r-eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent-2); font-weight: 700; }
+  .r-kpis { display:grid; grid-template-columns: repeat(4,1fr); gap: .8rem; margin: 1rem 0; }
+  .r-kpi { background: var(--surface-2); border-radius: 12px; padding: .9rem; text-align:center; }
+  .r-chart-box { background: var(--surface-2); border-radius: 12px; padding: .8rem; height: 220px; position: relative; }
+  .r-grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .r-grid-3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+  .toolbar { max-width: 960px; margin: 0 auto 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+  @media print {
+    #sidebar-mount, #topbar-mount, .toolbar { display: none !important; }
+    body, .main, .content { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+    .r-page { box-shadow: none; border-radius: 0; background: #fff; }
+    .r-kpi, .r-chart-box { background: #f4f4f4 !important; }
+    * { color: #111 !important; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+
+      <div class="toolbar">
+        <div class="muted-note" id="report-status">Generating snapshot…</div>
+        <div style="display:flex; gap:.6rem;">
+          <a href="/app/report.html" class="btn btn-ghost btn-sm">← Full Report</a>
+          <button class="btn btn-primary btn-sm" id="print-btn">🖨 Download as PDF</button>
+        </div>
+      </div>
+
+      <div class="report-doc" id="report-doc" style="display:none;">
+
+        <!-- PAGE 1 — DASHBOARD SNAPSHOT -->
+        <div class="r-page">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div class="r-eyebrow">Analytics Snapshot</div>
+              <h1 style="font-size:1.5rem; margin-top:.3rem;" id="snap-org">—</h1>
+            </div>
+            <img src="/assets/img/logo-icon.png" style="height:30px;" alt="">
+          </div>
+          <div class="r-kpis">
+            <div class="r-kpi"><div class="stat-value" id="kpi-responses" style="font-size:1.5rem;">–</div><div class="muted-note">Respondents</div></div>
+            <div class="r-kpi"><div class="stat-value" id="kpi-surveys" style="font-size:1.5rem;">–</div><div class="muted-note">Active Projects</div></div>
+            <div class="r-kpi"><div class="stat-value" id="kpi-rate" style="font-size:1.5rem;">–</div><div class="muted-note">Completion</div></div>
+            <div class="r-kpi"><div class="stat-value" id="kpi-sentiment" style="font-size:1.5rem;">–</div><div class="muted-note">Positive</div></div>
+          </div>
+          <div class="r-grid-2" style="margin-top:1rem;">
+            <div class="r-chart-box"><canvas id="chartSentiment"></canvas></div>
+            <div class="r-chart-box"><canvas id="chartChannels"></canvas></div>
+          </div>
+        </div>
+
+        <!-- PAGE 2 — DEMOGRAPHICS -->
+        <div class="r-page">
+          <div class="r-eyebrow">Demographics</div>
+          <div class="r-grid-2" style="margin-top:1rem;">
+            <div class="r-chart-box"><canvas id="chartGender"></canvas></div>
+            <div class="r-chart-box"><canvas id="chartAge"></canvas></div>
+          </div>
+        </div>
+
+        <!-- PAGE 3 — REGIONAL BREAKDOWN -->
+        <div class="r-page">
+          <div class="r-eyebrow">Regional Reach</div>
+          <div class="r-chart-box" style="height:320px; margin-top:1rem;"><canvas id="chartRegion"></canvas></div>
+        </div>
+
+        <!-- PAGE 4 — SENTIMENT DETAIL -->
+        <div class="r-page">
+          <div class="r-eyebrow">Sentiment Detail</div>
+          <div class="r-chart-box" style="height:320px; margin-top:1rem;"><canvas id="chartTopics"></canvas></div>
+        </div>
+
+        <!-- PAGE 5 — AI RECOMMENDATIONS -->
+        <div class="r-page" style="page-break-after: auto;">
+          <div class="r-eyebrow">AI Recommendations</div>
+          <div class="r-grid-3" style="margin-top:1rem;">
+            <div class="r-chart-box" style="height:auto; padding:1rem;"><h4 style="color:var(--accent); font-size:.85rem; margin-bottom:.6rem;">Immediate</h4><ul id="rec-immediate" style="margin:0; padding-left:1.1rem; font-size:.85rem; color:var(--text);"></ul></div>
+            <div class="r-chart-box" style="height:auto; padding:1rem;"><h4 style="color:var(--accent-2); font-size:.85rem; margin-bottom:.6rem;">Strategic</h4><ul id="rec-strategic" style="margin:0; padding-left:1.1rem; font-size:.85rem; color:var(--text);"></ul></div>
+            <div class="r-chart-box" style="height:auto; padding:1rem;"><h4 style="color:var(--text-muted); font-size:.85rem; margin-bottom:.6rem;">Policy</h4><ul id="rec-policy" style="margin:0; padding-left:1.1rem; font-size:.85rem; color:var(--text);"></ul></div>
+          </div>
+          <div style="border-top:1px solid var(--border); margin-top:1.5rem; padding-top:1rem; text-align:center;" class="muted-note">VoiceInsights Africa · voiceinsightsafrica.com</div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/reports.html', eyebrow:'Reports', title:'Analytics Snapshot' });
+  document.getElementById('print-btn').addEventListener('click', () => window.print());
+
+  const SENTIMENT_COLOR = { positive: '#6FBF8B', neutral: '#9FB3AB', negative: '#D9634A', distressed: '#E4C23A' };
+  const SENTIMENT_LABEL = { positive: 'Positive', neutral: 'Neutral', negative: 'Negative', distressed: 'Distress' };
+  const CHART_COLORS = ['#E4A23A', '#4FA490', '#D9634A', '#E4C23A', '#6FBF8B', '#9FB3AB'];
+
+  function makeChart(canvasId, type, labels, data, colors, horizontal) {
+    if (typeof Chart === 'undefined') return;
+    new Chart(document.getElementById(canvasId), {
+      type,
+      data: { labels: labels.length ? labels : ['No data yet'], datasets: [{ data: data.length ? data : [1], backgroundColor: colors, borderWidth: type === 'doughnut' ? 0 : undefined }] },
+      options: {
+        indexAxis: horizontal ? 'y' : 'x',
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: type === 'doughnut', position: 'bottom', labels: { color: '#9FB3AB', boxWidth: 8, padding: 8, font: { size: 10 } } } },
+        scales: type === 'bar' ? { x: { grid: { display: !horizontal, color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', font: { size: 10 } } }, y: { beginAtZero: true, grid: { display: horizontal, color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', precision: 0, font: { size: 10 } } } } : undefined,
+      },
+    });
+  }
+
+  (async () => {
+    try {
+      const [stats, analytics, org, intelligence] = await Promise.all([
+        apiRequest('/api/dashboard/stats'),
+        apiRequest('/api/analytics/summary'),
+        apiRequest('/api/organizations/me'),
+        apiRequest('/api/reports/intelligence').catch(() => ({ recommendations: { immediate: [], strategic: [], policy: [] } })),
+      ]);
+
+      document.getElementById('snap-org').textContent = org.organization.name + ' — Live Analytics';
+      document.getElementById('kpi-responses').textContent = stats.total_responses;
+      document.getElementById('kpi-surveys').textContent = stats.active_surveys;
+      document.getElementById('kpi-rate').textContent = stats.total_responses ? stats.response_rate + '%' : '—';
+      document.getElementById('kpi-sentiment').textContent = stats.total_responses ? stats.positive_sentiment_pct + '%' : '—';
+
+      makeChart('chartSentiment', 'doughnut',
+        analytics.sentiment.map(s => SENTIMENT_LABEL[s.overall_sentiment] || s.overall_sentiment || 'Unknown'),
+        analytics.sentiment.map(s => s.n),
+        analytics.sentiment.map(s => SENTIMENT_COLOR[s.overall_sentiment] || '#9FB3AB'));
+      makeChart('chartChannels', 'doughnut', (stats.by_channel || []).map(c => c.channel), (stats.by_channel || []).map(c => c.n), CHART_COLORS);
+      makeChart('chartGender', 'doughnut', analytics.gender.map(g => g.gender), analytics.gender.map(g => g.n), CHART_COLORS);
+      makeChart('chartAge', 'bar', analytics.age.map(a => a.age_bracket), analytics.age.map(a => a.n), '#E4A23A', true);
+      makeChart('chartRegion', 'bar', analytics.regions.map(r => r.region), analytics.regions.map(r => r.n), '#4FA490', false);
+      makeChart('chartTopics', 'bar', analytics.topics.map(t => t.topic), analytics.topics.map(t => t.count), '#4FA490', true);
+
+      ['immediate', 'strategic', 'policy'].forEach(key => {
+        const el = document.getElementById('rec-' + key);
+        const items = (intelligence.recommendations && intelligence.recommendations[key]) || [];
+        el.innerHTML = items.length ? items.map(i => `<li>${i}</li>`).join('') : '<li class="muted-note">—</li>';
+      });
+
+      document.getElementById('report-status').textContent = 'Ready.';
+      document.getElementById('report-doc').style.display = 'block';
+    } catch (e) {
+      document.getElementById('report-status').textContent = 'Could not load snapshot data: ' + e.message;
+    }
+  })();
+</script>
+</body>
+</html>

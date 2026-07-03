@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sample Research Intelligence Report — VoiceInsights Africa</title>
+<meta name="description" content="See what a VoiceInsights Africa report looks like — a sample, illustrative report with the format your data would generate.">
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  .report-doc { max-width: 900px; margin: 0 auto; }
+  .r-page { background: var(--surface); border-radius: 16px; padding: 3rem; margin-bottom: 1.5rem; }
+  .r-eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent-2); font-weight: 700; }
+  .r-cover { min-height: 480px; display:flex; flex-direction:column; justify-content:space-between; background:
+    radial-gradient(circle at 85% 15%, rgba(228,162,58,.10), transparent 45%),
+    radial-gradient(circle at 10% 90%, rgba(79,164,144,.10), transparent 45%); }
+  .r-kpis { display:grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin: 1.75rem 0; }
+  .r-kpi { background: var(--surface-2); border-radius: 12px; padding: 1.1rem; text-align:center; }
+  .r-findings { list-style: none; padding: 0; margin: 1rem 0; }
+  .r-findings li { padding: .8rem 0 .8rem 2rem; border-bottom: 1px solid var(--border); position: relative; font-size: 1rem; color: var(--text); }
+  .r-findings li::before { content: '→'; position:absolute; left:0; color: var(--accent); font-weight:700; }
+  .r-insight-box { border-left: 3px solid var(--accent); background: var(--surface-2); border-radius: 0 10px 10px 0; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+  .r-insight-box .r-insight-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color: var(--accent); font-weight:700; margin-bottom:.4rem; }
+  .r-chart-box { background: var(--surface-2); border-radius: 12px; padding: 1rem; height: 260px; position: relative; }
+  .r-two-col { display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .r-quote-card { background: var(--surface-2); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+  .r-quote-card p { font-style: italic; font-size: 1.05rem; color: var(--text); margin: .5rem 0 0; }
+  .r-rec-col { background: var(--surface-2); border-radius: 12px; padding: 1.25rem; }
+  .r-rec-col h4 { font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; margin-bottom: .8rem; }
+  .r-rec-col ul { margin: 0; padding-left: 1.2rem; color: var(--text); font-size: .9rem; line-height: 1.6; }
+  .sample-banner { max-width: 900px; margin: 0 auto 1.5rem; background: var(--warn-bg); border: 1px solid var(--warn); border-radius: 10px; padding: 1rem 1.25rem; color: var(--warn); font-size: .88rem; }
+  .toolbar { max-width: 900px; margin: 0 auto 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+</style>
+</head>
+<body>
+
+<nav class="pub-nav">
+  <a href="/index.html" style="display:flex;align-items:center;gap:.6rem;">
+    <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+    <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+  </a>
+  <div style="display:flex; align-items:center; gap:1.75rem; flex-wrap:wrap; justify-content:flex-end;">
+    <div class="pub-nav-links" style="display:flex; gap:1.4rem; align-items:center;">
+      <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
+      <a href="/solutions.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
+      <a href="/case-studies.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Case Studies</a>
+      <a href="/index.html#pricing" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Pricing</a>
+    </div>
+    <div style="display:flex; gap:.9rem; align-items:center;">
+      <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="/contact.html" class="btn btn-primary btn-sm">Book Demo</a>
+    </div>
+  </div>
+</nav>
+
+<div class="content" style="padding: 2rem 5vw;">
+
+  <div class="sample-banner">
+    <b>⚠ Sample report — illustrative data.</b> This shows the exact format and depth of report VoiceInsights Africa generates automatically from your own data. The numbers below are for demonstration only, not a real study.
+  </div>
+
+  <div class="toolbar">
+    <div class="muted-note">This is what your organization's report would look like.</div>
+    <a href="/contact.html" class="btn btn-primary btn-sm">Get This For Your Data →</a>
+  </div>
+
+  <div class="report-doc">
+
+    <div class="r-page r-cover">
+      <div style="display:flex; align-items:center; gap:.6rem;">
+        <img src="/assets/img/logo-icon.png" style="height:32px;" alt="">
+        <span style="font-family:var(--font-display); font-weight:600; font-size:1.15rem;">VoiceInsights Africa</span>
+      </div>
+      <div style="text-align:center;">
+        <div class="r-eyebrow" style="margin-bottom:1rem;">Voice Research Intelligence Report — Sample</div>
+        <h1 style="font-size:2.4rem; max-width:22ch; margin:0 auto .8rem;">Agricultural Baseline Assessment</h1>
+        <div class="muted-note" style="font-size:1rem;">Zanzibar, Tanzania · Q2 2026 (illustrative) · 1,240 respondents across 6 districts</div>
+        <div id="cover-wave" style="margin-top:2.5rem; height:50px;"></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-size:.8rem; color:var(--text-dim); border-top:1px solid var(--border); padding-top:1.25rem;">
+        <div><b style="color:var(--text-muted);">Prepared for</b><br>Sample NGO Partner</div>
+        <div><b style="color:var(--text-muted);">Report ID</b><br>VIA-SAMPLE-001</div>
+        <div><b style="color:var(--text-muted);">Generated</b><br>Illustrative</div>
+        <div><b style="color:var(--text-muted);">Prepared by</b><br>AI analysis + human review</div>
+      </div>
+    </div>
+
+    <div class="r-page">
+      <div class="r-eyebrow">Executive Summary</div>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">The 60-second version.</h2>
+      <div class="r-kpis">
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.7rem;">1,240</div><div class="muted-note">Respondents</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.7rem;">88%</div><div class="muted-note">Response Rate</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.7rem;">56%</div><div class="muted-note">Female Participation</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.7rem;">18%</div><div class="muted-note">Negative / Distress</div></div>
+      </div>
+      <h3 style="font-size:1rem; margin-top:1.5rem;">Key Findings</h3>
+      <ul class="r-findings">
+        <li>Water scarcity is the top-cited issue, mentioned by 64% of respondents.</li>
+        <li>Women report a notably higher burden from water collection than men.</li>
+        <li>Coastal districts show the highest concentration of distress signals.</li>
+      </ul>
+      <div class="r-insight-box">
+        <div class="r-insight-label">AI Insight</div>
+        <div class="muted-note">Fertilizer cost and water access together account for over half of all negative-sentiment responses — a strong signal for where intervention would have the most impact.</div>
+      </div>
+    </div>
+
+    <div class="r-page">
+      <div class="r-eyebrow">Demographic Intelligence</div>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">Who responded.</h2>
+      <div class="r-two-col" style="margin-top:1.5rem;">
+        <div class="r-chart-box"><canvas id="chartGender"></canvas></div>
+        <div class="r-chart-box"><canvas id="chartAge"></canvas></div>
+      </div>
+      <div class="r-chart-box" style="height:220px; margin-top:1.5rem;"><canvas id="chartRegion"></canvas></div>
+    </div>
+
+    <div class="r-page">
+      <div class="r-eyebrow">Core Insights</div>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">What people are telling us.</h2>
+      <div class="r-chart-box" style="height:280px; margin-top:1.5rem;"><canvas id="chartTopics"></canvas></div>
+    </div>
+
+    <div class="r-page">
+      <div class="r-eyebrow">Sentiment &amp; Emotion</div>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">How people feel.</h2>
+      <div class="r-chart-box" style="max-width:420px; margin:1.5rem auto;"><canvas id="chartSentiment"></canvas></div>
+      <div class="r-insight-box">
+        <div class="r-insight-label">AI Insight</div>
+        <div class="muted-note">Negative sentiment is concentrated in the two coastal districts — worth a targeted follow-up before the next planting season.</div>
+      </div>
+    </div>
+
+    <div class="r-page">
+      <div class="r-eyebrow">Voices from the Field</div>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">In their own words.</h2>
+      <div style="margin-top:1.5rem;">
+        <div class="r-quote-card"><span class="badge badge-danger">Negative</span><p>"Water shortage affects us every dry season — it's our biggest challenge."</p></div>
+        <div class="r-quote-card"><span class="badge badge-danger">Negative</span><p>"Fertilizer prices have gone up so much this year, it's hard to keep farming profitable."</p></div>
+        <div class="r-quote-card"><span class="badge badge-success">Positive</span><p>"This season's yield was better than last year, thanks to the new irrigation support."</p></div>
+      </div>
+    </div>
+
+    <div class="r-page">
+      <div class="r-eyebrow">Recommendations</div>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">What should happen next.</h2>
+      <div class="r-two-col" style="margin-top:1.5rem; grid-template-columns: 1fr 1fr 1fr;">
+        <div class="r-rec-col"><h4 style="color:var(--accent);">Immediate (30 days)</h4><ul><li>Prioritize water point repair in the two coastal districts.</li><li>Share fertilizer price data with district agriculture offices.</li></ul></div>
+        <div class="r-rec-col"><h4 style="color:var(--accent-2);">Strategic (6–12 months)</h4><ul><li>Expand irrigation support to districts with lowest yield gains.</li><li>Launch a women-focused water access program.</li></ul></div>
+        <div class="r-rec-col"><h4 style="color:var(--text-muted);">Policy (Long-term)</h4><ul><li>Advocate for regional fertilizer subsidy review.</li></ul></div>
+      </div>
+    </div>
+
+    <div class="r-page">
+      <div class="r-eyebrow">Outcome Indicators <span style="color:var(--text-dim); text-transform:none; font-weight:400;">— Donor Impact Report add-on</span></div>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">Baseline vs. Current — measurable change.</h2>
+      <div class="table-wrap" style="margin-top:1.5rem;">
+        <table>
+          <thead><tr><th>Indicator</th><th>Baseline</th><th>Current</th><th>Change</th></tr></thead>
+          <tbody>
+            <tr><td>Food Security Rate</td><td>41%</td><td>67%</td><td style="color:var(--success); font-weight:600;">+26%</td></tr>
+            <tr><td>School Attendance</td><td>52%</td><td>79%</td><td style="color:var(--success); font-weight:600;">+27%</td></tr>
+            <tr><td>Access to Clean Water</td><td>34%</td><td>48%</td><td style="color:var(--success); font-weight:600;">+14%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="muted-note" style="margin-top:1rem;">Baseline and current values are entered by your team from your own M&amp;E framework — auditable, not just AI-inferred.</div>
+    </div>
+
+    <div class="r-page">
+      <div class="r-eyebrow">Methodology &amp; Trust</div>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">How this data was collected.</h2>
+      <div class="r-two-col" style="margin-top:1.5rem;">
+        <div>
+          <h4 style="font-size:.9rem; color:var(--text-muted);">Data Collection</h4>
+          <ul style="color:var(--text); font-size:.9rem; line-height:1.8;">
+            <li>Sample size: 1,240 respondents</li>
+            <li>Response rate: 88%</li>
+            <li>Channels: Phone, WhatsApp, SMS, Web, Offline App</li>
+            <li>AI transcription &amp; sentiment analysis on every response</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-size:.9rem; color:var(--text-muted);">Compliance &amp; Safeguarding</h4>
+          <ul style="color:var(--text); font-size:.9rem; line-height:1.8;">
+            <li>Verbal consent obtained before every interview</li>
+            <li>Fraud detection applied to all responses</li>
+            <li>Data encrypted in transit and at rest</li>
+            <li>See our full <a href="/safeguarding.html" style="color:var(--accent-2);">Safeguarding &amp; Compliance policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:2.5rem;">
+        <a href="/contact.html" class="btn btn-primary">Get a Report Like This for Your Own Data →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
+  <div style="flex:1 1 220px;">
+    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
+    </div>
+    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="/assets/js/app.js"></script>
+<script>
+  lucide.createIcons();
+  document.getElementById('cover-wave').innerHTML = makeWaveform(48, false);
+
+  const CHART_COLORS = ['#E4A23A', '#4FA490', '#D9634A', '#E4C23A', '#6FBF8B', '#9FB3AB'];
+  function makeChart(canvasId, type, labels, data, colors, horizontal) {
+    new Chart(document.getElementById(canvasId), {
+      type,
+      data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: type === 'doughnut' ? 0 : undefined }] },
+      options: {
+        indexAxis: horizontal ? 'y' : 'x',
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: type === 'doughnut', position: 'bottom', labels: { color: '#9FB3AB', boxWidth: 10, padding: 10, font: { size: 10 } } } },
+        scales: type === 'bar' ? { x: { grid: { display: !horizontal, color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', font: { size: 10 } } }, y: { beginAtZero: true, grid: { display: horizontal, color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', precision: 0, font: { size: 10 } } } } : undefined,
+      },
+    });
+  }
+
+  makeChart('chartGender', 'doughnut', ['Female', 'Male', 'Prefer not to say'], [56, 41, 3], CHART_COLORS);
+  makeChart('chartAge', 'bar', ['Under 18', '18–24', '25–34', '35–44', '45–54', '55+'], [3, 14, 27, 24, 19, 13], '#E4A23A', true);
+  makeChart('chartRegion', 'bar', ['Unguja South', 'Unguja North', 'Pemba North', 'Pemba South', 'Kaskazini A', 'Mjini'], [310, 265, 220, 195, 150, 100], '#4FA490', false);
+  makeChart('chartTopics', 'bar', ['Water scarcity', 'Fertilizer cost', 'Market access', 'Irrigation', 'Transport'], [64, 51, 38, 29, 21], '#4FA490', true);
+  makeChart('chartSentiment', 'doughnut', ['Positive', 'Neutral', 'Negative', 'Distress'], [46, 26, 21, 7], ['#6FBF8B', '#9FB3AB', '#D9634A', '#E4C23A']);
+</script>
+</body>
+</html>

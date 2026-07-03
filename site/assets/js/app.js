@@ -24,6 +24,23 @@ function t(key, fallback) {
   return fallback;
 }
 
+function showToast(message, type = 'info') {
+  let stack = document.getElementById('toast-stack');
+  if (!stack) {
+    stack = document.createElement('div');
+    stack.id = 'toast-stack';
+    document.body.appendChild(stack);
+  }
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.textContent = message;
+  stack.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('toast-out');
+    setTimeout(() => toast.remove(), 200);
+  }, 3800);
+}
+
 function makeWaveform(bars = 24, animate = false) {
   let html = '';
   for (let i = 0; i < bars; i++) {
@@ -115,6 +132,10 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
         </a>`).join('')}
     </div>`).join('');
 
+  const displayName = storedUser?.full_name || VI.user.name;
+  const displayInitials = displayName.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  const displayRole = storedUser?.role === 'me_officer' ? 'M&E Officer' : (role === 'admin' ? 'Super Admin' : 'Org Admin');
+
   const sidebarMount = document.getElementById('sidebar-mount');
   if (sidebarMount) {
     sidebarMount.innerHTML = `
@@ -125,6 +146,13 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
         </div>
         <div style="flex:1; display:flex; flex-direction:column; gap:1.5rem;">${navHtml}</div>
         <div class="sidebar-foot">
+          <div class="sidebar-user-card">
+            <div class="avatar">${displayInitials}</div>
+            <div class="info">
+              <div class="name">${displayName}</div>
+              <div class="role">${displayRole}</div>
+            </div>
+          </div>
           <a class="nav-item" href="/index.html">${iconSvg('log-out')} <span>${t('app.nav.logout', 'Log Out')}</span></a>
         </div>
       </aside>`;

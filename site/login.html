@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Log in — VoiceInsights Africa</title>
 <link rel="stylesheet" href="/assets/css/style.css">
@@ -52,7 +54,10 @@
         <button class="btn btn-primary" style="width:100%; justify-content:center;" type="submit" id="tfa-submit-btn">Verify</button>
       </form>
 
-      <div class="muted-note" style="margin-top:1rem;" id="demo-creds-note">Org Admin demo: <b style="color:var(--text-muted)">admin@nextgentanzania.com</b> / <b style="color:var(--text-muted)">VoiceInsights2026!</b><br>M&amp;E Officer demo (restricted view): <b style="color:var(--text-muted)">meofficer@nextgentanzania.com</b> / <b style="color:var(--text-muted)">MEOfficer2026!</b></div>
+      <div style="margin-top:1rem; text-align:center;" id="demo-creds-note">
+        <a href="#" id="demo-creds-toggle" class="muted-note" style="text-decoration:underline; cursor:pointer;">Want to see a demo login?</a>
+        <div class="muted-note" id="demo-creds-detail" style="display:none; margin-top:.6rem;">M&amp;E Officer demo (restricted view): <b style="color:var(--text-muted)">meofficer@nextgentanzania.com</b> / <b style="color:var(--text-muted)">MEOfficer2026!</b></div>
+      </div>
 
       <div style="margin-top:1.2rem; display:flex; justify-content:space-between; font-size:.82rem;">
         <a href="#" id="t-forgot" style="color:var(--text-dim);">Forgot password?</a>
@@ -83,6 +88,12 @@
     document.querySelectorAll('#site-lang-switch button').forEach(b => b.classList.toggle('active', b.dataset.lang === getAppLang()));
   }
   applyLoginTranslations();
+
+  document.getElementById('demo-creds-toggle').addEventListener('click', (e) => {
+    e.preventDefault();
+    const detail = document.getElementById('demo-creds-detail');
+    detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+  });
   document.querySelectorAll('#site-lang-switch button').forEach(b => {
     b.addEventListener('click', () => setAppLang(b.dataset.lang));
   });

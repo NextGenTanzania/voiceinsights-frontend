@@ -13,26 +13,47 @@
     <div id="topbar-mount"></div>
     <div class="content" style="max-width:700px;">
       <div class="pill-tabs">
-        <a class="active">Organization</a><a>Users</a><a>Notifications</a><a>Security</a>
-      </div>
-      <div class="card" style="margin-bottom:1.25rem;">
-        <div class="field"><label>Organization Name</label><input value="VoiceInsights Africa"></div>
-        <div class="field-row">
-          <div class="field"><label>Type ya Organization</label><select><option>Local NGO</option><option>INGO</option><option>Government</option><option>Research Firm</option></select></div>
-          <div class="field"><label>Language Chaguo-msingi</label><select><option>Swahili</option><option>English</option></select></div>
-        </div>
-        <button class="btn btn-primary btn-sm">Save Changes</button>
+        <a class="stab active" data-tab="org">Organization</a>
+        <a class="stab" data-tab="users">Users</a>
+        <a class="stab" data-tab="security">Security &amp; API</a>
       </div>
 
-      <div class="section-head"><h2 style="font-size:1.05rem;">Users wa Timu</h2><button class="btn btn-ghost btn-sm">+ Invite User</button></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Name</th><th>Email</th><th>Role</th><th></th></tr></thead>
-          <tbody>
-            <tr><td>Kitentya Msuya</td><td>luth@nextgentanzania.com</td><td><span class="badge badge-accent">Org Admin</span></td><td><a class="btn btn-ghost btn-sm">Edit</a></td></tr>
-            <tr><td>Amina Rashid</td><td>amina@nextgentanzania.com</td><td><span class="badge badge-neutral">M&amp;E Officer</span></td><td><a class="btn btn-ghost btn-sm">Edit</a></td></tr>
-          </tbody>
-        </table>
+      <div id="panel-org">
+        <div class="card" style="margin-bottom:1.25rem;">
+          <div class="field"><label>Organization Name</label><input value="VoiceInsights Africa"></div>
+          <div class="field-row">
+            <div class="field"><label>Organization Type</label><select><option>Local NGO</option><option>INGO</option><option>Government</option><option>Research Firm</option></select></div>
+            <div class="field"><label>Default Language</label><select><option>English</option><option>Kiswahili</option></select></div>
+          </div>
+          <button class="btn btn-primary btn-sm">Save Changes</button>
+        </div>
+      </div>
+
+      <div id="panel-users" style="display:none;">
+        <div class="section-head"><h2 style="font-size:1.05rem;">Team Members</h2><button class="btn btn-ghost btn-sm">+ Invite User</button></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th></th></tr></thead>
+            <tbody>
+              <tr><td>Kitentya Luth Msuya</td><td>admin@nextgentanzania.com</td><td><span class="badge badge-accent">Org Admin</span></td><td><a class="btn btn-ghost btn-sm">Edit</a></td></tr>
+              <tr><td>Amina Rashid</td><td>meofficer@nextgentanzania.com</td><td><span class="badge badge-neutral">M&amp;E Officer</span></td><td><a class="btn btn-ghost btn-sm">Edit</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="panel-security" style="display:none;">
+        <div class="card" style="margin-bottom:1.25rem;">
+          <div class="card-title">API Key</div>
+          <p class="muted-note" style="margin-bottom:.8rem;">Use this key for custom integrations (see the <a href="/api.html" style="color:var(--accent-2);">API &amp; Integrations</a> page). Treat it like a password — anyone with this key can act as your organization.</p>
+          <div id="api-key-display" style="font-family:var(--font-mono); background:var(--surface-2); padding:.7rem 1rem; border-radius:var(--radius-sm); font-size:.85rem; margin-bottom:.8rem; word-break:break-all;">No API key generated yet.</div>
+          <button class="btn btn-ghost btn-sm" id="regen-key-btn">Generate New Key</button>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Two-Factor Authentication</div>
+          <p class="muted-note">2FA is on our near-term roadmap — not available yet. <a href="/contact.html" style="color:var(--accent-2);">Contact us</a> if this is a requirement for your organization's security policy.</p>
+        </div>
       </div>
     </div>
   </main>
@@ -42,6 +63,38 @@
 <script src="/assets/js/app.js"></script>
 <script>
   if (!requireLogin()) { /* redirected */ }
-  renderShell({ role:'client', active:'/app/settings.html', eyebrow:'Account', title:'Settings' });</script>
+  renderShell({ role:'client', active:'/app/settings.html', eyebrow:'Account', title:'Settings' });
+
+  document.querySelectorAll('.stab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      ['org', 'users', 'security'].forEach(name => {
+        document.getElementById('panel-' + name).style.display = (name === tab.dataset.tab) ? 'block' : 'none';
+      });
+    });
+  });
+
+  async function loadApiKey() {
+    try {
+      const { organization } = await apiRequest('/api/organizations/me');
+      document.getElementById('api-key-display').textContent = organization.api_key || 'No API key generated yet.';
+    } catch (e) { /* silent */ }
+  }
+  loadApiKey();
+
+  document.getElementById('regen-key-btn').addEventListener('click', async () => {
+    const btn = document.getElementById('regen-key-btn');
+    btn.disabled = true; btn.textContent = 'Generating…';
+    try {
+      const { api_key } = await apiRequest('/api/organizations/regenerate-key', { method: 'POST' });
+      document.getElementById('api-key-display').textContent = api_key;
+    } catch (e) {
+      alert('Could not generate key: ' + e.message);
+    } finally {
+      btn.disabled = false; btn.textContent = 'Generate New Key';
+    }
+  });
+</script>
 </body>
 </html>

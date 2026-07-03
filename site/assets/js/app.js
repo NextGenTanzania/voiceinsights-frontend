@@ -90,7 +90,18 @@ const APP_LANGS = [
 ];
 
 function renderShell({ role = 'client', active = '', title = '', eyebrow = '' }) {
-  const nav = role === 'admin' ? NAV_ADMIN : NAV_APP;
+  const storedUser = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  const userRole = storedUser?.role || 'org_admin';
+
+  // Full-access roles see everything; a plain M&E Officer gets a reduced, focused nav
+  // (no Billing, no Compliance edit, no Leads) — reflecting real permission differences.
+  const RESTRICTED_FOR_ME_OFFICER = ['/app/billing.html', '/app/settings.html', '/admin/leads.html', '/admin/clients.html'];
+
+  let nav = role === 'admin' ? NAV_ADMIN : NAV_APP;
+  if (role === 'client' && userRole === 'me_officer') {
+    nav = nav.map(g => ({ ...g, items: g.items.filter(it => !RESTRICTED_FOR_ME_OFFICER.includes(it.href)) })).filter(g => g.items.length);
+  }
+
   const brandName = 'VoiceInsights Africa';
   const brandSub = role === 'admin' ? t('app.nav.admin_console', 'Admin Console') : t('app.nav.client_dashboard', 'Client Dashboard');
   const currentLang = getAppLang();
@@ -137,6 +148,7 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
           <div class="user-chip">
             <div class="avatar">${VI.user.initials}</div>
             <span style="font-size:.85rem; font-weight:600;">${VI.user.name}</span>
+            <span class="badge badge-neutral" style="font-size:.62rem;">${userRole === 'me_officer' ? 'M&E Officer' : (role === 'admin' ? 'Super Admin' : 'Org Admin')}</span>
           </div>
         </div>
       </header>`;

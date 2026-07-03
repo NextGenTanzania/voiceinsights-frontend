@@ -149,6 +149,13 @@ CREATE TABLE IF NOT EXISTS leads (
 );
 
 -- Regulatory / compliance status per survey (COSTECH, NBS, Ethics) — one row per survey.
+-- API keys per organization (for future custom integrations).
+CREATE TABLE IF NOT EXISTS organization_api_keys (
+  organization_id  TEXT PRIMARY KEY REFERENCES organizations(id),
+  api_key          TEXT NOT NULL,
+  created_at       TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 CREATE TABLE IF NOT EXISTS survey_compliance (
   survey_id           TEXT PRIMARY KEY REFERENCES surveys(id),
   costech_status      TEXT NOT NULL DEFAULT 'not_required',  -- not_required | pending | approved
@@ -197,6 +204,19 @@ VALUES (
   '429f4023fe215e10540a0fc3df1b4365',
   'Kitentya Luth Msuya',
   'org_admin'
+);
+
+-- Second demo login with a restricted role, to test role-based UI differences.
+-- Email: meofficer@nextgentanzania.com   Password: MEOfficer2026!
+INSERT OR IGNORE INTO users (id, organization_id, email, password_hash, password_salt, full_name, role)
+VALUES (
+  'user_demo_me_officer',
+  'org_demo',
+  'meofficer@nextgentanzania.com',
+  'e4282632b66fc80e1d3581b816c5daee529550d18d31dcee6e21be38aa83f6ad',
+  '628983e0b63fda25ae23f4877508f387',
+  'Amina Rashid',
+  'me_officer'
 );
 
 -- Default survey + campaign + question so the WhatsApp pipeline has somewhere

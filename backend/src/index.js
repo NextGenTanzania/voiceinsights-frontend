@@ -9,7 +9,8 @@
 //   GET  /api/analytics/summary
 //   GET  /api/fraud/alerts
 //   GET  /api/reports/csv?campaign_id=...        (Excel-compatible export)
-//   GET  /api/organizations/me                    (current org's plan/status)
+//   GET  /api/organizations/me                    (current org's plan/status/API key)
+//   POST /api/organizations/regenerate-key        (generate a new API key)
 //   POST /api/billing/create-checkout-session     (Stripe Checkout — real subscriptions)
 //   POST /api/billing/webhook                     (Stripe webhook — activates plan on payment)
 //   POST /api/contact/submit                      (public — website Contact form, saves a lead)
@@ -187,18 +188,30 @@ export default {
            JOIN answers a ON t.answer_id = a.id JOIN responses r ON a.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id
            WHERE c.organization_id = ? ORDER BY t.created_at DESC LIMIT 6`
         ).bind(claims.org).all();
-        return json({ sentiment: sentimentRows, topics, quotes: quoteRows });
+        const { results: regionRows } = await env.DB.prepare(
+          `SELECT COALESCE(NULLIF(TRIM(resp.region), ''), 'Unspecified') as region, COUNT(*) as n
+           FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
+           WHERE c.organization_id = ? GROUP BY region ORDER BY n DESC LIMIT 10`
+        ).bind(claims.org).all();
+        return json({ sentiment: sentimentRows, topics, quotes: quoteRows, regions: regionRows });
       }
 
       // ---------- FRAUD ALERTS ----------
       if (path === '/api/fraud/alerts' && method === 'GET') {
         const claims = await requireAuth(request, env);
         const { results } = await env.DB.prepare(
-          `SELECT r.id as response_id, r.fraud_score, r.overall_sentiment, r.started_at, r.channel, resp.phone_number, c.name as campaign_name
+          `SELECT r.id as response_id, r.fraud_score, r.overall_sentiment, r.started_at, r.channel, resp.phone_number, c.name as campaign_name,
+                  (SELECT ai.content_json FROM ai_insights ai WHERE ai.response_id = r.id AND ai.insight_type = 'fraud_flag' ORDER BY ai.created_at DESC LIMIT 1) as fraud_json
            FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
            WHERE c.organization_id = ? AND r.fraud_score IS NOT NULL AND r.fraud_score >= 0.5 ORDER BY r.fraud_score DESC LIMIT 50`
         ).bind(claims.org).all();
-        return json({ alerts: results });
+        const alerts = results.map(a => {
+          let reasons = [];
+          try { reasons = JSON.parse(a.fraud_json || '{}').reasons || []; } catch (_) {}
+          const { fraud_json, ...rest } = a;
+          return { ...rest, reasons };
+        });
+        return json({ alerts });
       }
 
       // ---------- REPORTS (CSV / Excel export) ----------
@@ -211,7 +224,18 @@ export default {
         const claims = await requireAuth(request, env);
         const org = await env.DB.prepare('SELECT id, name, type, billing_tier, status FROM organizations WHERE id = ?').bind(claims.org).first();
         if (!org) return error('Organization not found', 404);
-        return json({ organization: org });
+        const keyRow = await env.DB.prepare('SELECT api_key FROM organization_api_keys WHERE organization_id = ?').bind(claims.org).first();
+        return json({ organization: { ...org, api_key: keyRow ? keyRow.api_key : null } });
+      }
+
+      if (path === '/api/organizations/regenerate-key' && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        const newKey = 'via_' + [...crypto.getRandomValues(new Uint8Array(24))].map(b => b.toString(16).padStart(2, '0')).join('');
+        await env.DB.prepare(
+          `INSERT INTO organization_api_keys (organization_id, api_key, created_at) VALUES (?, ?, datetime('now'))
+           ON CONFLICT(organization_id) DO UPDATE SET api_key = excluded.api_key, created_at = datetime('now')`
+        ).bind(claims.org, newKey).run();
+        return json({ api_key: newKey });
       }
 
       if (path === '/api/billing/create-checkout-session' && method === 'POST') {

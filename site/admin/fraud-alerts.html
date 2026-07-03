@@ -19,9 +19,9 @@
 
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Response</th><th>Phone</th><th>Campaign</th><th>Reasons</th><th>Fraud Score</th><th>Sentiment</th></tr></thead>
+          <thead><tr><th>Response</th><th>Phone</th><th>Campaign</th><th>Reasons</th><th>Fraud Score</th><th>Sentiment</th><th>When</th></tr></thead>
           <tbody id="fraud-tbody">
-            <tr><td colspan="6" class="muted-note" style="padding:1.5rem;">Loading fraud alerts…</td></tr>
+            <tr><td colspan="7" class="muted-note" style="padding:1.5rem;">Loading fraud alerts…</td></tr>
           </tbody>
         </table>
       </div>
@@ -40,22 +40,26 @@
     try {
       const { alerts } = await apiRequest('/api/fraud/alerts');
       if (!alerts.length) {
-        tbody.innerHTML = `<tr><td colspan="6" class="muted-note" style="padding:1.5rem;">No fraud signals detected yet. This updates automatically as WhatsApp responses come in.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem;">No fraud signals detected yet. This updates automatically as WhatsApp responses come in.</td></tr>`;
         return;
       }
       tbody.innerHTML = alerts.map(a => {
         const scoreColor = a.fraud_score >= 0.8 ? 'var(--danger)' : a.fraud_score >= 0.6 ? 'var(--warn)' : 'var(--text-dim)';
+        const reasonsHtml = (a.reasons && a.reasons.length)
+          ? a.reasons.map(r => `<div style="font-size:.78rem; margin-bottom:.2rem;">• ${r}</div>`).join('')
+          : '<span class="muted-note">No reasons logged</span>';
         return `<tr>
           <td>#${a.response_id.slice(0, 12)}</td>
           <td>${a.phone_number || '—'}</td>
           <td>${a.campaign_name}</td>
-          <td>${new Date(a.started_at + 'Z').toLocaleString()}</td>
+          <td>${reasonsHtml}</td>
           <td style="color:${scoreColor}; font-family:var(--font-mono);">${a.fraud_score.toFixed(2)}</td>
           <td><span class="badge badge-neutral">${a.overall_sentiment || 'unrated'}</span></td>
+          <td class="muted-note">${new Date(a.started_at + 'Z').toLocaleString()}</td>
         </tr>`;
       }).join('');
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="6" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
     }
   })();
 </script>

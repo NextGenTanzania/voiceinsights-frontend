@@ -14,13 +14,14 @@
     <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
   </a>
   <div class="pub-nav-links" style="display:flex; gap:1.4rem; align-items:center;">
-    <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
-    <a href="/solutions.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
-    <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
-    <a href="/case-studies.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Case Studies</a>
-    <a href="/index.html#pricing" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Pricing</a>
-    <a href="/safeguarding.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
-    <a href="/about.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">About</a>
+    <a href="/platform.html" data-i18n="topnav.platform" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
+    <a href="/solutions.html" data-i18n="topnav.solutions" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
+    <a href="/industries.html" data-i18n="topnav.industries" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
+    <a href="/case-studies.html" data-i18n="topnav.case_studies" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Case Studies</a>
+    <a href="/index.html#pricing" data-i18n="topnav.pricing" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Pricing</a>
+    <a href="/safeguarding.html" data-i18n="topnav.compliance" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
+    <a href="/about.html" data-i18n="topnav.about" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">About</a>
+    <a href="/respondent.html" style="color:var(--accent); font-size:.85rem; font-weight:700;">Try Demo</a>
   </div>
   <div style="display:flex; gap:.9rem; align-items:center;">
     <div class="site-lang-switch" id="site-lang-switch">
@@ -29,8 +30,8 @@
       <button data-lang="pt">PT</button>
       <button data-lang="sw">SW</button>
     </div>
-    <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
-    <a href="/contact.html" class="btn btn-primary btn-sm">Book Demo</a>
+    <a href="/login.html" data-i18n="nav.login" class="btn btn-ghost btn-sm">Log in</a>
+    <a href="/contact.html" data-i18n="topnav.book_demo" class="btn btn-primary btn-sm">Book Demo</a>
   </div>
 </nav>
 
@@ -91,30 +92,36 @@
       <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
       <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
     </div>
-    <p style="max-width:32ch; font-size:.85rem; line-height:1.7;">VoiceInsights Africa is an enterprise voice intelligence platform helping organizations collect, analyze, and transform multilingual voice data into decision-ready insights.</p>
+    <p style="max-width:32ch; font-size:.85rem; line-height:1.7;" data-i18n="footer.tagline">VoiceInsights Africa is an enterprise voice intelligence platform helping organizations collect, analyze, and transform multilingual voice data into decision-ready insights.</p>
+    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); margin-top:1rem; line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+    <div style="margin-top:.6rem; display:flex; gap:1rem;">
+      <a href="/privacy.html" style="font-size:.75rem; color:var(--text-dim);">Privacy Policy</a>
+      <a href="/terms.html" style="font-size:.75rem; color:var(--text-dim);">Terms of Service</a>
+      <a href="/careers.html" style="font-size:.75rem; color:var(--text-dim);">Careers</a>
+    </div>
   </div>
-  <div><div class="nav-label" style="padding:0;">Platform</div>
-    <a href="/app/dashboard.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Dashboard</a>
-    <a href="/respondent.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Interview Demo</a>
-    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Analytics</a>
-    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Reporting</a>
-    <a href="/api.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">API &amp; Integrations</a>
+  <div><div class="nav-label" style="padding:0;" data-i18n="footer.platform">Platform</div>
+    <a href="/app/dashboard.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.dashboard">Dashboard</a>
+    <a href="/respondent.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.demo_link">Interview Demo</a>
+    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.analytics">Analytics</a>
+    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.reporting">Reporting</a>
+    <a href="/api.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.api">API &amp; Integrations</a>
   </div>
-  <div><div class="nav-label" style="padding:0;">Solutions</div>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Survey Automation</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Monitoring & Evaluation</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Beneficiary Feedback</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Grievance Systems</a>
+  <div><div class="nav-label" style="padding:0;" data-i18n="footer.solutions">Solutions</div>
+    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.survey_automation">Survey Automation</a>
+    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.me">Monitoring &amp; Evaluation</a>
+    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.beneficiary">Beneficiary Feedback</a>
+    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.grievance">Grievance Systems</a>
   </div>
-  <div><div class="nav-label" style="padding:0;">Trust</div>
-    <a href="/safeguarding.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Safeguarding</a>
-    <a href="/security.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Security</a>
-    <a href="/faq.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">FAQ</a>
+  <div><div class="nav-label" style="padding:0;" data-i18n="footer.trust">Trust</div>
+    <a href="/safeguarding.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.safeguarding_link">Safeguarding</a>
+    <a href="/security.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.security">Security</a>
+    <a href="/faq.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.faq_link">FAQ</a>
   </div>
-  <div><div class="nav-label" style="padding:0;">Contact</div>
+  <div><div class="nav-label" style="padding:0;" data-i18n="footer.contact">Contact</div>
     <a href="mailto:partnerships@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">partnerships@voiceinsightsafrica.com</a>
     <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
-    <a href="/contact.html" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+    <a href="/contact.html" class="btn btn-primary btn-sm" style="margin-top:1rem;" data-i18n="topnav.book_demo">Book Demo</a>
   </div>
 </footer>
 
@@ -123,10 +130,7 @@
 <script src="/assets/js/app.js"></script>
 <script>
   lucide.createIcons();
-  document.querySelectorAll('#site-lang-switch button').forEach(b => {
-    b.addEventListener('click', () => { localStorage.setItem('vi_app_lang', b.dataset.lang); location.reload(); });
-    if (b.dataset.lang === getAppLang()) b.classList.add('active');
-  });
+  initSiteLanguage();
 </script>
 </body>
 </html>

@@ -25,13 +25,14 @@
     <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
   </a>
   <div class="pub-nav-links" style="display:flex; gap:1.4rem; align-items:center;">
-    <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
-    <a href="/solutions.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
-    <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
-    <a href="/case-studies.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Case Studies</a>
-    <a href="/index.html#pricing" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Pricing</a>
-    <a href="/safeguarding.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
-    <a href="/about.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">About</a>
+    <a href="/platform.html" data-i18n="topnav.platform" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
+    <a href="/solutions.html" data-i18n="topnav.solutions" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
+    <a href="/industries.html" data-i18n="topnav.industries" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
+    <a href="/case-studies.html" data-i18n="topnav.case_studies" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Case Studies</a>
+    <a href="/index.html#pricing" data-i18n="topnav.pricing" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Pricing</a>
+    <a href="/safeguarding.html" data-i18n="topnav.compliance" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
+    <a href="/about.html" data-i18n="topnav.about" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">About</a>
+    <a href="/respondent.html" style="color:var(--accent); font-size:.85rem; font-weight:700;">Try Demo</a>
   </div>
   <div style="display:flex; gap:.9rem; align-items:center;">
     <div class="site-lang-switch" id="site-lang-switch">
@@ -40,8 +41,8 @@
       <button data-lang="pt">PT</button>
       <button data-lang="sw">SW</button>
     </div>
-    <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
-    <a href="/contact.html" class="btn btn-primary btn-sm">Book Demo</a>
+    <a href="/login.html" data-i18n="nav.login" class="btn btn-ghost btn-sm">Log in</a>
+    <a href="/contact.html" data-i18n="topnav.book_demo" class="btn btn-primary btn-sm">Book Demo</a>
   </div>
 </nav>
 
@@ -53,9 +54,15 @@
       <p class="lead" data-i18n="hero.lead">VoiceInsights Africa helps NGOs, governments, and research firms around the world collect, analyze, and report voice data — no paperwork, no months of waiting, no language left behind.</p>
       <div style="display:flex; gap:.8rem; margin-top:2rem; flex-wrap:wrap;">
         <a href="/contact.html" class="btn btn-primary" data-i18n="hero.cta1">Request Demo &rarr;</a>
-        <a href="#jinsi" class="btn btn-ghost" data-i18n="hero.cta2">Explore Platform</a>
+        <a href="/respondent.html" class="btn btn-ghost">Try Live Demo</a>
       </div>
-      <div style="margin-top:2.5rem; display:flex; gap:1.75rem; flex-wrap:wrap; align-items:center;">
+      <div class="grid grid-4" style="margin-top:2.5rem; gap:1rem; max-width:560px;">
+        <div><div class="stat-value" style="font-size:1.4rem;">5</div><div class="muted-note" style="font-size:.72rem;">Collection channels</div></div>
+        <div><div class="stat-value" style="font-size:1.4rem;">4</div><div class="muted-note" style="font-size:.72rem;">Languages supported</div></div>
+        <div><div class="stat-value" style="font-size:1.4rem;">24/7</div><div class="muted-note" style="font-size:.72rem;">Live data collection</div></div>
+        <div><div class="stat-value" style="font-size:1.4rem;">0</div><div class="muted-note" style="font-size:.72rem;">Paper forms needed</div></div>
+      </div>
+      <div style="margin-top:1.75rem; display:flex; gap:1.75rem; flex-wrap:wrap; align-items:center;">
         <span class="muted-note" style="font-size:.75rem; text-transform:uppercase; letter-spacing:.06em;">Trusted by</span>
         <span style="color:var(--text-dim); font-size:.85rem; font-weight:600;">NGOs</span>
         <span style="color:var(--text-dim); font-size:.85rem; font-weight:600;">Governments</span>
@@ -79,6 +86,17 @@
   </div>
 </header>
 
+<section class="pub-section">
+  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="whouses.eyebrow">Who it's for</span>
+  <h2 style="max-width:36ch;" data-i18n="whouses.h2">Built for teams that depend on reliable data.</h2>
+  <div class="grid grid-4" style="margin-top:2.5rem;">
+    <div class="feature-card"><h3 style="font-size:1.05rem;" data-i18n="whouses.c1.title">NGOs</h3><p style="font-size:.85rem;" data-i18n="whouses.c1.desc">Programme monitoring and beneficiary feedback at field scale.</p></div>
+    <div class="feature-card"><h3 style="font-size:1.05rem;" data-i18n="whouses.c2.title">Governments</h3><p style="font-size:.85rem;" data-i18n="whouses.c2.desc">Citizen feedback and public service monitoring.</p></div>
+    <div class="feature-card"><h3 style="font-size:1.05rem;" data-i18n="whouses.c3.title">Research Firms</h3><p style="font-size:.85rem;" data-i18n="whouses.c3.desc">Large-scale studies across languages and geographies.</p></div>
+    <div class="feature-card"><h3 style="font-size:1.05rem;" data-i18n="whouses.c4.title">Enterprises</h3><p style="font-size:.85rem;" data-i18n="whouses.c4.desc">Customer intelligence and market research at scale.</p></div>
+  </div>
+</section>
+
 <section class="pub-section" id="tatizo">
   <span class="eyebrow" style="color:var(--accent);" data-i18n="problem.eyebrow">The Problem</span>
   <h2 data-i18n="problem.h2">Traditional research in emerging and underserved markets is expensive, slow, and loses the real voice of the people.</h2>
@@ -88,9 +106,9 @@
     <div class="feature-card"><span class="num">03</span><h3 style="font-size:1.1rem;" data-i18n="problem.c3.title">Voices that get lost</h3><p data-i18n="problem.c3.desc">Rich qualitative answers go underused because analyzing them by hand is too much work — worse in languages most AI tools were never built for.</p></div>
   </div>
   <div class="grid grid-3" style="margin-top:1.25rem; text-align:center;">
-    <div class="card"><div class="stat-value" style="font-size:1.6rem; justify-content:center;">Majority</div><div class="muted-note" style="margin-top:.3rem;">of typical field-research budgets go to logistics, not analysis</div></div>
-    <div class="card"><div class="stat-value" style="font-size:1.6rem; justify-content:center;">Weeks</div><div class="muted-note" style="margin-top:.3rem;">commonly lost to manual transcription and data entry</div></div>
-    <div class="card"><div class="stat-value" style="font-size:1.6rem; justify-content:center;">Excluded</div><div class="muted-note" style="margin-top:.3rem;">respondents without literacy or a smartphone, on text-only tools</div></div>
+    <div class="card"><div class="stat-value" style="font-size:1.6rem; justify-content:center;" data-i18n="stats.s1.val">Majority</div><div class="muted-note" style="margin-top:.3rem;" data-i18n="stats.s1.label">of typical field-research budgets go to logistics, not analysis</div></div>
+    <div class="card"><div class="stat-value" style="font-size:1.6rem; justify-content:center;" data-i18n="stats.s2.val">Weeks</div><div class="muted-note" style="margin-top:.3rem;" data-i18n="stats.s2.label">commonly lost to manual transcription and data entry</div></div>
+    <div class="card"><div class="stat-value" style="font-size:1.6rem; justify-content:center;" data-i18n="stats.s3.val">Excluded</div><div class="muted-note" style="margin-top:.3rem;" data-i18n="stats.s3.label">respondents without literacy or a smartphone, on text-only tools</div></div>
   </div>
 </section>
 
@@ -99,43 +117,43 @@
 </div>
 
 <section class="pub-section" style="padding-top:0;">
-  <span class="eyebrow" style="color:var(--accent-2);">The Solution</span>
-  <h2 style="max-width:34ch;">One platform. Every voice. Instant insight.</h2>
+  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="solution.eyebrow">The Solution</span>
+  <h2 style="max-width:34ch;" data-i18n="solution.h2">One platform. Every voice. Instant insight.</h2>
   <div class="grid grid-3" style="margin-top:2.5rem;">
-    <div class="feature-card"><span class="num">Collect</span><h3 style="font-size:1.1rem;">Capture voice anywhere</h3><p>Phone, WhatsApp, SMS, web, or an offline field app — respondents answer however is easiest for them.</p></div>
-    <div class="feature-card"><span class="num">Understand</span><h3 style="font-size:1.1rem;">AI transcribes and analyzes</h3><p>Speech becomes text, then topics, sentiment, and fraud signals are extracted automatically.</p></div>
-    <div class="feature-card"><span class="num">Act</span><h3 style="font-size:1.1rem;">Decision-ready reports</h3><p>A live dashboard and structured exports — insight your team can act on the same day, not next quarter.</p></div>
+    <div class="feature-card"><span class="num" data-i18n="solution.c1.label">Collect</span><h3 style="font-size:1.1rem;" data-i18n="solution.c1.title">Capture voice anywhere</h3><p data-i18n="solution.c1.desc">Phone, WhatsApp, SMS, web, or an offline field app — respondents answer however is easiest for them.</p></div>
+    <div class="feature-card"><span class="num" data-i18n="solution.c2.label">Understand</span><h3 style="font-size:1.1rem;" data-i18n="solution.c2.title">AI transcribes and analyzes</h3><p data-i18n="solution.c2.desc">Speech becomes text, then topics, sentiment, and fraud signals are extracted automatically.</p></div>
+    <div class="feature-card"><span class="num" data-i18n="solution.c3.label">Act</span><h3 style="font-size:1.1rem;" data-i18n="solution.c3.title">Decision-ready reports</h3><p data-i18n="solution.c3.desc">A live dashboard and structured exports — insight your team can act on the same day, not next quarter.</p></div>
   </div>
 </section>
 
 <section class="pub-section" id="jinsi" style="padding-top:0;">
-  <span class="eyebrow" style="color:var(--accent-2);">How it works</span>
-  <h2>From survey setup to a donor-ready report — five steps.</h2>
+  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="how5.eyebrow">How it works</span>
+  <h2 data-i18n="how5.h2">From survey setup to a donor-ready report — five steps.</h2>
   <div class="grid grid-5" style="margin-top:2.5rem;">
     <div class="feature-card">
-      <span class="num">Step 1</span>
-      <h3 style="font-size:1rem;">Survey Setup</h3>
-      <p style="font-size:.85rem;">Build your questionnaire, pick your channels, and set your compliance requirements.</p>
+      <span class="num" data-i18n="how5.step1.label">Step 1</span>
+      <h3 style="font-size:1rem;" data-i18n="how5.step1.title">Survey Setup</h3>
+      <p style="font-size:.85rem;" data-i18n="how5.step1.desc">Build your questionnaire, pick your channels, and set your compliance requirements.</p>
     </div>
     <div class="feature-card">
-      <span class="num">Step 2</span>
-      <h3 style="font-size:1rem;">Voice Collection</h3>
-      <p style="font-size:.85rem;">Via phone call, WhatsApp, SMS, a web link, or an offline field app — in their own everyday language.</p>
+      <span class="num" data-i18n="how5.step2.label">Step 2</span>
+      <h3 style="font-size:1rem;" data-i18n="how5.step2.title">Voice Collection</h3>
+      <p style="font-size:.85rem;" data-i18n="how5.step2.desc">Via phone call, WhatsApp, SMS, a web link, or an offline field app — in their own everyday language.</p>
     </div>
     <div class="feature-card">
-      <span class="num">Step 3</span>
-      <h3 style="font-size:1rem;">Transcription</h3>
-      <p style="font-size:.85rem;">Voice is converted to text, recognizing accents, dialects, and mixed-language speech.</p>
+      <span class="num" data-i18n="how5.step3.label">Step 3</span>
+      <h3 style="font-size:1rem;" data-i18n="how5.step3.title">Transcription</h3>
+      <p style="font-size:.85rem;" data-i18n="how5.step3.desc">Voice is converted to text, recognizing accents, dialects, and mixed-language speech.</p>
     </div>
     <div class="feature-card">
-      <span class="num">Step 4</span>
-      <h3 style="font-size:1rem;">AI Analysis</h3>
-      <p style="font-size:.85rem;">Topics, sentiment, and signs of fraud are detected automatically.</p>
+      <span class="num" data-i18n="how5.step4.label">Step 4</span>
+      <h3 style="font-size:1rem;" data-i18n="how5.step4.title">AI Analysis</h3>
+      <p style="font-size:.85rem;" data-i18n="how5.step4.desc">Topics, sentiment, and signs of fraud are detected automatically.</p>
     </div>
     <div class="feature-card">
-      <span class="num">Step 5</span>
-      <h3 style="font-size:1rem;">Reports</h3>
-      <p style="font-size:.85rem;">A live dashboard, a donor PDF, and an analyst Excel export — every time.</p>
+      <span class="num" data-i18n="how5.step5.label">Step 5</span>
+      <h3 style="font-size:1rem;" data-i18n="how5.step5.title">Reports</h3>
+      <p style="font-size:.85rem;" data-i18n="how5.step5.desc">A live dashboard, a donor PDF, and an analyst Excel export — every time.</p>
     </div>
   </div>
 </section>
@@ -178,15 +196,15 @@
 </section>
 
 <section class="pub-section">
-  <span class="eyebrow" style="color:var(--accent);">See it in action</span>
-  <h2 style="max-width:34ch;">See what decision-makers see.</h2>
-  <p style="max-width:60ch; margin-top:1rem;">A live look at the dashboard your team works in every day.</p>
+  <span class="eyebrow" style="color:var(--accent);" data-i18n="dashprev.eyebrow">See it in action</span>
+  <h2 style="max-width:34ch;" data-i18n="dashprev.h2">See what decision-makers see.</h2>
+  <p style="max-width:60ch; margin-top:1rem;" data-i18n="dashprev.lead">A live look at the dashboard your team works in every day.</p>
 
   <div class="pill-tabs" style="margin-top:2rem;">
-    <a class="dash-tab active" data-tab="responses">Live Responses</a>
-    <a class="dash-tab" data-tab="analytics">Analytics</a>
-    <a class="dash-tab" data-tab="sentiment">Sentiment</a>
-    <a class="dash-tab" data-tab="export">Report Export</a>
+    <a class="dash-tab active" data-tab="responses" data-i18n="dashprev.tab1">Live Responses</a>
+    <a class="dash-tab" data-tab="analytics" data-i18n="dashprev.tab2">Analytics</a>
+    <a class="dash-tab" data-tab="sentiment" data-i18n="dashprev.tab3">Sentiment</a>
+    <a class="dash-tab" data-tab="export" data-i18n="dashprev.tab4">Report Export</a>
   </div>
 
   <div class="card" id="dash-panel-responses">
@@ -245,16 +263,16 @@
 </section>
 
 <section class="pub-section">
-  <span class="eyebrow" style="color:var(--accent-2);">Why VoiceInsights Africa</span>
-  <h2 style="max-width:34ch;">Not just faster — a different kind of tool.</h2>
+  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="compare.eyebrow">Why VoiceInsights Africa</span>
+  <h2 style="max-width:34ch;" data-i18n="compare.h2">Not just faster — a different kind of tool.</h2>
   <div class="table-wrap" style="margin-top:2rem;">
     <table>
-      <thead><tr><th>Traditional Tools</th><th>VoiceInsights Africa</th></tr></thead>
+      <thead><tr><th data-i18n="compare.col1">Traditional Tools</th><th data-i18n="compare.col2">VoiceInsights Africa</th></tr></thead>
       <tbody>
-        <tr><td>Text-first, low completion in low-literacy areas</td><td>Voice-first — no literacy or smartphone required</td></tr>
-        <tr><td>Manual cleaning and data entry</td><td>AI processing from the moment audio arrives</td></tr>
-        <tr><td>Weak qualitative analysis at scale</td><td>Deep voice insight — sentiment, topics, fraud, on every response</td></tr>
-        <tr><td>Generic, built for other markets first</td><td>Africa-optimized — Kiswahili and code-switching from day one</td></tr>
+        <tr><td data-i18n="compare.r1.old">Text-first, low completion in low-literacy areas</td><td data-i18n="compare.r1.new">Voice-first — no literacy or smartphone required</td></tr>
+        <tr><td data-i18n="compare.r2.old">Manual cleaning and data entry</td><td data-i18n="compare.r2.new">AI processing from the moment audio arrives</td></tr>
+        <tr><td data-i18n="compare.r3.old">Weak qualitative analysis at scale</td><td data-i18n="compare.r3.new">Deep voice insight — sentiment, topics, fraud, on every response</td></tr>
+        <tr><td data-i18n="compare.r4.old">Generic, built for other markets first</td><td data-i18n="compare.r4.new">Africa-optimized — Kiswahili and code-switching from day one</td></tr>
       </tbody>
     </table>
   </div>
@@ -267,20 +285,20 @@
     <div class="feature-card">
       <h3 style="font-size:1.2rem;" data-i18n="pricing.starter.title">Starter</h3>
       <p style="margin-bottom:1.5rem;" data-i18n="pricing.starter.blurb">For small NGOs starting out with voice research.</p>
-      <div class="stat-value" style="font-size:1.3rem; margin-bottom:1rem;">$2K – $8K<span style="font-size:.7rem; color:var(--text-dim); font-family:var(--font-body);" data-i18n="pricing.per_year"> /year USD</span></div>
+      <div class="stat-value" style="font-size:1.3rem; margin-bottom:1rem;" data-i18n="pricing.custom_label">Custom pricing</div><div class="muted-note" style="margin-bottom:1rem;" data-i18n="pricing.custom_note">Based on scale — pilot packages available</div>
       <a href="/contact.html" class="btn btn-ghost btn-sm" data-i18n="pricing.starter.cta">Request Demo</a>
     </div>
     <div class="feature-card" style="border-color:var(--accent);">
       <span class="badge badge-accent" style="margin-bottom:.8rem;" data-i18n="pricing.popular">Most popular</span>
       <h3 style="font-size:1.2rem;" data-i18n="pricing.pro.title">Professional</h3>
       <p style="margin-bottom:1.5rem;" data-i18n="pricing.pro.blurb">For mid-size organizations running multiple campaigns.</p>
-      <div class="stat-value" style="font-size:1.3rem; margin-bottom:1rem;">$10K – $32K<span style="font-size:.7rem; color:var(--text-dim); font-family:var(--font-body);" data-i18n="pricing.per_year"> /year USD</span></div>
+      <div class="stat-value" style="font-size:1.3rem; margin-bottom:1rem;" data-i18n="pricing.custom_label">Custom pricing</div><div class="muted-note" style="margin-bottom:1rem;" data-i18n="pricing.custom_note">Based on scale — pilot packages available</div>
       <a href="/contact.html" class="btn btn-primary btn-sm" data-i18n="pricing.pro.cta">Request Demo</a>
     </div>
     <div class="feature-card">
       <h3 style="font-size:1.2rem;" data-i18n="pricing.ent.title">Enterprise</h3>
       <p style="margin-bottom:1.5rem;" data-i18n="pricing.ent.blurb">Large INGOs and government, with on-prem hosting.</p>
-      <div class="stat-value" style="font-size:1.3rem; margin-bottom:1rem;">$40K+<span style="font-size:.7rem; color:var(--text-dim); font-family:var(--font-body);" data-i18n="pricing.per_year"> /year USD</span></div>
+      <div class="stat-value" style="font-size:1.3rem; margin-bottom:1rem;" data-i18n="pricing.custom_label">Custom pricing</div><div class="muted-note" style="margin-bottom:1rem;" data-i18n="pricing.custom_note">Annual licensing — contact for a quote</div>
       <a href="/contact.html" class="btn btn-ghost btn-sm" data-i18n="pricing.ent.cta">Contact Us</a>
     </div>
   </div>
@@ -292,30 +310,36 @@
       <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
       <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
     </div>
-    <p style="max-width:32ch; font-size:.85rem; line-height:1.7;">VoiceInsights Africa is an enterprise voice intelligence platform helping organizations collect, analyze, and transform multilingual voice data into decision-ready insights.</p>
+    <p style="max-width:32ch; font-size:.85rem; line-height:1.7;" data-i18n="footer.tagline">VoiceInsights Africa is an enterprise voice intelligence platform helping organizations collect, analyze, and transform multilingual voice data into decision-ready insights.</p>
+    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); margin-top:1rem; line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+    <div style="margin-top:.6rem; display:flex; gap:1rem;">
+      <a href="/privacy.html" style="font-size:.75rem; color:var(--text-dim);">Privacy Policy</a>
+      <a href="/terms.html" style="font-size:.75rem; color:var(--text-dim);">Terms of Service</a>
+      <a href="/careers.html" style="font-size:.75rem; color:var(--text-dim);">Careers</a>
+    </div>
   </div>
-  <div><div class="nav-label" style="padding:0;">Platform</div>
-    <a href="/app/dashboard.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Dashboard</a>
-    <a href="/respondent.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Interview Demo</a>
-    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Analytics</a>
-    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Reporting</a>
-    <a href="/api.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">API &amp; Integrations</a>
+  <div><div class="nav-label" style="padding:0;" data-i18n="footer.platform">Platform</div>
+    <a href="/app/dashboard.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.dashboard">Dashboard</a>
+    <a href="/respondent.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.demo_link">Interview Demo</a>
+    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.analytics">Analytics</a>
+    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.reporting">Reporting</a>
+    <a href="/api.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.api">API &amp; Integrations</a>
   </div>
-  <div><div class="nav-label" style="padding:0;">Solutions</div>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Survey Automation</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Monitoring & Evaluation</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Beneficiary Feedback</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Grievance Systems</a>
+  <div><div class="nav-label" style="padding:0;" data-i18n="footer.solutions">Solutions</div>
+    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.survey_automation">Survey Automation</a>
+    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.me">Monitoring &amp; Evaluation</a>
+    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.beneficiary">Beneficiary Feedback</a>
+    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.grievance">Grievance Systems</a>
   </div>
-  <div><div class="nav-label" style="padding:0;">Trust</div>
-    <a href="/safeguarding.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Safeguarding</a>
-    <a href="/security.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Security</a>
-    <a href="/faq.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">FAQ</a>
+  <div><div class="nav-label" style="padding:0;" data-i18n="footer.trust">Trust</div>
+    <a href="/safeguarding.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.safeguarding_link">Safeguarding</a>
+    <a href="/security.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.security">Security</a>
+    <a href="/faq.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.faq_link">FAQ</a>
   </div>
-  <div><div class="nav-label" style="padding:0;">Contact</div>
+  <div><div class="nav-label" style="padding:0;" data-i18n="footer.contact">Contact</div>
     <a href="mailto:partnerships@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">partnerships@voiceinsightsafrica.com</a>
     <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
-    <a href="/contact.html" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+    <a href="/contact.html" class="btn btn-primary btn-sm" style="margin-top:1rem;" data-i18n="topnav.book_demo">Book Demo</a>
   </div>
 </footer>
 

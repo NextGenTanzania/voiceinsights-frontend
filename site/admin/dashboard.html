@@ -49,11 +49,11 @@
   try {
     if (typeof Chart === 'undefined') throw new Error('Chart.js did not load');
     new Chart(document.getElementById('chartUsage'), { type:'bar',
-      data:{ labels:['NEXT-GEN','World Vision','Amani Fdn','Rootical','UNICEF TZ'], datasets:[{data:[812,690,410,205,980], backgroundColor:'#E4A23A'}]},
-      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false},ticks:{color:'#9FB3AB'}}, y:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}}} } });
+      data:{ labels:['NEXT-GEN','World Vision','Amani Fdn','Rootical','UNICEF TZ'], datasets:[{data:[812,690,410,205,980], backgroundColor:'#16C79A'}]},
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false},ticks:{color:'#9DB4CC'}}, y:{grid:{color:'rgba(205,225,245,.06)'},ticks:{color:'#9DB4CC'}}} } });
     new Chart(document.getElementById('chartAccuracy'), { type:'line',
-      data:{ labels:['Feb','Mar','Apr','May','Jun'], datasets:[{data:[81,83,85,87,89], borderColor:'#4FA490', tension:.35}]},
-      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}}, y:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}, min:70,max:100} } } });
+      data:{ labels:['Feb','Mar','Apr','May','Jun'], datasets:[{data:[81,83,85,87,89], borderColor:'#3B82F6', tension:.35}]},
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{color:'rgba(205,225,245,.06)'},ticks:{color:'#9DB4CC'}}, y:{grid:{color:'rgba(205,225,245,.06)'},ticks:{color:'#9DB4CC'}, min:70,max:100} } } });
   } catch (e) {
     console.warn('Charts unavailable:', e.message);
   }

@@ -309,17 +309,17 @@ document.addEventListener('DOMContentLoaded', highlightActiveTopNav);
 
 document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('mobile-nav-toggle');
-  const panel = document.getElementById('pub-nav-right');
-  if (toggle && panel) {
+  const panels = document.querySelectorAll('.pub-nav-collapse');
+  if (toggle && panels.length) {
     toggle.addEventListener('click', () => {
       toggle.classList.toggle('open');
-      panel.classList.toggle('open');
+      panels.forEach(p => p.classList.toggle('open'));
     });
     // Close the mobile menu after tapping any link inside it.
-    panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    panels.forEach(panel => panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
       toggle.classList.remove('open');
-      panel.classList.remove('open');
-    }));
+      panels.forEach(p => p.classList.remove('open'));
+    })));
   }
 
   // Public-site theme toggle button (app pages get their own handler in renderShell()).

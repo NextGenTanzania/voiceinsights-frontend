@@ -57,6 +57,11 @@ export default {
       if (path === '/api/auth/login' && method === 'POST') {
         const { email, password } = await request.json();
         if (!email || !password) return error('Email and password are required');
+        // 10 attempts per 15 minutes, keyed by email — slows down brute-force
+        // password guessing without locking out a user typo-ing their password once.
+        if (await isRateLimited(env, `login:${email}`, 10, 15 * 60)) {
+          return error('Too many login attempts. Please wait a few minutes and try again.', 429);
+        }
         const user = await env.DB.prepare('SELECT * FROM users WHERE email = ? AND is_active = 1').bind(email).first();
         if (!user) return error('Invalid email or password', 401);
         const ok = await verifyPassword(password, user.password_salt, user.password_hash);
@@ -70,6 +75,7 @@ export default {
 
         const token = await signJWT({ sub: user.id, org: user.organization_id, role: user.role, email: user.email }, env.JWT_SECRET);
         await env.DB.prepare('UPDATE users SET last_login_at = datetime("now") WHERE id = ?').bind(user.id).run();
+        await logAudit(env, { org: user.organization_id, userId: user.id, action: 'login', resourceType: 'user', resourceId: user.id, request });
         return json({ token, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, organization_id: user.organization_id } });
       }
 
@@ -88,6 +94,7 @@ export default {
         const user = await env.DB.prepare('SELECT * FROM users WHERE id = ?').bind(claims.sub).first();
         const token = await signJWT({ sub: user.id, org: user.organization_id, role: user.role, email: user.email }, env.JWT_SECRET);
         await env.DB.prepare('UPDATE users SET last_login_at = datetime("now") WHERE id = ?').bind(user.id).run();
+        await logAudit(env, { org: user.organization_id, userId: user.id, action: 'login_2fa', resourceType: 'user', resourceId: user.id, request });
         return json({ token, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, organization_id: user.organization_id } });
       }
 
@@ -118,12 +125,14 @@ export default {
         const valid = await verifyTotpCode(row.secret, code.trim());
         if (!valid) return error('Incorrect code — check your authenticator app and try again', 401);
         await env.DB.prepare('UPDATE user_2fa SET enabled = 1 WHERE user_id = ?').bind(claims.sub).run();
+        await logAudit(env, { org: claims.org, userId: claims.sub, action: '2fa_enabled', resourceType: 'user', resourceId: claims.sub, request });
         return json({ ok: true });
       }
 
       if (path === '/api/2fa/disable' && method === 'POST') {
         const claims = await requireAuth(request, env);
         await env.DB.prepare('DELETE FROM user_2fa WHERE user_id = ?').bind(claims.sub).run();
+        await logAudit(env, { org: claims.org, userId: claims.sub, action: '2fa_disabled', resourceType: 'user', resourceId: claims.sub, request });
         return json({ ok: true });
       }
 
@@ -147,6 +156,50 @@ export default {
         return json({ ok: true });
       }
 
+      // ---------- FORGOT / RESET PASSWORD ----------
+      if (path === '/api/auth/forgot-password' && method === 'POST') {
+        const { email } = await request.json();
+        if (!email) return error('email is required');
+        // 3 requests per hour per email — stops spamming one inbox with reset emails.
+        if (await isRateLimited(env, `forgot:${email}`, 3, 60 * 60)) {
+          return json({ ok: true, message: 'If an account exists for that email, a reset link has been sent.' });
+        }
+        const user = await env.DB.prepare('SELECT id, full_name FROM users WHERE email = ? AND is_active = 1').bind(email).first();
+        // Always return success, whether or not the email exists — prevents account enumeration.
+        if (user) {
+          const token = [...crypto.getRandomValues(new Uint8Array(24))].map(b => b.toString(16).padStart(2, '0')).join('');
+          const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString(); // 1 hour
+          await env.DB.prepare(
+            `INSERT INTO password_reset_tokens (token, user_id, expires_at) VALUES (?, ?, ?)`
+          ).bind(token, user.id, expiresAt).run();
+          const resetUrl = `${env.SITE_URL || 'https://voiceinsights-frontend.pages.dev'}/reset-password.html?token=${token}`;
+          await sendEmail(env, {
+            to: email,
+            subject: 'Reset your VoiceInsights Africa password',
+            html: `<p>Hi ${user.full_name},</p>
+                   <p>We received a request to reset your password. Click the link below to choose a new one — this link expires in 1 hour and can only be used once.</p>
+                   <p><a href="${resetUrl}">${resetUrl}</a></p>
+                   <p>If you didn't request this, you can safely ignore this email.</p>`,
+          });
+        }
+        return json({ ok: true, message: 'If an account exists for that email, a reset link has been sent.' });
+      }
+
+      if (path === '/api/auth/reset-password' && method === 'POST') {
+        const { token, new_password } = await request.json();
+        if (!token || !new_password) return error('token and new_password are required');
+        if (new_password.length < 8) return error('New password must be at least 8 characters', 400);
+        const row = await env.DB.prepare('SELECT * FROM password_reset_tokens WHERE token = ?').bind(token).first();
+        if (!row || row.used || new Date(row.expires_at) < new Date()) {
+          return error('This reset link is invalid or has expired. Please request a new one.', 400);
+        }
+        const { hash, salt } = await hashPassword(new_password);
+        await env.DB.prepare('UPDATE users SET password_hash = ?, password_salt = ? WHERE id = ?').bind(hash, salt, row.user_id).run();
+        await env.DB.prepare('UPDATE password_reset_tokens SET used = 1 WHERE token = ?').bind(token).run();
+        await logAudit(env, { userId: row.user_id, action: 'password_reset', resourceType: 'user', resourceId: row.user_id, request });
+        return json({ ok: true });
+      }
+
       // ---------- USER MANAGEMENT (invite team members) ----------
       if (path === '/api/users' && method === 'GET') {
         const claims = await requireAuth(request, env);
@@ -157,6 +210,13 @@ export default {
         ).bind(claims.org).all();
         return json({ users: results });
       }
+
+      const ROLE_WELCOME_LABEL = { org_admin: 'Org Admin', me_officer: 'M&E Officer', enumerator: 'Field Enumerator' };
+      const ROLE_ONBOARDING_STEPS = {
+        org_admin: `<li>Explore <b>Projects</b> and <b>Campaigns</b> to see everything already set up.</li><li>Invite the rest of your team from <b>Settings → Team</b>.</li>`,
+        me_officer: `<li>Open <b>Analytics</b> and <b>Reports</b> to see the data already collected.</li><li>Check <b>Interviews</b> to listen to real voice responses and read transcripts.</li>`,
+        enumerator: `<li>Open the <b>Enumerator App</b> (works offline) or the Web Link shared with you to start collecting responses.</li><li>You'll only see data for the project you were assigned to.</li>`,
+      };
 
       if (path === '/api/users/invite' && method === 'POST') {
         const claims = await requireAuth(request, env);
@@ -211,16 +271,31 @@ export default {
         if (delivered.startsWith('email')) {
           await sendEmail(env, {
             to: email,
-            subject: `You've been invited to VoiceInsights Africa`,
-            html: `<p>Hi ${full_name},</p>
-                   <p>You've been added as a team member on VoiceInsights Africa${region ? ` for the ${region} region` : ''}${campaignName ? `, assigned to the <b>${campaignName}</b> project` : ''}.</p>
-                   <p><b>Login:</b> <a href="${loginUrl}">${loginUrl}</a><br>
-                   <b>Email:</b> ${email}<br>
-                   <b>Temporary password:</b> ${tempPassword}</p>
-                   <p>Please log in and change your password from Settings as soon as possible.</p>`,
+            subject: `Welcome to VoiceInsights Africa`,
+            html: `<div style="font-family:Arial,sans-serif; max-width:520px; margin:0 auto; color:#1E2620;">
+                     <div style="background:#0F1614; padding:1.5rem; text-align:center; border-radius:10px 10px 0 0;">
+                       <span style="color:#E4A23A; font-size:1.2rem; font-weight:700;">VoiceInsights Africa</span>
+                     </div>
+                     <div style="padding:1.75rem; background:#fff; border:1px solid #eee; border-top:none; border-radius:0 0 10px 10px;">
+                       <h2 style="margin-top:0;">Welcome, ${full_name} 👋</h2>
+                       <p>You've been added to VoiceInsights Africa${region ? ` for the ${region} region` : ''}${campaignName ? `, assigned to the <b>${campaignName}</b> project` : ''} as a <b>${ROLE_WELCOME_LABEL[role] || 'team member'}</b>.</p>
+                       <div style="background:#f7f5f0; border-radius:8px; padding:1rem 1.25rem; margin:1.25rem 0;">
+                         <p style="margin:.3rem 0;"><b>Login page:</b> <a href="${loginUrl}">${loginUrl}</a></p>
+                         <p style="margin:.3rem 0;"><b>Email:</b> ${email}</p>
+                         <p style="margin:.3rem 0;"><b>Temporary password:</b> ${tempPassword}</p>
+                       </div>
+                       <h3 style="font-size:1rem;">Your first 3 steps</h3>
+                       <ol style="padding-left:1.2rem; line-height:1.7;">
+                         <li>Log in and <b>change your password</b> from Settings right away.</li>
+                         ${ROLE_ONBOARDING_STEPS[role] || ROLE_ONBOARDING_STEPS.me_officer}
+                       </ol>
+                       <p style="margin-top:1.5rem; font-size:.85rem; color:#888;">Questions? Just reply to this email.</p>
+                     </div>
+                   </div>`,
           });
         }
 
+        await logAudit(env, { org: claims.org, userId: claims.sub, action: 'user_invited', resourceType: 'user', resourceId: userId, request });
         return json({ ok: true, delivered_via: delivered, user: { id: userId, email, full_name, role: role || 'me_officer', region: region || null, campaign_id: campaign_id || null } }, 201);
       }
 
@@ -229,6 +304,7 @@ export default {
         const claims = await requireAuth(request, env);
         if (claims.role !== 'org_admin') return error('Only an Org Admin can deactivate users', 403);
         await env.DB.prepare('UPDATE users SET is_active = 0 WHERE id = ? AND organization_id = ?').bind(deactivateMatch[1], claims.org).run();
+        await logAudit(env, { org: claims.org, userId: claims.sub, action: 'user_deactivated', resourceType: 'user', resourceId: deactivateMatch[1], request });
         return json({ ok: true });
       }
 
@@ -266,6 +342,31 @@ export default {
         if (!survey) return error('Survey not found', 404);
         const { results: questions } = await env.DB.prepare('SELECT * FROM questions WHERE survey_id = ? ORDER BY order_index ASC').bind(surveyMatch[1]).all();
         return json({ survey, questions });
+      }
+
+      if (surveyMatch && method === 'PUT') {
+        const claims = await requireAuth(request, env);
+        const existing = await env.DB.prepare('SELECT id FROM surveys WHERE id = ? AND organization_id = ?').bind(surveyMatch[1], claims.org).first();
+        if (!existing) return error('Survey not found', 404);
+        const body = await request.json();
+        if (!body.title) return error('title is required');
+        await env.DB.prepare(
+          `UPDATE surveys SET title = ?, description = ?, module_type = ?, status = ?, updated_at = datetime('now') WHERE id = ?`
+        ).bind(body.title, body.description || null, body.module_type || 'survey', body.status || 'draft', surveyMatch[1]).run();
+
+        // Questions are replaced wholesale on each save — simplest way to support
+        // add/edit/remove/reorder in one request without a separate diffing endpoint.
+        if (Array.isArray(body.questions)) {
+          await env.DB.prepare('DELETE FROM questions WHERE survey_id = ?').bind(surveyMatch[1]).run();
+          for (let i = 0; i < body.questions.length; i++) {
+            const q = body.questions[i];
+            if (!q.question_text) continue;
+            await env.DB.prepare(
+              `INSERT INTO questions (id, survey_id, order_index, question_text, question_type, kpi_tag) VALUES (?, ?, ?, ?, ?, ?)`
+            ).bind(newId('q'), surveyMatch[1], i, q.question_text, q.question_type || 'open_voice', q.kpi_tag || null).run();
+          }
+        }
+        return json({ ok: true });
       }
 
       const questionsMatch = path.match(/^\/api\/surveys\/([a-zA-Z0-9_]+)\/questions$/);
@@ -434,6 +535,10 @@ export default {
 
       // ---------- CONTACT / LEADS (sales pipeline) ----------
       if (path === '/api/contact/submit' && method === 'POST') {
+        const clientIp = request.headers.get('CF-Connecting-IP') || 'unknown';
+        if (await isRateLimited(env, `contact:${clientIp}`, 5, 60 * 60)) {
+          return error('Too many submissions. Please try again later.', 429);
+        }
         const body = await request.json();
         if (!body.full_name || !body.work_email) return error('full_name and work_email are required');
         const id = newId('lead');
@@ -473,7 +578,7 @@ export default {
       if (path === '/api/respondents' && method === 'GET') {
         const claims = await requireAuth(request, env);
         const { results } = await env.DB.prepare(
-          `SELECT r.id, r.phone_number, r.region, r.gender, r.age_bracket, r.consent_given, r.created_at,
+          `SELECT r.id, r.phone_number, r.full_name, r.region, r.gender, r.age_bracket, r.consent_given, r.created_at,
                   (SELECT COUNT(*) FROM responses resp WHERE resp.respondent_id = r.id) AS response_count
            FROM respondents r WHERE r.organization_id = ? ORDER BY r.created_at DESC LIMIT 200`
         ).bind(claims.org).all();
@@ -622,20 +727,31 @@ export default {
            FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
            WHERE c.organization_id = ? GROUP BY gender`
         ).bind(claims.org).all();
+        const { results: ageRows } = await env.DB.prepare(
+          `SELECT COALESCE(NULLIF(TRIM(resp.age_bracket), ''), 'Unspecified') as age_bracket, COUNT(*) as n
+           FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
+           WHERE c.organization_id = ? GROUP BY age_bracket`
+        ).bind(claims.org).all();
         const { results: regionRows } = await env.DB.prepare(
           `SELECT COALESCE(NULLIF(TRIM(resp.region), ''), 'Unspecified') as region, COUNT(*) as n
            FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
            WHERE c.organization_id = ? GROUP BY region ORDER BY n DESC LIMIT 8`
         ).bind(claims.org).all();
+        // Sentiment cross-tabulated by region — lets the AI spot *where* problems concentrate, not just that they exist.
+        const { results: sentByRegionRows } = await env.DB.prepare(
+          `SELECT COALESCE(NULLIF(TRIM(resp.region), ''), 'Unspecified') as region, r.overall_sentiment, COUNT(*) as n
+           FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
+           WHERE c.organization_id = ? AND r.overall_sentiment IS NOT NULL GROUP BY region, r.overall_sentiment`
+        ).bind(claims.org).all();
         const { results: insightRows } = await env.DB.prepare(
           `SELECT ai.content_json FROM ai_insights ai JOIN responses r ON ai.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id
-           WHERE c.organization_id = ? AND ai.insight_type = 'summary' ORDER BY ai.created_at DESC LIMIT 100`
+           WHERE c.organization_id = ? AND ai.insight_type = 'summary' ORDER BY ai.created_at DESC LIMIT 150`
         ).bind(claims.org).all();
         const topicCounts = {};
         for (const row of insightRows) {
           try { const parsed = JSON.parse(row.content_json); for (const t of parsed.topics || []) topicCounts[t] = (topicCounts[t] || 0) + 1; } catch (_) {}
         }
-        const topics = Object.entries(topicCounts).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([topic, count]) => ({ topic, count }));
+        const topics = Object.entries(topicCounts).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([topic, count]) => ({ topic, count }));
         const totalResponses = sentimentRows.reduce((s, r) => s + r.n, 0);
 
         if (totalResponses === 0) {
@@ -645,31 +761,59 @@ export default {
           });
         }
 
-        const context = `Total responses: ${totalResponses}
-Sentiment breakdown: ${JSON.stringify(sentimentRows)}
-Gender breakdown: ${JSON.stringify(genderRows)}
-Top regions: ${JSON.stringify(regionRows)}
-Top topics mentioned: ${JSON.stringify(topics)}`;
+        // Real verbatim quotes, paired with their sentiment/topic tags — this is what
+        // lets the AI write specific, grounded findings instead of generic summaries.
+        const { results: quoteRows } = await env.DB.prepare(
+          `SELECT t.raw_text, r.overall_sentiment, resp.region
+           FROM transcripts t JOIN answers a ON t.answer_id = a.id JOIN responses r ON a.response_id = r.id
+           JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
+           WHERE c.organization_id = ? ORDER BY t.created_at DESC LIMIT 25`
+        ).bind(claims.org).all();
+
+        const context = `SAMPLE SIZE: ${totalResponses} total responses
+
+SENTIMENT BREAKDOWN: ${JSON.stringify(sentimentRows)}
+GENDER BREAKDOWN: ${JSON.stringify(genderRows)}
+AGE BREAKDOWN: ${JSON.stringify(ageRows)}
+REGION BREAKDOWN: ${JSON.stringify(regionRows)}
+SENTIMENT BY REGION (cross-tab — use this to identify WHERE issues concentrate): ${JSON.stringify(sentByRegionRows)}
+TOP TOPICS MENTIONED, WITH FREQUENCY: ${JSON.stringify(topics)}
+
+SAMPLE VERBATIM RESPONSES (real transcripts, tagged with sentiment and region — use these to ground findings in specific evidence, and to select real illustrative quotes):
+${quoteRows.map(q => `- [${q.overall_sentiment || 'unrated'}, ${q.region || 'unspecified region'}] "${q.raw_text}"`).join('\n')}`;
 
         const claudeResp = await fetch('https://api.anthropic.com/v1/messages', {
           method: 'POST',
           headers: { 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
           body: JSON.stringify({
             model: 'claude-sonnet-5',
-            max_tokens: 900,
+            max_tokens: 2200,
             messages: [{
               role: 'user',
-              content: `You are a research analyst producing an executive report for an NGO/donor audience. Using ONLY the data below, write:
-1. "key_findings": exactly 3 short, punchy bullet-point findings (each under 20 words) a CEO could read in 60 seconds. Cite real numbers/percentages from the data where possible.
-2. "recommendations": an object with three arrays — "immediate" (next 30 days, 2 items), "strategic" (6-12 months, 2 items), "policy" (long-term, 1-2 items).
+              content: `You are a senior research analyst producing an executive intelligence report for an NGO/donor/government audience. Your output will be read by people deciding whether to award a $25K-$500K contract based on data quality — generic, vague, or template-sounding analysis is an immediate credibility failure. Every finding must be specific, evidence-grounded, and non-obvious.
 
-Do not invent statistics not supported by the data. If the data is too sparse for a strong claim, say so plainly instead of fabricating specifics.
+STRICT RULES:
+- Every key finding MUST cite a specific number, percentage, or comparison FROM THE DATA BELOW. Never write a finding that could apply to any survey anywhere (e.g. banning phrases like "respondents shared valuable feedback" or "the data shows important insights").
+- Use the SENTIMENT BY REGION cross-tab to name which specific region(s) show elevated negative sentiment, if any — don't just say "some regions."
+- Use the verbatim quotes to ground at least one finding in something a specific respondent said (paraphrase briefly, don't quote verbatim here — that's for the report's own quotes section).
+- Assign each key finding a severity: "critical", "high", "medium", or "low" — based on how many responses are affected AND how negative the associated sentiment is. Do not mark everything "critical."
+- If a cross-tab or breakdown has too few responses to support a claim (e.g. under 5 per group), say so explicitly rather than drawing a conclusion from it.
+- Recommendations must each name a concrete action tied to a specific finding above — not generic advice like "improve communication" or "conduct further research."
+
+Using ONLY the data below, produce:
+1. "key_findings": an array of 3-4 objects, each with "text" (a specific, numbers-grounded finding, under 25 words) and "severity" ("critical"|"high"|"medium"|"low").
+2. "recommendations": an object with three arrays — "immediate" (next 30 days, 1-2 items, each tied to a specific finding), "strategic" (6-12 months, 1-2 items), "policy" (long-term structural change, 0-1 items — omit if the data doesn't support a policy-level claim).
+3. "risk_if_ignored": one specific sentence describing the concrete consequence of not acting on the top finding — grounded in the data, not generic ("things may get worse").
+4. "top_recommendation": an object {"action": the single highest-priority recommendation text, "impact": a 0-100 estimate of how much this could move the top finding if implemented, "urgency": "high"|"medium"|"low", "confidence": a 0-100 estimate of how confident you are given the sample size and data quality}.
+5. "narrative": a 3-4 paragraph flowing prose write-up (not bullet points) that tells the story of what was found, written for someone who wants to read a full account rather than skim bullets — ground every claim in the data, and weave in the general theme of any verbatim quotes provided (without quoting them verbatim here).
+
+Do not invent statistics not supported by the data. If the data is too sparse for a strong claim anywhere, say so plainly in that finding instead of fabricating specifics.
 
 DATA:
 ${context}
 
 Respond with ONLY valid JSON in this exact shape, no markdown, no preamble:
-{"key_findings": ["...", "...", "..."], "recommendations": {"immediate": ["...", "..."], "strategic": ["...", "..."], "policy": ["..."]}}`,
+{"key_findings": [{"text": "...", "severity": "high"}], "recommendations": {"immediate": ["..."], "strategic": ["..."], "policy": ["..."]}, "risk_if_ignored": "...", "top_recommendation": {"action": "...", "impact": 80, "urgency": "high", "confidence": 85}, "narrative": "..."}`,
             }],
           }),
         });
@@ -734,13 +878,73 @@ Respond with ONLY valid JSON in this exact shape, no markdown, no preamble:
            FROM transcripts t JOIN answers a ON t.answer_id = a.id JOIN responses r ON a.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id
            WHERE c.organization_id = ?`
         ).bind(claims.org).first();
+        // Real Whisper confidence, averaged across every voice response — not an illustrative number.
+        const avgConfidence = await env.DB.prepare(
+          `SELECT AVG(CAST(json_extract(ai.content_json, '$.confidence') AS REAL)) as avg_confidence
+           FROM ai_insights ai JOIN responses r ON ai.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id
+           WHERE c.organization_id = ? AND ai.insight_type = 'transcription_quality'`
+        ).bind(claims.org).first();
         return json({
           total_responses: responses.n,
           total_transcripts: transcripts.n,
           fraud_flags: fraudFlags.n,
           avg_fraud_score: fraudFlags.avg_score,
           avg_processing_seconds: avgLatency.avg_seconds,
+          avg_transcription_confidence: avgConfidence.avg_confidence,
         });
+      }
+
+      // ---------- OUTBOUND CAMPAIGNS (host-initiated calls/SMS/WhatsApp — you call THEM) ----------
+      const outboundMatch = path.match(/^\/api\/campaigns\/([a-zA-Z0-9_]+)\/outbound$/);
+      if (outboundMatch && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        const campaign = await env.DB.prepare('SELECT * FROM campaigns WHERE id = ? AND organization_id = ?').bind(outboundMatch[1], claims.org).first();
+        if (!campaign) return error('Campaign not found', 404);
+        const { phone_numbers, channel, language } = await request.json();
+        if (!Array.isArray(phone_numbers) || !phone_numbers.length) return error('phone_numbers must be a non-empty array');
+        if (!['phone_call', 'sms', 'whatsapp'].includes(channel)) return error('channel must be phone_call, sms, or whatsapp');
+        const lang = language === 'en' ? 'en' : 'sw';
+        const base = new URL(request.url).origin;
+
+        const results = [];
+        for (const rawNumber of phone_numbers) {
+          const phone = rawNumber.trim();
+          if (!phone) continue;
+          if (channel === 'phone_call') {
+            const voiceUrl = `${base}/api/voice/outbound-connected?campaign_id=${encodeURIComponent(campaign.id)}&language=${lang}`;
+            const result = await initiateOutboundCall(env, phone, voiceUrl);
+            results.push({ phone, ok: result.ok, reason: result.reason });
+          } else {
+            // For SMS/WhatsApp we start the session immediately and text the
+            // first question directly — their reply is then handled by the
+            // exact same inbound webhook logic already in place.
+            try {
+              const session = await getOrCreateSession(env, { sessionKey: phone, channel, campaignId: campaign.id, language: lang });
+              const questions = await getQuestions(env, session.survey_id);
+              const q = questions[session.current_index];
+              const messageBody = q ? q.question_text : 'Thank you for participating.';
+              const sendResult = await sendTwilioMessage(env, { to: phone, body: messageBody, whatsapp: channel === 'whatsapp' });
+              results.push({ phone, ok: sendResult.ok, reason: sendResult.reason });
+            } catch (e) {
+              results.push({ phone, ok: false, reason: e.message });
+            }
+          }
+        }
+        const successCount = results.filter(r => r.ok).length;
+        await logAudit(env, { org: claims.org, userId: claims.sub, action: 'outbound_campaign_started', resourceType: 'campaign', resourceId: campaign.id, request });
+        return json({ ok: true, sent: successCount, failed: results.length - successCount, results });
+      }
+
+      // ---------- AUDIT LOG (real security trail — logins, invites, 2FA changes) ----------
+      if (path === '/api/audit-logs' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        if (claims.role !== 'org_admin') return error('Only an Org Admin can view the audit log', 403);
+        const { results } = await env.DB.prepare(
+          `SELECT al.action, al.resource_type, al.resource_id, al.ip_address, al.created_at, u.full_name, u.email
+           FROM audit_logs al LEFT JOIN users u ON al.user_id = u.id
+           WHERE al.organization_id = ? ORDER BY al.created_at DESC LIMIT 200`
+        ).bind(claims.org).all();
+        return json({ logs: results });
       }
 
       // ---------- PUBLIC: survey questions for the web widget ----------
@@ -758,6 +962,7 @@ Respond with ONLY valid JSON in this exact shape, no markdown, no preamble:
       // ---------- CHANNEL 2: PHONE CALL (Twilio Voice) ----------
       if (path === '/api/voice/incoming' && method === 'POST') return handleVoiceIncoming(request, env);
       if (path === '/api/voice/language' && method === 'POST') return await handleVoiceLanguage(request, env);
+      if (path === '/api/voice/outbound-connected' && method === 'POST') return await handleVoiceOutboundConnected(request, env);
       if (path === '/api/voice/recording' && method === 'POST') return await handleVoiceRecording(request, env);
 
       // ---------- CHANNEL 3: SMS (feature-phone fallback, text only) ----------
@@ -781,10 +986,28 @@ Respond with ONLY valid JSON in this exact shape, no markdown, no preamble:
 async function getOrCreateSession(env, { sessionKey, channel, campaignId, language }) {
   campaignId = campaignId || env.DEFAULT_CAMPAIGN_ID || 'camp_default';
 
+  // First, look for ANY in-progress session for this session_key+channel, regardless
+  // of campaign_id. This matters for outbound SMS/WhatsApp/calls: the reply webhook
+  // only knows the phone number, not which campaign the outbound message belonged
+  // to — without this, a reply to an outbound message for a non-default campaign
+  // would silently create a brand-new session under the wrong (default) campaign.
   let session = await env.DB.prepare(
-    `SELECT * FROM sessions WHERE session_key = ? AND channel = ? AND campaign_id = ? AND status = 'in_progress'`
-  ).bind(sessionKey, channel, campaignId).first();
+    `SELECT * FROM sessions WHERE session_key = ? AND channel = ? AND status = 'in_progress'`
+  ).bind(sessionKey, channel).first();
   if (session) return session;
+
+  // One response per device, for the web link specifically — if this device already
+  // completed this exact campaign, don't silently start a brand-new response.
+  if (channel === 'web_link') {
+    const completed = await env.DB.prepare(
+      `SELECT id FROM sessions WHERE session_key = ? AND channel = ? AND campaign_id = ? AND status = 'completed'`
+    ).bind(sessionKey, channel, campaignId).first();
+    if (completed) {
+      const err = new Error('This device has already submitted a response for this survey.');
+      err.code = 'ALREADY_SUBMITTED';
+      throw err;
+    }
+  }
 
   const campaign = await env.DB.prepare('SELECT * FROM campaigns WHERE id = ?').bind(campaignId).first();
   if (!campaign) throw new Error('Campaign not found: ' + campaignId);
@@ -820,17 +1043,42 @@ async function submitAnswer(env, session, { audioBuf, mediaType, textAnswer }) {
   const question = questions[session.current_index];
   if (!question) throw new Error('This session has no more questions');
 
-  let transcript, r2Key = null, sttEngine;
+  let transcript, r2Key = null, sttEngine, transcriptionConfidence = null;
   if (audioBuf) {
     r2Key = `${session.channel}/${Date.now()}-${crypto.randomUUID()}.audio`;
     await env.AUDIO_BUCKET.put(r2Key, audioBuf, { httpMetadata: { contentType: mediaType || 'audio/ogg' } });
-    transcript = await transcribeAudio(env, audioBuf, mediaType);
+    const sttResult = await transcribeAudio(env, audioBuf, mediaType);
+    transcript = sttResult.text;
+    transcriptionConfidence = sttResult.confidence;
     sttEngine = 'whisper-1';
   } else {
     transcript = (textAnswer || '').trim();
     sttEngine = 'text-input';
   }
   if (!transcript) throw new Error('Empty answer');
+
+  // A "full_name" question is metadata about the respondent, not a survey
+  // opinion — skip sentiment/fraud analysis (meaningless on a name) and store
+  // it directly on the respondent record so it shows up everywhere immediately.
+  if (question.question_type === 'full_name') {
+    await env.DB.prepare('UPDATE respondents SET full_name = ? WHERE id = ?').bind(transcript, session.respondent_id).run();
+    const answerId = newId('answer');
+    await env.DB.prepare(
+      `INSERT INTO answers (id, response_id, question_id, answer_text, audio_r2_key) VALUES (?, ?, ?, ?, ?)`
+    ).bind(answerId, session.response_id, question.id, audioBuf ? null : transcript, r2Key).run();
+    await env.DB.prepare(
+      `INSERT INTO transcripts (id, answer_id, raw_text, language_detected, stt_engine) VALUES (?, ?, ?, ?, ?)`
+    ).bind(newId('tr'), answerId, transcript, session.language, sttEngine).run();
+    const nextIndex = session.current_index + 1;
+    const isComplete = nextIndex >= questions.length;
+    await env.DB.prepare(
+      `UPDATE sessions SET current_index = ?, status = ?, updated_at = datetime('now') WHERE id = ?`
+    ).bind(nextIndex, isComplete ? 'completed' : 'in_progress', session.id).run();
+    if (isComplete) {
+      await env.DB.prepare(`UPDATE responses SET status = 'completed', completed_at = datetime('now') WHERE id = ?`).bind(session.response_id).run();
+    }
+    return { transcript, analysis: null, fraudResult: null, isComplete, nextQuestion: isComplete ? null : questions[nextIndex] };
+  }
 
   const analysis = await analyzeText(env, transcript);
   const fraudResult = await runFraudChecks(env, session.campaign_id, transcript);
@@ -843,6 +1091,12 @@ async function submitAnswer(env, session, { audioBuf, mediaType, textAnswer }) {
   await env.DB.prepare(
     `INSERT INTO transcripts (id, answer_id, raw_text, language_detected, stt_engine) VALUES (?, ?, ?, ?, ?)`
   ).bind(newId('tr'), answerId, transcript, session.language, sttEngine).run();
+
+  if (transcriptionConfidence != null) {
+    await env.DB.prepare(
+      `INSERT INTO ai_insights (id, response_id, insight_type, content_json, model_used) VALUES (?, ?, 'transcription_quality', ?, 'whisper-1')`
+    ).bind(newId('ai'), session.response_id, JSON.stringify({ confidence: transcriptionConfidence })).run();
+  }
 
   await env.DB.prepare(
     `INSERT INTO ai_insights (id, response_id, insight_type, content_json, model_used) VALUES (?, ?, 'summary', ?, 'claude-sonnet-5')`
@@ -886,12 +1140,20 @@ async function transcribeAudio(env, audioBuf, mediaType) {
   whisperForm.append('file', new Blob([audioBuf], { type: mediaType || 'audio/ogg' }), 'audio.ogg');
   whisperForm.append('model', 'whisper-1');
   whisperForm.append('language', 'sw');
+  whisperForm.append('response_format', 'verbose_json'); // returns per-segment avg_logprob — a real confidence signal, not a guess
   const resp = await fetch('https://api.openai.com/v1/audio/transcriptions', {
     method: 'POST', headers: { Authorization: `Bearer ${env.OPENAI_API_KEY}` }, body: whisperForm,
   });
   if (!resp.ok) throw new Error('Transcription failed: ' + (await resp.text()).slice(0, 200));
-  const { text } = await resp.json();
-  return text;
+  const data = await resp.json();
+  // avg_logprob is typically in [-1, 0]; a simple, defensible mapping to a 0-100%
+  // confidence score is exp(avg_logprob) * 100 — standard practice for Whisper output.
+  let confidence = null;
+  if (data.segments && data.segments.length) {
+    const avgLogprob = data.segments.reduce((s, seg) => s + (seg.avg_logprob || 0), 0) / data.segments.length;
+    confidence = Math.round(Math.exp(avgLogprob) * 100);
+  }
+  return { text: data.text, confidence };
 }
 
 async function analyzeText(env, transcript) {
@@ -975,6 +1237,38 @@ function handleVoiceIncoming(request, env) {
     <Say voice="Polly.Joanna">Welcome to VoiceInsights. For English, press 1. Kwa Kiswahili, bonyeza 2.</Say>
   </Gather>
   <Redirect method="POST">${base}/api/voice/language</Redirect>
+</Response>`;
+  return new Response(xml, { headers: { 'Content-Type': 'text/xml' } });
+}
+
+// Called by Twilio the moment an OUTBOUND call (initiated by the org) is answered.
+// Unlike inbound calls, we already know the campaign and language from the
+// dial request, so we skip straight to the first question — no keypress needed.
+async function handleVoiceOutboundConnected(request, env) {
+  const url = new URL(request.url);
+  const campaignId = url.searchParams.get('campaign_id');
+  const language = url.searchParams.get('language') === 'en' ? 'en' : 'sw';
+  const form = await request.formData();
+  const callSid = form.get('CallSid');
+  const base = url.origin;
+
+  let session;
+  try {
+    session = await getOrCreateSession(env, { sessionKey: callSid, channel: 'phone_call', campaignId, language });
+  } catch (e) {
+    return voiceTwiml(language === 'en' ? 'Sorry, this survey is not currently active. Goodbye.' : 'Samahani, utafiti huu haupo hai kwa sasa. Kwaheri.');
+  }
+  const questions = await getQuestions(env, session.survey_id);
+  const q = questions[0];
+  const greeting = language === 'en'
+    ? 'Hello, this is a call from VoiceInsights Africa. We would like to ask you a few questions.'
+    : 'Habari, huu ni ujumbe kutoka VoiceInsights Africa. Tungependa kukuuliza maswali machache.';
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Say voice="Polly.Joanna">${escapeXml(greeting)}</Say>
+  <Say voice="Polly.Joanna">${escapeXml(q ? q.question_text : 'Thank you.')}</Say>
+  <Record maxLength="120" playBeep="true" action="${base}/api/voice/recording" method="POST" trim="trim-silence"/>
+  <Say>We did not receive a recording. Goodbye.</Say>
 </Response>`;
   return new Response(xml, { headers: { 'Content-Type': 'text/xml' } });
 }
@@ -1077,6 +1371,12 @@ async function handleSmsWebhook(request, env) {
 // in one visit so answers link to the same response.
 // ============================================================
 async function handleWebSubmit(request, env) {
+  const clientIp = request.headers.get('CF-Connecting-IP') || 'unknown';
+  // 30 submissions per 10 minutes per IP — generous for a real respondent
+  // answering a multi-question survey, but blocks automated spam/abuse.
+  if (await isRateLimited(env, `websubmit:${clientIp}`, 30, 10 * 60)) {
+    return error('Too many submissions from this connection. Please wait a few minutes and try again.', 429);
+  }
   const form = await request.formData();
   const audioFile = form.get('audio');
   const campaignId = form.get('campaign_id') || env.DEFAULT_CAMPAIGN_ID || 'camp_default';
@@ -1088,6 +1388,7 @@ async function handleWebSubmit(request, env) {
   try {
     session = await getOrCreateSession(env, { sessionKey, channel: 'web_link', campaignId, language });
   } catch (e) {
+    if (e.code === 'ALREADY_SUBMITTED') return error('This device has already submitted a response for this survey.', 409);
     return error('Campaign not found or inactive', 404);
   }
 
@@ -1282,6 +1583,65 @@ async function getAssignedCampaignId(env, claims) {
   if (claims.role !== 'enumerator') return null;
   const row = await env.DB.prepare('SELECT campaign_id FROM user_campaign_assignment WHERE user_id = ?').bind(claims.sub).first();
   return row ? row.campaign_id : null;
+}
+
+// Sliding-window rate limiter backed by D1. Returns true if the request should
+// be BLOCKED (limit exceeded). windowSeconds and maxRequests are per rate_key.
+async function isRateLimited(env, rateKey, maxRequests, windowSeconds) {
+  try {
+    const now = Date.now();
+    const row = await env.DB.prepare('SELECT count, window_start FROM rate_limits WHERE rate_key = ?').bind(rateKey).first();
+    if (!row) {
+      await env.DB.prepare('INSERT INTO rate_limits (rate_key, count, window_start) VALUES (?, 1, ?)').bind(rateKey, new Date(now).toISOString()).run();
+      return false;
+    }
+    const windowStart = new Date(row.window_start).getTime();
+    if (now - windowStart > windowSeconds * 1000) {
+      // Window expired — reset it.
+      await env.DB.prepare('UPDATE rate_limits SET count = 1, window_start = ? WHERE rate_key = ?').bind(new Date(now).toISOString(), rateKey).run();
+      return false;
+    }
+    if (row.count >= maxRequests) return true;
+    await env.DB.prepare('UPDATE rate_limits SET count = count + 1 WHERE rate_key = ?').bind(rateKey).run();
+    return false;
+  } catch (e) {
+    return false; // Never let rate-limit bookkeeping itself break a real request.
+  }
+}
+
+// Records a real, queryable audit trail entry — used for login, invites,
+// deactivations, and 2FA changes, the events security/procurement reviewers ask about.
+async function logAudit(env, { org, userId, action, resourceType, resourceId, request }) {
+  try {
+    await env.DB.prepare(
+      `INSERT INTO audit_logs (id, organization_id, user_id, action, resource_type, resource_id, ip_address) VALUES (?, ?, ?, ?, ?, ?, ?)`
+    ).bind(newId('audit'), org || null, userId || null, action, resourceType || null, resourceId || null, request ? request.headers.get('CF-Connecting-IP') : null).run();
+  } catch (e) {
+    // Never let audit logging break the actual request.
+  }
+}
+
+// Initiates a real outbound phone call via Twilio's REST API. Twilio will dial
+// the number and, once answered, fetch TwiML from `voiceUrl` — reusing the
+// exact same inbound call flow (language select, then questions) we already have.
+async function initiateOutboundCall(env, phoneNumber, voiceUrl) {
+  if (!env.TWILIO_ACCOUNT_SID || !env.TWILIO_AUTH_TOKEN || !env.TWILIO_PHONE_NUMBER) {
+    return { ok: false, reason: 'twilio_not_configured' };
+  }
+  try {
+    const auth = btoa(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`);
+    const params = new URLSearchParams({ To: phoneNumber, From: env.TWILIO_PHONE_NUMBER, Url: voiceUrl });
+    const resp = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${env.TWILIO_ACCOUNT_SID}/Calls.json`, {
+      method: 'POST',
+      headers: { Authorization: `Basic ${auth}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString(),
+    });
+    if (!resp.ok) { const errText = await resp.text(); console.error('Twilio outbound call failed:', errText); return { ok: false, reason: 'twilio_error' }; }
+    return { ok: true };
+  } catch (e) {
+    console.error('Twilio outbound call exception:', e.message);
+    return { ok: false, reason: 'exception' };
+  }
 }
 
 async function sendTwilioMessage(env, { to, body, whatsapp = false }) {

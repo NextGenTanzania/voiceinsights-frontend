@@ -19,42 +19,19 @@
         <div>
           <div class="card" style="margin-bottom:1.25rem;">
             <div class="field-row">
-              <div class="field"><label>Survey Name</label><input id="f-title" value="Baseline — Morogoro Region Agriculture"></div>
+              <div class="field"><label>Survey Name</label><input id="f-title" placeholder="e.g. Access to Finance in Agriculture — Tanzania"></div>
               <div class="field"><label>Module Type</label>
                 <select id="f-module"><option>Impact Monitoring</option><option>Survey Automation</option><option>Beneficiary Feedback</option><option>Call-Based Research</option><option>Grievance</option></select>
               </div>
             </div>
-            <div class="field"><label>Description</label><textarea id="f-desc" rows="2">Measuring farmers' baseline status before the fertilizer subsidy project.</textarea></div>
+            <div class="field"><label>Description</label><textarea id="f-desc" rows="2" placeholder="What is this survey trying to find out?"></textarea></div>
           </div>
 
           <div class="section-head"><h2 style="font-size:1.05rem;">Questions</h2><button class="btn btn-primary btn-sm" id="add-q-btn">+ Add Question</button></div>
 
           <div id="questions-list">
-            <div class="card question-row" style="margin-bottom:.9rem;">
-              <div style="display:flex; justify-content:space-between; margin-bottom:.6rem;">
-                <span class="badge badge-accent">Question 1 · Voice (Open Voice)</span>
-                <button class="btn btn-ghost btn-sm remove-q">Remove</button>
-              </div>
-              <input class="q-text" value="How has your harvest this season compared to last season?">
-              <div class="muted-note" style="margin-top:.5rem;">Indicator (KPI tag): <b style="color:var(--text-muted)">yield_change</b></div>
-            </div>
-
-            <div class="card question-row" style="margin-bottom:.9rem;">
-              <div style="display:flex; justify-content:space-between; margin-bottom:.6rem;">
-                <span class="badge badge-neutral">Question 2 · Scale (1-5)</span>
-                <button class="btn btn-ghost btn-sm remove-q">Remove</button>
-              </div>
-              <input class="q-text" value="On a scale of 1-5, how confident are you about next season's harvest?">
-            </div>
-
-            <div class="card question-row">
-              <div style="display:flex; justify-content:space-between; margin-bottom:.6rem;">
-                <span class="badge badge-neutral">Question 3 · Yes/No</span>
-                <button class="btn btn-ghost btn-sm remove-q">Remove</button>
-              </div>
-              <input class="q-text" value="Did you receive subsidized fertilizer this season?">
-            </div>
           </div>
+          <p class="muted-note" id="no-questions-note">No questions yet — click "+ Add Question" to add your first one.</p>
         </div>
 
         <div>
@@ -79,46 +56,108 @@
 <script src="/assets/js/app.js"></script>
 <script>
   if (!requireLogin()) { /* redirected */ }
-  renderShell({ role:'client', active:'/app/surveys.html', eyebrow:'Survey Builder', title:'Baseline — Morogoro Region Agriculture' });
+  const params = new URLSearchParams(window.location.search);
+  const editingId = params.get('id');
 
-  document.getElementById('add-q-btn').addEventListener('click', () => {
+  renderShell({ role:'client', active:'/app/surveys.html', eyebrow:'Survey Builder', title: editingId ? 'Loading…' : 'New Survey' });
+
+  function updateNoQuestionsNote() {
+    document.getElementById('no-questions-note').style.display = document.querySelectorAll('.question-row').length ? 'none' : 'block';
+  }
+
+  function addQuestionRow(text, type) {
     const row = document.createElement('div');
     row.className = 'card question-row';
     row.style.marginBottom = '.9rem';
     row.innerHTML = `
-      <div style="display:flex; justify-content:space-between; margin-bottom:.6rem;">
-        <span class="badge badge-neutral">New Question · Voice (Open Voice)</span>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.6rem; gap:.6rem;">
+        <select class="q-type" style="max-width:220px; padding:.3rem .5rem; font-size:.78rem;">
+          <option value="open_voice">Voice (Open Voice)</option>
+          <option value="full_name">Respondent's Full Name</option>
+        </select>
         <button class="btn btn-ghost btn-sm remove-q">Remove</button>
       </div>
-      <input class="q-text" placeholder="Type your question...">`;
+      <input class="q-text" placeholder="Type your question..." value="${text ? text.replace(/"/g, '&quot;') : ''}">
+      <div class="muted-note q-name-note" style="margin-top:.4rem; display:none;">This answer is saved as the respondent's name (shown across Respondents, Interviews, and Reports) — it skips sentiment/fraud analysis.</div>`;
     document.getElementById('questions-list').appendChild(row);
-    row.querySelector('.remove-q').addEventListener('click', () => row.remove());
-  });
-  document.querySelectorAll('.remove-q').forEach(b => b.addEventListener('click', (e) => e.target.closest('.question-row').remove()));
+    const typeSelect = row.querySelector('.q-type');
+    if (type) typeSelect.value = type;
+    const nameNote = row.querySelector('.q-name-note');
+    nameNote.style.display = typeSelect.value === 'full_name' ? 'block' : 'none';
+    typeSelect.addEventListener('change', () => { nameNote.style.display = typeSelect.value === 'full_name' ? 'block' : 'none'; });
+    row.querySelector('.remove-q').addEventListener('click', () => { row.remove(); updateNoQuestionsNote(); });
+    updateNoQuestionsNote();
+  }
+
+  document.getElementById('add-q-btn').addEventListener('click', () => addQuestionRow(''));
+  updateNoQuestionsNote();
+
+  if (editingId) {
+    (async () => {
+      try {
+        const { survey, questions } = await apiRequest(`/api/surveys/${editingId}`);
+        document.getElementById('f-title').value = survey.title;
+        document.getElementById('f-desc').value = survey.description || '';
+        const moduleSelect = document.getElementById('f-module');
+        [...moduleSelect.options].forEach(o => { if (o.value.toLowerCase().replace(/ /g, '_') === survey.module_type) moduleSelect.value = o.value; });
+        const statusSelect = document.getElementById('f-status');
+        [...statusSelect.options].forEach(o => { if (o.value.toLowerCase() === survey.status) statusSelect.value = o.value; });
+        questions.forEach(q => addQuestionRow(q.question_text, q.question_type));
+        document.querySelector('#topbar-mount h1').textContent = survey.title;
+        document.getElementById('save-status').textContent = `Editing existing survey (ID: ${survey.id})`;
+      } catch (e) {
+        document.getElementById('save-status').textContent = 'Could not load this survey: ' + e.message;
+        document.getElementById('save-status').style.color = 'var(--danger)';
+      }
+    })();
+  }
 
   document.getElementById('save-btn').addEventListener('click', async () => {
     const btn = document.getElementById('save-btn');
     const statusNote = document.getElementById('save-status');
+    if (!document.getElementById('f-title').value.trim()) {
+      statusNote.textContent = 'Please give the survey a name first.';
+      statusNote.style.color = 'var(--danger)';
+      return;
+    }
     btn.disabled = true; btn.textContent = 'Saving…';
+    const questions = [...document.querySelectorAll('.question-row')]
+      .map(row => ({ question_text: row.querySelector('.q-text').value, question_type: row.querySelector('.q-type').value }))
+      .filter(q => q.question_text);
     try {
-      const { survey } = await apiRequest('/api/surveys', {
-        method: 'POST',
-        body: {
-          title: document.getElementById('f-title').value,
-          description: document.getElementById('f-desc').value,
-          module_type: document.getElementById('f-module').value,
-          status: document.getElementById('f-status').value.toLowerCase(),
-        },
-      });
-      const questionTexts = [...document.querySelectorAll('.q-text')].map(i => i.value).filter(Boolean);
-      for (let i = 0; i < questionTexts.length; i++) {
-        await apiRequest(`/api/surveys/${survey.id}/questions`, {
-          method: 'POST',
-          body: { question_text: questionTexts[i], order_index: i },
+      if (editingId) {
+        await apiRequest(`/api/surveys/${editingId}`, {
+          method: 'PUT',
+          body: {
+            title: document.getElementById('f-title').value,
+            description: document.getElementById('f-desc').value,
+            module_type: document.getElementById('f-module').value,
+            status: document.getElementById('f-status').value.toLowerCase(),
+            questions,
+          },
         });
+        statusNote.textContent = 'Saved ✓';
+        statusNote.style.color = 'var(--success)';
+      } else {
+        const { survey } = await apiRequest('/api/surveys', {
+          method: 'POST',
+          body: {
+            title: document.getElementById('f-title').value,
+            description: document.getElementById('f-desc').value,
+            module_type: document.getElementById('f-module').value,
+            status: document.getElementById('f-status').value.toLowerCase(),
+          },
+        });
+        for (let i = 0; i < questions.length; i++) {
+          await apiRequest(`/api/surveys/${survey.id}/questions`, {
+            method: 'POST',
+            body: { question_text: questions[i].question_text, question_type: questions[i].question_type, order_index: i },
+          });
+        }
+        statusNote.textContent = `Saved ✓ — redirecting…`;
+        statusNote.style.color = 'var(--success)';
+        setTimeout(() => { window.location.href = `/app/survey-builder.html?id=${survey.id}`; }, 800);
       }
-      statusNote.textContent = `Saved ✓ (survey ID: ${survey.id})`;
-      statusNote.style.color = 'var(--success)';
     } catch (err) {
       statusNote.textContent = err.message.includes('Failed to fetch')
         ? 'Backend not reachable — check config.js API_BASE_URL'

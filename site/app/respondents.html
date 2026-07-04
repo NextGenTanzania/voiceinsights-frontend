@@ -17,11 +17,12 @@
       <div class="table-wrap">
         <table>
           <thead><tr>
-            <th data-i18n="resp.phone">Phone</th><th data-i18n="resp.region">Region</th><th data-i18n="resp.gender">Gender</th>
+            <th data-i18n="resp.name">Name</th><th data-i18n="resp.phone">Phone</th><th data-i18n="resp.region">Region</th><th data-i18n="resp.gender">Gender</th>
             <th data-i18n="resp.age_band">Age Band</th><th data-i18n="resp.consent">Consent</th><th data-i18n="resp.responses">Responses</th><th data-i18n="resp.first_seen">First Seen</th>
           </tr></thead>
           <tbody id="resp-tbody">
-            <tr><td colspan="7" class="muted-note" style="padding:1.5rem;" id="resp-loading">Loading respondents…</td></tr>
+            <tr><td><div class="skeleton skeleton-text" style="width:60%;"></div></td><td><div class="skeleton skeleton-text" style="width:70%;"></div></td><td><div class="skeleton skeleton-text" style="width:50%;"></div></td><td><div class="skeleton skeleton-text" style="width:40%;"></div></td><td><div class="skeleton skeleton-text" style="width:45%;"></div></td><td><div class="skeleton skeleton-text" style="width:55%;"></div></td><td><div class="skeleton skeleton-text" style="width:35%;"></div></td><td><div class="skeleton skeleton-text" style="width:45%;"></div></td></tr>
+            <tr><td><div class="skeleton skeleton-text" style="width:55%;"></div></td><td><div class="skeleton skeleton-text" style="width:65%;"></div></td><td><div class="skeleton skeleton-text" style="width:55%;"></div></td><td><div class="skeleton skeleton-text" style="width:35%;"></div></td><td><div class="skeleton skeleton-text" style="width:50%;"></div></td><td><div class="skeleton skeleton-text" style="width:60%;"></div></td><td><div class="skeleton skeleton-text" style="width:40%;"></div></td><td><div class="skeleton skeleton-text" style="width:50%;"></div></td></tr>
           </tbody>
         </table>
       </div>
@@ -34,7 +35,6 @@
 <script>
   if (!requireLogin()) { /* redirected */ }
   renderShell({ role:'client', active:'/app/respondents.html', eyebrow:'Participants', title:'Respondents' });
-  document.getElementById('resp-loading').textContent = t('resp.loading', 'Loading respondents…');
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n'), el.textContent); });
 
   (async () => {
@@ -42,11 +42,12 @@
     try {
       const { respondents } = await apiRequest('/api/respondents');
       if (!respondents.length) {
-        tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem;">${t('resp.empty', "No respondents yet — they'll appear here as soon as someone answers a survey on any channel.")}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="muted-note" style="padding:1.5rem;">${t('resp.empty', "No respondents yet — they'll appear here as soon as someone answers a survey on any channel.")}</td></tr>`;
         return;
       }
       tbody.innerHTML = respondents.map(r => `
         <tr>
+          <td>${r.full_name || '<span class="muted-note">—</span>'}</td>
           <td>${r.phone_number || '<span class="muted-note">' + t('resp.anonymous_web', 'Anonymous (web)') + '</span>'}</td>
           <td>${r.region || '—'}</td>
           <td>${r.gender || '—'}</td>
@@ -56,7 +57,7 @@
           <td>${new Date(r.created_at + 'Z').toLocaleDateString()}</td>
         </tr>`).join('');
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem; color:var(--danger);">${t('resp.error', 'Could not load:')} ${e.message}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" class="muted-note" style="padding:1.5rem; color:var(--danger);">${t('resp.error', 'Could not load:')} ${e.message}</td></tr>`;
     }
   })();
 </script>

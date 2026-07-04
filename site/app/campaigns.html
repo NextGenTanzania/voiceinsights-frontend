@@ -24,9 +24,10 @@
 
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Campaign</th><th>Channel</th><th>Targeted</th><th>Reached</th><th>Progress</th><th>Status</th></tr></thead>
+          <thead><tr><th>Campaign</th><th>Channel</th><th>Targeted</th><th>Reached</th><th>Progress</th><th>Status</th><th>Share</th></tr></thead>
           <tbody id="campaigns-tbody">
-            <tr><td colspan="6" class="muted-note" style="padding:1.5rem;">Loading campaigns…</td></tr>
+            <tr><td><div class="skeleton skeleton-text" style="width:75%;"></div></td><td><div class="skeleton skeleton-text" style="width:50%;"></div></td><td><div class="skeleton skeleton-text" style="width:40%;"></div></td><td><div class="skeleton skeleton-text" style="width:40%;"></div></td><td><div class="skeleton" style="height:8px; width:90%;"></div></td><td><div class="skeleton skeleton-text" style="width:50%;"></div></td><td><div class="skeleton skeleton-text" style="width:60%;"></div></td></tr>
+            <tr><td><div class="skeleton skeleton-text" style="width:65%;"></div></td><td><div class="skeleton skeleton-text" style="width:55%;"></div></td><td><div class="skeleton skeleton-text" style="width:35%;"></div></td><td><div class="skeleton skeleton-text" style="width:45%;"></div></td><td><div class="skeleton" style="height:8px; width:70%;"></div></td><td><div class="skeleton skeleton-text" style="width:55%;"></div></td><td><div class="skeleton skeleton-text" style="width:55%;"></div></td></tr>
           </tbody>
         </table>
       </div>
@@ -35,6 +36,48 @@
         <div class="card-title">No network in the field?</div>
         <p style="color:var(--text); margin-bottom:1rem;">The Enumerator App works with zero signal — field workers record answers offline all day, then sync everything in one tap once they're back in range.</p>
         <a href="/enumerator.html" class="btn btn-primary btn-sm">Open Enumerator App →</a>
+      </div>
+
+      <div id="share-modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; align-items:center; justify-content:center; padding:5vw;">
+        <div class="card" style="max-width:420px; width:100%; text-align:center; position:relative;">
+          <button id="share-modal-close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
+          <div class="card-title">Share this campaign link</div>
+          <h3 id="share-campaign-name" style="font-size:1.1rem; margin:.5rem 0 1.2rem;">—</h3>
+          <img id="share-qr-img" src="" alt="QR code" style="background:#fff; padding:.6rem; border-radius:8px; width:180px; height:180px; margin:0 auto;">
+          <div style="display:flex; gap:.5rem; margin-top:1.2rem;">
+            <input id="share-link-input" readonly style="flex:1; font-size:.8rem;">
+            <button class="btn btn-primary btn-sm" id="share-copy-btn">Copy</button>
+          </div>
+          <p class="muted-note" style="margin-top:1rem; font-size:.78rem;">Anyone with this link can answer your survey — no login required. Share it via WhatsApp, SMS, email, or print the QR code for in-person collection.</p>
+        </div>
+      </div>
+
+      <div id="outbound-modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; align-items:center; justify-content:center; padding:5vw;">
+        <div class="card" style="max-width:480px; width:100%; position:relative;">
+          <button id="outbound-modal-close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
+          <div class="card-title">Call or Text Respondents Directly</div>
+          <h3 id="outbound-campaign-name" style="font-size:1.1rem; margin:.5rem 0 1.2rem;">—</h3>
+          <div class="field">
+            <label>Channel</label>
+            <select id="outbound-channel">
+              <option value="phone_call">Phone Call (automated voice interview)</option>
+              <option value="sms">SMS (text-based Q&amp;A)</option>
+              <option value="whatsapp">WhatsApp</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Language</label>
+            <select id="outbound-language"><option value="sw">Kiswahili</option><option value="en">English</option></select>
+          </div>
+          <div class="field">
+            <label>Phone numbers (one per line, international format e.g. +255712345678)</label>
+            <textarea id="outbound-numbers" rows="5" placeholder="+255712345678&#10;+255755000111"></textarea>
+          </div>
+          <div id="outbound-error" style="display:none; color:var(--danger); font-size:.82rem; margin-bottom:.8rem;"></div>
+          <div id="outbound-result" style="display:none; font-size:.85rem; margin-bottom:.8rem;"></div>
+          <button class="btn btn-primary" id="outbound-start-btn" style="width:100%; justify-content:center;">Start Outbound Batch →</button>
+          <p class="muted-note" style="margin-top:1rem; font-size:.76rem;">For phone calls, each person receives a real automated call asking the survey questions aloud. For SMS/WhatsApp, they receive the first question as a text and reply to continue — same as if they'd texted in themselves.</p>
+        </div>
       </div>
     </div>
   </main>
@@ -56,7 +99,7 @@
     try {
       const { campaigns } = await apiRequest('/api/campaigns');
       if (!campaigns.length) {
-        tbody.innerHTML = `<tr><td colspan="6" class="muted-note" style="padding:1.5rem;">No campaigns yet. Create a survey, then link it to a campaign to start collecting responses.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem;">No campaigns yet. Create a survey, then link it to a campaign to start collecting responses.</td></tr>`;
         document.getElementById('stat-active').textContent = '0';
         document.getElementById('stat-targeted').textContent = '0';
         document.getElementById('stat-reached').textContent = '0';
@@ -77,18 +120,94 @@
           <td>${reached}</td>
           <td style="width:150px;"><div class="progress"><span style="width:${pct}%"></span></div></td>
           <td><span class="badge ${badgeClass}">${c.status}</span></td>
+          <td style="display:flex; gap:.4rem;"><button class="btn btn-ghost btn-sm share-link-btn" data-id="${c.id}" data-name="${c.name}">🔗 Share</button><button class="btn btn-ghost btn-sm outbound-btn" data-id="${c.id}" data-name="${c.name}">📞 Call/Text Respondents</button></td>
         </tr>`;
       }).join('');
       document.getElementById('stat-active').textContent = activeCount;
       document.getElementById('stat-targeted').textContent = totalTargeted.toLocaleString();
       document.getElementById('stat-reached').textContent = totalReached.toLocaleString();
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="6" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load campaigns: ${e.message}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load campaigns: ${e.message}</td></tr>`;
     }
   })();
 
   document.getElementById('new-campaign-btn').addEventListener('click', () => {
     window.location.href = '/app/surveys.html';
+  });
+
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('share-link-btn')) {
+      const link = `${window.location.origin}/respondent.html?campaign=${e.target.dataset.id}`;
+      document.getElementById('share-campaign-name').textContent = e.target.dataset.name;
+      document.getElementById('share-link-input').value = link;
+      document.getElementById('share-qr-img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(link);
+      document.getElementById('share-modal-backdrop').style.display = 'flex';
+    }
+  });
+  document.getElementById('share-modal-close').addEventListener('click', () => {
+    document.getElementById('share-modal-backdrop').style.display = 'none';
+  });
+  document.getElementById('share-modal-backdrop').addEventListener('click', (e) => {
+    if (e.target.id === 'share-modal-backdrop') document.getElementById('share-modal-backdrop').style.display = 'none';
+  });
+  document.getElementById('share-copy-btn').addEventListener('click', () => {
+    const input = document.getElementById('share-link-input');
+    input.select();
+    navigator.clipboard.writeText(input.value).then(() => {
+      const btn = document.getElementById('share-copy-btn');
+      btn.textContent = 'Copied ✓';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+    });
+  });
+
+  let outboundCampaignId = null;
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('outbound-btn')) {
+      outboundCampaignId = e.target.dataset.id;
+      document.getElementById('outbound-campaign-name').textContent = e.target.dataset.name;
+      document.getElementById('outbound-numbers').value = '';
+      document.getElementById('outbound-error').style.display = 'none';
+      document.getElementById('outbound-result').style.display = 'none';
+      document.getElementById('outbound-modal-backdrop').style.display = 'flex';
+    }
+  });
+  document.getElementById('outbound-modal-close').addEventListener('click', () => {
+    document.getElementById('outbound-modal-backdrop').style.display = 'none';
+  });
+  document.getElementById('outbound-modal-backdrop').addEventListener('click', (e) => {
+    if (e.target.id === 'outbound-modal-backdrop') document.getElementById('outbound-modal-backdrop').style.display = 'none';
+  });
+
+  document.getElementById('outbound-start-btn').addEventListener('click', async () => {
+    const errBox = document.getElementById('outbound-error');
+    const resultBox = document.getElementById('outbound-result');
+    errBox.style.display = 'none'; resultBox.style.display = 'none';
+    const numbers = document.getElementById('outbound-numbers').value.split('\n').map(n => n.trim()).filter(Boolean);
+    if (!numbers.length) {
+      errBox.textContent = 'Please enter at least one phone number.';
+      errBox.style.display = 'block';
+      return;
+    }
+    const btn = document.getElementById('outbound-start-btn');
+    btn.disabled = true; btn.textContent = 'Starting…';
+    try {
+      const result = await apiRequest(`/api/campaigns/${outboundCampaignId}/outbound`, {
+        method: 'POST',
+        body: {
+          phone_numbers: numbers,
+          channel: document.getElementById('outbound-channel').value,
+          language: document.getElementById('outbound-language').value,
+        },
+      });
+      resultBox.style.color = result.failed > 0 ? 'var(--warn)' : 'var(--success)';
+      resultBox.textContent = `✓ ${result.sent} started successfully${result.failed ? `, ${result.failed} failed (check Twilio is fully configured)` : ''}.`;
+      resultBox.style.display = 'block';
+    } catch (err) {
+      errBox.textContent = err.message;
+      errBox.style.display = 'block';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Start Outbound Batch →';
+    }
   });
 </script>
 </body>

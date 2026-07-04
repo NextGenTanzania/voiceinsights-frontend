@@ -15,27 +15,25 @@
   <main class="main">
     <div id="topbar-mount"></div>
     <div class="content">
+      <p class="muted-note" style="margin-bottom:1rem;">Real operational figures for your organization. VoiceInsights Africa currently runs as a single-tenant deployment per client — cross-client aggregation will appear here once the platform serves multiple organizations from one console.</p>
       <div class="grid grid-4" style="margin-bottom:1.5rem;">
-        <div class="card"><div class="card-title">Active Clients</div><div class="stat-value">18</div></div>
-        <div class="card"><div class="card-title">Calls/Messages Today (System-wide)</div><div class="stat-value">2,340</div></div>
-        <div class="card"><div class="card-title">Fraud Alerts (This Week)</div><div class="stat-value" style="color:var(--danger)">6</div></div>
-        <div class="card"><div class="card-title">System Uptime (30d)</div><div class="stat-value">99.94%</div></div>
+        <div class="card"><div class="card-title">Total Responses</div><div class="stat-value" id="stat-responses">–</div></div>
+        <div class="card"><div class="card-title">Transcripts Generated</div><div class="stat-value" id="stat-transcripts">–</div></div>
+        <div class="card"><div class="card-title" data-tooltip="Fraud flags raised divided by total responses.">Fraud Flag Rate</div><div class="stat-value" id="stat-flagrate" style="color:var(--warn);">–</div></div>
+        <div class="card"><div class="card-title">Avg. Processing Time</div><div class="stat-value" id="stat-latency">–</div></div>
       </div>
 
       <div class="grid grid-2" style="margin-bottom:1.5rem;">
-        <div class="card"><div class="card-title">Usage by Client (This Week)</div><div style="position:relative; height:220px;"><canvas id="chartUsage"></canvas></div></div>
-        <div class="card"><div class="card-title">Model Accuracy — Swahili STT</div><div style="position:relative; height:220px;"><canvas id="chartAccuracy"></canvas></div></div>
+        <div class="card"><div class="card-title">Responses by Channel</div><div style="position:relative; height:220px;"><canvas id="chartChannel"></canvas></div></div>
+        <div class="card"><div class="card-title">Sentiment Breakdown</div><div style="position:relative; height:220px;"><canvas id="chartSentiment"></canvas></div></div>
       </div>
 
-      <div class="section-head"><h2 style="font-size:1.05rem;">Recent Events</h2></div>
+      <div class="section-head"><h2 style="font-size:1.05rem;">Recent Security Events</h2><a href="/admin/audit-logs.html" class="muted-note" style="font-size:.8rem;">View full audit log →</a></div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Time</th><th>Event</th><th>Client</th><th>Severity</th></tr></thead>
-          <tbody>
-            <tr><td>Today, 09:14</td><td>Fraud pattern detected — repeated answers</td><td>Rootical TZ</td><td><span class="badge badge-danger">High</span></td></tr>
-            <tr><td>Today, 08:02</td><td>New client registered</td><td>Amani Foundation</td><td><span class="badge badge-neutral">Info</span></td></tr>
-            <tr><td>Yesterday, 21:40</td><td>Model latency increased by 12 minutes</td><td>System</td><td><span class="badge badge-warn">Medium</span></td></tr>
-            <tr><td>Yesterday, 15:10</td><td>Large data export (12k rows)</td><td>World Vision TZ</td><td><span class="badge badge-neutral">Info</span></td></tr>
+          <thead><tr><th>Time</th><th>User</th><th>Event</th></tr></thead>
+          <tbody id="events-tbody">
+            <tr><td colspan="3" class="muted-note" style="padding:1.5rem;">Loading…</td></tr>
           </tbody>
         </table>
       </div>
@@ -48,17 +46,48 @@
 <script>
   if (!requireLogin()) { /* redirected */ }
   renderShell({ role:'admin', active:'/admin/dashboard.html', eyebrow:'Internal Operations', title:'System Overview' });
-  try {
-    if (typeof Chart === 'undefined') throw new Error('Chart.js did not load');
-    new Chart(document.getElementById('chartUsage'), { type:'bar',
-      data:{ labels:['NEXT-GEN','World Vision','Amani Fdn','Rootical','UNICEF TZ'], datasets:[{data:[812,690,410,205,980], backgroundColor:'#E4A23A'}]},
-      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false},ticks:{color:'#9FB3AB'}}, y:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}}} } });
-    new Chart(document.getElementById('chartAccuracy'), { type:'line',
-      data:{ labels:['Feb','Mar','Apr','May','Jun'], datasets:[{data:[81,83,85,87,89], borderColor:'#4FA490', tension:.35}]},
-      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}}, y:{grid:{color:'rgba(244,239,230,.06)'},ticks:{color:'#9FB3AB'}, min:70,max:100} } } });
-  } catch (e) {
-    console.warn('Charts unavailable:', e.message);
-  }
+
+  const ACTION_LABEL = {
+    login: 'Logged in', login_2fa: 'Logged in (2FA)', '2fa_enabled': '2FA enabled', '2fa_disabled': '2FA disabled',
+    user_invited: 'Invited a team member', user_deactivated: 'Deactivated a team member',
+  };
+  const CHANNEL_LABEL = { whatsapp: 'WhatsApp', phone_call: 'Phone Call', sms: 'SMS', web_link: 'Web', app: 'Offline App' };
+
+  (async () => {
+    try {
+      const [modelStats, dashStats, audit] = await Promise.all([
+        apiRequest('/api/admin/model-stats'),
+        apiRequest('/api/dashboard/stats'),
+        apiRequest('/api/audit-logs').catch(() => ({ logs: [] })),
+      ]);
+
+      document.getElementById('stat-responses').textContent = modelStats.total_responses;
+      document.getElementById('stat-transcripts').textContent = modelStats.total_transcripts;
+      document.getElementById('stat-flagrate').textContent = modelStats.total_responses ? ((modelStats.fraud_flags / modelStats.total_responses) * 100).toFixed(1) + '%' : '—';
+      document.getElementById('stat-latency').textContent = modelStats.avg_processing_seconds != null ? modelStats.avg_processing_seconds.toFixed(1) + 's' : '—';
+
+      const byChannel = dashStats.by_channel || [];
+      if (typeof Chart !== 'undefined') {
+        new Chart(document.getElementById('chartChannel'), { type: 'bar',
+          data: { labels: byChannel.map(c => CHANNEL_LABEL[c.channel] || c.channel), datasets: [{ data: byChannel.map(c => c.n), backgroundColor: '#E4A23A' }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#9FB3AB' } }, y: { grid: { color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', precision: 0 } } } } });
+
+        const sentimentRows = dashStats.sentiment_breakdown || [];
+        new Chart(document.getElementById('chartSentiment'), { type: 'doughnut',
+          data: { labels: sentimentRows.map(s => s.overall_sentiment || 'Unrated'), datasets: [{ data: sentimentRows.map(s => s.n), backgroundColor: ['#6FBF8B', '#9FB3AB', '#D9634A', '#E4C23A'] }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9FB3AB' } } } } });
+      }
+
+      const tbody = document.getElementById('events-tbody');
+      tbody.innerHTML = audit.logs.length
+        ? audit.logs.slice(0, 8).map(l => `<tr><td style="font-family:var(--font-mono); font-size:.8rem;">${new Date(l.created_at + 'Z').toLocaleString()}</td><td>${l.full_name || l.email || 'System'}</td><td>${ACTION_LABEL[l.action] || l.action}</td></tr>`).join('')
+        : '<tr><td colspan="3" class="muted-note" style="padding:1.5rem;">No events recorded yet.</td></tr>';
+    } catch (e) {
+      console.warn('Could not load admin overview:', e.message);
+      ['stat-responses', 'stat-transcripts', 'stat-flagrate', 'stat-latency'].forEach(id => document.getElementById(id).textContent = '—');
+      document.getElementById('events-tbody').innerHTML = `<tr><td colspan="3" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+    }
+  })();
 </script>
 </body>
 </html>

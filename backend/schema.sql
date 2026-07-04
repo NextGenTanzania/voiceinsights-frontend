@@ -170,7 +170,21 @@ CREATE TABLE IF NOT EXISTS user_profile (
   invite_method TEXT
 );
 
--- Optional project/campaign assignment for restricted-access users (e.g. field
+-- Simple sliding-window rate limiting — no extra Cloudflare product needed,
+-- just a small D1 table. Cleared rows are cheap; old rows are pruned on write.
+CREATE TABLE IF NOT EXISTS rate_limits (
+  rate_key    TEXT PRIMARY KEY,
+  count       INTEGER NOT NULL DEFAULT 1,
+  window_start TEXT NOT NULL
+);
+-- no ALTER TABLE is ever needed on the existing users table.
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+  token       TEXT PRIMARY KEY,
+  user_id     TEXT NOT NULL REFERENCES users(id),
+  expires_at  TEXT NOT NULL,
+  used        INTEGER NOT NULL DEFAULT 0,
+  created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);
 -- enumerators who should only see data for the specific project they were
 -- invited to). Kept as its own table so no ALTER TABLE is ever needed on
 -- the existing user_profile table.

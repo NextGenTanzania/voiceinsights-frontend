@@ -14,18 +14,15 @@
   <main class="main">
     <div id="topbar-mount"></div>
     <div class="content">
+      <p class="muted-note" style="margin-bottom:1rem;">A real, append-only security trail — every login, invite, and 2FA change on your account is recorded here automatically.</p>
       <div class="field" style="max-width:340px; margin-bottom:1.2rem;">
-        <input placeholder="Search by user, action, or client...">
+        <input id="audit-search" placeholder="Search by user or action...">
       </div>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Time</th><th>User</th><th>Action</th><th>Resource</th><th>IP</th></tr></thead>
-          <tbody>
-            <tr><td style="font-family:var(--font-mono); font-size:.8rem;">2026-07-02 09:14:02</td><td>k.msuya@nextgentanzania.com</td><td>survey.create</td><td>Baseline — Morogoro Agriculture</td><td>102.219.4.18</td></tr>
-            <tr><td style="font-family:var(--font-mono); font-size:.8rem;">2026-07-02 08:59:41</td><td>amina@nextgentanzania.com</td><td>report.export</td><td>INV-2026-0042</td><td>102.219.4.22</td></tr>
-            <tr><td style="font-family:var(--font-mono); font-size:.8rem;">2026-07-01 21:40:10</td><td>system</td><td>fraud.flag_raised</td><td>#RESP-88213</td><td>—</td></tr>
-            <tr><td style="font-family:var(--font-mono); font-size:.8rem;">2026-07-01 15:10:33</td><td>me.officer@worldvision.org</td><td>data.export_bulk (12,000 rows)</td><td>Campaign #WV-2026-04</td><td>41.72.10.5</td></tr>
-            <tr><td style="font-family:var(--font-mono); font-size:.8rem;">2026-07-01 10:02:15</td><td>admin@voiceinsights.africa</td><td>client.create</td><td>Amani Foundation</td><td>102.219.4.1</td></tr>
+          <tbody id="audit-tbody">
+            <tr><td colspan="5" class="muted-note" style="padding:1.5rem;" id="audit-loading">Loading…</td></tr>
           </tbody>
         </table>
       </div>
@@ -37,6 +34,45 @@
 <script src="/assets/js/app.js"></script>
 <script>
   if (!requireLogin()) { /* redirected */ }
-  renderShell({ role:'admin', active:'/admin/audit-logs.html', eyebrow:'Security', title:'Audit Logs' });</script>
+  renderShell({ role:'admin', active:'/admin/audit-logs.html', eyebrow:'Security', title:'Audit Logs' });
+  document.getElementById('audit-loading').textContent = t('audit.loading', 'Loading…');
+
+  const ACTION_LABEL = {
+    login: 'Logged in', login_2fa: 'Logged in (2FA)', '2fa_enabled': '2FA enabled', '2fa_disabled': '2FA disabled',
+    user_invited: 'Invited a team member', user_deactivated: 'Deactivated a team member',
+  };
+
+  let allLogs = [];
+  function render(filterText) {
+    const tbody = document.getElementById('audit-tbody');
+    const filtered = filterText
+      ? allLogs.filter(l => `${l.full_name || ''} ${l.email || ''} ${l.action}`.toLowerCase().includes(filterText.toLowerCase()))
+      : allLogs;
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="5" class="muted-note" style="padding:1.5rem;">${t('audit.empty', 'No activity recorded yet — entries appear here as your team logs in, invites people, or changes security settings.')}</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = filtered.map(l => `
+      <tr>
+        <td style="font-family:var(--font-mono); font-size:.8rem;">${new Date(l.created_at + 'Z').toLocaleString()}</td>
+        <td>${l.full_name || l.email || 'System'}</td>
+        <td>${ACTION_LABEL[l.action] || l.action}</td>
+        <td class="muted-note">${l.resource_type ? l.resource_type + (l.resource_id ? ' · ' + l.resource_id.slice(0, 12) : '') : '—'}</td>
+        <td class="muted-note">${l.ip_address || '—'}</td>
+      </tr>`).join('');
+  }
+
+  (async () => {
+    try {
+      const { logs } = await apiRequest('/api/audit-logs');
+      allLogs = logs;
+      render('');
+    } catch (e) {
+      document.getElementById('audit-tbody').innerHTML = `<tr><td colspan="5" class="muted-note" style="padding:1.5rem; color:var(--danger);">${t('audit.error', 'Could not load:')} ${e.message}</td></tr>`;
+    }
+  })();
+
+  document.getElementById('audit-search').addEventListener('input', (e) => render(e.target.value));
+</script>
 </body>
 </html>

@@ -14,10 +14,11 @@
   <main class="main">
     <div id="topbar-mount"></div>
     <div class="content">
-      <p class="muted-note" style="margin-bottom:1rem;">These are real operational figures from your own data — not benchmark accuracy scores (we don't yet have a labeled ground-truth dataset to measure transcription/sentiment accuracy against).</p>
-      <div class="grid grid-4" style="margin-bottom:1.5rem;">
+      <p class="muted-note" style="margin-bottom:1rem;">These are real operational figures from your own data. Transcription confidence comes directly from Whisper's own per-segment probability output — not a benchmark or estimate.</p>
+      <div class="grid grid-5" style="margin-bottom:1.5rem;">
         <div class="card"><div class="card-title">Responses Processed</div><div class="stat-value" id="stat-responses">–</div></div>
         <div class="card"><div class="card-title">Transcripts Generated</div><div class="stat-value" id="stat-transcripts">–</div></div>
+        <div class="card"><div class="card-title" data-tooltip="Average Whisper confidence across every voice response, from the model's own segment-level probabilities.">Avg. Transcription Confidence</div><div class="stat-value" id="stat-confidence" style="color:var(--success);">–</div></div>
         <div class="card"><div class="card-title">Avg. Processing Time</div><div class="stat-value" id="stat-latency">–</div></div>
         <div class="card"><div class="card-title">Fraud Flags Raised</div><div class="stat-value" id="stat-fraud">–</div></div>
       </div>
@@ -51,10 +52,11 @@
       const stats = await apiRequest('/api/admin/model-stats');
       document.getElementById('stat-responses').textContent = stats.total_responses;
       document.getElementById('stat-transcripts').textContent = stats.total_transcripts;
+      document.getElementById('stat-confidence').textContent = stats.avg_transcription_confidence != null ? Math.round(stats.avg_transcription_confidence) + '%' : '—';
       document.getElementById('stat-latency').textContent = stats.avg_processing_seconds != null ? stats.avg_processing_seconds.toFixed(1) + 's' : '—';
       document.getElementById('stat-fraud').textContent = stats.fraud_flags;
     } catch (e) {
-      ['stat-responses', 'stat-transcripts', 'stat-latency', 'stat-fraud'].forEach(id => document.getElementById(id).textContent = '—');
+      ['stat-responses', 'stat-transcripts', 'stat-confidence', 'stat-latency', 'stat-fraud'].forEach(id => document.getElementById(id).textContent = '—');
     }
   })();
 </script>

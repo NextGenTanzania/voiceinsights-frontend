@@ -50,7 +50,7 @@
       <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
     </a>
     <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
-    <div class="pub-nav-collapse pub-nav-row1-right" style="display:flex; align-items:center; gap:.9rem; flex-wrap:wrap;">
+    <div class="pub-nav-collapse pub-nav-row1-right">
       <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
       <a href="/contact.html" class="btn btn-primary btn-sm">Book Demo</a>
     </div>
@@ -71,10 +71,18 @@
 
   <div class="toolbar">
     <div class="muted-note">This is what your organization's report would look like.</div>
-    <button class="btn btn-primary btn-sm" onclick="window.print()">🖨 Download as PDF</button>
+    <div style="display:flex; gap:.6rem; flex-wrap:wrap; align-items:center;">
+      <div class="pill-tabs" style="margin:0;">
+        <a class="report-mode-tab active" data-mode="summary" style="cursor:pointer;">Summary Report</a>
+        <a class="report-mode-tab" data-mode="narrative" style="cursor:pointer;">Narrative Report</a>
+        <a class="report-mode-tab" data-mode="full" style="cursor:pointer;">Full Detailed Report</a>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="word-download-btn">📄 Download Word</button>
+      <button class="btn btn-primary btn-sm" onclick="window.print()">🖨 Download as PDF</button>
+    </div>
   </div>
 
-  <div class="report-doc">
+  <div class="report-doc" id="summary-view">
 
     <div class="r-page r-cover">
       <div style="display:flex; align-items:center; gap:.6rem;">
@@ -92,6 +100,19 @@
         <div><b style="color:var(--text-muted);">Report ID</b><br>VIA-SAMPLE-TZ-FIN-01</div>
         <div><b style="color:var(--text-muted);">Sample Size</b><br>n = 100</div>
         <div><b style="color:var(--text-muted);">Prepared by</b><br>AI analysis + human review</div>
+      </div>
+    </div>
+
+    <div class="r-page">
+      <div class="r-eyebrow">At a Glance</div>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">The whole project in six numbers.</h2>
+      <div class="r-kpis" style="grid-template-columns: repeat(3,1fr); margin-top:1.5rem;">
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.6rem;">100</div><div class="muted-note">Responses</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.6rem;">91%</div><div class="muted-note">Completion Rate</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.6rem;">4m 12s</div><div class="muted-note">Avg. Interview Length</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.6rem; color:var(--warn);">3.0%</div><div class="muted-note">Fraud Flag Rate</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.6rem;">5</div><div class="muted-note">Regions Covered</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.6rem; color:var(--success);">97.4%</div><div class="muted-note">AI Confidence</div></div>
       </div>
     </div>
 
@@ -124,12 +145,38 @@
         <div class="r-chart-box"><canvas id="chartAge"></canvas></div>
       </div>
       <div class="r-chart-box" style="height:220px; margin-top:1.5rem;"><canvas id="chartRegion"></canvas></div>
+      <div class="table-wrap" style="margin-top:1.5rem;">
+        <table>
+          <thead><tr><th>Region</th><th>Responses</th><th>Top Issue</th><th>Risk Level</th></tr></thead>
+          <tbody>
+            <tr><td>Morogoro</td><td>26</td><td>Collateral requirements</td><td><span class="badge badge-danger">High</span></td></tr>
+            <tr><td>Iringa</td><td>22</td><td>Interest rates</td><td><span class="badge badge-warn">Medium</span></td></tr>
+            <tr><td>Mbeya</td><td>20</td><td>Collateral requirements</td><td><span class="badge badge-danger">High</span></td></tr>
+            <tr><td>Dodoma</td><td>18</td><td>Loan processing delays</td><td><span class="badge badge-warn">Medium</span></td></tr>
+            <tr><td>Arusha</td><td>14</td><td>SACCOS access</td><td><span class="badge badge-success">Low</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="muted-note" style="margin-top:.8rem;">A full geographic map view (with district-level boundaries) is on our roadmap — this table shows the same regional breakdown available today.</div>
     </div>
 
     <div class="r-page">
       <div class="r-eyebrow">Core Insights</div>
       <h2 style="font-size:1.5rem; margin-top:.5rem;">What farmers are telling us about accessing finance.</h2>
       <div class="r-chart-box" style="height:280px; margin-top:1.5rem;"><canvas id="chartTopics"></canvas></div>
+      <div class="table-wrap" style="margin-top:1.5rem;">
+        <table>
+          <thead><tr><th>Issue</th><th>Severity</th><th>Prevalence</th></tr></thead>
+          <tbody>
+            <tr><td>Collateral requirements</td><td><span class="badge badge-danger">🔴 Critical</span></td><td>61%</td></tr>
+            <tr><td>High interest rates</td><td><span class="badge badge-warn">🟠 High</span></td><td>54%</td></tr>
+            <tr><td>Loan processing delays</td><td><span class="badge badge-warn">🟠 High</span></td><td>42%</td></tr>
+            <tr><td>Limited SACCOS access</td><td><span class="badge badge-neutral">🟡 Medium</span></td><td>35%</td></tr>
+            <tr><td>Financial literacy gaps</td><td><span class="badge badge-success">🟢 Low</span></td><td>27%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="muted-note" style="margin-top:.8rem;">Severity combines how often an issue is mentioned with how strongly it's tied to negative sentiment — not frequency alone.</div>
     </div>
 
     <div class="r-page">
@@ -180,6 +227,25 @@
         <div class="r-rec-col"><h4 style="color:var(--accent);">Immediate (30 days)</h4><ul><li>Pilot a simplified collateral pathway for smallholder loans under a fixed threshold.</li><li>Promote existing mobile-money-linked micro-loan products more actively in surveyed districts.</li></ul></div>
         <div class="r-rec-col"><h4 style="color:var(--accent-2);">Strategic (6–12 months)</h4><ul><li>Support SACCOS expansion in the two districts with lowest cooperative coverage.</li><li>Bundle financial literacy training with loan applications.</li></ul></div>
         <div class="r-rec-col"><h4 style="color:var(--text-muted);">Policy (Long-term)</h4><ul><li>Advocate for a simplified land-title registration pathway for smallholder collateral use.</li></ul></div>
+      </div>
+      <div class="r-insight-box" style="margin-top:1.5rem;">
+        <div class="r-insight-label">Top Recommendation — AI Scoring</div>
+        <div style="display:flex; gap:1.5rem; flex-wrap:wrap; margin-top:.4rem;">
+          <div><b style="color:var(--text);">Support SACCOS expansion</b></div>
+          <div class="muted-note">Impact: <b style="color:var(--success);">92%</b></div>
+          <div class="muted-note">Urgency: <b style="color:var(--warn);">High</b></div>
+          <div class="muted-note">Confidence: <b style="color:var(--text);">94%</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="r-page" style="border-left: 3px solid var(--accent-2);">
+      <div class="r-eyebrow" style="color:var(--accent-2);">Executive Decision Brief</div>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">Three things to decide right now.</h2>
+      <div class="r-two-col" style="margin-top:1.5rem; grid-template-columns: 1fr 1fr 1fr;">
+        <div class="r-rec-col"><h4 style="color:var(--accent);">Immediate Action</h4><p style="color:var(--text); font-size:.9rem; margin:0;">Pilot a simplified collateral pathway for smallholder loans this quarter.</p></div>
+        <div class="r-rec-col"><h4 style="color:var(--accent-2);">Strategic Action</h4><p style="color:var(--text); font-size:.9rem; margin:0;">Fund SACCOS expansion in the two lowest-coverage districts over the next 6 months.</p></div>
+        <div class="r-rec-col" style="border-left: 3px solid var(--danger); padding-left:1rem;"><h4 style="color:var(--danger);">Risk if Ignored</h4><p style="color:var(--text); font-size:.9rem; margin:0;">Unmet credit demand among surveyed farmers could keep rising heading into the next planting season.</p></div>
       </div>
     </div>
 
@@ -252,6 +318,100 @@
     </div>
 
   </div>
+
+  <div class="report-doc" id="narrative-view" style="display:none;">
+    <div class="r-page">
+      <div class="r-eyebrow">Narrative Report — Access to Finance in Agriculture, Tanzania</div>
+      <h2 style="font-size:1.4rem; margin-top:.5rem;">A full written account of what we heard.</h2>
+      <div style="margin-top:1.5rem; color:var(--text); line-height:1.9; font-size:1.02rem;">
+        <p><b>Terms of Reference.</b> This study set out to understand how smallholder farmers across five Tanzanian regions — Morogoro, Iringa, Mbeya, Dodoma, and Arusha — experience access to agricultural finance, and what specifically stands between them and the credit they need to plant, expand, or recover from a difficult season. VoiceInsights Africa collected voice interviews from 100 farmers over phone and WhatsApp, achieving a 91% response rate.</p>
+
+        <p><b>What we found.</b> Collateral requirements dominate the conversation. Sixty-one percent of respondents raised it unprompted, and it is the single most common reason farmers gave for being turned away from formal credit. As one farmer put it, the bank asked for a land title as collateral, but his land is not registered — so he could not get the loan. This is not an isolated story; it is the modal experience among farmers who tried and failed to access formal credit in this sample.</p>
+
+        <p>Interest rates and processing delays follow closely behind, cited by 54% and 42% of respondents respectively. Together with collateral, these three issues account for the large majority of negative sentiment recorded in the study — sentiment that, on closer inspection, is not directed at the idea of borrowing itself, but at the specific terms on offer today.</p>
+
+        <p><b>The mobile money paradox.</b> Nearly nine in ten farmers (89%) already use mobile money, yet only 22% have accessed a formal bank loan. This gap is worth sitting with: farmers have adopted digital financial tools readily, but that adoption has not yet translated into meaningful credit access. Mobile money today functions mainly as a savings and transaction tool, not yet a bridge to larger agricultural financing.</p>
+
+        <p><b>What sets successful borrowers apart.</b> The clearest pattern in the data is cooperative membership. Farmers who belong to a SACCOS are markedly more likely to report an active agricultural loan than those who do not — more so than any regional, age, or gender pattern we tested. One respondent described it plainly: since joining her SACCOS, she has been able to get a loan twice, for seeds and fertilizer, right when she needed it. This single relationship — cooperative membership to credit access — is arguably the most actionable finding in this study.</p>
+
+        <p><b>What this means going forward.</b> In the near term, a simplified collateral pathway for smaller loan amounts, alongside more active promotion of existing mobile-money-linked micro-loan products, could unlock credit for farmers currently excluded by paperwork alone. Over the next six to twelve months, expanding SACCOS coverage in the two lowest-coverage districts — paired with financial literacy support bundled into the loan application process — addresses the deeper structural gap the data points to. Longer term, the collateral barrier is ultimately a land-title registration problem as much as it is a lending problem, and a simplified registration pathway for smallholders would address the root cause rather than its symptoms.</p>
+
+        <p>If nothing changes, the risk is not abstract: unmet credit demand among these farmers is likely to persist through the next planting season, with the farmers least able to absorb that cost — those without collateral or cooperative membership — bearing it disproportionately.</p>
+      </div>
+      <div style="border-top:1px solid var(--border); margin-top:2rem; padding-top:1rem; text-align:center;" class="muted-note">
+        VoiceInsights Africa · Sample narrative report — illustrative data
+      </div>
+    </div>
+  </div>
+
+  <div class="report-doc" id="full-view" style="display:none;">
+    <div class="r-page">
+      <div class="r-eyebrow">Full Detailed Report — Access to Finance in Agriculture, Tanzania</div>
+      <h1 style="font-size:1.8rem; margin-top:.5rem;">Access to Finance in Agriculture</h1>
+      <div class="muted-note">Tanzania · Q1 2026 (illustrative) · 100 smallholder farmers across 5 regions</div>
+      <div class="r-kpis" style="margin-top:1.5rem;">
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.5rem;">100</div><div class="muted-note">Farmers</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.5rem;">91%</div><div class="muted-note">Response Rate</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.5rem;">34%</div><div class="muted-note">Active Agri-Loan</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.5rem;">89%</div><div class="muted-note">Mobile Money</div></div>
+      </div>
+    </div>
+
+    <div class="r-page">
+      <div style="color:var(--text); line-height:1.9; font-size:1.02rem;">
+        <p><b>Terms of Reference.</b> This study set out to understand how smallholder farmers across five Tanzanian regions experience access to agricultural finance, and what specifically stands between them and the credit they need to plant, expand, or recover from a difficult season. VoiceInsights Africa collected voice interviews from 100 farmers over phone and WhatsApp, achieving a 91% response rate.</p>
+        <p><b>What we found.</b> Collateral requirements dominate the conversation. Sixty-one percent of respondents raised it unprompted, and it is the single most common reason farmers gave for being turned away from formal credit.</p>
+      </div>
+      <div class="r-two-col" style="margin-top:1.5rem;">
+        <div class="r-chart-box"><canvas id="chartGenderFull"></canvas></div>
+        <div class="r-chart-box"><canvas id="chartAgeFull"></canvas></div>
+      </div>
+    </div>
+
+    <div class="r-page">
+      <div style="color:var(--text); line-height:1.9; font-size:1.02rem;">
+        <p>Interest rates and processing delays follow closely behind, cited by 54% and 42% of respondents respectively. Together with collateral, these three issues account for the large majority of negative sentiment recorded in the study.</p>
+      </div>
+      <div class="r-chart-box" style="height:280px; margin-top:1.5rem;"><canvas id="chartTopicsFull"></canvas></div>
+      <div class="table-wrap" style="margin-top:1.5rem;">
+        <table>
+          <thead><tr><th>Issue</th><th>Severity</th><th>Prevalence</th></tr></thead>
+          <tbody>
+            <tr><td>Collateral requirements</td><td><span class="badge badge-danger">🔴 Critical</span></td><td>61%</td></tr>
+            <tr><td>High interest rates</td><td><span class="badge badge-warn">🟠 High</span></td><td>54%</td></tr>
+            <tr><td>Loan processing delays</td><td><span class="badge badge-warn">🟠 High</span></td><td>42%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="r-page">
+      <div style="color:var(--text); line-height:1.9; font-size:1.02rem;">
+        <p><b>The mobile money paradox.</b> Nearly nine in ten farmers (89%) already use mobile money, yet only 22% have accessed a formal bank loan. Mobile money today functions mainly as a savings and transaction tool, not yet a bridge to larger agricultural financing.</p>
+      </div>
+      <div class="r-chart-box" style="max-width:420px; margin:1.5rem auto;"><canvas id="chartSentimentFull"></canvas></div>
+      <div style="margin-top:1.5rem;">
+        <div class="r-quote-card"><span class="badge badge-danger">Negative</span><p>"The bank asked for a land title as collateral, but our land isn't registered — so we couldn't get the loan."</p></div>
+        <div class="r-quote-card"><span class="badge badge-success">Positive</span><p>"Since joining our SACCOS, I've been able to get a loan twice — for seeds and fertilizer, right when I needed it."</p></div>
+      </div>
+    </div>
+
+    <div class="r-page">
+      <div style="color:var(--text); line-height:1.9; font-size:1.02rem;">
+        <p><b>What sets successful borrowers apart.</b> The clearest pattern in the data is cooperative membership. Farmers who belong to a SACCOS are markedly more likely to report an active agricultural loan than those who do not.</p>
+        <p><b>What this means going forward.</b> A simplified collateral pathway for smaller loan amounts, alongside more active promotion of existing mobile-money-linked micro-loan products, could unlock credit for farmers currently excluded by paperwork alone.</p>
+      </div>
+      <div class="r-two-col" style="margin-top:1.5rem; grid-template-columns: 1fr 1fr 1fr;">
+        <div class="r-rec-col"><h4 style="color:var(--accent);">Immediate (30 days)</h4><ul><li>Simplify collateral pathway for smallholder loans.</li></ul></div>
+        <div class="r-rec-col"><h4 style="color:var(--accent-2);">Strategic (6–12 months)</h4><ul><li>Support SACCOS expansion in lowest-coverage districts.</li></ul></div>
+        <div class="r-rec-col"><h4 style="color:var(--text-muted);">Policy (Long-term)</h4><ul><li>Simplify land-title registration for smallholders.</li></ul></div>
+      </div>
+      <div style="border-top:1px solid var(--border); margin-top:2rem; padding-top:1rem; text-align:center;" class="muted-note">
+        VoiceInsights Africa · Full Detailed Report — illustrative data
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
@@ -260,13 +420,57 @@
       <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
       <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
     </div>
-    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.<br><span style="font-size:.68rem;">VoiceInsights Africa&trade; and VIA Intelligence Engine&trade; are proprietary trademarks of VoiceInsights Africa Ltd.</span></p>
   </div>
 </footer>
 
 <script src="/assets/js/app.js"></script>
 <script>
   lucide.createIcons();
+
+  // ---------- Summary / Narrative toggle ----------
+  document.querySelectorAll('.report-mode-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.report-mode-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const mode = tab.dataset.mode;
+      document.getElementById('summary-view').style.display = mode === 'summary' ? 'block' : 'none';
+      document.getElementById('narrative-view').style.display = mode === 'narrative' ? 'block' : 'none';
+      document.getElementById('full-view').style.display = mode === 'full' ? 'block' : 'none';
+    });
+  });
+
+  // ---------- Word document download (real, opens natively in Microsoft Word) ----------
+  // Technique: Word can open any HTML file saved with a .doc extension, as long
+  // as it declares the right XML namespaces. No external library needed.
+  document.getElementById('word-download-btn').addEventListener('click', () => {
+    let activeView = 'summary-view';
+    if (document.getElementById('narrative-view').style.display !== 'none') activeView = 'narrative-view';
+    if (document.getElementById('full-view').style.display !== 'none') activeView = 'full-view';
+    const contentHtml = document.getElementById(activeView).innerHTML;
+    const modeLabel = { 'summary-view': 'Summary', 'narrative-view': 'Narrative', 'full-view': 'Full-Detailed' }[activeView];
+    const wordHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="utf-8"><title>VoiceInsights Africa Report</title>
+<style>
+  body { font-family: Calibri, Arial, sans-serif; color:#1E2620; line-height:1.6; }
+  h1, h2 { color:#1E2620; }
+  table { border-collapse: collapse; width:100%; margin:1em 0; }
+  td, th { border:1px solid #ccc; padding:8px; text-align:left; }
+  .r-eyebrow { color:#2E7D6B; text-transform:uppercase; font-size:11px; font-weight:bold; letter-spacing:1px; }
+  .stat-value { font-size:20px; font-weight:bold; }
+  .muted-note { color:#5B6B5E; font-size:12px; }
+  .r-page { margin-bottom: 30px; page-break-after: always; }
+  canvas { display:none; } /* charts don't render outside a browser canvas context — omitted from Word export */
+</style></head>
+<body>${contentHtml}</body></html>`;
+    const blob = new Blob(['\ufeff', wordHtml], { type: 'application/msword' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `VoiceInsights-${modeLabel}-Report-Access-to-Finance-Sample.doc`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
   document.getElementById('cover-wave').innerHTML = makeWaveform(48, false);
 
   const CHART_COLORS = ['#E4A23A', '#4FA490', '#D9634A', '#E4C23A', '#6FBF8B', '#9FB3AB'];
@@ -288,6 +492,12 @@
   makeChart('chartRegion', 'bar', ['Morogoro', 'Iringa', 'Mbeya', 'Dodoma', 'Arusha'], [26, 22, 20, 18, 14], '#4FA490', false);
   makeChart('chartTopics', 'bar', ['Collateral requirements', 'High interest rates', 'Loan processing delays', 'Limited SACCOS access', 'Financial literacy gaps'], [61, 54, 42, 35, 27], '#4FA490', true);
   makeChart('chartSentiment', 'doughnut', ['Positive', 'Neutral', 'Negative', 'Distress'], [24, 38, 31, 7], ['#6FBF8B', '#9FB3AB', '#D9634A', '#E4C23A']);
+
+  // ---------- Full Detailed Report charts (same data, separate canvases) ----------
+  makeChart('chartGenderFull', 'doughnut', ['Male', 'Female', 'Prefer not to say'], [53, 45, 2], CHART_COLORS);
+  makeChart('chartAgeFull', 'bar', ['Under 18', '18–24', '25–34', '35–44', '45–54', '55+'], [1, 9, 28, 31, 21, 10], '#E4A23A', true);
+  makeChart('chartTopicsFull', 'bar', ['Collateral requirements', 'High interest rates', 'Loan processing delays', 'Limited SACCOS access', 'Financial literacy gaps'], [61, 54, 42, 35, 27], '#4FA490', true);
+  makeChart('chartSentimentFull', 'doughnut', ['Positive', 'Neutral', 'Negative', 'Distress'], [24, 38, 31, 7], ['#6FBF8B', '#9FB3AB', '#D9634A', '#E4C23A']);
 </script>
 </body>
 </html>

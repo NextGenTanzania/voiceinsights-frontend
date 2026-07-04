@@ -40,6 +40,12 @@ function t(key, fallback) {
   return fallback;
 }
 
+// Generates <tr> skeleton-loading rows for a table with `cols` columns, `rows` of them.
+function skeletonRows(cols, rows = 4) {
+  const cells = Array.from({ length: cols }, () => `<td><div class="skeleton skeleton-text" style="width:${60 + Math.round(Math.random() * 30)}%;"></div></td>`).join('');
+  return Array.from({ length: rows }, () => `<tr>${cells}</tr>`).join('');
+}
+
 function showToast(message, type = 'info') {
   let stack = document.getElementById('toast-stack');
   if (!stack) {
@@ -191,6 +197,7 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
           </div>
         </div>
         <div style="display:flex; align-items:center; gap:.9rem;">
+          <button class="btn btn-ghost btn-sm" id="cmdk-hint-btn" title="Quick jump" style="padding:.5em .8em; font-size:.72rem; color:var(--text-dim);">⌘K</button>
           <button class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">${getTheme() === 'light' ? '🌙' : '☀️'}</span></button>
           <div class="lang-toggle" id="app-lang-toggle">
             ${APP_LANGS.map(l => `<button class="${currentLang === l.code ? 'active' : ''}" data-lang="${l.code}">${l.label}</button>`).join('')}
@@ -206,6 +213,8 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
 
   const themeToggleBtn = document.getElementById('theme-toggle-btn');
   if (themeToggleBtn && !themeToggleBtn.dataset.bound) { themeToggleBtn.dataset.bound = '1'; themeToggleBtn.addEventListener('click', toggleTheme); }
+  const cmdkHintBtn = document.getElementById('cmdk-hint-btn');
+  if (cmdkHintBtn && !cmdkHintBtn.dataset.bound) { cmdkHintBtn.dataset.bound = '1'; cmdkHintBtn.addEventListener('click', () => { if (window.__openCmdK) window.__openCmdK(); }); }
 
   if (window.lucide) lucide.createIcons();
 
@@ -220,6 +229,83 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
   }
 
   renderViaAssistant();
+  renderCommandPalette(nav);
+}
+
+const ALL_NAV_ITEMS = [
+  { href: '/app/dashboard.html', label: 'Dashboard', icon: 'layout-dashboard' },
+  { href: '/app/projects.html', label: 'Projects', icon: 'folder-kanban' },
+  { href: '/app/surveys.html', label: 'Surveys', icon: 'list-checks' },
+  { href: '/app/campaigns.html', label: 'Campaigns', icon: 'megaphone' },
+  { href: '/app/respondents.html', label: 'Respondents', icon: 'users' },
+  { href: '/app/interviews.html', label: 'Interviews', icon: 'headphones' },
+  { href: '/app/analytics.html', label: 'Analytics', icon: 'bar-chart-3' },
+  { href: '/app/reports.html', label: 'Reports', icon: 'file-text' },
+  { href: '/app/compliance.html', label: 'Compliance', icon: 'shield-check' },
+  { href: '/app/billing.html', label: 'Billing', icon: 'credit-card' },
+  { href: '/app/settings.html', label: 'Settings', icon: 'settings' },
+  { href: '/app/report.html', label: 'Generate: Executive Report', icon: 'file-text' },
+  { href: '/app/report-donor.html', label: 'Generate: Donor Impact Report', icon: 'file-text' },
+  { href: '/app/survey-builder.html', label: 'New Survey', icon: 'plus-circle' },
+];
+
+function renderCommandPalette() {
+  if (document.getElementById('cmdk-backdrop')) return; // already mounted
+  const backdrop = document.createElement('div');
+  backdrop.id = 'cmdk-backdrop';
+  backdrop.style.cssText = 'display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:400; align-items:flex-start; justify-content:center; padding-top:12vh;';
+  backdrop.innerHTML = `
+    <div style="width:100%; max-width:520px; background:var(--surface); border:1px solid var(--border-strong); border-radius:12px; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden;">
+      <input id="cmdk-input" placeholder="Jump to… (Dashboard, Reports, Surveys)" style="width:100%; border:none; background:none; padding:1rem 1.2rem; font-size:1rem; color:var(--text); outline:none; border-bottom:1px solid var(--border);">
+      <div id="cmdk-results" style="max-height:50vh; overflow-y:auto; padding:.5rem;"></div>
+    </div>`;
+  document.body.appendChild(backdrop);
+
+  const input = backdrop.querySelector('#cmdk-input');
+  const resultsEl = backdrop.querySelector('#cmdk-results');
+  let activeIndex = 0;
+
+  function renderResults(query) {
+    const q = query.trim().toLowerCase();
+    const matches = ALL_NAV_ITEMS.filter(it => it.label.toLowerCase().includes(q));
+    activeIndex = 0;
+    resultsEl.innerHTML = matches.length
+      ? matches.map((it, i) => `
+        <a href="${it.href}" class="cmdk-item ${i === 0 ? 'active' : ''}" data-index="${i}" style="display:flex; align-items:center; gap:.7rem; padding:.7rem .9rem; border-radius:8px; text-decoration:none; color:var(--text); font-size:.9rem;">
+          ${iconSvg(it.icon)} <span>${it.label}</span>
+        </a>`).join('')
+      : '<div class="muted-note" style="padding:.9rem;">No matches.</div>';
+    if (window.lucide) lucide.createIcons();
+    highlightActive();
+  }
+
+  function highlightActive() {
+    resultsEl.querySelectorAll('.cmdk-item').forEach((el, i) => {
+      el.style.background = i === activeIndex ? 'var(--surface-2)' : 'none';
+    });
+  }
+
+  function open() {
+    backdrop.style.display = 'flex';
+    input.value = '';
+    renderResults('');
+    setTimeout(() => input.focus(), 30);
+  }
+  function close() { backdrop.style.display = 'none'; }
+  window.__openCmdK = open;
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); open(); }
+    if (e.key === 'Escape') close();
+  });
+  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(); });
+  input.addEventListener('input', () => renderResults(input.value));
+  input.addEventListener('keydown', (e) => {
+    const items = resultsEl.querySelectorAll('.cmdk-item');
+    if (e.key === 'ArrowDown') { e.preventDefault(); activeIndex = Math.min(activeIndex + 1, items.length - 1); highlightActive(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); activeIndex = Math.max(activeIndex - 1, 0); highlightActive(); }
+    if (e.key === 'Enter' && items[activeIndex]) { window.location.href = items[activeIndex].getAttribute('href'); }
+  });
 }
 
 function renderViaAssistant() {

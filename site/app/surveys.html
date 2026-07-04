@@ -18,19 +18,14 @@
         <div></div>
         <a href="/app/survey-builder.html" class="btn btn-primary btn-sm">+ Survey Mpya</a>
       </div>
-      <div class="pill-tabs">
-        <a class="active">All (12)</a><a>Active (7)</a><a>Draft (3)</a><a>Completed (2)</a>
+      <div class="pill-tabs" id="status-tabs">
+        <a class="active" data-filter="all">All (0)</a><a data-filter="active">Active (0)</a><a data-filter="draft">Draft (0)</a><a data-filter="completed">Completed (0)</a>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Name la Survey</th><th>Type</th><th>Language</th><th>Questions</th><th>Campaigns Zinazounganishwa</th><th>Status</th><th></th></tr></thead>
-          <tbody>
-            <tr><td>Baseline — Morogoro Region Agriculture</td><td>Impact Monitoring</td><td>SW</td><td>14</td><td>1</td><td><span class="badge badge-success">Active</span></td><td><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html">Open</a></td></tr>
-            <tr><td>Beneficiary Feedback — Zanzibar</td><td>Beneficiary Feedback</td><td>SW</td><td>8</td><td>1</td><td><span class="badge badge-success">Active</span></td><td><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html">Open</a></td></tr>
-            <tr><td>Anonymous Grievances — Dar es Salaam</td><td>Grievance</td><td>SW/EN</td><td>6</td><td>1</td><td><span class="badge badge-neutral">Completed</span></td><td><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html">Open</a></td></tr>
-            <tr><td>Endline — Singida Education</td><td>Impact Monitoring</td><td>SW</td><td>18</td><td>1</td><td><span class="badge badge-warn">Draft</span></td><td><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html">Open</a></td></tr>
-            <tr><td>Small Business Owner Interviews</td><td>Call-Based Research</td><td>SW</td><td>10</td><td>2</td><td><span class="badge badge-success">Active</span></td><td><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html">Open</a></td></tr>
-            <tr><td>Market Survey — Fertilizer</td><td>Survey</td><td>SW</td><td>12</td><td>1</td><td><span class="badge badge-warn">Draft</span></td><td><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html">Open</a></td></tr>
+          <thead><tr><th>Survey Name</th><th>Type</th><th>Language</th><th>Created</th><th>Status</th><th></th></tr></thead>
+          <tbody id="surveys-tbody">
+            <tr><td colspan="6" class="muted-note" style="padding:1.5rem;">Loading…</td></tr>
           </tbody>
         </table>
       </div>
@@ -42,6 +37,83 @@
 <script src="/assets/js/app.js"></script>
 <script>
   if (!requireLogin()) { /* redirected */ }
-  renderShell({ role:'client', active:'/app/surveys.html', eyebrow:'Survey Management', title:'All Surveys' });</script>
+  renderShell({ role:'client', active:'/app/surveys.html', eyebrow:'Survey Management', title:'All Surveys' });
+
+  const STATUS_BADGE = { active: 'badge-success', draft: 'badge-warn', completed: 'badge-neutral' };
+  const TYPE_LABEL = { survey: 'Survey', call_research: 'Call-Based Research', impact_monitoring: 'Impact Monitoring', beneficiary_feedback: 'Beneficiary Feedback', grievance: 'Grievance' };
+
+  let allSurveys = [];
+  function render(filter) {
+    const tbody = document.getElementById('surveys-tbody');
+    const filtered = filter === 'all' ? allSurveys : allSurveys.filter(s => s.status === filter);
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="6" class="muted-note" style="padding:1.5rem;">No surveys yet. Click "+ Survey Mpya" to create your first one.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = filtered.map(s => `
+      <tr>
+        <td>${s.title}</td>
+        <td>${TYPE_LABEL[s.module_type] || s.module_type}</td>
+        <td>${(s.language || 'en').toUpperCase()}</td>
+        <td class="muted-note">${new Date(s.created_at + 'Z').toLocaleDateString()}</td>
+        <td><span class="badge ${STATUS_BADGE[s.status] || 'badge-neutral'}">${s.status}</span></td>
+        <td style="display:flex; gap:.4rem;"><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html?id=${s.id}">Open</a><button class="btn btn-ghost btn-sm duplicate-btn" data-id="${s.id}" data-title="${s.title.replace(/"/g, '&quot;')}">Duplicate</button></td>
+      </tr>`).join('');
+  }
+
+  (async () => {
+    try {
+      const { surveys } = await apiRequest('/api/surveys');
+      allSurveys = surveys;
+      const counts = { all: surveys.length, active: 0, draft: 0, completed: 0 };
+      surveys.forEach(s => { if (counts[s.status] != null) counts[s.status]++; });
+      document.querySelectorAll('#status-tabs a').forEach(a => {
+        const f = a.dataset.filter;
+        a.textContent = `${a.textContent.split(' (')[0]} (${counts[f] || 0})`;
+      });
+      render('all');
+    } catch (e) {
+      document.getElementById('surveys-tbody').innerHTML = `<tr><td colspan="6" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load surveys: ${e.message}</td></tr>`;
+    }
+  })();
+
+  document.querySelectorAll('#status-tabs a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.querySelectorAll('#status-tabs a').forEach(t => t.classList.remove('active'));
+      a.classList.add('active');
+      render(a.dataset.filter);
+    });
+  });
+
+  document.addEventListener('click', async (e) => {
+    if (!e.target.classList.contains('duplicate-btn')) return;
+    const btn = e.target;
+    const originalId = btn.dataset.id;
+    const originalTitle = btn.dataset.title;
+    btn.disabled = true; btn.textContent = 'Duplicating…';
+    try {
+      const { survey: originalFull, questions } = await apiRequest(`/api/surveys/${originalId}`);
+      const { survey: newSurvey } = await apiRequest('/api/surveys', {
+        method: 'POST',
+        body: {
+          title: `Copy of ${originalTitle}`,
+          description: originalFull.description,
+          module_type: originalFull.module_type,
+          status: 'draft',
+        },
+      });
+      for (let i = 0; i < questions.length; i++) {
+        await apiRequest(`/api/surveys/${newSurvey.id}/questions`, {
+          method: 'POST',
+          body: { question_text: questions[i].question_text, order_index: i, question_type: questions[i].question_type, kpi_tag: questions[i].kpi_tag },
+        });
+      }
+      window.location.href = `/app/survey-builder.html?id=${newSurvey.id}`;
+    } catch (err) {
+      showToast('Could not duplicate: ' + err.message, 'error');
+      btn.disabled = false; btn.textContent = 'Duplicate';
+    }
+  });
+</script>
 </body>
 </html>

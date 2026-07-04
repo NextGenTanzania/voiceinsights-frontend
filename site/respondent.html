@@ -54,6 +54,8 @@
       tapToRecord: 'Tap to record your answer', recording: 'Recording… tap again to stop', ready: 'Recording ready — review below, then submit ✓',
       submit: 'Submit Answer', submitting: 'Submitting…', next: 'Next Answer', done: 'Thank you for your responses!',
       doneNote: 'Your answers have been recorded and analyzed. We appreciate your time.',
+      alreadyDone: 'You have already responded',
+      alreadyDoneNote: 'It looks like this device has already submitted a response for this survey. If you believe this is a mistake, please contact the organization that shared this link with you.',
       footer: 'Your answers are stored securely and used for research purposes only.',
       micDenied: 'Microphone access denied — please allow microphone access and try again.',
       loadError: 'Could not load this survey. The link may be invalid or expired.',
@@ -64,6 +66,8 @@
       tapToRecord: 'Gusa kurekodi jibu lako', recording: 'Inarekodi… gusa tena kusitisha', ready: 'Rekodi tayari — kagua chini, kisha tuma ✓',
       submit: 'Tuma Jibu', submitting: 'Inatuma…', next: 'Jibu Lifuatalo', done: 'Asante kwa majibu yako!',
       doneNote: 'Majibu yako yamehifadhiwa na kuchambuliwa. Tunashukuru kwa muda wako.',
+      alreadyDone: 'Tayari umeshajibu',
+      alreadyDoneNote: 'Inaonekana kifaa hiki tayari kimeshatuma jibu kwa utafiti huu. Kama unaona hii ni kosa, tafadhali wasiliana na shirika lililokutumia link hii.',
       footer: 'Majibu yako yanahifadhiwa kwa usalama na kutumika kwa madhumuni ya utafiti pekee.',
       micDenied: 'Ruhusa ya kipaza sauti imekataliwa — tafadhali ruhusu kipaza sauti na ujaribu tena.',
       loadError: 'Imeshindwa kupakia utafiti huu. Kiungo kinaweza kuwa batili au kimeisha muda.',
@@ -92,7 +96,17 @@
   // ---------- Survey loading ----------
   const params = new URLSearchParams(window.location.search);
   const campaignId = params.get('campaign') || '';
-  const sessionKey = 'web_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+  // A persistent per-device ID (not a fresh random one per page load) — this is
+  // what lets the backend recognize "this device already completed this survey."
+  function getDeviceId() {
+    let id = localStorage.getItem('vi_device_id');
+    if (!id) {
+      id = 'web_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('vi_device_id', id);
+    }
+    return id;
+  }
+  const sessionKey = getDeviceId();
 
   let questions = [], currentIndex = 0, audioBlob = null, recording = false, mediaRecorder, chunks = [], waveTimer;
 
@@ -175,6 +189,15 @@
 
       const res = await fetch(`${API_BASE_URL}/api/web/submit`, { method: 'POST', body: form });
       const data = await res.json();
+      if (res.status === 409) {
+        document.getElementById('q-card').innerHTML = `
+          <div style="text-align:center; padding: 1.5rem 0;">
+            <div style="font-size:2.5rem; margin-bottom:1rem;">✓</div>
+            <h2 style="font-size:1.2rem; margin-bottom:.5rem;">${t('alreadyDone')}</h2>
+            <p class="muted-note">${t('alreadyDoneNote')}</p>
+          </div>`;
+        return;
+      }
       if (!res.ok) throw new Error(data.error || 'Submission failed');
 
       audioBlob = null;

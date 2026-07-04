@@ -53,12 +53,11 @@
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Campaigns</th><th>Survey</th><th>Channel</th><th>Progress</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td>Baseline — Morogoro Region Agriculture</td><td>Impact Monitoring</td><td>WhatsApp</td><td style="width:160px;"><div class="progress"><span style="width:74%"></span></div></td><td><span class="badge badge-success">Active</span></td></tr>
-            <tr><td>Beneficiary Feedback — Zanzibar</td><td>Beneficiary Feedback</td><td>Phone Call</td><td style="width:160px;"><div class="progress"><span style="width:45%"></span></div></td><td><span class="badge badge-success">Active</span></td></tr>
-            <tr><td>Anonymous Grievances — Dar es Salaam</td><td>Grievance</td><td>WhatsApp</td><td style="width:160px;"><div class="progress"><span style="width:100%"></span></div></td><td><span class="badge badge-neutral">Completed</span></td></tr>
-            <tr><td>Endline — Singida Education</td><td>Impact Monitoring</td><td>Web Link</td><td style="width:160px;"><div class="progress"><span style="width:12%"></span></div></td><td><span class="badge badge-warn">Recently started</span></td></tr>
+          <thead><tr><th>Campaigns</th><th>Channel</th><th>Progress</th><th>Status</th></tr></thead>
+          <tbody id="recent-campaigns-tbody">
+            <tr><td><div class="skeleton skeleton-text" style="width:70%;"></div></td><td><div class="skeleton skeleton-text" style="width:60%;"></div></td><td><div class="skeleton skeleton-text" style="width:80%;"></div></td><td><div class="skeleton skeleton-text" style="width:50%;"></div></td></tr>
+            <tr><td><div class="skeleton skeleton-text" style="width:65%;"></div></td><td><div class="skeleton skeleton-text" style="width:55%;"></div></td><td><div class="skeleton skeleton-text" style="width:75%;"></div></td><td><div class="skeleton skeleton-text" style="width:60%;"></div></td></tr>
+            <tr><td><div class="skeleton skeleton-text" style="width:72%;"></div></td><td><div class="skeleton skeleton-text" style="width:58%;"></div></td><td><div class="skeleton skeleton-text" style="width:68%;"></div></td><td><div class="skeleton skeleton-text" style="width:55%;"></div></td></tr>
           </tbody>
         </table>
       </div>
@@ -87,6 +86,24 @@
       document.getElementById('stat-responses').textContent = stats.total_responses;
       document.getElementById('stat-rate').textContent = stats.total_responses ? stats.response_rate + '%' : '—';
       document.getElementById('stat-sentiment').textContent = stats.total_responses ? stats.positive_sentiment_pct + '%' : '—';
+
+      apiRequest('/api/campaigns').then(({ campaigns }) => {
+        const tbody = document.getElementById('recent-campaigns-tbody');
+        const STATUS_BADGE = { running: 'badge-success', scheduled: 'badge-warn', paused: 'badge-neutral', completed: 'badge-neutral' };
+        const CHANNEL_LABEL = { whatsapp: 'WhatsApp', phone_call: 'Phone Call', web_link: 'Web Link', sms: 'SMS', app: 'Offline App' };
+        if (!campaigns.length) {
+          tbody.innerHTML = '<tr><td colspan="4" class="muted-note" style="padding:1.5rem;">No campaigns yet.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = campaigns.slice(0, 4).map(c => {
+          const targeted = c.target_respondents || 0;
+          const reached = c.reached_count || 0;
+          const pct = targeted > 0 ? Math.min(100, Math.round((reached / targeted) * 100)) : (reached > 0 ? 100 : 0);
+          return `<tr><td>${c.name}</td><td>${CHANNEL_LABEL[c.channel] || c.channel}</td><td style="width:160px;"><div class="progress"><span style="width:${pct}%"></span></div></td><td><span class="badge ${STATUS_BADGE[c.status] || 'badge-neutral'}">${c.status}</span></td></tr>`;
+        }).join('');
+      }).catch(() => {
+        document.getElementById('recent-campaigns-tbody').innerHTML = '<tr><td colspan="4" class="muted-note" style="padding:1.5rem;">Could not load campaigns.</td></tr>';
+      });
     } catch (e) {
       console.warn('Live stats unavailable:', e.message);
       document.getElementById('stat-surveys').textContent = '—';

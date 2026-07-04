@@ -136,13 +136,14 @@
       document.getElementById('brief-org').textContent = org.organization.name;
       document.getElementById('brief-meta').textContent = `${stats.total_responses} respondents · Generated ${new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}`;
 
-      const headline = (intelligence.key_findings && intelligence.key_findings[0]) || 'Not enough data yet for a headline finding.';
+      const headline = (intelligence.key_findings && intelligence.key_findings[0]) ? intelligence.key_findings[0].text : 'Not enough data yet for a headline finding.';
       document.getElementById('brief-headline').textContent = headline;
 
+      const SEVERITY_BADGE = { critical: 'badge-danger', high: 'badge-warn', medium: 'badge-neutral', low: 'badge-success' };
       const interpEl = document.getElementById('brief-interpretation');
       const findings = intelligence.key_findings || [];
       interpEl.innerHTML = findings.length
-        ? findings.map(f => `<p style="margin-bottom:1rem;">→ ${f}</p>`).join('')
+        ? findings.map(f => `<p style="margin-bottom:1rem;"><span class="badge ${SEVERITY_BADGE[f.severity] || 'badge-neutral'}" style="margin-right:.5rem; font-size:.65rem;">${(f.severity || 'medium').toUpperCase()}</span>${f.text}</p>`).join('')
         : '<p class="muted-note">AI interpretation will appear here once enough responses are collected.</p>';
 
       makeChart('chartGender', 'doughnut', analytics.gender.map(g => g.gender), analytics.gender.map(g => g.n), CHART_COLORS);

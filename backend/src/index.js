@@ -1192,6 +1192,8 @@ async function handleWhatsAppWebhook(request, env) {
   const mediaType = form.get('MediaContentType0');
   const bodyText = (form.get('Body') || '').trim();
   const campaignId = env.DEFAULT_CAMPAIGN_ID || 'camp_default';
+  const hasAudio = numMedia > 0 && mediaUrl && (mediaType || '').startsWith('audio');
+  const hasText = bodyText.length > 0;
 
   let session;
   try {
@@ -1201,23 +1203,28 @@ async function handleWhatsAppWebhook(request, env) {
   }
   const questions = await getQuestions(env, session.survey_id);
 
-  // Fresh session and no audio yet: greet and ask the first question.
-  if (session.current_index === 0 && !numMedia) {
+  // Fresh session and no answer content yet: greet and ask the first question.
+  // Accepts a reply either as a voice note or as typed text — respondent's choice.
+  if (session.current_index === 0 && !hasAudio && !hasText) {
     const q = questions[0];
-    return twiml(`Welcome to VoiceInsights! Please send a voice note to answer.\n\n${q ? q.question_text : 'Thank you.'}`);
+    return twiml(`Welcome to VoiceInsights! Reply with a voice note or type your answer.\n\n${q ? q.question_text : 'Thank you.'}`);
   }
-  if (!numMedia || !mediaUrl) {
+  if (!hasAudio && !hasText) {
     const q = questions[session.current_index];
-    return twiml(q ? `Please reply with a voice note: ${q.question_text}` : 'Please send a voice note to answer.');
+    return twiml(q ? `Please reply with a voice note or type your answer: ${q.question_text}` : 'Please send a voice note or type your answer.');
   }
-
-  const twilioAuth = btoa(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`);
-  const audioResp = await fetch(mediaUrl, { headers: { Authorization: `Basic ${twilioAuth}` } });
-  if (!audioResp.ok) return twiml('Sorry, we could not receive your audio. Please try again.');
-  const audioBuf = await audioResp.arrayBuffer();
 
   try {
-    const result = await submitAnswer(env, session, { audioBuf, mediaType });
+    let result;
+    if (hasAudio) {
+      const twilioAuth = btoa(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`);
+      const audioResp = await fetch(mediaUrl, { headers: { Authorization: `Basic ${twilioAuth}` } });
+      if (!audioResp.ok) return twiml('Sorry, we could not receive your audio. Please try again.');
+      const audioBuf = await audioResp.arrayBuffer();
+      result = await submitAnswer(env, session, { audioBuf, mediaType });
+    } else {
+      result = await submitAnswer(env, session, { textAnswer: bodyText });
+    }
     if (result.isComplete) return twiml('Thank you! You have completed the survey. We appreciate your time.');
     return twiml(`Got it! Next question:\n${result.nextQuestion.question_text}`);
   } catch (e) {

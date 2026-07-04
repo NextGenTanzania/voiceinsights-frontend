@@ -12,10 +12,21 @@
   .report-doc { max-width: 900px; margin: 0 auto; }
   .r-page { background: var(--surface); border-radius: 16px; padding: 3rem; margin-bottom: 1.5rem; page-break-after: always; }
   .r-eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent-2); font-weight: 700; }
-  .r-cover { min-height: 520px; display:flex; flex-direction:column; justify-content:space-between; background:
-    radial-gradient(circle at 85% 15%, rgba(228,162,58,.10), transparent 45%),
-    radial-gradient(circle at 10% 90%, rgba(79,164,144,.10), transparent 45%); }
-  .r-cover-wave span { display:inline-block; width:4px; margin-right:3px; background: var(--accent); border-radius:2px; vertical-align:middle; }
+  .r-cover {
+    min-height: 620px; display:flex; flex-direction:column; justify-content:space-between;
+    background: linear-gradient(160deg, #0B3D2E 0%, #0F1614 65%);
+    position: relative; overflow: hidden; padding: 2.5rem 3rem !important;
+  }
+  .r-cover::before {
+    content: ''; position: absolute; top: -20%; right: -15%; width: 70%; height: 140%;
+    background: radial-gradient(circle, rgba(79,164,144,.35), transparent 65%);
+    border-radius: 50%; pointer-events: none;
+  }
+  .r-cover-wave-big { position: relative; height: 150px; margin: 2rem 0; opacity: .9; }
+  .r-cover-wave-big .waveform { height: 150px; gap: 5px; }
+  .r-cover-wave-big .waveform span { width: 5px; background: linear-gradient(180deg, #E4A23A, #4FA490); }
+  .r-cover-title { font-size: clamp(2rem, 4.5vw, 2.8rem); line-height: 1.08; font-weight: 800; color: #fff; letter-spacing: -.01em; text-transform: uppercase; max-width: 20ch; }
+  .r-cover-subtitle { font-size: 1.1rem; color: #A8D9C9; font-weight: 500; margin-top: .8rem; }
   .r-kpis { display:grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin: 1.75rem 0; }
   .r-kpi { background: var(--surface-2); border-radius: 12px; padding: 1.1rem; text-align:center; }
   .r-findings { list-style: none; padding: 0; margin: 1rem 0; }
@@ -69,21 +80,18 @@
         <!-- PAGE 1 — COVER -->
 
         <div class="r-page r-cover">
-          <div style="display:flex; align-items:center; gap:.6rem;">
-            <img src="/assets/img/logo-icon.png" style="height:32px;" alt="">
-            <span style="font-family:var(--font-display); font-weight:600; font-size:1.15rem;">VoiceInsights Africa</span>
+          <div style="display:flex; align-items:center; gap:.6rem; position:relative; z-index:1;">
+            <img src="/assets/img/logo-icon.png" style="height:30px;" alt="">
+            <span style="font-family:var(--font-display); font-weight:600; font-size:1.05rem; color:#fff;">VoiceInsights Africa</span>
           </div>
-          <div style="text-align:center;">
-            <div class="r-eyebrow" style="margin-bottom:1rem;">Voice Research Intelligence Report</div>
-            <h1 style="font-size:2.4rem; max-width:20ch; margin:0 auto .8rem;" id="cover-title">Research &amp; Monitoring Intelligence</h1>
-            <div class="muted-note" style="font-size:1rem;" id="cover-subtitle">—</div>
-            <div id="cover-wave" class="r-cover-wave" style="margin-top:2.5rem; height:50px;"></div>
+          <div style="position:relative; z-index:1;">
+            <h1 class="r-cover-title" id="cover-title">Research &amp; Monitoring Intelligence</h1>
+            <div class="r-cover-subtitle" id="cover-subtitle">—</div>
+            <div id="cover-wave" class="r-cover-wave-big"></div>
           </div>
-          <div style="display:flex; justify-content:space-between; font-size:.8rem; color:var(--text-dim); border-top:1px solid var(--border); padding-top:1.25rem;">
-            <div><b style="color:var(--text-muted);">Prepared for</b><br><span id="cover-org">—</span></div>
-            <div><b style="color:var(--text-muted);">Report ID</b><br><span id="cover-id">—</span></div>
-            <div><b style="color:var(--text-muted);">Generated</b><br><span id="cover-date">—</span></div>
-            <div><b style="color:var(--text-muted);">Prepared by</b><br>AI analysis + human review</div>
+          <div style="position:relative; z-index:1; border-top:1px solid rgba(255,255,255,.15); padding-top:1.25rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+            <div style="font-size:.85rem; color:rgba(255,255,255,.55);">Prepared for<br><b style="color:#fff; font-size:1rem;" id="cover-org">—</b></div>
+            <div style="font-size:.85rem; color:rgba(255,255,255,.55); text-align:right;">Generated <span id="cover-date">—</span><br><b style="color:#fff; font-size:1rem;" id="cover-id">—</b></div>
           </div>
         </div>
 

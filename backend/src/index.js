@@ -1184,6 +1184,30 @@ Answer: """${transcript}"""`,
 // ============================================================
 // CHANNEL 1 — WhatsApp (multi-question)
 // ============================================================
+// Twilio media URLs (voice notes, MMS) sometimes redirect to a separate storage
+// host that doesn't want the Twilio auth header — and some fetch clients drop
+// or mishandle that header across the redirect. Try the straightforward way
+// first, then retry without auth (covers the redirect-to-public-URL case),
+// before giving up. Logs the actual failure so real issues are diagnosable.
+async function fetchTwilioMedia(env, mediaUrl) {
+  const twilioAuth = btoa(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`);
+  try {
+    const resp = await fetch(mediaUrl, { headers: { Authorization: `Basic ${twilioAuth}` } });
+    if (resp.ok) return await resp.arrayBuffer();
+    console.error('Twilio media fetch (with auth) failed:', resp.status, await resp.text().catch(() => ''));
+  } catch (e) {
+    console.error('Twilio media fetch (with auth) exception:', e.message);
+  }
+  try {
+    const resp2 = await fetch(mediaUrl);
+    if (resp2.ok) return await resp2.arrayBuffer();
+    console.error('Twilio media fetch (no auth) failed:', resp2.status, await resp2.text().catch(() => ''));
+  } catch (e) {
+    console.error('Twilio media fetch (no auth) exception:', e.message);
+  }
+  return null;
+}
+
 async function handleWhatsAppWebhook(request, env) {
   const form = await request.formData();
   const from = form.get('From');
@@ -1217,10 +1241,8 @@ async function handleWhatsAppWebhook(request, env) {
   try {
     let result;
     if (hasAudio) {
-      const twilioAuth = btoa(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`);
-      const audioResp = await fetch(mediaUrl, { headers: { Authorization: `Basic ${twilioAuth}` } });
-      if (!audioResp.ok) return twiml('Sorry, we could not receive your audio. Please try again.');
-      const audioBuf = await audioResp.arrayBuffer();
+      const audioBuf = await fetchTwilioMedia(env, mediaUrl);
+      if (!audioBuf) return twiml('Sorry, we could not receive your audio. Please try typing your answer instead, or send the voice note again.');
       result = await submitAnswer(env, session, { audioBuf, mediaType });
     } else {
       result = await submitAnswer(env, session, { textAnswer: bodyText });
@@ -1316,10 +1338,8 @@ async function handleVoiceRecording(request, env) {
   ).bind(callSid).first();
   if (!session) return voiceTwiml('Sorry, your session expired. Goodbye.');
 
-  const twilioAuth = btoa(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`);
-  const audioResp = await fetch(recordingUrl + '.mp3', { headers: { Authorization: `Basic ${twilioAuth}` } });
-  if (!audioResp.ok) return voiceTwiml('Sorry, we could not process your recording. Goodbye.');
-  const audioBuf = await audioResp.arrayBuffer();
+  const audioBuf = await fetchTwilioMedia(env, recordingUrl + '.mp3');
+  if (!audioBuf) return voiceTwiml('Sorry, we could not process your recording. Goodbye.');
 
   try {
     const result = await submitAnswer(env, session, { audioBuf, mediaType: 'audio/mpeg' });

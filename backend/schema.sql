@@ -170,6 +170,28 @@ CREATE TABLE IF NOT EXISTS user_profile (
   invite_method TEXT
 );
 
+-- Sustainability and Coherence (OECD-DAC criteria) require program-level
+-- judgment no AI can infer from voice data alone — stored per-organization so
+-- your team writes them once and every report picks them up automatically.
+CREATE TABLE IF NOT EXISTS oecd_dac_assessments (
+  organization_id  TEXT PRIMARY KEY REFERENCES organizations(id),
+  sustainability_note TEXT,
+  coherence_note       TEXT,
+  updated_at        TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Optional field-collection metadata (GPS, device, timestamp) — kept as its
+-- own table so no ALTER TABLE is ever needed on the existing responses table.
+-- Populated only when the collecting device/browser provides it; never required.
+CREATE TABLE IF NOT EXISTS response_metadata (
+  response_id   TEXT PRIMARY KEY REFERENCES responses(id),
+  device_id     TEXT,
+  gps_lat       REAL,
+  gps_lng       REAL,
+  gps_accuracy_m REAL,
+  captured_at   TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 -- Simple sliding-window rate limiting — no extra Cloudflare product needed,
 -- just a small D1 table. Cleared rows are cheap; old rows are pruned on write.
 CREATE TABLE IF NOT EXISTS rate_limits (
@@ -258,7 +280,7 @@ VALUES (
   '2f717f95d592f79ab0e328ae7dfc74a8c63b173388a7f656ca8b69c4816d0024',
   'bfb95dcdc3381a3d6353395d33c177ea',
   'Kitentya Luth',
-  'org_admin'
+  'super_admin'
 );
 
 -- Force the real admin credentials even if this row already existed from an
@@ -268,7 +290,8 @@ UPDATE users SET
   email = 'kitentya.luth@voiceinsightsafrica.com',
   password_hash = '2f717f95d592f79ab0e328ae7dfc74a8c63b173388a7f656ca8b69c4816d0024',
   password_salt = 'bfb95dcdc3381a3d6353395d33c177ea',
-  full_name = 'Kitentya Luth'
+  full_name = 'Kitentya Luth',
+  role = 'super_admin'
 WHERE id = 'user_demo_admin';
 
 -- Second demo login with a restricted role, to test role-based UI differences.

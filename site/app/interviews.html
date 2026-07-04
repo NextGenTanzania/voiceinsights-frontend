@@ -59,7 +59,7 @@
             <span style="font-weight:600; font-size:.85rem;">${iv.phone_number || t('iv.web_respondent', 'Web respondent')}</span>
             <span class="badge ${SENTIMENT_BADGE[iv.overall_sentiment] || 'badge-neutral'}" style="font-size:.65rem;">${iv.overall_sentiment || '—'}</span>
           </div>
-          <div class="muted-note">${iv.campaign_name} · ${iv.channel} · ${new Date(iv.started_at + 'Z').toLocaleDateString()}</div>
+          <div class="muted-note">${iv.campaign_name} · ${iv.channel} · ${new Date(iv.started_at + 'Z').toLocaleDateString()}${iv.gps_lat != null ? ` · 📍 ${iv.gps_lat.toFixed(4)}, ${iv.gps_lng.toFixed(4)}` : ''}${iv.device_id ? ` · 📱 ${iv.device_id.slice(0, 12)}…` : ''}</div>
         </div>`).join('');
       document.querySelectorAll('.interview-row').forEach(row => row.addEventListener('click', () => selectInterview(parseInt(row.dataset.index))));
       selectInterview(0);

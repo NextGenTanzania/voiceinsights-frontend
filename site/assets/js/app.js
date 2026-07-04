@@ -104,6 +104,9 @@ const NAV_APP = [
 ];
 
 const NAV_ADMIN = [
+  { groupKey: 'app.nav.group.platform', group: 'Platform', items: [
+    { href: '/admin/organizations.html', icon: 'globe', key: 'app.nav.organizations', label: 'Organizations', superAdminOnly: true },
+  ]},
   { groupKey: 'app.nav.group.operations', group: 'Operations', items: [
     { href: '/admin/dashboard.html', icon: 'layout-dashboard', key: 'app.nav.overview', label: 'Overview' },
     { href: '/admin/leads.html', icon: 'inbox', key: 'app.nav.leads', label: 'Leads' },
@@ -139,6 +142,9 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
   const RESTRICTED_FOR_ENUMERATOR = [...RESTRICTED_FOR_ME_OFFICER, '/app/surveys.html', '/app/campaigns.html', '/app/compliance.html'];
 
   let nav = role === 'admin' ? NAV_ADMIN : NAV_APP;
+  if (role === 'admin' && userRole !== 'super_admin') {
+    nav = nav.map(g => ({ ...g, items: g.items.filter(it => !it.superAdminOnly) })).filter(g => g.items.length);
+  }
   if (role === 'client' && userRole === 'me_officer') {
     nav = nav.map(g => ({ ...g, items: g.items.filter(it => !RESTRICTED_FOR_ME_OFFICER.includes(it.href)) })).filter(g => g.items.length);
   } else if (role === 'client' && userRole === 'enumerator') {
@@ -158,7 +164,7 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
         </a>`).join('')}
     </div>`).join('');
 
-  const ROLE_DISPLAY = { me_officer: 'M&E Officer', enumerator: 'Enumerator' };
+  const ROLE_DISPLAY = { me_officer: 'M&E Officer', enumerator: 'Enumerator', super_admin: 'Super Admin', org_admin: 'Org Admin' };
   const displayName = storedUser?.full_name || VI.user.name;
   const displayInitials = displayName.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
   const displayRole = ROLE_DISPLAY[storedUser?.role] || (role === 'admin' ? 'Super Admin' : 'Org Admin');
@@ -197,15 +203,15 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
           </div>
         </div>
         <div style="display:flex; align-items:center; gap:.9rem;">
-          <button class="btn btn-ghost btn-sm" id="cmdk-hint-btn" title="Quick jump" style="padding:.5em .8em; font-size:.72rem; color:var(--text-dim);">⌘K</button>
-          <button class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">${getTheme() === 'light' ? '🌙' : '☀️'}</span></button>
+          <button class="btn btn-ghost btn-sm" id="cmdk-hint-btn" title="Quick jump" aria-label="Open quick navigation search" style="padding:.5em .8em; font-size:.72rem; color:var(--text-dim);">⌘K</button>
+          <button class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">${getTheme() === 'light' ? '🌙' : '☀️'}</span></button>
           <div class="lang-toggle" id="app-lang-toggle">
             ${APP_LANGS.map(l => `<button class="${currentLang === l.code ? 'active' : ''}" data-lang="${l.code}">${l.label}</button>`).join('')}
           </div>
           <div class="user-chip">
             <div class="avatar">${VI.user.initials}</div>
             <span style="font-size:.85rem; font-weight:600;">${VI.user.name}</span>
-            <span class="badge badge-neutral" style="font-size:.62rem;">${userRole === 'me_officer' ? 'M&E Officer' : (role === 'admin' ? 'Super Admin' : 'Org Admin')}</span>
+            <span class="badge badge-neutral" style="font-size:.62rem;">${ROLE_DISPLAY[userRole] || (role === 'admin' ? 'Super Admin' : 'Org Admin')}</span>
           </div>
         </div>
       </header>`;
@@ -322,7 +328,7 @@ function renderViaAssistant() {
   panel.innerHTML = `
     <div style="padding:.9rem 1rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
       <div><strong style="font-family:var(--font-display);">VIA Assistant</strong><div class="muted-note" style="font-size:.7rem;">${t('via.subtitle', 'Ask about your data')}</div></div>
-      <button id="via-close" style="background:none; border:none; color:var(--text-dim); cursor:pointer; font-size:1.1rem;">×</button>
+      <button id="via-close" aria-label="Close" style="background:none; border:none; color:var(--text-dim); cursor:pointer; font-size:1.1rem;">×</button>
     </div>
     <div id="via-messages" style="flex:1; overflow-y:auto; padding:1rem; display:flex; flex-direction:column; gap:.7rem; min-height:200px;">
       <div class="muted-note">${t('via.hint', "Try: \"What's the overall sentiment so far?\" or \"Summarize recent responses.\"")}</div>
@@ -392,6 +398,23 @@ function highlightActiveTopNav() {
   });
 }
 document.addEventListener('DOMContentLoaded', highlightActiveTopNav);
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Accessibility: inject a "Skip to main content" link as the very first
+  // focusable element, for keyboard and screen-reader users — works on any
+  // page without needing every page edited individually.
+  const nav = document.querySelector('.pub-nav');
+  const mainEl = document.querySelector('main') || document.querySelector('.pub-hero') || document.querySelector('.content');
+  if (mainEl && !document.getElementById('skip-to-content')) {
+    if (!mainEl.id) mainEl.id = 'main-content-auto';
+    const skip = document.createElement('a');
+    skip.href = '#' + mainEl.id;
+    skip.id = 'skip-to-content';
+    skip.className = 'skip-link';
+    skip.textContent = 'Skip to main content';
+    document.body.insertBefore(skip, document.body.firstChild);
+  }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('mobile-nav-toggle');

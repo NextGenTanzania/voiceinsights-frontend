@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organizations — Super Admin</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="section-head">
+        <p class="muted-note" style="margin:0;">Every client organization on the platform. Only visible to Super Admin accounts.</p>
+        <button class="btn btn-primary btn-sm" id="new-org-btn">+ New Organization</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Organization</th><th>Tier</th><th>Users</th><th>Responses</th><th>Status</th><th>Created</th><th></th></tr></thead>
+          <tbody id="orgs-tbody">
+            <tr><td colspan="7" class="muted-note" style="padding:1.5rem;">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="new-org-modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; align-items:center; justify-content:center; padding:5vw;">
+        <div class="card" style="max-width:440px; width:100%; position:relative;">
+          <button id="new-org-modal-close" aria-label="Close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
+          <div class="card-title">Create a New Organization</div>
+          <div class="field"><label>Organization Name</label><input id="new-org-name" placeholder="e.g. UNICEF Tanzania"></div>
+          <div class="field"><label>Billing Tier</label>
+            <select id="new-org-tier"><option value="starter">Starter</option><option value="professional">Professional</option><option value="enterprise">Enterprise</option></select>
+          </div>
+          <div class="field"><label>Admin Full Name</label><input id="new-org-admin-name" placeholder="First point of contact"></div>
+          <div class="field"><label>Admin Email</label><input id="new-org-admin-email" type="email" placeholder="admin@theirorg.org"></div>
+          <div id="new-org-error" style="display:none; color:var(--danger); font-size:.82rem; margin-bottom:.8rem;"></div>
+          <button class="btn btn-primary" id="new-org-create-btn" style="width:100%; justify-content:center;">Create Organization &amp; Send Login →</button>
+          <p class="muted-note" style="margin-top:1rem; font-size:.76rem;">A login and temporary password will be emailed to the admin immediately.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'admin', active:'/admin/organizations.html', eyebrow:'Platform', title:'Organizations' });
+
+  const STATUS_BADGE = { active: 'badge-success', suspended: 'badge-danger', trial: 'badge-warn' };
+
+  (async () => {
+    try {
+      const { organizations } = await apiRequest('/api/superadmin/organizations');
+      const tbody = document.getElementById('orgs-tbody');
+      tbody.innerHTML = organizations.length ? organizations.map(o => `
+        <tr>
+          <td>${o.name}</td>
+          <td>${o.billing_tier}</td>
+          <td>${o.user_count}</td>
+          <td>${o.response_count}</td>
+          <td><span class="badge ${STATUS_BADGE[o.status] || 'badge-neutral'}">${o.status}</span></td>
+          <td class="muted-note">${new Date(o.created_at + 'Z').toLocaleDateString()}</td>
+          <td>
+            ${o.status === 'active'
+              ? `<button class="btn btn-ghost btn-sm suspend-btn" data-id="${o.id}">Suspend</button>`
+              : `<button class="btn btn-ghost btn-sm activate-btn" data-id="${o.id}">Activate</button>`}
+          </td>
+        </tr>`).join('') : '<tr><td colspan="7" class="muted-note" style="padding:1.5rem;">No organizations yet.</td></tr>';
+    } catch (e) {
+      document.getElementById('orgs-tbody').innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem; color:var(--danger);">${e.message.includes('403') ? 'Super Admin access required.' : 'Could not load: ' + e.message}</td></tr>`;
+    }
+  })();
+
+  document.addEventListener('click', async (e) => {
+    if (e.target.classList.contains('suspend-btn') || e.target.classList.contains('activate-btn')) {
+      const newStatus = e.target.classList.contains('suspend-btn') ? 'suspended' : 'active';
+      try {
+        await apiRequest(`/api/superadmin/organizations/${e.target.dataset.id}/status`, { method: 'PUT', body: { status: newStatus } });
+        location.reload();
+      } catch (err) {
+        showToast('Could not update: ' + err.message, 'error');
+      }
+    }
+  });
+
+  document.getElementById('new-org-btn').addEventListener('click', () => {
+    document.getElementById('new-org-error').style.display = 'none';
+    document.getElementById('new-org-modal-backdrop').style.display = 'flex';
+  });
+  document.getElementById('new-org-modal-close').addEventListener('click', () => {
+    document.getElementById('new-org-modal-backdrop').style.display = 'none';
+  });
+
+  document.getElementById('new-org-create-btn').addEventListener('click', async () => {
+    const errBox = document.getElementById('new-org-error');
+    errBox.style.display = 'none';
+    const btn = document.getElementById('new-org-create-btn');
+    btn.disabled = true; btn.textContent = 'Creating…';
+    try {
+      await apiRequest('/api/superadmin/organizations', {
+        method: 'POST',
+        body: {
+          name: document.getElementById('new-org-name').value,
+          billing_tier: document.getElementById('new-org-tier').value,
+          admin_full_name: document.getElementById('new-org-admin-name').value,
+          admin_email: document.getElementById('new-org-admin-email').value,
+        },
+      });
+      location.reload();
+    } catch (err) {
+      errBox.textContent = err.message;
+      errBox.style.display = 'block';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Create Organization & Send Login →';
+    }
+  });
+</script>
+</body>
+</html>

@@ -111,8 +111,38 @@
         const res = await fetch(`${API_BASE_URL}/api/public/campaigns/${campaignId}/questions`);
         const data = await res.json();
         if (res.ok) {
+          const cached = await OfflineDB.getCachedQuestions(campaignId);
+          const pendingCount = (await OfflineDB.getAllHouseholds()).filter(h => !h.synced).length;
+
+          // If the survey was edited on the server AND there are still unsynced
+          // interviews recorded against the OLD question set, do NOT silently
+          // switch to the new questions yet — those pending answers were
+          // recorded against the old ones (matched by question_id, so they'll
+          // still sync correctly), but showing new questions for the NEXT
+          // household while old ones are still pending would confuse the
+          // enumerator about which version is "live". Warn instead.
+          const versionChanged = cached && cached.surveyVersion && data.survey_version && cached.surveyVersion !== data.survey_version;
+          if (versionChanged && pendingCount > 0) {
+            questions = cached.questions; // keep using the old cached set for now — safe, still valid for pending syncs
+            campaignNameEl.textContent = cached.campaignName;
+            campaignNoteEl.innerHTML = `⚠️ Project updated on the server, but you have <b>${pendingCount} pending interview(s)</b> using the old questions. <button class="btn btn-ghost btn-sm" id="force-update-btn" style="padding:.2em .6em; font-size:.75rem;">Sync first, then tap here to update</button>`;
+            newHouseholdBtn.disabled = false;
+            const forceBtn = document.getElementById('force-update-btn');
+            if (forceBtn) forceBtn.addEventListener('click', async () => {
+              if ((await OfflineDB.getAllHouseholds()).filter(h => !h.synced).length > 0) {
+                showToast('Please sync all pending interviews first.', 'error'); return;
+              }
+              questions = data.questions || [];
+              await OfflineDB.cacheQuestions(campaignId, data.campaign.name, questions, data.survey_version);
+              campaignNameEl.textContent = data.campaign.name;
+              campaignNoteEl.textContent = `${questions.length} questions · updated to latest version`;
+              newHouseholdBtn.disabled = questions.length === 0;
+            });
+            return;
+          }
+
           questions = data.questions || [];
-          await OfflineDB.cacheQuestions(campaignId, data.campaign.name, questions);
+          await OfflineDB.cacheQuestions(campaignId, data.campaign.name, questions, data.survey_version);
           campaignNameEl.textContent = data.campaign.name;
           campaignNoteEl.textContent = `${questions.length} questions · synced just now`;
           newHouseholdBtn.disabled = questions.length === 0;
@@ -169,8 +199,38 @@
 
   let currentHousehold = null, currentIndex = 0, mediaRecorder, chunks = [], audioBlob = null, recording = false, waveTimer;
 
+  // A persistent per-device ID (same value across all interviews on this
+  // tablet/phone) — lets an admin later see which device collected what,
+  // useful for quality checks without identifying individual enumerators by name.
+  function getEnumeratorDeviceId() {
+    let id = localStorage.getItem('vi_enumerator_device_id');
+    if (!id) {
+      id = 'enum_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('vi_enumerator_device_id', id);
+    }
+    return id;
+  }
+
+  // GPS is entirely optional and best-effort: if the browser has no location
+  // permission, or the device has no GPS, interviews still save and sync
+  // normally — this only adds context when it's available.
+  function captureGpsForHousehold(household) {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        household.gpsLat = pos.coords.latitude;
+        household.gpsLng = pos.coords.longitude;
+        household.gpsAccuracy = pos.coords.accuracy;
+        OfflineDB.saveHousehold(household).catch(() => {});
+      },
+      () => { /* permission denied or unavailable — silently proceed without GPS */ },
+      { timeout: 8000, maximumAge: 60000 }
+    );
+  }
+
   newHouseholdBtn.addEventListener('click', () => {
-    currentHousehold = { id: 'hh_' + Date.now() + '_' + Math.random().toString(36).slice(2), label: '', answers: [], createdAt: Date.now(), synced: false };
+    currentHousehold = { id: 'hh_' + Date.now() + '_' + Math.random().toString(36).slice(2), label: '', answers: [], createdAt: Date.now(), synced: false, deviceId: getEnumeratorDeviceId(), gpsLat: null, gpsLng: null, gpsAccuracy: null };
+    captureGpsForHousehold(currentHousehold);
     currentIndex = 0;
     labelInput.value = '';
     showQuestion();
@@ -236,7 +296,7 @@
     if (!audioBlob) return;
     const q = questions[currentIndex];
     currentHousehold.label = labelInput.value.trim();
-    currentHousehold.answers.push({ questionIndex: currentIndex, questionId: q.id, blob: audioBlob });
+    currentHousehold.answers.push({ questionIndex: currentIndex, questionId: q.id, blob: audioBlob, synced: false });
 
     currentIndex++;
     if (currentIndex >= questions.length) {
@@ -250,39 +310,58 @@
   });
 
   // ---------------- Sync ----------------
+  // Resumes from the EXACT answer that failed last time — never re-sends an
+  // answer already confirmed by the server, and never skips ahead past one
+  // that failed. Progress is saved to local storage after every single
+  // answer (not just at the end), so even a mid-sync crash or connection
+  // drop loses at most one answer's worth of progress, never more.
   syncBtn.addEventListener('click', async () => {
     if (!navigator.onLine) return;
     syncBtn.disabled = true;
     const households = (await OfflineDB.getAllHouseholds()).filter(h => !h.synced);
-    let done = 0, failed = 0;
+    let householdsDone = 0, householdsFailed = 0;
     syncLog.textContent = `Syncing ${households.length} household(s)…`;
 
     for (const h of households) {
       const sessionKey = h.id; // stable per household, so the backend groups all its answers into one response
-      let ok = true;
       const sorted = [...h.answers].sort((a, b) => a.questionIndex - b.questionIndex);
+      let allSynced = true;
+
       for (const ans of sorted) {
+        if (ans.synced) continue; // already confirmed by the server on a previous attempt — skip, don't resend
         try {
           const form = new FormData();
           form.append('audio', ans.blob, 'answer.webm');
           form.append('session_key', sessionKey);
           form.append('campaign_id', campaignId);
           form.append('language', 'sw');
+          if (ans.questionId) form.append('question_id', ans.questionId); // pins this answer to the exact question it was recorded against, even if the survey has since been edited
+          if (h.deviceId) form.append('device_id', h.deviceId);
+          if (h.gpsLat != null) {
+            form.append('gps_lat', h.gpsLat);
+            form.append('gps_lng', h.gpsLng);
+            form.append('gps_accuracy', h.gpsAccuracy);
+          }
           const res = await fetch(`${API_BASE_URL}/api/web/submit`, { method: 'POST', body: form });
-          if (!res.ok) { ok = false; break; }
-        } catch (e) { ok = false; break; }
+          if (!res.ok) { allSynced = false; break; } // stop at the first failure — don't skip ahead out of order
+          ans.synced = true;
+          await OfflineDB.saveHousehold(h); // persist immediately, so a crash right after this doesn't lose the confirmation
+        } catch (e) {
+          allSynced = false; break;
+        }
       }
-      if (ok) {
+
+      if (allSynced) {
         h.synced = true;
         await OfflineDB.saveHousehold(h);
-        done++;
+        householdsDone++;
       } else {
-        failed++;
+        householdsFailed++;
       }
-      syncLog.textContent = `Synced ${done}/${households.length}${failed ? `, ${failed} failed (will retry next sync)` : ''}…`;
+      syncLog.textContent = `Synced ${householdsDone}/${households.length}${householdsFailed ? `, ${householdsFailed} incomplete (will resume from where it stopped next sync)` : ''}…`;
     }
 
-    syncLog.textContent = `Done. ${done} household(s) synced${failed ? `, ${failed} failed — try again when signal improves.` : '.'}`;
+    syncLog.textContent = `Done. ${householdsDone} household(s) fully synced${householdsFailed ? `, ${householdsFailed} incomplete — try again when signal improves, it will pick up exactly where it left off.` : '.'}`;
     refreshPendingList();
     updateNetBadge();
   });

@@ -34,10 +34,10 @@ const OfflineDB = (() => {
   }
 
   return {
-    async cacheQuestions(campaignId, campaignName, questions) {
+    async cacheQuestions(campaignId, campaignName, questions, surveyVersion) {
       const store = await tx('cached_questions', 'readwrite');
       return new Promise((resolve, reject) => {
-        const req = store.put({ campaignId, campaignName, questions, cachedAt: Date.now() });
+        const req = store.put({ campaignId, campaignName, questions, surveyVersion: surveyVersion || null, cachedAt: Date.now() });
         req.onsuccess = () => resolve();
         req.onerror = () => reject(req.error);
       });

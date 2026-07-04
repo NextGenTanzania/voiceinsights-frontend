@@ -25,9 +25,12 @@
   @media print {
     #sidebar-mount, #topbar-mount, .toolbar, .no-print { display: none !important; }
     body, .main, .content { margin: 0 !important; padding: 0 !important; background: #fff !important; }
-    .r-page { box-shadow: none; border-radius: 0; background: #fff; page-break-after: always; }
+    .r-page { box-shadow: none; border-radius: 0; background: #fff; page-break-after: always; break-after: page; page-break-inside: avoid; }
+    .r-page:last-child { page-break-after: auto; break-after: auto; }
     .r-kpi, .r-chart-box, .r-quote-card { background: #f4f4f4 !important; }
-    * { color: #111 !important; }
+    .r-page:not(.r-cover) * { color: #111 !important; }
+    .r-cover, .r-cover * { color: #fff !important; }
+    .r-cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
 </style>
 </head>
@@ -166,6 +169,26 @@
           </div>
         </div>
 
+        <!-- OECD-DAC EVALUATION CRITERIA -->
+        <div class="r-page">
+          <div class="r-eyebrow">OECD-DAC Evaluation Criteria</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">Assessed against the international development standard.</h2>
+          <div class="table-wrap" style="margin-top:1.5rem;">
+            <table>
+              <thead><tr><th>Criterion</th><th>Assessment</th></tr></thead>
+              <tbody>
+                <tr><td><b>Relevance</b></td><td>See AI Insights above — grounded in what respondents raised directly.</td></tr>
+                <tr><td><b>Effectiveness</b></td><td>See Project Background — response rate and completion above.</td></tr>
+                <tr><td><b>Efficiency</b></td><td id="dac-efficiency">Calculating…</td></tr>
+                <tr><td><b>Impact</b></td><td>See Outcome Indicators — baseline vs. current movement.</td></tr>
+                <tr><td><b>Sustainability</b> <span class="badge badge-neutral" style="font-size:.6rem;">Org input</span></td><td id="dac-sustainability" class="muted-note">Not yet set — add this in Compliance → Evaluation Standard.</td></tr>
+                <tr><td><b>Coherence</b> <span class="badge badge-neutral" style="font-size:.6rem;">Org input</span></td><td id="dac-coherence" class="muted-note">Not yet set — add this in Compliance → Evaluation Standard.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="muted-note" style="margin-top:1rem;">Sustainability and Coherence require program-level context AI cannot infer from voice data alone — set them once in Compliance and every report will include them automatically.</div>
+        </div>
+
         <!-- APPENDIX -->
         <div class="r-page" style="page-break-after: auto;">
           <div class="r-eyebrow">Appendix — Compliance &amp; Safeguarding</div>
@@ -190,6 +213,7 @@
           <div id="narrative-content" style="margin-top:1.5rem; color:var(--text); line-height:1.9; font-size:1.02rem;">
             <p class="muted-note">Generating narrative…</p>
           </div>
+          <div id="narrative-dac-note" style="margin-top:1rem; color:var(--text); line-height:1.9; font-size:1.02rem;"></div>
         </div>
       </div>
 
@@ -224,6 +248,23 @@
           <div class="r-two-col" style="margin-top:1.5rem;">
             <div><h4 style="font-size:.85rem; color:var(--accent);">Immediate</h4><ul id="full-rec-immediate"><li class="muted-note">—</li></ul></div>
             <div><h4 style="font-size:.85rem; color:var(--accent-2);">Strategic</h4><ul id="full-rec-strategic"><li class="muted-note">—</li></ul></div>
+          </div>
+        </div>
+        <div class="r-page">
+          <div class="r-eyebrow">OECD-DAC Evaluation Criteria</div>
+          <h2 style="font-size:1.4rem; margin-top:.5rem;">Assessed against the international development standard.</h2>
+          <div class="table-wrap" style="margin-top:1.5rem;">
+            <table>
+              <thead><tr><th>Criterion</th><th>Assessment</th></tr></thead>
+              <tbody>
+                <tr><td><b>Relevance</b></td><td style="font-size:.85rem;">See AI Insights — grounded in what respondents raised.</td></tr>
+                <tr><td><b>Effectiveness</b></td><td style="font-size:.85rem;">See Project Background — response rate above.</td></tr>
+                <tr><td><b>Efficiency</b></td><td id="dac-efficiency-full" style="font-size:.85rem;">Calculating…</td></tr>
+                <tr><td><b>Impact</b></td><td style="font-size:.85rem;">See Outcome Indicators, if tracked.</td></tr>
+                <tr><td><b>Sustainability</b> <span class="badge badge-neutral" style="font-size:.6rem;">Org input</span></td><td id="dac-sustainability-full" class="muted-note" style="font-size:.85rem;">Not yet set — Compliance → Evaluation Standard.</td></tr>
+                <tr><td><b>Coherence</b> <span class="badge badge-neutral" style="font-size:.6rem;">Org input</span></td><td id="dac-coherence-full" class="muted-note" style="font-size:.85rem;">Not yet set — Compliance → Evaluation Standard.</td></tr>
+              </tbody>
+            </table>
           </div>
           <div style="border-top:1px solid var(--border); margin-top:2rem; padding-top:1rem; text-align:center;" class="muted-note">
             Generated by VoiceInsights Africa · voiceinsightsafrica.com
@@ -344,12 +385,13 @@
 
   (async () => {
     try {
-      const [stats, analytics, org, intelligence, quality] = await Promise.all([
+      const [stats, analytics, org, intelligence, quality, oecdDac] = await Promise.all([
         apiRequest('/api/dashboard/stats'),
         apiRequest('/api/analytics/summary'),
         apiRequest('/api/organizations/me'),
         apiRequest('/api/reports/intelligence').catch(() => ({ key_findings: [], recommendations: { immediate: [], strategic: [] }, risk_if_ignored: null, narrative: null })),
         apiRequest('/api/admin/model-stats').catch(() => null),
+        apiRequest('/api/oecd-dac-assessment').catch(() => ({ sustainability_note: '', coherence_note: '' })),
       ]);
 
       if (quality) {
@@ -442,6 +484,33 @@
       ['immediate', 'strategic'].forEach(key => {
         document.getElementById('full-rec-' + key).innerHTML = document.getElementById('rec-' + key).innerHTML;
       });
+
+      // ---------- OECD-DAC Evaluation Criteria (all three views, kept in sync) ----------
+      const channelCount = (stats.by_channel || []).length;
+      const efficiencyText = stats.total_responses
+        ? `${stats.total_responses} responses collected across ${channelCount || 1} channel(s) with zero field enumerators required for phone/WhatsApp/SMS/web collection.`
+        : 'Not enough data yet to assess.';
+      document.getElementById('dac-efficiency').textContent = efficiencyText;
+      const dacEffFull = document.getElementById('dac-efficiency-full');
+      if (dacEffFull) dacEffFull.textContent = efficiencyText;
+
+      if (oecdDac.sustainability_note) {
+        document.getElementById('dac-sustainability').textContent = oecdDac.sustainability_note;
+        document.getElementById('dac-sustainability').classList.remove('muted-note');
+        const el2 = document.getElementById('dac-sustainability-full');
+        if (el2) { el2.textContent = oecdDac.sustainability_note; el2.classList.remove('muted-note'); }
+      }
+      if (oecdDac.coherence_note) {
+        document.getElementById('dac-coherence').textContent = oecdDac.coherence_note;
+        document.getElementById('dac-coherence').classList.remove('muted-note');
+        const el3 = document.getElementById('dac-coherence-full');
+        if (el3) { el3.textContent = oecdDac.coherence_note; el3.classList.remove('muted-note'); }
+      }
+
+      const dacNarrativeEl = document.getElementById('narrative-dac-note');
+      if (dacNarrativeEl) {
+        dacNarrativeEl.innerHTML = `<p><b>Assessed against the OECD-DAC evaluation standard.</b> On efficiency: ${efficiencyText} ${oecdDac.sustainability_note ? 'Sustainability — ' + oecdDac.sustainability_note + ' ' : ''}${oecdDac.coherence_note ? 'Coherence — ' + oecdDac.coherence_note : (!oecdDac.sustainability_note ? 'Sustainability and coherence have not yet been set by your team — add them once in Compliance → Evaluation Standard.' : '')}</p>`;
+      }
 
       document.getElementById('report-status').textContent = 'Ready.';
       document.getElementById('report-doc').style.display = 'block';

@@ -17,6 +17,7 @@
       <div class="pill-tabs">
         <a class="ctab active" data-tab="regulatory" data-i18n="comp.tab_reg">Regulatory Status</a>
         <a class="ctab" data-tab="consent" data-i18n="comp.tab_consent">Consent Logs</a>
+        <a class="ctab" data-tab="oecd">Evaluation Standard</a>
       </div>
 
       <div id="panel-regulatory">
@@ -41,6 +42,22 @@
           </table>
         </div>
       </div>
+
+      <div id="panel-oecd" style="display:none;">
+        <p class="muted-note" style="margin-bottom:1rem;">Two OECD-DAC evaluation criteria — <b>Sustainability</b> and <b>Coherence</b> — need program-level judgment that AI cannot infer from voice data alone. Write them here once; every report your organization generates will include them automatically.</p>
+        <div class="card" style="margin-bottom:1rem;">
+          <div class="card-title">Sustainability</div>
+          <p class="muted-note" style="margin-bottom:.6rem;">Will the benefits/changes this project measures continue after it ends?</p>
+          <textarea id="sustainability-note" rows="4" placeholder="e.g. Gains depend on continued SACCOS support and follow-through on the collateral policy pilot..."></textarea>
+        </div>
+        <div class="card" style="margin-bottom:1rem;">
+          <div class="card-title">Coherence</div>
+          <p class="muted-note" style="margin-bottom:.6rem;">How does this align with other programs (government, other donors) working in the same area?</p>
+          <textarea id="coherence-note" rows="4" placeholder="e.g. This complements the Ministry of Agriculture's ongoing fertilizer subsidy program in the same districts..."></textarea>
+        </div>
+        <div id="oecd-status" class="muted-note" style="margin-bottom:.8rem;"></div>
+        <button class="btn btn-primary btn-sm" id="oecd-save-btn">Save</button>
+      </div>
     </div>
   </main>
 </div>
@@ -60,7 +77,38 @@
       tab.classList.add('active');
       document.getElementById('panel-regulatory').style.display = tab.dataset.tab === 'regulatory' ? 'block' : 'none';
       document.getElementById('panel-consent').style.display = tab.dataset.tab === 'consent' ? 'block' : 'none';
+      document.getElementById('panel-oecd').style.display = tab.dataset.tab === 'oecd' ? 'block' : 'none';
     });
+  });
+
+  (async () => {
+    try {
+      const data = await apiRequest('/api/oecd-dac-assessment');
+      document.getElementById('sustainability-note').value = data.sustainability_note || '';
+      document.getElementById('coherence-note').value = data.coherence_note || '';
+    } catch (e) { /* leave blank if not set yet */ }
+  })();
+
+  document.getElementById('oecd-save-btn').addEventListener('click', async () => {
+    const statusEl = document.getElementById('oecd-status');
+    const btn = document.getElementById('oecd-save-btn');
+    btn.disabled = true; btn.textContent = 'Saving…';
+    try {
+      await apiRequest('/api/oecd-dac-assessment', {
+        method: 'PUT',
+        body: {
+          sustainability_note: document.getElementById('sustainability-note').value,
+          coherence_note: document.getElementById('coherence-note').value,
+        },
+      });
+      statusEl.textContent = 'Saved ✓ — every report will now include this.';
+      statusEl.style.color = 'var(--success)';
+    } catch (e) {
+      statusEl.textContent = 'Error: ' + e.message;
+      statusEl.style.color = 'var(--danger)';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Save';
+    }
   });
 
   const STATUS_OPTIONS = ['not_required', 'pending', 'approved'];

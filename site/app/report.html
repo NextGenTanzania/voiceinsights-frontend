@@ -45,9 +45,13 @@
   @media print {
     #sidebar-mount, #topbar-mount, .toolbar { display: none !important; }
     body, .main, .content { margin: 0 !important; padding: 0 !important; background: #fff !important; }
-    .r-page { box-shadow: none; border-radius: 0; background: #fff; page-break-after: always; }
+    .r-page { box-shadow: none; border-radius: 0; background: #fff; page-break-after: always; break-after: page; page-break-inside: avoid; }
+    .r-page:last-child { page-break-after: auto; break-after: auto; }
     .r-kpi, .r-chart-box, .r-insight-box, .r-quote-card, .r-rec-col { background: #f4f4f4 !important; }
-    * { color: #111 !important; }
+    .r-page:not(.r-cover) * { color: #111 !important; }
+    .r-cover, .r-cover * { color: #fff !important; }
+    .r-cover-subtitle { color: #A8D9C9 !important; }
+    .r-cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
 </style>
 </head>
@@ -85,15 +89,32 @@
             <span style="font-family:var(--font-display); font-weight:600; font-size:1.05rem; color:#fff;">VoiceInsights Africa</span>
           </div>
           <div style="position:relative; z-index:1;">
-            <h1 class="r-cover-title" id="cover-title">Research &amp; Monitoring Intelligence</h1>
-            <div class="r-cover-subtitle" id="cover-subtitle">—</div>
-            <div id="cover-wave" class="r-cover-wave-big"></div>
+            <h1 class="r-cover-title js-cover-title" id="cover-title">Research &amp; Monitoring Intelligence</h1>
+            <div class="r-cover-subtitle js-cover-subtitle" id="cover-subtitle">—</div>
+            <div class="r-cover-wave-big js-cover-wave" id="cover-wave"></div>
           </div>
           <div style="position:relative; z-index:1; border-top:1px solid rgba(255,255,255,.15); padding-top:1.25rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
-            <div style="font-size:.85rem; color:rgba(255,255,255,.55);">Prepared for<br><b style="color:#fff; font-size:1rem;" id="cover-org">—</b></div>
-            <div style="font-size:.85rem; color:rgba(255,255,255,.55); text-align:right;">Generated <span id="cover-date">—</span><br><b style="color:#fff; font-size:1rem;" id="cover-id">—</b></div>
+            <div style="font-size:.85rem; color:rgba(255,255,255,.55);">Prepared for<br><b style="color:#fff; font-size:1rem;" class="js-cover-org" id="cover-org">—</b></div>
+            <div style="font-size:.85rem; color:rgba(255,255,255,.55); text-align:right;">Generated <span class="js-cover-date" id="cover-date">—</span><br><b style="color:#fff; font-size:1rem;" class="js-cover-id" id="cover-id">—</b></div>
           </div>
         </div>
+
+        <!-- COVER CLONE FOR NARRATIVE/FULL VIEWS (JS keeps these in sync with the fields above) -->
+        <template id="cover-template"><div class="r-page r-cover">
+          <div style="display:flex; align-items:center; gap:.6rem; position:relative; z-index:1;">
+            <img src="/assets/img/logo-icon.png" style="height:30px;" alt="">
+            <span style="font-family:var(--font-display); font-weight:600; font-size:1.05rem; color:#fff;">VoiceInsights Africa</span>
+          </div>
+          <div style="position:relative; z-index:1;">
+            <h1 class="r-cover-title js-cover-title">Research &amp; Monitoring Intelligence</h1>
+            <div class="r-cover-subtitle js-cover-subtitle">—</div>
+            <div class="r-cover-wave-big js-cover-wave"></div>
+          </div>
+          <div style="position:relative; z-index:1; border-top:1px solid rgba(255,255,255,.15); padding-top:1.25rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+            <div style="font-size:.85rem; color:rgba(255,255,255,.55);">Prepared for<br><b style="color:#fff; font-size:1rem;" class="js-cover-org">—</b></div>
+            <div style="font-size:.85rem; color:rgba(255,255,255,.55); text-align:right;">Generated <span class="js-cover-date">—</span><br><b style="color:#fff; font-size:1rem;" class="js-cover-id">—</b></div>
+          </div>
+        </div></template>
 
         <!-- PAGE 1B — AT A GLANCE (real data) -->
         <div class="r-page">
@@ -214,6 +235,26 @@
           </div>
         </div>
 
+        <!-- OECD-DAC EVALUATION CRITERIA (real efficiency stat + org-entered notes) -->
+        <div class="r-page" data-section="full">
+          <div class="r-eyebrow">OECD-DAC Evaluation Criteria</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">Assessed against the international development standard.</h2>
+          <div class="table-wrap" style="margin-top:1.5rem;">
+            <table>
+              <thead><tr><th>Criterion</th><th>Assessment</th></tr></thead>
+              <tbody>
+                <tr><td><b>Relevance</b></td><td>See Key Findings — grounded in what respondents raised directly.</td></tr>
+                <tr><td><b>Effectiveness</b></td><td>See At a Glance — completion rate and response volume above.</td></tr>
+                <tr><td><b>Efficiency</b></td><td id="dac-efficiency">Calculating…</td></tr>
+                <tr><td><b>Impact</b></td><td>See Outcome Indicators, if your organization tracks baseline vs. current values.</td></tr>
+                <tr><td><b>Sustainability</b> <span class="badge badge-neutral" style="font-size:.6rem;">Org input</span></td><td id="dac-sustainability" class="muted-note">Not yet set — add this in Compliance → Evaluation Standard.</td></tr>
+                <tr><td><b>Coherence</b> <span class="badge badge-neutral" style="font-size:.6rem;">Org input</span></td><td id="dac-coherence" class="muted-note">Not yet set — add this in Compliance → Evaluation Standard.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="muted-note" style="margin-top:1rem;">Sustainability and Coherence require program-level context AI cannot infer from voice data alone — set them once in Compliance and every report will include them automatically.</div>
+        </div>
+
         <!-- FORECASTING & BENCHMARKING (illustrative, clearly labeled) -->
         <div class="r-page" data-section="full">
           <div class="r-eyebrow">Forecasting <span style="color:var(--text-dim); text-transform:none; font-weight:400;">— illustrative capability</span></div>
@@ -256,16 +297,19 @@
       </div>
 
       <div class="report-doc" id="narrative-view" style="display:none;">
+        <div id="narrative-cover-mount"></div>
         <div class="r-page">
           <div class="r-eyebrow">Narrative Report</div>
           <h2 style="font-size:1.4rem; margin-top:.5rem;">A full written account of what we found.</h2>
           <div id="narrative-content" style="margin-top:1.5rem; color:var(--text); line-height:1.9; font-size:1.02rem;">
             <p class="muted-note">Generating narrative…</p>
           </div>
+          <div id="narrative-dac-note" style="margin-top:1rem; color:var(--text); line-height:1.9; font-size:1.02rem;"></div>
         </div>
       </div>
 
       <div class="report-doc" id="full-view" style="display:none;">
+        <div id="full-cover-mount"></div>
         <div class="r-page">
           <div class="r-eyebrow">Full Detailed Report</div>
           <h1 style="font-size:1.8rem; margin-top:.5rem;" id="full-title">—</h1>
@@ -308,6 +352,24 @@
             <div class="r-rec-col"><h4 style="color:var(--accent);">Immediate</h4><ul id="full-rec-immediate"><li class="muted-note">—</li></ul></div>
             <div class="r-rec-col"><h4 style="color:var(--accent-2);">Strategic</h4><ul id="full-rec-strategic"><li class="muted-note">—</li></ul></div>
             <div class="r-rec-col"><h4 style="color:var(--text-muted);">Policy</h4><ul id="full-rec-policy"><li class="muted-note">—</li></ul></div>
+          </div>
+        </div>
+
+        <div class="r-page">
+          <div class="r-eyebrow">OECD-DAC Evaluation Criteria</div>
+          <h2 style="font-size:1.4rem; margin-top:.5rem;">Assessed against the international development standard.</h2>
+          <div class="table-wrap" style="margin-top:1.5rem;">
+            <table>
+              <thead><tr><th>Criterion</th><th>Assessment</th></tr></thead>
+              <tbody>
+                <tr><td><b>Relevance</b></td><td style="font-size:.85rem;">See Key Findings — grounded in what respondents raised.</td></tr>
+                <tr><td><b>Effectiveness</b></td><td style="font-size:.85rem;">See At a Glance — completion rate above.</td></tr>
+                <tr><td><b>Efficiency</b></td><td id="dac-efficiency-full" style="font-size:.85rem;">Calculating…</td></tr>
+                <tr><td><b>Impact</b></td><td style="font-size:.85rem;">See Outcome Indicators, if tracked.</td></tr>
+                <tr><td><b>Sustainability</b> <span class="badge badge-neutral" style="font-size:.6rem;">Org input</span></td><td id="dac-sustainability-full" class="muted-note" style="font-size:.85rem;">Not yet set — Compliance → Evaluation Standard.</td></tr>
+                <tr><td><b>Coherence</b> <span class="badge badge-neutral" style="font-size:.6rem;">Org input</span></td><td id="dac-coherence-full" class="muted-note" style="font-size:.85rem;">Not yet set — Compliance → Evaluation Standard.</td></tr>
+              </tbody>
+            </table>
           </div>
           <div style="border-top:1px solid var(--border); margin-top:2rem; padding-top:1rem; text-align:center;" class="muted-note">
             Generated by VoiceInsights Africa · voiceinsightsafrica.com
@@ -389,12 +451,13 @@
 
   (async () => {
     try {
-      const [stats, analytics, org, intelligence, quality] = await Promise.all([
+      const [stats, analytics, org, intelligence, quality, oecdDac] = await Promise.all([
         apiRequest('/api/dashboard/stats'),
         apiRequest('/api/analytics/summary'),
         apiRequest('/api/organizations/me'),
         apiRequest('/api/reports/intelligence').catch(() => ({ key_findings: [], recommendations: { immediate: [], strategic: [], policy: [] }, risk_if_ignored: null, top_recommendation: null, narrative: null })),
         apiRequest('/api/admin/model-stats').catch(() => null),
+        apiRequest('/api/oecd-dac-assessment').catch(() => ({ sustainability_note: '', coherence_note: '' })),
       ]);
 
       if (quality) {
@@ -408,12 +471,19 @@
       const female = analytics.gender.find(g => /female/i.test(g.gender));
       const negative = analytics.sentiment.filter(s => s.overall_sentiment === 'negative' || s.overall_sentiment === 'distressed').reduce((s, r) => s + r.n, 0);
 
-      document.getElementById('cover-org').textContent = org.organization.name;
-      document.getElementById('cover-title').textContent = org.organization.name + ' — Voice Data Report';
-      document.getElementById('cover-subtitle').textContent = `${new Date().toLocaleDateString(undefined, { month: 'long', year: 'numeric' })} · ${total} respondents across ${analytics.regions.length || 0} regions`;
-      document.getElementById('cover-id').textContent = 'VIA-' + new Date().getFullYear() + '-' + Math.random().toString(36).slice(2, 7).toUpperCase();
-      document.getElementById('cover-date').textContent = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
-      document.getElementById('cover-wave').innerHTML = makeWaveform(48, false);
+      // Clone the cover into Narrative and Full Detailed views before populating,
+      // so all three views show the exact same, always-in-sync cover page.
+      const coverTemplate = document.getElementById('cover-template');
+      document.getElementById('narrative-cover-mount').appendChild(coverTemplate.content.cloneNode(true));
+      document.getElementById('full-cover-mount').appendChild(coverTemplate.content.cloneNode(true));
+
+      document.querySelectorAll('.js-cover-org').forEach(el => { el.textContent = org.organization.name; });
+      document.querySelectorAll('.js-cover-title').forEach(el => { el.textContent = org.organization.name + ' — Voice Data Report'; });
+      document.querySelectorAll('.js-cover-subtitle').forEach(el => { el.textContent = `${new Date().toLocaleDateString(undefined, { month: 'long', year: 'numeric' })} · ${total} respondents across ${analytics.regions.length || 0} regions`; });
+      const coverIdValue = 'VIA-' + new Date().getFullYear() + '-' + Math.random().toString(36).slice(2, 7).toUpperCase();
+      document.querySelectorAll('.js-cover-id').forEach(el => { el.textContent = coverIdValue; });
+      document.querySelectorAll('.js-cover-date').forEach(el => { el.textContent = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }); });
+      document.querySelectorAll('.js-cover-wave').forEach(el => { el.innerHTML = makeWaveform(48, false); });
 
       document.getElementById('kpi-responses').textContent = total;
       document.getElementById('kpi-rate').textContent = total ? stats.response_rate + '%' : '—';
@@ -544,6 +614,30 @@
       ['immediate', 'strategic', 'policy'].forEach(key => {
         document.getElementById('full-rec-' + key).innerHTML = document.getElementById('rec-' + key).innerHTML;
       });
+
+      // ---------- OECD-DAC Evaluation Criteria (all three views, kept in sync) ----------
+      const channelCount = (stats.by_channel || []).length;
+      const efficiencyText = total
+        ? `${total} responses collected across ${channelCount || 1} channel(s) with zero field enumerators required for phone/WhatsApp/SMS/web collection.`
+        : 'Not enough data yet to assess.';
+      document.getElementById('dac-efficiency').textContent = efficiencyText;
+      const dacEffFull = document.getElementById('dac-efficiency-full');
+      if (dacEffFull) dacEffFull.textContent = efficiencyText;
+
+      if (oecdDac.sustainability_note) {
+        document.getElementById('dac-sustainability').textContent = oecdDac.sustainability_note;
+        document.getElementById('dac-sustainability').classList.remove('muted-note');
+        const el2 = document.getElementById('dac-sustainability-full');
+        if (el2) { el2.textContent = oecdDac.sustainability_note; el2.classList.remove('muted-note'); }
+      }
+      if (oecdDac.coherence_note) {
+        document.getElementById('dac-coherence').textContent = oecdDac.coherence_note;
+        document.getElementById('dac-coherence').classList.remove('muted-note');
+        const el3 = document.getElementById('dac-coherence-full');
+        if (el3) { el3.textContent = oecdDac.coherence_note; el3.classList.remove('muted-note'); }
+      }
+
+      document.getElementById('narrative-dac-note').innerHTML = `<p><b>Assessed against the OECD-DAC evaluation standard.</b> On efficiency: ${efficiencyText} On sustainability and coherence: ${oecdDac.sustainability_note || oecdDac.coherence_note ? '' : 'not yet set by your team — '}${oecdDac.sustainability_note ? 'Sustainability — ' + oecdDac.sustainability_note + ' ' : ''}${oecdDac.coherence_note ? 'Coherence — ' + oecdDac.coherence_note : (oecdDac.sustainability_note ? '' : 'add these once in Compliance → Evaluation Standard and every report will include them automatically.')}</p>`;
 
       document.getElementById('report-status').textContent = 'Ready.';
       document.getElementById('report-doc').style.display = 'block';

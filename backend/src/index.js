@@ -507,6 +507,68 @@ export default {
       }
 
       // ---------- ORGANIZATION / BILLING ----------
+      // ---------- SUPER ADMIN (VoiceInsights Africa's own team — sees ALL client organizations) ----------
+      // Gated strictly on role === 'super_admin'. Every other role in this system
+      // (org_admin, me_officer, enumerator) is scoped to their own organization_id
+      // and can NEVER reach these routes, even by guessing the URL — requireAuth
+      // decodes the JWT server-side, so the role check below cannot be spoofed
+      // from the client.
+      if (path === '/api/superadmin/organizations' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        if (claims.role !== 'super_admin') return error('Super Admin access required', 403);
+        const { results } = await env.DB.prepare(
+          `SELECT o.id, o.name, o.type, o.billing_tier, o.status, o.created_at,
+                  (SELECT COUNT(*) FROM users u WHERE u.organization_id = o.id AND u.is_active = 1) AS user_count,
+                  (SELECT COUNT(*) FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = o.id) AS response_count
+           FROM organizations o ORDER BY o.created_at DESC`
+        ).all();
+        return json({ organizations: results });
+      }
+
+      if (path === '/api/superadmin/organizations' && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        if (claims.role !== 'super_admin') return error('Super Admin access required', 403);
+        const { name, admin_email, admin_full_name, billing_tier } = await request.json();
+        if (!name || !admin_email || !admin_full_name) return error('name, admin_email, and admin_full_name are required');
+        const existing = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(admin_email).first();
+        if (existing) return error('A user with this email already exists', 409);
+
+        const orgId = newId('org');
+        await env.DB.prepare(
+          `INSERT INTO organizations (id, name, type, billing_tier, status) VALUES (?, ?, 'local_ngo', ?, 'active')`
+        ).bind(orgId, name, billing_tier || 'starter').run();
+
+        const tempPassword = [...crypto.getRandomValues(new Uint8Array(9))].map(b => b.toString(36)).join('').slice(0, 12);
+        const { hash, salt } = await hashPassword(tempPassword);
+        const userId = newId('user');
+        await env.DB.prepare(
+          `INSERT INTO users (id, organization_id, email, password_hash, password_salt, full_name, role, is_active) VALUES (?, ?, ?, ?, ?, ?, 'org_admin', 1)`
+        ).bind(userId, orgId, admin_email, hash, salt, admin_full_name).run();
+
+        const loginUrl = `${env.SITE_URL || 'https://voiceinsights-frontend.pages.dev'}/login.html`;
+        await sendEmail(env, {
+          to: admin_email,
+          subject: `Your VoiceInsights Africa organization is ready`,
+          html: `<p>Hi ${admin_full_name},</p><p>A VoiceInsights Africa account has been created for <b>${name}</b>.</p>
+                 <p><b>Login:</b> <a href="${loginUrl}">${loginUrl}</a><br><b>Email:</b> ${admin_email}<br><b>Temporary password:</b> ${tempPassword}</p>
+                 <p>Please log in and change your password from Settings as soon as possible.</p>`,
+        });
+
+        await logAudit(env, { org: orgId, userId: claims.sub, action: 'organization_created', resourceType: 'organization', resourceId: orgId, request });
+        return json({ ok: true, organization: { id: orgId, name } }, 201);
+      }
+
+      const orgStatusMatch = path.match(/^\/api\/superadmin\/organizations\/([a-zA-Z0-9_]+)\/status$/);
+      if (orgStatusMatch && method === 'PUT') {
+        const claims = await requireAuth(request, env);
+        if (claims.role !== 'super_admin') return error('Super Admin access required', 403);
+        const { status } = await request.json();
+        if (!['active', 'suspended', 'trial'].includes(status)) return error('status must be active, suspended, or trial');
+        await env.DB.prepare('UPDATE organizations SET status = ?, updated_at = datetime(\'now\') WHERE id = ?').bind(status, orgStatusMatch[1]).run();
+        await logAudit(env, { org: orgStatusMatch[1], userId: claims.sub, action: 'organization_status_changed', resourceType: 'organization', resourceId: orgStatusMatch[1], request });
+        return json({ ok: true });
+      }
+
       if (path === '/api/organizations/me' && method === 'GET') {
         const claims = await requireAuth(request, env);
         const org = await env.DB.prepare('SELECT id, name, type, billing_tier, status FROM organizations WHERE id = ?').bind(claims.org).first();
@@ -594,10 +656,12 @@ export default {
                   resp.phone_number, c.name as campaign_name,
                   (SELECT a.audio_r2_key FROM answers a WHERE a.response_id = r.id AND a.audio_r2_key IS NOT NULL ORDER BY a.created_at ASC LIMIT 1) as audio_r2_key,
                   (SELECT t.raw_text FROM transcripts t JOIN answers a2 ON t.answer_id = a2.id WHERE a2.response_id = r.id ORDER BY t.created_at ASC LIMIT 1) as first_transcript,
-                  (SELECT ai.content_json FROM ai_insights ai WHERE ai.response_id = r.id AND ai.insight_type = 'summary' ORDER BY ai.created_at DESC LIMIT 1) as summary_json
+                  (SELECT ai.content_json FROM ai_insights ai WHERE ai.response_id = r.id AND ai.insight_type = 'summary' ORDER BY ai.created_at DESC LIMIT 1) as summary_json,
+                  rm.device_id, rm.gps_lat, rm.gps_lng, rm.gps_accuracy_m
            FROM responses r
            JOIN campaigns c ON r.campaign_id = c.id
            JOIN respondents resp ON r.respondent_id = resp.id
+           LEFT JOIN response_metadata rm ON rm.response_id = r.id
            WHERE c.organization_id = ? ${assignedCampaign ? 'AND c.id = ?' : ''}
            ORDER BY r.started_at DESC LIMIT 100`
         ).bind(...(assignedCampaign ? [claims.org, assignedCampaign] : [claims.org])).all();
@@ -635,6 +699,23 @@ export default {
       }
 
       // ---------- COMPLIANCE ----------
+      // ---------- OECD-DAC Sustainability & Coherence (org writes once, every report shows it) ----------
+      if (path === '/api/oecd-dac-assessment' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const row = await env.DB.prepare('SELECT sustainability_note, coherence_note FROM oecd_dac_assessments WHERE organization_id = ?').bind(claims.org).first();
+        return json({ sustainability_note: row?.sustainability_note || '', coherence_note: row?.coherence_note || '' });
+      }
+
+      if (path === '/api/oecd-dac-assessment' && method === 'PUT') {
+        const claims = await requireAuth(request, env);
+        const { sustainability_note, coherence_note } = await request.json();
+        await env.DB.prepare(
+          `INSERT INTO oecd_dac_assessments (organization_id, sustainability_note, coherence_note) VALUES (?, ?, ?)
+           ON CONFLICT(organization_id) DO UPDATE SET sustainability_note = excluded.sustainability_note, coherence_note = excluded.coherence_note, updated_at = datetime('now')`
+        ).bind(claims.org, sustainability_note || null, coherence_note || null).run();
+        return json({ ok: true });
+      }
+
       if (path === '/api/compliance' && method === 'GET') {
         const claims = await requireAuth(request, env);
         const { results } = await env.DB.prepare(
@@ -952,8 +1033,11 @@ Respond with ONLY valid JSON in this exact shape, no markdown, no preamble:
       if (publicQMatch && method === 'GET') {
         const campaign = await env.DB.prepare('SELECT * FROM campaigns WHERE id = ?').bind(publicQMatch[1]).first();
         if (!campaign) return error('Campaign not found', 404);
+        const survey = await env.DB.prepare('SELECT updated_at FROM surveys WHERE id = ?').bind(campaign.survey_id).first();
         const questions = await getQuestions(env, campaign.survey_id);
-        return json({ campaign: { id: campaign.id, name: campaign.name }, questions });
+        // survey_version lets an offline-caching client (the Enumerator App) detect
+        // that the survey was edited server-side since it last downloaded it.
+        return json({ campaign: { id: campaign.id, name: campaign.name }, questions, survey_version: survey ? survey.updated_at : null });
       }
 
       // ---------- CHANNEL 1: WHATSAPP ----------
@@ -1038,10 +1122,18 @@ async function getQuestions(env, surveyId) {
 
 // Process one answer (audio OR plain text) for the session's CURRENT question,
 // then advance the session. Every channel calls this one function.
-async function submitAnswer(env, session, { audioBuf, mediaType, textAnswer }) {
+async function submitAnswer(env, session, { audioBuf, mediaType, textAnswer, questionId }) {
   const questions = await getQuestions(env, session.survey_id);
-  const question = questions[session.current_index];
+  // If the caller supplies the exact question_id this answer was recorded
+  // against (used by the offline Enumerator App, which may have downloaded
+  // the survey before it was later edited), honor that specific question —
+  // never re-map an already-recorded answer to a different question just
+  // because the live question list has since changed order or content.
+  // Falls back to position-based lookup for channels with no local cache
+  // (WhatsApp/SMS/Phone), which are always talking to the live question list.
+  const question = questionId ? questions.find(q => q.id === questionId) : questions[session.current_index];
   if (!question) throw new Error('This session has no more questions');
+  const questionIndexForProgress = questions.findIndex(q => q.id === question.id);
 
   let transcript, r2Key = null, sttEngine, transcriptionConfidence = null;
   if (audioBuf) {
@@ -1069,7 +1161,7 @@ async function submitAnswer(env, session, { audioBuf, mediaType, textAnswer }) {
     await env.DB.prepare(
       `INSERT INTO transcripts (id, answer_id, raw_text, language_detected, stt_engine) VALUES (?, ?, ?, ?, ?)`
     ).bind(newId('tr'), answerId, transcript, session.language, sttEngine).run();
-    const nextIndex = session.current_index + 1;
+    const nextIndex = questionIndexForProgress + 1;
     const isComplete = nextIndex >= questions.length;
     await env.DB.prepare(
       `UPDATE sessions SET current_index = ?, status = ?, updated_at = datetime('now') WHERE id = ?`
@@ -1122,7 +1214,7 @@ async function submitAnswer(env, session, { audioBuf, mediaType, textAnswer }) {
     `UPDATE responses SET fraud_score = MAX(COALESCE(fraud_score, 0), ?), overall_sentiment = ? WHERE id = ?`
   ).bind(fraudResult.score, analysis.sentiment, session.response_id).run();
 
-  const nextIndex = session.current_index + 1;
+  const nextIndex = questionIndexForProgress + 1;
   const isComplete = nextIndex >= questions.length;
 
   if (isComplete) {
@@ -1409,6 +1501,11 @@ async function handleWebSubmit(request, env) {
   const campaignId = form.get('campaign_id') || env.DEFAULT_CAMPAIGN_ID || 'camp_default';
   const sessionKey = form.get('session_key') || newId('web');
   const language = form.get('language') || 'en';
+  const questionId = form.get('question_id') || null;
+  const deviceId = form.get('device_id') || null;
+  const gpsLat = form.get('gps_lat') ? parseFloat(form.get('gps_lat')) : null;
+  const gpsLng = form.get('gps_lng') ? parseFloat(form.get('gps_lng')) : null;
+  const gpsAccuracy = form.get('gps_accuracy') ? parseFloat(form.get('gps_accuracy')) : null;
   if (!audioFile || typeof audioFile === 'string') return error('audio file is required');
 
   let session;
@@ -1419,9 +1516,20 @@ async function handleWebSubmit(request, env) {
     return error('Campaign not found or inactive', 404);
   }
 
+  // Record field-collection metadata once per response, whenever the device
+  // supplies it — entirely optional, never blocks submission if absent.
+  if (deviceId || gpsLat != null) {
+    try {
+      await env.DB.prepare(
+        `INSERT INTO response_metadata (response_id, device_id, gps_lat, gps_lng, gps_accuracy_m) VALUES (?, ?, ?, ?, ?)
+         ON CONFLICT(response_id) DO UPDATE SET device_id = excluded.device_id, gps_lat = excluded.gps_lat, gps_lng = excluded.gps_lng, gps_accuracy_m = excluded.gps_accuracy_m`
+      ).bind(session.response_id, deviceId, gpsLat, gpsLng, gpsAccuracy).run();
+    } catch (e) { /* metadata is best-effort — never let it block a real answer from saving */ }
+  }
+
   const audioBuf = await audioFile.arrayBuffer();
   try {
-    const result = await submitAnswer(env, session, { audioBuf, mediaType: audioFile.type || 'audio/webm' });
+    const result = await submitAnswer(env, session, { audioBuf, mediaType: audioFile.type || 'audio/webm', questionId });
     return json({
       ok: true, session_key: sessionKey, transcript: result.transcript, sentiment: result.analysis.sentiment,
       is_complete: result.isComplete, next_question: result.nextQuestion,

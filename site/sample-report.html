@@ -47,9 +47,13 @@
   @media print {
     .sample-banner, .toolbar, nav, footer { display: none !important; }
     body { background: #fff !important; }
-    .r-page { box-shadow: none; background: #fff; }
+    .r-page { box-shadow: none; background: #fff; page-break-after: always; break-after: page; page-break-inside: avoid; }
+    .r-page:last-child { page-break-after: auto; break-after: auto; }
     .r-kpi, .r-chart-box, .r-insight-box, .r-quote-card, .r-rec-col { background: #f4f4f4 !important; }
-    * { color: #111 !important; }
+    .r-page:not(.r-cover) * { color: #111 !important; }
+    .r-cover, .r-cover * { color: #fff !important; }
+    .r-cover-subtitle { color: #A8D9C9 !important; }
+    .r-cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
 </style>
 </head>
@@ -301,6 +305,26 @@
     </div>
 
     <div class="r-page">
+      <div class="r-eyebrow">OECD-DAC Evaluation Criteria</div>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">Assessed against the international development evaluation standard.</h2>
+      <p class="muted-note" style="margin-top:.5rem;">Every VoiceInsights Africa report is structured against all six OECD-DAC criteria, the framework used by UN agencies, USAID, and most bilateral donors to assess development interventions — not just data tables.</p>
+      <div class="table-wrap" style="margin-top:1.5rem;">
+        <table>
+          <thead><tr><th>Criterion</th><th>Assessment</th></tr></thead>
+          <tbody>
+            <tr><td><b>Relevance</b></td><td>Covered under Key Findings — collateral and credit-access barriers match what farmers themselves raised unprompted.</td></tr>
+            <tr><td><b>Effectiveness</b></td><td>Covered under At a Glance / Outcome Indicators — 91% completion rate, measurable movement on 3 tracked indicators.</td></tr>
+            <tr><td><b>Efficiency</b></td><td>100 interviews completed via phone/WhatsApp in 3 weeks with zero field enumerators required — versus an estimated 6-8 weeks and a multi-person field team for an equivalent traditional survey (see ROI Calculator on our website for a full cost comparison methodology).</td></tr>
+            <tr><td><b>Impact</b></td><td>Covered under Outcome Indicators — baseline-to-current movement on agricultural loan uptake, mobile money usage, and cooperative membership.</td></tr>
+            <tr><td><b>Sustainability</b><span class="badge badge-neutral" style="margin-left:.5rem; font-size:.6rem;">Org input</span></td><td class="muted-note">Whether these gains persist depends on continued SACCOS support and collateral-policy follow-through — an assessment your team is best placed to make; this field is designed to be completed by your program staff, not inferred by AI.</td></tr>
+            <tr><td><b>Coherence</b><span class="badge badge-neutral" style="margin-left:.5rem; font-size:.6rem;">Org input</span></td><td class="muted-note">How this aligns with other agricultural finance programs in the same districts (government, other donors) is program-context your team holds — this field is designed to be completed by your program staff, not inferred by AI.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="muted-note" style="margin-top:1rem;">Sustainability and Coherence require program-level context AI cannot infer from voice data alone — VoiceInsights Africa deliberately leaves these as editable fields for your team, rather than fabricating a plausible-sounding answer.</div>
+    </div>
+
+    <div class="r-page">
       <div class="r-eyebrow">Methodology &amp; Trust</div>
       <h2 style="font-size:1.5rem; margin-top:.5rem;">How this data was collected.</h2>
       <div class="r-two-col" style="margin-top:1.5rem;">
@@ -331,6 +355,22 @@
   </div>
 
   <div class="report-doc" id="narrative-view" style="display:none;">
+    <div class="r-page r-cover">
+      <div style="display:flex; align-items:center; gap:.6rem; position:relative; z-index:1;">
+        <img src="/assets/img/logo-icon.png" style="height:30px;" alt="">
+        <span style="font-family:var(--font-display); font-weight:600; font-size:1.05rem; color:#fff;">VoiceInsights Africa</span>
+      </div>
+      <div style="position:relative; z-index:1;">
+        <h1 class="r-cover-title">Access to Finance<br>in Agriculture</h1>
+        <div class="r-cover-subtitle">Tanzania Intelligence Report</div>
+        <div class="r-cover-wave-big cover-wave-clone"></div>
+      </div>
+      <div style="position:relative; z-index:1; border-top:1px solid rgba(255,255,255,.15); padding-top:1.25rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+        <div style="font-size:.85rem; color:rgba(255,255,255,.55);">Prepared for<br><b style="color:#fff; font-size:1rem;">Sample Development Partner</b></div>
+        <div style="font-size:.85rem; color:rgba(255,255,255,.55); text-align:right;">Q1 2026 (illustrative) &middot; n = 100<br><b style="color:#fff; font-size:1rem;">VIA-SAMPLE-TZ-FIN-01</b></div>
+      </div>
+    </div>
+
     <div class="r-page">
       <div class="r-eyebrow">Narrative Report — Access to Finance in Agriculture, Tanzania</div>
       <h2 style="font-size:1.4rem; margin-top:.5rem;">A full written account of what we heard.</h2>
@@ -348,6 +388,8 @@
         <p><b>What this means going forward.</b> In the near term, a simplified collateral pathway for smaller loan amounts, alongside more active promotion of existing mobile-money-linked micro-loan products, could unlock credit for farmers currently excluded by paperwork alone. Over the next six to twelve months, expanding SACCOS coverage in the two lowest-coverage districts — paired with financial literacy support bundled into the loan application process — addresses the deeper structural gap the data points to. Longer term, the collateral barrier is ultimately a land-title registration problem as much as it is a lending problem, and a simplified registration pathway for smallholders would address the root cause rather than its symptoms.</p>
 
         <p>If nothing changes, the risk is not abstract: unmet credit demand among these farmers is likely to persist through the next planting season, with the farmers least able to absorb that cost — those without collateral or cooperative membership — bearing it disproportionately.</p>
+
+        <p><b>Assessed against the OECD-DAC evaluation standard.</b> On relevance and effectiveness, this study speaks for itself — the findings above are grounded directly in what farmers raised unprompted, and 91% completed the full interview. On efficiency, 100 interviews were completed by phone and WhatsApp in three weeks with no field enumerator team required, against an estimated six to eight weeks for an equivalent traditional survey. Sustainability and coherence — whether these gains persist, and how this aligns with other agricultural finance efforts in the same districts — are questions this report deliberately leaves to your program team's judgment rather than an AI-generated guess; they depend on context no voice dataset alone can supply.</p>
       </div>
       <div style="border-top:1px solid var(--border); margin-top:2rem; padding-top:1rem; text-align:center;" class="muted-note">
         VoiceInsights Africa · Sample narrative report — illustrative data
@@ -356,10 +398,25 @@
   </div>
 
   <div class="report-doc" id="full-view" style="display:none;">
+    <div class="r-page r-cover">
+      <div style="display:flex; align-items:center; gap:.6rem; position:relative; z-index:1;">
+        <img src="/assets/img/logo-icon.png" style="height:30px;" alt="">
+        <span style="font-family:var(--font-display); font-weight:600; font-size:1.05rem; color:#fff;">VoiceInsights Africa</span>
+      </div>
+      <div style="position:relative; z-index:1;">
+        <h1 class="r-cover-title">Access to Finance<br>in Agriculture</h1>
+        <div class="r-cover-subtitle">Tanzania Intelligence Report</div>
+        <div class="r-cover-wave-big cover-wave-clone"></div>
+      </div>
+      <div style="position:relative; z-index:1; border-top:1px solid rgba(255,255,255,.15); padding-top:1.25rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+        <div style="font-size:.85rem; color:rgba(255,255,255,.55);">Prepared for<br><b style="color:#fff; font-size:1rem;">Sample Development Partner</b></div>
+        <div style="font-size:.85rem; color:rgba(255,255,255,.55); text-align:right;">Q1 2026 (illustrative) &middot; n = 100<br><b style="color:#fff; font-size:1rem;">VIA-SAMPLE-TZ-FIN-01</b></div>
+      </div>
+    </div>
+
     <div class="r-page">
-      <div class="r-eyebrow">Full Detailed Report — Access to Finance in Agriculture, Tanzania</div>
-      <h1 style="font-size:1.8rem; margin-top:.5rem;">Access to Finance in Agriculture</h1>
-      <div class="muted-note">Tanzania · Q1 2026 (illustrative) · 100 smallholder farmers across 5 regions</div>
+      <div class="r-eyebrow">At a Glance</div>
+      <h2 style="font-size:1.4rem; margin-top:.5rem;">The whole project in four numbers.</h2>
       <div class="r-kpis" style="margin-top:1.5rem;">
         <div class="r-kpi"><div class="stat-value" style="font-size:1.5rem;">100</div><div class="muted-note">Farmers</div></div>
         <div class="r-kpi"><div class="stat-value" style="font-size:1.5rem;">91%</div><div class="muted-note">Response Rate</div></div>
@@ -416,6 +473,24 @@
         <div class="r-rec-col"><h4 style="color:var(--accent);">Immediate (30 days)</h4><ul><li>Simplify collateral pathway for smallholder loans.</li></ul></div>
         <div class="r-rec-col"><h4 style="color:var(--accent-2);">Strategic (6–12 months)</h4><ul><li>Support SACCOS expansion in lowest-coverage districts.</li></ul></div>
         <div class="r-rec-col"><h4 style="color:var(--text-muted);">Policy (Long-term)</h4><ul><li>Simplify land-title registration for smallholders.</li></ul></div>
+      </div>
+    </div>
+
+    <div class="r-page">
+      <div class="r-eyebrow">OECD-DAC Evaluation Criteria</div>
+      <h2 style="font-size:1.4rem; margin-top:.5rem;">Assessed against the international development standard.</h2>
+      <div class="table-wrap" style="margin-top:1.5rem;">
+        <table>
+          <thead><tr><th>Criterion</th><th>Assessment</th></tr></thead>
+          <tbody>
+            <tr><td><b>Relevance</b></td><td style="font-size:.85rem;">Findings grounded in what farmers raised unprompted.</td></tr>
+            <tr><td><b>Effectiveness</b></td><td style="font-size:.85rem;">91% completion rate; measurable indicator movement.</td></tr>
+            <tr><td><b>Efficiency</b></td><td style="font-size:.85rem;">100 interviews in 3 weeks, zero field enumerators.</td></tr>
+            <tr><td><b>Impact</b></td><td style="font-size:.85rem;">Baseline-to-current movement on 3 tracked indicators.</td></tr>
+            <tr><td><b>Sustainability</b> <span class="badge badge-neutral" style="font-size:.6rem;">Org input</span></td><td class="muted-note" style="font-size:.85rem;">Left for your program team to assess — not AI-inferred.</td></tr>
+            <tr><td><b>Coherence</b> <span class="badge badge-neutral" style="font-size:.6rem;">Org input</span></td><td class="muted-note" style="font-size:.85rem;">Left for your program team to assess — not AI-inferred.</td></tr>
+          </tbody>
+        </table>
       </div>
       <div style="border-top:1px solid var(--border); margin-top:2rem; padding-top:1rem; text-align:center;" class="muted-note">
         VoiceInsights Africa · Full Detailed Report — illustrative data
@@ -482,7 +557,7 @@
     link.click();
     document.body.removeChild(link);
   });
-  document.getElementById('cover-wave').innerHTML = makeWaveform(48, false);
+  document.querySelectorAll('.r-cover-wave-big').forEach(el => { el.innerHTML = makeWaveform(48, false); });
 
   const CHART_COLORS = ['#E4A23A', '#4FA490', '#D9634A', '#E4C23A', '#6FBF8B', '#9FB3AB'];
   function makeChart(canvasId, type, labels, data, colors, horizontal) {

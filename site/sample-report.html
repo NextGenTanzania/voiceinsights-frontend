@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sample Research Intelligence Report — VoiceInsights Africa</title>
-<meta name="description" content="See what a VoiceInsights Africa report looks like — a sample, illustrative report with the format your data would generate.">
+<title>Sample Report — Access to Finance in Agriculture, Tanzania — VoiceInsights Africa</title>
+<meta name="description" content="A sample VoiceInsights Africa research intelligence report: Access to Finance in Agriculture, Tanzania — 100 farmers, illustrative data showing the exact format your data would generate.">
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -30,8 +30,15 @@
   .r-rec-col { background: var(--surface-2); border-radius: 12px; padding: 1.25rem; }
   .r-rec-col h4 { font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; margin-bottom: .8rem; }
   .r-rec-col ul { margin: 0; padding-left: 1.2rem; color: var(--text); font-size: .9rem; line-height: 1.6; }
-  .sample-banner { max-width: 900px; margin: 0 auto 1.5rem; background: var(--warn-bg); border: 1px solid var(--warn); border-radius: 10px; padding: 1rem 1.25rem; color: var(--warn); font-size: .88rem; }
+  .sample-banner { max-width: 900px; margin: 0 auto 1.5rem; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px; padding: .9rem 1.25rem; color: var(--text-muted); font-size: .85rem; }
   .toolbar { max-width: 900px; margin: 0 auto 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+  @media print {
+    .sample-banner, .toolbar, nav, footer { display: none !important; }
+    body { background: #fff !important; }
+    .r-page { box-shadow: none; background: #fff; }
+    .r-kpi, .r-chart-box, .r-insight-box, .r-quote-card, .r-rec-col { background: #f4f4f4 !important; }
+    * { color: #111 !important; }
+  }
 </style>
 </head>
 <body>
@@ -59,12 +66,12 @@
 <div class="content" style="padding: 2rem 5vw;">
 
   <div class="sample-banner">
-    <b>⚠ Sample report — illustrative data.</b> This shows the exact format and depth of report VoiceInsights Africa generates automatically from your own data. The numbers below are for demonstration only, not a real study.
+    <b style="color:var(--text);">Sample report, produced by VoiceInsights Africa.</b> This document shows the exact format, depth, and AI intelligence layer our platform generates automatically from your own data. The organization, respondents, and figures shown are illustrative — not a real published study.
   </div>
 
   <div class="toolbar">
     <div class="muted-note">This is what your organization's report would look like.</div>
-    <a href="/contact.html" class="btn btn-primary btn-sm">Get This For Your Data →</a>
+    <button class="btn btn-primary btn-sm" onclick="window.print()">🖨 Download as PDF</button>
   </div>
 
   <div class="report-doc">
@@ -76,14 +83,14 @@
       </div>
       <div style="text-align:center;">
         <div class="r-eyebrow" style="margin-bottom:1rem;">Voice Research Intelligence Report — Sample</div>
-        <h1 style="font-size:2.4rem; max-width:22ch; margin:0 auto .8rem;">Agricultural Baseline Assessment</h1>
-        <div class="muted-note" style="font-size:1rem;">Zanzibar, Tanzania · Q2 2026 (illustrative) · 1,240 respondents across 6 districts</div>
+        <h1 style="font-size:2.3rem; max-width:24ch; margin:0 auto .8rem;">Access to Finance in Agriculture</h1>
+        <div class="muted-note" style="font-size:1rem;">Tanzania · Q1 2026 (illustrative) · 100 smallholder farmers across 5 regions</div>
         <div id="cover-wave" style="margin-top:2.5rem; height:50px;"></div>
       </div>
-      <div style="display:flex; justify-content:space-between; font-size:.8rem; color:var(--text-dim); border-top:1px solid var(--border); padding-top:1.25rem;">
-        <div><b style="color:var(--text-muted);">Prepared for</b><br>Sample NGO Partner</div>
-        <div><b style="color:var(--text-muted);">Report ID</b><br>VIA-SAMPLE-001</div>
-        <div><b style="color:var(--text-muted);">Generated</b><br>Illustrative</div>
+      <div style="display:flex; justify-content:space-between; font-size:.8rem; color:var(--text-dim); border-top:1px solid var(--border); padding-top:1.25rem; flex-wrap:wrap; gap:1rem;">
+        <div><b style="color:var(--text-muted);">Prepared for</b><br>Sample Development Partner</div>
+        <div><b style="color:var(--text-muted);">Report ID</b><br>VIA-SAMPLE-TZ-FIN-01</div>
+        <div><b style="color:var(--text-muted);">Sample Size</b><br>n = 100</div>
         <div><b style="color:var(--text-muted);">Prepared by</b><br>AI analysis + human review</div>
       </div>
     </div>
@@ -92,20 +99,20 @@
       <div class="r-eyebrow">Executive Summary</div>
       <h2 style="font-size:1.5rem; margin-top:.5rem;">The 60-second version.</h2>
       <div class="r-kpis">
-        <div class="r-kpi"><div class="stat-value" style="font-size:1.7rem;">1,240</div><div class="muted-note">Respondents</div></div>
-        <div class="r-kpi"><div class="stat-value" style="font-size:1.7rem;">88%</div><div class="muted-note">Response Rate</div></div>
-        <div class="r-kpi"><div class="stat-value" style="font-size:1.7rem;">56%</div><div class="muted-note">Female Participation</div></div>
-        <div class="r-kpi"><div class="stat-value" style="font-size:1.7rem;">18%</div><div class="muted-note">Negative / Distress</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.7rem;">100</div><div class="muted-note">Farmers Interviewed</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.7rem;">91%</div><div class="muted-note">Response Rate</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.7rem;">34%</div><div class="muted-note">Have an Active Agri-Loan</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.7rem;">89%</div><div class="muted-note">Use Mobile Money</div></div>
       </div>
       <h3 style="font-size:1rem; margin-top:1.5rem;">Key Findings</h3>
       <ul class="r-findings">
-        <li>Water scarcity is the top-cited issue, mentioned by 64% of respondents.</li>
-        <li>Women report a notably higher burden from water collection than men.</li>
-        <li>Coastal districts show the highest concentration of distress signals.</li>
+        <li><span class="badge badge-danger" style="margin-right:.6rem; font-size:.65rem; vertical-align:middle;">CRITICAL</span>Collateral requirements are the top-cited barrier to formal credit, mentioned by 61% of farmers.</li>
+        <li><span class="badge badge-warn" style="margin-right:.6rem; font-size:.65rem; vertical-align:middle;">HIGH</span>Mobile money adoption (89%) is far ahead of formal bank loan uptake (22%) — a gap, not a solved problem.</li>
+        <li><span class="badge badge-neutral" style="margin-right:.6rem; font-size:.65rem; vertical-align:middle;">MEDIUM</span>Farmers in a SACCOS/cooperative are markedly more likely to have received agricultural credit than those outside one.</li>
       </ul>
       <div class="r-insight-box">
         <div class="r-insight-label">AI Insight</div>
-        <div class="muted-note">Fertilizer cost and water access together account for over half of all negative-sentiment responses — a strong signal for where intervention would have the most impact.</div>
+        <div class="muted-note">Cooperative membership is the single strongest factor separating farmers with active credit from those without — stronger than region, age, or gender in this sample. This points to SACCOS expansion as a high-leverage intervention.</div>
       </div>
     </div>
 
@@ -121,17 +128,38 @@
 
     <div class="r-page">
       <div class="r-eyebrow">Core Insights</div>
-      <h2 style="font-size:1.5rem; margin-top:.5rem;">What people are telling us.</h2>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">What farmers are telling us about accessing finance.</h2>
       <div class="r-chart-box" style="height:280px; margin-top:1.5rem;"><canvas id="chartTopics"></canvas></div>
     </div>
 
     <div class="r-page">
       <div class="r-eyebrow">Sentiment &amp; Emotion</div>
-      <h2 style="font-size:1.5rem; margin-top:.5rem;">How people feel.</h2>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">How farmers feel about their access to credit.</h2>
       <div class="r-chart-box" style="max-width:420px; margin:1.5rem auto;"><canvas id="chartSentiment"></canvas></div>
       <div class="r-insight-box">
         <div class="r-insight-label">AI Insight</div>
-        <div class="muted-note">Negative sentiment is concentrated in the two coastal districts — worth a targeted follow-up before the next planting season.</div>
+        <div class="muted-note">Negative sentiment concentrates around collateral and interest rates specifically — not around agricultural credit as a concept. Farmers want credit; the current terms are the obstacle.</div>
+      </div>
+    </div>
+
+    <div class="r-page" style="border-left: 3px solid var(--danger);">
+      <div class="r-eyebrow" style="color:var(--danger);">Urgent Alert</div>
+      <h2 style="font-size:1.4rem; margin-top:.5rem;">12 farmers report being unable to purchase seeds or fertilizer this planting season due to lack of credit.</h2>
+      <p class="muted-note" style="margin-top:.8rem;">Flagged automatically because responses mentioning "can't afford inputs" or "missed planting season" clustered within a single data collection week — a pattern worth a fast follow-up before the next season closes.</p>
+    </div>
+
+    <div class="r-page">
+      <div class="r-eyebrow">Data Quality &amp; Risk Detection</div>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">Every response is checked before it counts.</h2>
+      <div class="r-kpis">
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.5rem; color:var(--success);">97.4%</div><div class="muted-note">Avg. Transcription Confidence</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.5rem; color:var(--success);">93.8%</div><div class="muted-note">Avg. Sentiment Confidence</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.5rem; color:var(--warn);">3</div><div class="muted-note">Responses Flagged for Review</div></div>
+        <div class="r-kpi"><div class="stat-value" style="font-size:1.5rem;">3.0%</div><div class="muted-note">Suspicious Response Rate</div></div>
+      </div>
+      <div class="r-insight-box">
+        <div class="r-insight-label">AI Insight</div>
+        <div class="muted-note">All 3 flagged responses were near-duplicate wording submitted within 10 seconds of a prior answer on the same campaign — consistent with rushed or repeated submissions, not necessarily bad faith. They were excluded from the analysis above.</div>
       </div>
     </div>
 
@@ -139,9 +167,9 @@
       <div class="r-eyebrow">Voices from the Field</div>
       <h2 style="font-size:1.5rem; margin-top:.5rem;">In their own words.</h2>
       <div style="margin-top:1.5rem;">
-        <div class="r-quote-card"><span class="badge badge-danger">Negative</span><p>"Water shortage affects us every dry season — it's our biggest challenge."</p></div>
-        <div class="r-quote-card"><span class="badge badge-danger">Negative</span><p>"Fertilizer prices have gone up so much this year, it's hard to keep farming profitable."</p></div>
-        <div class="r-quote-card"><span class="badge badge-success">Positive</span><p>"This season's yield was better than last year, thanks to the new irrigation support."</p></div>
+        <div class="r-quote-card"><span class="badge badge-danger">Negative</span><p>"The bank asked for a land title as collateral, but our land isn't registered — so we couldn't get the loan."</p></div>
+        <div class="r-quote-card"><span class="badge badge-neutral">Neutral</span><p>"Mobile money has made it easier to save small amounts, but it's not enough to buy a tractor or expand our farm."</p></div>
+        <div class="r-quote-card"><span class="badge badge-success">Positive</span><p>"Since joining our SACCOS, I've been able to get a loan twice — for seeds and fertilizer, right when I needed it."</p></div>
       </div>
     </div>
 
@@ -149,10 +177,34 @@
       <div class="r-eyebrow">Recommendations</div>
       <h2 style="font-size:1.5rem; margin-top:.5rem;">What should happen next.</h2>
       <div class="r-two-col" style="margin-top:1.5rem; grid-template-columns: 1fr 1fr 1fr;">
-        <div class="r-rec-col"><h4 style="color:var(--accent);">Immediate (30 days)</h4><ul><li>Prioritize water point repair in the two coastal districts.</li><li>Share fertilizer price data with district agriculture offices.</li></ul></div>
-        <div class="r-rec-col"><h4 style="color:var(--accent-2);">Strategic (6–12 months)</h4><ul><li>Expand irrigation support to districts with lowest yield gains.</li><li>Launch a women-focused water access program.</li></ul></div>
-        <div class="r-rec-col"><h4 style="color:var(--text-muted);">Policy (Long-term)</h4><ul><li>Advocate for regional fertilizer subsidy review.</li></ul></div>
+        <div class="r-rec-col"><h4 style="color:var(--accent);">Immediate (30 days)</h4><ul><li>Pilot a simplified collateral pathway for smallholder loans under a fixed threshold.</li><li>Promote existing mobile-money-linked micro-loan products more actively in surveyed districts.</li></ul></div>
+        <div class="r-rec-col"><h4 style="color:var(--accent-2);">Strategic (6–12 months)</h4><ul><li>Support SACCOS expansion in the two districts with lowest cooperative coverage.</li><li>Bundle financial literacy training with loan applications.</li></ul></div>
+        <div class="r-rec-col"><h4 style="color:var(--text-muted);">Policy (Long-term)</h4><ul><li>Advocate for a simplified land-title registration pathway for smallholder collateral use.</li></ul></div>
       </div>
+    </div>
+
+    <div class="r-page">
+      <div class="r-eyebrow">Forecasting <span style="color:var(--text-dim); text-transform:none; font-weight:400;">— illustrative capability, not a real prediction</span></div>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">What an AI trend projection would look like.</h2>
+      <div class="r-insight-box" style="border-left-color:var(--accent-2);">
+        <div class="r-insight-label" style="color:var(--accent-2);">Example Projection</div>
+        <div class="muted-note">"If the current rate of collateral-related loan rejections continues unaddressed, unmet credit demand among surveyed farmers could rise over the next two planting seasons." Real forecasts require at least 2-3 rounds of the same survey over time — available once your project has repeat data collection waves.</div>
+      </div>
+    </div>
+
+    <div class="r-page">
+      <div class="r-eyebrow">Benchmarking <span style="color:var(--text-dim); text-transform:none; font-weight:400;">— illustrative capability, not real comparative data</span></div>
+      <h2 style="font-size:1.5rem; margin-top:.5rem;">What a period-over-period comparison would look like.</h2>
+      <div class="table-wrap" style="margin-top:1.5rem;">
+        <table>
+          <thead><tr><th>Indicator</th><th>Example: Previous Round</th><th>Example: Current Round</th><th>Change</th></tr></thead>
+          <tbody>
+            <tr><td>Farmers citing collateral as top barrier</td><td>52%</td><td>61%</td><td style="color:var(--danger); font-weight:600;">+9%</td></tr>
+            <tr><td>Mobile money usage</td><td>74%</td><td>89%</td><td style="color:var(--success); font-weight:600;">+15%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="muted-note" style="margin-top:1rem;">This comparison becomes real and automatic once your organization runs the same survey again in a later period — VoiceInsights Africa keeps every round on record for exactly this.</div>
     </div>
 
     <div class="r-page">
@@ -162,9 +214,9 @@
         <table>
           <thead><tr><th>Indicator</th><th>Baseline</th><th>Current</th><th>Change</th></tr></thead>
           <tbody>
-            <tr><td>Food Security Rate</td><td>41%</td><td>67%</td><td style="color:var(--success); font-weight:600;">+26%</td></tr>
-            <tr><td>School Attendance</td><td>52%</td><td>79%</td><td style="color:var(--success); font-weight:600;">+27%</td></tr>
-            <tr><td>Access to Clean Water</td><td>34%</td><td>48%</td><td style="color:var(--success); font-weight:600;">+14%</td></tr>
+            <tr><td>Farmers with an Active Agricultural Loan</td><td>18%</td><td>34%</td><td style="color:var(--success); font-weight:600;">+16%</td></tr>
+            <tr><td>Mobile Money Usage</td><td>62%</td><td>89%</td><td style="color:var(--success); font-weight:600;">+27%</td></tr>
+            <tr><td>SACCOS / Cooperative Membership</td><td>24%</td><td>41%</td><td style="color:var(--success); font-weight:600;">+17%</td></tr>
           </tbody>
         </table>
       </div>
@@ -178,9 +230,9 @@
         <div>
           <h4 style="font-size:.9rem; color:var(--text-muted);">Data Collection</h4>
           <ul style="color:var(--text); font-size:.9rem; line-height:1.8;">
-            <li>Sample size: 1,240 respondents</li>
-            <li>Response rate: 88%</li>
-            <li>Channels: Phone, WhatsApp, SMS, Web, Offline App</li>
+            <li>Sample size: 100 farmers (91% response rate)</li>
+            <li>Regions: Morogoro, Iringa, Mbeya, Dodoma, Arusha</li>
+            <li>Channels: Phone, WhatsApp, and offline Enumerator App</li>
             <li>AI transcription &amp; sentiment analysis on every response</li>
           </ul>
         </div>
@@ -231,11 +283,11 @@
     });
   }
 
-  makeChart('chartGender', 'doughnut', ['Female', 'Male', 'Prefer not to say'], [56, 41, 3], CHART_COLORS);
-  makeChart('chartAge', 'bar', ['Under 18', '18–24', '25–34', '35–44', '45–54', '55+'], [3, 14, 27, 24, 19, 13], '#E4A23A', true);
-  makeChart('chartRegion', 'bar', ['Unguja South', 'Unguja North', 'Pemba North', 'Pemba South', 'Kaskazini A', 'Mjini'], [310, 265, 220, 195, 150, 100], '#4FA490', false);
-  makeChart('chartTopics', 'bar', ['Water scarcity', 'Fertilizer cost', 'Market access', 'Irrigation', 'Transport'], [64, 51, 38, 29, 21], '#4FA490', true);
-  makeChart('chartSentiment', 'doughnut', ['Positive', 'Neutral', 'Negative', 'Distress'], [46, 26, 21, 7], ['#6FBF8B', '#9FB3AB', '#D9634A', '#E4C23A']);
+  makeChart('chartGender', 'doughnut', ['Male', 'Female', 'Prefer not to say'], [53, 45, 2], CHART_COLORS);
+  makeChart('chartAge', 'bar', ['Under 18', '18–24', '25–34', '35–44', '45–54', '55+'], [1, 9, 28, 31, 21, 10], '#E4A23A', true);
+  makeChart('chartRegion', 'bar', ['Morogoro', 'Iringa', 'Mbeya', 'Dodoma', 'Arusha'], [26, 22, 20, 18, 14], '#4FA490', false);
+  makeChart('chartTopics', 'bar', ['Collateral requirements', 'High interest rates', 'Loan processing delays', 'Limited SACCOS access', 'Financial literacy gaps'], [61, 54, 42, 35, 27], '#4FA490', true);
+  makeChart('chartSentiment', 'doughnut', ['Positive', 'Neutral', 'Negative', 'Distress'], [24, 38, 31, 7], ['#6FBF8B', '#9FB3AB', '#D9634A', '#E4C23A']);
 </script>
 </body>
 </html>

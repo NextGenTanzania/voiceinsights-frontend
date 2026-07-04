@@ -170,6 +170,16 @@ CREATE TABLE IF NOT EXISTS user_profile (
   invite_method TEXT
 );
 
+-- Optional project/campaign assignment for restricted-access users (e.g. field
+-- enumerators who should only see data for the specific project they were
+-- invited to). Kept as its own table so no ALTER TABLE is ever needed on
+-- the existing user_profile table.
+CREATE TABLE IF NOT EXISTS user_campaign_assignment (
+  user_id      TEXT PRIMARY KEY REFERENCES users(id),
+  campaign_id  TEXT NOT NULL REFERENCES campaigns(id),
+  assigned_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 -- Two-Factor Authentication (TOTP) per user — compatible with Google Authenticator, Authy, etc.
 CREATE TABLE IF NOT EXISTS user_2fa (
   user_id      TEXT PRIMARY KEY REFERENCES users(id),

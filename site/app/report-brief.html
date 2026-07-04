@@ -82,7 +82,8 @@
               <tbody id="matrix-tbody"><tr><td colspan="3" class="muted-note">Loading…</td></tr></tbody>
             </table>
           </div>
-          <div style="border-top:1px solid var(--border); margin-top:2.5rem; padding-top:1rem; text-align:center;" class="muted-note">
+          <div class="muted-note" style="margin-top:1rem; font-size:.8rem;" id="quality-note">Data quality: loading…</div>
+          <div style="border-top:1px solid var(--border); margin-top:1.5rem; padding-top:1rem; text-align:center;" class="muted-note">
             VoiceInsights Africa · voiceinsightsafrica.com
           </div>
         </div>
@@ -119,12 +120,18 @@
 
   (async () => {
     try {
-      const [stats, analytics, org, intelligence] = await Promise.all([
+      const [stats, analytics, org, intelligence, quality] = await Promise.all([
         apiRequest('/api/dashboard/stats'),
         apiRequest('/api/analytics/summary'),
         apiRequest('/api/organizations/me'),
         apiRequest('/api/reports/intelligence').catch(() => ({ key_findings: [], recommendations: { immediate: [], strategic: [], policy: [] } })),
+        apiRequest('/api/admin/model-stats').catch(() => null),
       ]);
+
+      if (quality) {
+        const rate = quality.total_responses ? ((quality.fraud_flags / quality.total_responses) * 100).toFixed(1) : '0.0';
+        document.getElementById('quality-note').textContent = `Data quality: ${quality.total_responses} responses checked, ${quality.fraud_flags} flagged for review (${rate}% flag rate).`;
+      }
 
       document.getElementById('brief-org').textContent = org.organization.name;
       document.getElementById('brief-meta').textContent = `${stats.total_responses} respondents · Generated ${new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}`;

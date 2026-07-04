@@ -161,11 +161,18 @@ export default {
       if (path === '/api/users/invite' && method === 'POST') {
         const claims = await requireAuth(request, env);
         if (claims.role !== 'org_admin') return error('Only an Org Admin can invite users', 403);
-        const { email, full_name, role, region, phone, invite_method } = await request.json();
+        const { email, full_name, role, region, phone, invite_method, campaign_id } = await request.json();
         if (!email || !full_name) return error('email and full_name are required');
         if ((invite_method === 'sms' || invite_method === 'whatsapp') && !phone) return error('Phone number is required for SMS/WhatsApp invites', 400);
         const existing = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(email).first();
         if (existing) return error('A user with this email already exists', 409);
+
+        let campaignName = null;
+        if (campaign_id) {
+          const campaign = await env.DB.prepare('SELECT id, name FROM campaigns WHERE id = ? AND organization_id = ?').bind(campaign_id, claims.org).first();
+          if (!campaign) return error('That project/campaign was not found', 400);
+          campaignName = campaign.name;
+        }
 
         const tempPassword = [...crypto.getRandomValues(new Uint8Array(9))].map(b => b.toString(36)).join('').slice(0, 12);
         const { hash, salt } = await hashPassword(tempPassword);
@@ -181,11 +188,17 @@ export default {
           ).bind(userId, phone || null, region || null, invite_method || 'email').run();
         }
 
+        if (campaign_id && role === 'enumerator') {
+          await env.DB.prepare(
+            `INSERT INTO user_campaign_assignment (user_id, campaign_id) VALUES (?, ?)`
+          ).bind(userId, campaign_id).run();
+        }
+
         const loginUrl = `${env.SITE_URL || 'https://voiceinsights-frontend.pages.dev'}/login.html`;
         let delivered = 'email';
 
         if (invite_method === 'sms' || invite_method === 'whatsapp') {
-          const smsBody = `Hi ${full_name}, you've been invited to VoiceInsights Africa. Login: ${loginUrl} | Email: ${email} | Temp password: ${tempPassword}. Please change your password after first login.`;
+          const smsBody = `Hi ${full_name}, you've been invited to VoiceInsights Africa${campaignName ? ` for the "${campaignName}" project` : ''}. Login: ${loginUrl} | Email: ${email} | Temp password: ${tempPassword}. Please change your password after first login.`;
           const result = await sendTwilioMessage(env, { to: phone, body: smsBody, whatsapp: invite_method === 'whatsapp' });
           if (result.ok) {
             delivered = invite_method;
@@ -200,7 +213,7 @@ export default {
             to: email,
             subject: `You've been invited to VoiceInsights Africa`,
             html: `<p>Hi ${full_name},</p>
-                   <p>You've been added as a team member on VoiceInsights Africa${region ? ` for the ${region} region` : ''}.</p>
+                   <p>You've been added as a team member on VoiceInsights Africa${region ? ` for the ${region} region` : ''}${campaignName ? `, assigned to the <b>${campaignName}</b> project` : ''}.</p>
                    <p><b>Login:</b> <a href="${loginUrl}">${loginUrl}</a><br>
                    <b>Email:</b> ${email}<br>
                    <b>Temporary password:</b> ${tempPassword}</p>
@@ -208,7 +221,7 @@ export default {
           });
         }
 
-        return json({ ok: true, delivered_via: delivered, user: { id: userId, email, full_name, role: role || 'me_officer', region: region || null } }, 201);
+        return json({ ok: true, delivered_via: delivered, user: { id: userId, email, full_name, role: role || 'me_officer', region: region || null, campaign_id: campaign_id || null } }, 201);
       }
 
       const deactivateMatch = path.match(/^\/api\/users\/([a-zA-Z0-9_]+)\/deactivate$/);
@@ -291,29 +304,32 @@ export default {
       // ---------- DASHBOARD ----------
       if (path === '/api/dashboard/stats' && method === 'GET') {
         const claims = await requireAuth(request, env);
+        const assignedCampaign = await getAssignedCampaignId(env, claims);
+        const campFilter = assignedCampaign ? 'AND c.id = ?' : '';
+        const bindArgs = assignedCampaign ? [claims.org, assignedCampaign] : [claims.org];
         const surveys = await env.DB.prepare('SELECT COUNT(*) as n FROM surveys WHERE organization_id = ? AND status = "active"').bind(claims.org).first();
         const responses = await env.DB.prepare(
-          `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ?`
-        ).bind(claims.org).first();
+          `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? ${campFilter}`
+        ).bind(...bindArgs).first();
         const completed = await env.DB.prepare(
-          `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? AND r.status = 'completed'`
-        ).bind(claims.org).first();
+          `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? ${campFilter} AND r.status = 'completed'`
+        ).bind(...bindArgs).first();
         const positive = await env.DB.prepare(
-          `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? AND r.overall_sentiment = 'positive'`
-        ).bind(claims.org).first();
+          `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? ${campFilter} AND r.overall_sentiment = 'positive'`
+        ).bind(...bindArgs).first();
         const byChannel = await env.DB.prepare(
-          `SELECT r.channel, COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? GROUP BY r.channel`
-        ).bind(claims.org).all();
+          `SELECT r.channel, COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? ${campFilter} GROUP BY r.channel`
+        ).bind(...bindArgs).all();
         const { results: weeklyRows } = await env.DB.prepare(
           `SELECT strftime('%Y-%W', r.started_at) as week, COUNT(*) as n
            FROM responses r JOIN campaigns c ON r.campaign_id = c.id
-           WHERE c.organization_id = ? AND r.started_at >= datetime('now', '-42 days')
+           WHERE c.organization_id = ? ${campFilter} AND r.started_at >= datetime('now', '-42 days')
            GROUP BY week ORDER BY week ASC`
-        ).bind(claims.org).all();
+        ).bind(...bindArgs).all();
         const { results: sentimentRows } = await env.DB.prepare(
           `SELECT r.overall_sentiment, COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id
-           WHERE c.organization_id = ? GROUP BY r.overall_sentiment`
-        ).bind(claims.org).all();
+           WHERE c.organization_id = ? ${campFilter} GROUP BY r.overall_sentiment`
+        ).bind(...bindArgs).all();
         const responseRate = responses.n > 0 ? Math.round((completed.n / responses.n) * 100) : 0;
         const positiveSentimentPct = responses.n > 0 ? Math.round((positive.n / responses.n) * 100) : 0;
         return json({
@@ -467,6 +483,7 @@ export default {
       // ---------- INTERVIEWS (responses with transcript + audio) ----------
       if (path === '/api/interviews' && method === 'GET') {
         const claims = await requireAuth(request, env);
+        const assignedCampaign = await getAssignedCampaignId(env, claims);
         const { results } = await env.DB.prepare(
           `SELECT r.id as response_id, r.channel, r.overall_sentiment, r.fraud_score, r.status, r.started_at,
                   resp.phone_number, c.name as campaign_name,
@@ -476,9 +493,9 @@ export default {
            FROM responses r
            JOIN campaigns c ON r.campaign_id = c.id
            JOIN respondents resp ON r.respondent_id = resp.id
-           WHERE c.organization_id = ?
+           WHERE c.organization_id = ? ${assignedCampaign ? 'AND c.id = ?' : ''}
            ORDER BY r.started_at DESC LIMIT 100`
-        ).bind(claims.org).all();
+        ).bind(...(assignedCampaign ? [claims.org, assignedCampaign] : [claims.org])).all();
         return json({ interviews: results });
       }
 
@@ -1259,6 +1276,14 @@ async function sendEmail(env, { to, subject, html }) {
 // Outbound SMS / WhatsApp via Twilio (for invites and future alerts).
 // Silently no-ops if Twilio isn't configured — caller should fall back to email.
 // ============================================================
+// Returns the campaign_id a user is restricted to, or null if they have full
+// organization access (only 'enumerator' role users can be scoped this way).
+async function getAssignedCampaignId(env, claims) {
+  if (claims.role !== 'enumerator') return null;
+  const row = await env.DB.prepare('SELECT campaign_id FROM user_campaign_assignment WHERE user_id = ?').bind(claims.sub).first();
+  return row ? row.campaign_id : null;
+}
+
 async function sendTwilioMessage(env, { to, body, whatsapp = false }) {
   if (!env.TWILIO_ACCOUNT_SID || !env.TWILIO_AUTH_TOKEN || !env.TWILIO_PHONE_NUMBER) {
     return { ok: false, reason: 'twilio_not_configured' };

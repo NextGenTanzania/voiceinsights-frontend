@@ -37,6 +37,32 @@
   --sidebar-w: 248px;
 }
 
+/* ---------- Light theme override (toggled via [data-theme="light"] on <html>) ---------- */
+html[data-theme="light"] {
+  --bg:        #F7F5F0;
+  --surface:   #FFFFFF;
+  --surface-2: #F1EEE6;
+  --surface-3: #E7E2D6;
+  --border:    rgba(35, 30, 20, 0.10);
+  --border-strong: rgba(35, 30, 20, 0.20);
+  --text:      #1E2620;
+  --text-muted:#5B6B5E;
+  --text-dim:  #8A9B8D;
+  --accent:    #C97F1A;
+  --accent-ink:#FFF6E6;
+  --accent-2:  #2E7D6B;
+  --accent-2-ink:#EAFBF6;
+  --danger:    #C24A32;
+  --danger-bg: rgba(194, 74, 50, 0.10);
+  --success:   #3B8F5E;
+  --success-bg:rgba(59,143,94,0.10);
+  --warn:      #B08A1A;
+  --warn-bg:   rgba(176,138,26,0.12);
+}
+html[data-theme="light"] .pub-nav::before { background: rgba(247, 245, 240, 0.88); }
+html[data-theme="light"] .topbar { background: rgba(247,245,240,.8); }
+html[data-theme="light"] .sidebar { box-shadow: 1px 0 0 var(--border); }
+
 * { box-sizing: border-box; }
 html { color-scheme: dark; scroll-behavior: smooth; }
 body {
@@ -285,6 +311,17 @@ footer.pub-footer { padding: 3rem 5vw; max-width: 1200px; margin: 2rem auto 0; b
 }
 
 /* ---------- Public marketing pages: mobile ---------- */
+/* ---------- Tooltips ---------- */
+[data-tooltip] { position: relative; cursor: help; border-bottom: 1px dotted var(--text-dim); }
+[data-tooltip]::after {
+  content: attr(data-tooltip); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  background: var(--surface-3); color: var(--text); border: 1px solid var(--border-strong); border-radius: 8px;
+  padding: .5rem .75rem; font-size: .74rem; font-weight: 500; white-space: normal; width: max-content; max-width: 220px;
+  box-shadow: 0 12px 24px -8px rgba(0,0,0,.5); opacity: 0; pointer-events: none; transition: opacity .15s ease, transform .15s ease;
+  z-index: 50; line-height: 1.4;
+}
+[data-tooltip]:hover::after { opacity: 1; transform: translateX(-50%) translateY(-2px); }
+
 .trust-bar { max-width: 1200px; margin: 0 auto; padding: 1.5rem 5vw; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
 .trust-bar-badges { display: flex; gap: .7rem; flex-wrap: wrap; }
 .trust-badge { display: inline-flex; align-items: center; gap: .4rem; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: .4rem .9rem; font-size: .76rem; color: var(--text-muted); font-weight: 600; }

@@ -53,11 +53,12 @@
             </div>
             <img src="/assets/img/logo-icon.png" style="height:30px;" alt="">
           </div>
-          <div class="r-kpis">
+          <div class="r-kpis" style="grid-template-columns: repeat(5,1fr);">
             <div class="r-kpi"><div class="stat-value" id="kpi-responses" style="font-size:1.5rem;">–</div><div class="muted-note">Respondents</div></div>
             <div class="r-kpi"><div class="stat-value" id="kpi-surveys" style="font-size:1.5rem;">–</div><div class="muted-note">Active Projects</div></div>
             <div class="r-kpi"><div class="stat-value" id="kpi-rate" style="font-size:1.5rem;">–</div><div class="muted-note">Completion</div></div>
             <div class="r-kpi"><div class="stat-value" id="kpi-sentiment" style="font-size:1.5rem;">–</div><div class="muted-note">Positive</div></div>
+            <div class="r-kpi"><div class="stat-value" id="kpi-flagrate" style="font-size:1.5rem; color:var(--warn);">–</div><div class="muted-note">Fraud Flag Rate</div></div>
           </div>
           <div class="r-grid-2" style="margin-top:1rem;">
             <div class="r-chart-box"><canvas id="chartSentiment"></canvas></div>
@@ -129,12 +130,17 @@
 
   (async () => {
     try {
-      const [stats, analytics, org, intelligence] = await Promise.all([
+      const [stats, analytics, org, intelligence, quality] = await Promise.all([
         apiRequest('/api/dashboard/stats'),
         apiRequest('/api/analytics/summary'),
         apiRequest('/api/organizations/me'),
         apiRequest('/api/reports/intelligence').catch(() => ({ recommendations: { immediate: [], strategic: [], policy: [] } })),
+        apiRequest('/api/admin/model-stats').catch(() => null),
       ]);
+
+      if (quality) {
+        document.getElementById('kpi-flagrate').textContent = quality.total_responses ? ((quality.fraud_flags / quality.total_responses) * 100).toFixed(1) + '%' : '—';
+      }
 
       document.getElementById('snap-org').textContent = org.organization.name + ' — Live Analytics';
       document.getElementById('kpi-responses').textContent = stats.total_responses;

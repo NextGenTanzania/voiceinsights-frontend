@@ -43,10 +43,16 @@
             <div class="field"><label data-i18n="set.invite_role">Role</label>
               <select id="invite-role">
                 <option value="me_officer" data-i18n="set.me_officer">M&amp;E Officer</option>
+                <option value="enumerator" data-i18n="set.enumerator">Enumerator (field data collector)</option>
                 <option value="org_admin" data-i18n="set.org_admin">Org Admin</option>
               </select>
             </div>
             <div class="field"><label data-i18n="set.invite_region">Region</label><input id="invite-region" placeholder="e.g. Zanzibar, Mwanza"></div>
+          </div>
+          <div class="field" id="invite-project-field" style="display:none;">
+            <label data-i18n="set.invite_project">Assign to Project</label>
+            <select id="invite-project"><option value="" data-i18n="set.invite_project_none">Loading projects…</option></select>
+            <div class="muted-note" style="margin-top:.3rem;" data-i18n="set.invite_project_note">This enumerator will only see data for the project you select here.</div>
           </div>
           <div class="field">
             <label data-i18n="set.invite_method_label">Invitation Method</label>
@@ -217,8 +223,8 @@
   });
 
   // ---------- Team / Invite User ----------
-  const STATUS_BADGE_MAP = { org_admin: 'badge-accent', me_officer: 'badge-neutral' };
-  const ROLE_LABEL = { org_admin: t('set.org_admin', 'Org Admin'), me_officer: t('set.me_officer', 'M&E Officer') };
+  const STATUS_BADGE_MAP = { org_admin: 'badge-accent', me_officer: 'badge-neutral', enumerator: 'badge-success' };
+  const ROLE_LABEL = { org_admin: t('set.org_admin', 'Org Admin'), me_officer: t('set.me_officer', 'M&E Officer'), enumerator: t('set.enumerator', 'Enumerator (field data collector)') };
 
   async function loadUsers() {
     const tbody = document.getElementById('users-tbody');
@@ -252,6 +258,23 @@
     });
   });
 
+  document.getElementById('invite-role').addEventListener('change', (e) => {
+    document.getElementById('invite-project-field').style.display = e.target.value === 'enumerator' ? 'block' : 'none';
+  });
+
+  async function loadProjectOptions() {
+    const select = document.getElementById('invite-project');
+    try {
+      const { campaigns } = await apiRequest('/api/campaigns');
+      select.innerHTML = campaigns.length
+        ? campaigns.map(c => `<option value="${c.id}">${c.name}</option>`).join('')
+        : `<option value="">${t('set.invite_project_empty', 'No projects yet — create one first')}</option>`;
+    } catch (e) {
+      select.innerHTML = `<option value="">${t('set.invite_project_error', 'Could not load projects')}</option>`;
+    }
+  }
+  loadProjectOptions();
+
   document.getElementById('invite-send-btn').addEventListener('click', async () => {
     const errBox = document.getElementById('invite-error');
     const okBox = document.getElementById('invite-success');
@@ -259,16 +282,18 @@
     const btn = document.getElementById('invite-send-btn');
     btn.disabled = true; btn.textContent = t('set.sending', 'Sending…');
     const method = document.querySelector('input[name="invite-method"]:checked').value;
+    const role = document.getElementById('invite-role').value;
     try {
       const result = await apiRequest('/api/users/invite', {
         method: 'POST',
         body: {
           full_name: document.getElementById('invite-name').value,
           email: document.getElementById('invite-email').value,
-          role: document.getElementById('invite-role').value,
+          role,
           region: document.getElementById('invite-region').value,
           phone: document.getElementById('invite-phone').value,
           invite_method: method,
+          campaign_id: role === 'enumerator' ? document.getElementById('invite-project').value : null,
         },
       });
       okBox.textContent = t('set.invite_sent', 'Invite sent — they will receive their login details by email.') + ` (${result.delivered_via})`;

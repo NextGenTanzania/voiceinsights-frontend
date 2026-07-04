@@ -2,8 +2,24 @@
 
 const VI = {
   lang: localStorage.getItem('vi_lang') || 'en',
-  user: { name: 'Kitentya Msuya', org: 'VoiceInsights Africa', role: 'org_admin', initials: 'KM' },
+  user: { name: 'Kitentya Luth', org: 'VoiceInsights Africa', role: 'org_admin', initials: 'KL' },
 };
+
+// ---------- Theme (dark/light) — applied immediately to avoid a flash ----------
+function getTheme() {
+  return localStorage.getItem('vi_theme') || 'dark';
+}
+function applyTheme(theme) {
+  if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  else document.documentElement.removeAttribute('data-theme');
+  localStorage.setItem('vi_theme', theme);
+}
+function toggleTheme() {
+  const next = getTheme() === 'light' ? 'dark' : 'light';
+  applyTheme(next);
+  document.querySelectorAll('.theme-toggle-icon').forEach(el => { el.textContent = next === 'light' ? '🌙' : '☀️'; });
+}
+applyTheme(getTheme()); // run immediately on script load, before DOMContentLoaded, to avoid a flash of the wrong theme
 
 // ---------- App-wide language (separate from the public marketing site toggle) ----------
 function getAppLang() {
@@ -110,13 +126,17 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
   const storedUser = JSON.parse(localStorage.getItem('vi_user') || 'null');
   const userRole = storedUser?.role || 'org_admin';
 
-  // Full-access roles see everything; a plain M&E Officer gets a reduced, focused nav
-  // (no Billing, no Compliance edit, no Leads) — reflecting real permission differences.
+  // Full-access roles see everything; a plain M&E Officer or Enumerator gets a
+  // reduced, focused nav (no Billing, no Compliance edit, no Leads) — reflecting
+  // real permission differences. Enumerators additionally don't manage surveys.
   const RESTRICTED_FOR_ME_OFFICER = ['/app/billing.html', '/app/settings.html', '/admin/leads.html', '/admin/clients.html'];
+  const RESTRICTED_FOR_ENUMERATOR = [...RESTRICTED_FOR_ME_OFFICER, '/app/surveys.html', '/app/campaigns.html', '/app/compliance.html'];
 
   let nav = role === 'admin' ? NAV_ADMIN : NAV_APP;
   if (role === 'client' && userRole === 'me_officer') {
     nav = nav.map(g => ({ ...g, items: g.items.filter(it => !RESTRICTED_FOR_ME_OFFICER.includes(it.href)) })).filter(g => g.items.length);
+  } else if (role === 'client' && userRole === 'enumerator') {
+    nav = nav.map(g => ({ ...g, items: g.items.filter(it => !RESTRICTED_FOR_ENUMERATOR.includes(it.href)) })).filter(g => g.items.length);
   }
 
   const brandName = 'VoiceInsights Africa';
@@ -132,9 +152,10 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
         </a>`).join('')}
     </div>`).join('');
 
+  const ROLE_DISPLAY = { me_officer: 'M&E Officer', enumerator: 'Enumerator' };
   const displayName = storedUser?.full_name || VI.user.name;
   const displayInitials = displayName.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
-  const displayRole = storedUser?.role === 'me_officer' ? 'M&E Officer' : (role === 'admin' ? 'Super Admin' : 'Org Admin');
+  const displayRole = ROLE_DISPLAY[storedUser?.role] || (role === 'admin' ? 'Super Admin' : 'Org Admin');
 
   const sidebarMount = document.getElementById('sidebar-mount');
   if (sidebarMount) {
@@ -170,6 +191,7 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
           </div>
         </div>
         <div style="display:flex; align-items:center; gap:.9rem;">
+          <button class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">${getTheme() === 'light' ? '🌙' : '☀️'}</span></button>
           <div class="lang-toggle" id="app-lang-toggle">
             ${APP_LANGS.map(l => `<button class="${currentLang === l.code ? 'active' : ''}" data-lang="${l.code}">${l.label}</button>`).join('')}
           </div>
@@ -181,6 +203,9 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
         </div>
       </header>`;
   }
+
+  const themeToggleBtn = document.getElementById('theme-toggle-btn');
+  if (themeToggleBtn && !themeToggleBtn.dataset.bound) { themeToggleBtn.dataset.bound = '1'; themeToggleBtn.addEventListener('click', toggleTheme); }
 
   if (window.lucide) lucide.createIcons();
 
@@ -295,6 +320,14 @@ document.addEventListener('DOMContentLoaded', () => {
       toggle.classList.remove('open');
       panel.classList.remove('open');
     }));
+  }
+
+  // Public-site theme toggle button (app pages get their own handler in renderShell()).
+  const publicThemeBtn = document.getElementById('theme-toggle-btn');
+  if (publicThemeBtn && !publicThemeBtn.dataset.bound) {
+    publicThemeBtn.dataset.bound = '1';
+    publicThemeBtn.querySelector('.theme-toggle-icon').textContent = getTheme() === 'light' ? '🌙' : '☀️';
+    publicThemeBtn.addEventListener('click', toggleTheme);
   }
 });
 

@@ -134,6 +134,19 @@
           <div id="report-quotes" style="margin-top:1.5rem;"></div>
         </div>
 
+        <!-- PAGE 6B — DATA QUALITY & RISK DETECTION (real data) -->
+        <div class="r-page">
+          <div class="r-eyebrow">Data Quality &amp; Risk Detection</div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">Every response is checked before it counts.</h2>
+          <div class="r-kpis" id="quality-kpis">
+            <div class="r-kpi"><div class="stat-value" id="q-total" style="font-size:1.5rem;">–</div><div class="muted-note">Responses Checked</div></div>
+            <div class="r-kpi"><div class="stat-value" id="q-flagged" style="font-size:1.5rem; color:var(--warn);">–</div><div class="muted-note">Flagged for Review</div></div>
+            <div class="r-kpi"><div class="stat-value" id="q-flagrate" style="font-size:1.5rem;">–</div><div class="muted-note">Flag Rate</div></div>
+            <div class="r-kpi"><div class="stat-value" id="q-processing" style="font-size:1.5rem;">–</div><div class="muted-note">Avg. Processing Time</div></div>
+          </div>
+          <div class="muted-note" style="margin-top:.5rem;">These figures come directly from your own response data — not illustrative. Flagged responses (near-duplicate wording or unusually fast submission) are excluded from the analysis above.</div>
+        </div>
+
         <!-- PAGE 7 — RECOMMENDATIONS -->
         <div class="r-page">
           <div class="r-eyebrow">Recommendations</div>
@@ -212,12 +225,20 @@
 
   (async () => {
     try {
-      const [stats, analytics, org, intelligence] = await Promise.all([
+      const [stats, analytics, org, intelligence, quality] = await Promise.all([
         apiRequest('/api/dashboard/stats'),
         apiRequest('/api/analytics/summary'),
         apiRequest('/api/organizations/me'),
         apiRequest('/api/reports/intelligence').catch(() => ({ key_findings: [], recommendations: { immediate: [], strategic: [], policy: [] } })),
+        apiRequest('/api/admin/model-stats').catch(() => null),
       ]);
+
+      if (quality) {
+        document.getElementById('q-total').textContent = quality.total_responses;
+        document.getElementById('q-flagged').textContent = quality.fraud_flags;
+        document.getElementById('q-flagrate').textContent = quality.total_responses ? ((quality.fraud_flags / quality.total_responses) * 100).toFixed(1) + '%' : '—';
+        document.getElementById('q-processing').textContent = quality.avg_processing_seconds != null ? quality.avg_processing_seconds.toFixed(1) + 's' : '—';
+      }
 
       const total = stats.total_responses;
       const female = analytics.gender.find(g => /female/i.test(g.gender));

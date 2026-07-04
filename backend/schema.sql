@@ -233,7 +233,7 @@ VALUES (
   'kitentya.luth@voiceinsightsafrica.com',
   '2f717f95d592f79ab0e328ae7dfc74a8c63b173388a7f656ca8b69c4816d0024',
   'bfb95dcdc3381a3d6353395d33c177ea',
-  'Kitentya Luth Msuya',
+  'Kitentya Luth',
   'org_admin'
 );
 
@@ -243,7 +243,8 @@ VALUES (
 UPDATE users SET
   email = 'kitentya.luth@voiceinsightsafrica.com',
   password_hash = '2f717f95d592f79ab0e328ae7dfc74a8c63b173388a7f656ca8b69c4816d0024',
-  password_salt = 'bfb95dcdc3381a3d6353395d33c177ea'
+  password_salt = 'bfb95dcdc3381a3d6353395d33c177ea',
+  full_name = 'Kitentya Luth'
 WHERE id = 'user_demo_admin';
 
 -- Second demo login with a restricted role, to test role-based UI differences.

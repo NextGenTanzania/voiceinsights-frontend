@@ -21,11 +21,12 @@
 <body>
 
 <nav class="pub-nav">
-  <a href="/index.html" style="display:flex;align-items:center;gap:.6rem;">
+  <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
     <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
     <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
   </a>
-  <div style="display:flex; align-items:center; gap:1.75rem; flex-wrap:wrap; justify-content:flex-end;">
+  <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  <div id="pub-nav-right" style="display:flex; align-items:center; gap:1.75rem; flex-wrap:wrap; justify-content:flex-end;">
     <div class="pub-nav-links" style="display:flex; gap:1.4rem; align-items:center;">
       <a href="/platform.html" data-i18n="topnav.platform" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
       <a href="/solutions.html" data-i18n="topnav.solutions" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>

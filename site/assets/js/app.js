@@ -266,13 +266,36 @@ function renderViaAssistant() {
 }
 
 function highlightActiveTopNav() {
-  const current = window.location.pathname.replace(/\/index\.html$/, '/').replace(/\/$/, '') || '/';
+  const currentPath = window.location.pathname.replace(/\/index\.html$/, '/').replace(/\/$/, '') || '/';
+  const currentHash = window.location.hash;
   document.querySelectorAll('.pub-nav-links a').forEach(a => {
     const href = a.getAttribute('href') || '';
-    const hrefPath = href.split('#')[0].replace(/\/index\.html$/, '/').replace(/\/$/, '') || '/';
-    if (hrefPath && hrefPath === current) a.classList.add('active-nav-link');
+    const hasHash = href.includes('#');
+    const hrefPathRaw = hasHash ? href.split('#')[0] : href;
+    const hrefHash = hasHash ? '#' + href.split('#')[1] : '';
+    const hrefPath = hrefPathRaw.replace(/\/index\.html$/, '/').replace(/\/$/, '') || '/';
+    // Anchor links (e.g. Pricing → /index.html#pricing) only light up when the
+    // hash itself matches — otherwise they'd falsely activate on every homepage visit.
+    const isMatch = hasHash ? (hrefPath === currentPath && hrefHash === currentHash) : (hrefPath === currentPath);
+    if (isMatch) a.classList.add('active-nav-link');
   });
 }
 document.addEventListener('DOMContentLoaded', highlightActiveTopNav);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.getElementById('mobile-nav-toggle');
+  const panel = document.getElementById('pub-nav-right');
+  if (toggle && panel) {
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('open');
+      panel.classList.toggle('open');
+    });
+    // Close the mobile menu after tapping any link inside it.
+    panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      toggle.classList.remove('open');
+      panel.classList.remove('open');
+    }));
+  }
+});
 
 document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });

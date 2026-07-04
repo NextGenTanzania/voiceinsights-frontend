@@ -22,11 +22,12 @@
 </div>
 
 <nav class="pub-nav">
-  <a href="/index.html" style="display:flex;align-items:center;gap:.6rem;">
+  <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
     <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
     <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
   </a>
-  <div style="display:flex; align-items:center; gap:1.75rem; flex-wrap:wrap; justify-content:flex-end;">
+  <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  <div id="pub-nav-right" style="display:flex; align-items:center; gap:1.75rem; flex-wrap:wrap; justify-content:flex-end;">
     <div class="pub-nav-links" style="display:flex; gap:1.4rem; align-items:center;">
       <a href="/platform.html" data-i18n="topnav.platform" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
       <a href="/solutions.html" data-i18n="topnav.solutions" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
@@ -58,7 +59,8 @@
       <p class="lead" data-i18n="hero.lead">VoiceInsights Africa helps NGOs, governments, and research firms around the world collect, analyze, and report voice data — no paperwork, no months of waiting, no language left behind.</p>
       <div style="display:flex; gap:.8rem; margin-top:2rem; flex-wrap:wrap;">
         <a href="/contact.html" class="btn btn-primary" data-i18n="hero.cta1">Request Demo &rarr;</a>
-        <a href="/respondent.html" class="btn btn-ghost">Try Live Demo</a>
+        <a href="/sample-report.html" class="btn btn-ghost" data-i18n="hero.cta_sample">Download Sample Report</a>
+        <a href="/respondent.html" class="btn btn-ghost" data-i18n="hero.cta2">Try Live Demo</a>
       </div>
       <div class="grid grid-4" style="margin-top:2.5rem; gap:1rem; max-width:560px;">
         <div><div class="stat-value" style="font-size:1.4rem;">5</div><div class="muted-note" style="font-size:.72rem;">Collection channels</div></div>
@@ -90,14 +92,86 @@
   </div>
 </header>
 
+<div class="trust-bar">
+  <span class="muted-note" style="font-size:.72rem; text-transform:uppercase; letter-spacing:.08em;" data-i18n="trustbar.label">Built for high-impact organizations</span>
+  <div class="trust-bar-badges">
+    <span class="trust-badge">🔒 <span data-i18n="trustbar.b1">Encrypted in Transit &amp; at Rest</span></span>
+    <span class="trust-badge">🛡️ <span data-i18n="trustbar.b2">Role-Based Access Control</span></span>
+    <span class="trust-badge">🌍 <span data-i18n="trustbar.b3">GDPR-Aligned Architecture</span></span>
+    <span class="trust-badge">📋 <span data-i18n="trustbar.b4">Audit-Logged</span></span>
+    <span class="trust-badge">🗣️ <span data-i18n="trustbar.b5">Multilingual AI</span></span>
+  </div>
+</div>
+
+
 <section class="pub-section">
-  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="whouses.eyebrow">Who it's for</span>
-  <h2 style="max-width:36ch;" data-i18n="whouses.h2">Built for teams that depend on reliable data.</h2>
-  <div class="grid grid-4" style="margin-top:2.5rem;">
-    <div class="feature-card"><h3 style="font-size:1.05rem;" data-i18n="whouses.c1.title">NGOs</h3><p style="font-size:.85rem;" data-i18n="whouses.c1.desc">Programme monitoring and beneficiary feedback at field scale.</p></div>
-    <div class="feature-card"><h3 style="font-size:1.05rem;" data-i18n="whouses.c2.title">Governments</h3><p style="font-size:.85rem;" data-i18n="whouses.c2.desc">Citizen feedback and public service monitoring.</p></div>
-    <div class="feature-card"><h3 style="font-size:1.05rem;" data-i18n="whouses.c3.title">Research Firms</h3><p style="font-size:.85rem;" data-i18n="whouses.c3.desc">Large-scale studies across languages and geographies.</p></div>
-    <div class="feature-card"><h3 style="font-size:1.05rem;" data-i18n="whouses.c4.title">Enterprises</h3><p style="font-size:.85rem;" data-i18n="whouses.c4.desc">Customer intelligence and market research at scale.</p></div>
+  <span class="eyebrow" style="color:var(--accent);" data-i18n="dashprev.eyebrow">See it in action</span>
+  <h2 style="max-width:34ch;" data-i18n="dashprev.h2">See what decision-makers see.</h2>
+  <p style="max-width:60ch; margin-top:1rem;" data-i18n="dashprev.lead">A live look at the dashboard your team works in every day. Click any card to open a preview.</p>
+
+  <div class="grid grid-4" style="margin-top:2rem;">
+    <a href="#" class="feature-card demo-card" data-demo="responses" style="text-decoration:none; cursor:pointer;">
+      <span class="num">1</span><h3 style="font-size:.95rem;" data-i18n="dashprev.tab1">Executive Dashboard</h3>
+      <p style="font-size:.8rem;" data-i18n="dashprev.card1desc">Live responses across every channel, as they arrive.</p>
+    </a>
+    <a href="#" class="feature-card demo-card" data-demo="analytics" style="text-decoration:none; cursor:pointer;">
+      <span class="num">2</span><h3 style="font-size:.95rem;" data-i18n="dashprev.tab2">Analytics</h3>
+      <p style="font-size:.8rem;" data-i18n="dashprev.card2desc">Active surveys, respondents, and response rate at a glance.</p>
+    </a>
+    <a href="#" class="feature-card demo-card" data-demo="sentiment" style="text-decoration:none; cursor:pointer;">
+      <span class="num">3</span><h3 style="font-size:.95rem;" data-i18n="dashprev.tab3">Live Transcript</h3>
+      <p style="font-size:.8rem;" data-i18n="dashprev.card3desc">Raw voice transcript, sentiment, and topic tagging.</p>
+    </a>
+    <a href="#" class="feature-card demo-card" data-demo="export" style="text-decoration:none; cursor:pointer;">
+      <span class="num">4</span><h3 style="font-size:.95rem;" data-i18n="dashprev.tab4">PDF Report</h3>
+      <p style="font-size:.8rem;" data-i18n="dashprev.card4desc">Executive Intelligence and Donor Impact report formats.</p>
+    </a>
+  </div>
+
+  <div id="demo-modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; align-items:center; justify-content:center; padding:5vw;">
+    <div style="max-width:640px; width:100%; max-height:80vh; overflow-y:auto; position:relative;">
+      <button id="demo-modal-close" style="position:absolute; top:-2.5rem; right:0; background:none; border:none; color:var(--text); font-size:1.8rem; cursor:pointer; line-height:1;">&times;</button>
+
+      <div class="card" id="dash-panel-responses" style="display:none;">
+        <div class="table-wrap" style="border:none;">
+          <table>
+            <thead><tr><th>Respondent</th><th>Channel</th><th>Topic</th><th>Sentiment</th><th>Time</th></tr></thead>
+            <tbody>
+              <tr><td>+255 7XX-XX2841</td><td><span class="badge badge-neutral">WhatsApp</span></td><td>Fertilizer cost</td><td><span class="badge badge-success">Positive</span></td><td>0:14 ago</td></tr>
+              <tr><td>+255 6XX-XX9013</td><td><span class="badge badge-neutral">Phone Call</span></td><td>Water access</td><td><span class="badge badge-warn">Neutral</span></td><td>1:02 ago</td></tr>
+              <tr><td>+255 7XX-XX3357</td><td><span class="badge badge-neutral">Web</span></td><td>School attendance</td><td><span class="badge badge-danger">Negative</span></td><td>2:40 ago</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" id="dash-panel-analytics" style="display:none;">
+        <div class="grid grid-3" style="gap:1rem;">
+          <div><div class="card-title">Active Surveys</div><div class="stat-value">24</div></div>
+          <div><div class="card-title">Total Respondents</div><div class="stat-value">52,430</div></div>
+          <div><div class="card-title">Response Rate</div><div class="stat-value">83%</div></div>
+        </div>
+      </div>
+
+      <div class="card" id="dash-panel-sentiment" style="display:none;">
+        <div class="muted-note" style="text-transform:uppercase; font-size:.68rem; letter-spacing:.06em; margin-bottom:.6rem;">Question 3 · WhatsApp</div>
+        <div style="background:var(--surface-2); border-radius:10px 10px 10px 2px; padding:.7rem 1rem; max-width:80%; margin-bottom:.6rem;">"Je, umepata changamoto gani msimu huu wa kilimo?"</div>
+        <div style="background:var(--surface-3); border-radius:10px 10px 2px 10px; padding:.7rem 1rem; max-width:80%; margin-left:auto;">"Mavuno yameongezeka lakini bei ya mbolea imepanda sana — hilo ndilo tatizo kubwa."</div>
+        <div style="margin-top:1rem; display:flex; gap:.5rem;">
+          <span class="badge badge-success">Positive</span>
+          <span class="badge badge-neutral">Topic: Fertilizer cost</span>
+        </div>
+      </div>
+
+      <div class="card" id="dash-panel-export" style="display:none;">
+        <div class="grid grid-3" style="gap:1rem;">
+          <div class="feature-card"><span class="num">1</span><h3 style="font-size:.95rem;">Executive Intelligence</h3><p style="font-size:.8rem;">Cover, KPIs, demographics, AI recommendations.</p></div>
+          <div class="feature-card"><span class="num">2</span><h3 style="font-size:.95rem;">Donor Impact Report</h3><p style="font-size:.8rem;">Baseline vs. current indicator scorecards.</p></div>
+          <div class="feature-card"><span class="num">→</span><h3 style="font-size:.95rem;">See a real sample</h3><p style="font-size:.8rem; margin-bottom:.5rem;">View the full format with real charts.</p><a href="/sample-report.html" class="btn btn-ghost btn-sm">View Sample Report</a></div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -105,9 +179,9 @@
   <span class="eyebrow" style="color:var(--accent);" data-i18n="problem.eyebrow">The Problem</span>
   <h2 data-i18n="problem.h2">Traditional research in emerging and underserved markets is expensive, slow, and loses the real voice of the people.</h2>
   <div class="grid grid-3" style="margin-top:2.5rem;">
-    <div class="feature-card"><span class="num">01</span><h3 style="font-size:1.1rem;" data-i18n="problem.c1.title">Field costs</h3><p data-i18n="problem.c1.desc">Field teams, transport, and printed questionnaires eat up a large share of the project budget.</p></div>
-    <div class="feature-card"><span class="num">02</span><h3 style="font-size:1.1rem;" data-i18n="problem.c2.title">Slow reporting</h3><p data-i18n="problem.c2.desc">Weeks to months between collecting data and having a donor-ready report.</p></div>
-    <div class="feature-card"><span class="num">03</span><h3 style="font-size:1.1rem;" data-i18n="problem.c3.title">Voices that get lost</h3><p data-i18n="problem.c3.desc">Rich qualitative answers go underused because analyzing them by hand is too much work — worse in languages most AI tools were never built for.</p></div>
+    <div class="feature-card"><i data-lucide="truck" style="color:var(--accent); width:28px; height:28px; margin-bottom:.6rem;"></i><h3 style="font-size:1.1rem;" data-i18n="problem.c1.title">Field costs</h3><p data-i18n="problem.c1.desc">Field teams, transport, and printed questionnaires eat up a large share of the project budget.</p></div>
+    <div class="feature-card"><i data-lucide="clock" style="color:var(--accent); width:28px; height:28px; margin-bottom:.6rem;"></i><h3 style="font-size:1.1rem;" data-i18n="problem.c2.title">Slow reporting</h3><p data-i18n="problem.c2.desc">Weeks to months between collecting data and having a donor-ready report.</p></div>
+    <div class="feature-card"><i data-lucide="audio-lines" style="color:var(--accent); width:28px; height:28px; margin-bottom:.6rem;"></i><h3 style="font-size:1.1rem;" data-i18n="problem.c3.title">Voices that get lost</h3><p data-i18n="problem.c3.desc">Rich qualitative answers go underused because analyzing them by hand is too much work — worse in languages most AI tools were never built for.</p></div>
   </div>
   <div class="grid grid-3" style="margin-top:1.25rem; text-align:center;">
     <div class="card"><div class="stat-value" style="font-size:1.6rem; justify-content:center;" data-i18n="stats.s1.val">Majority</div><div class="muted-note" style="margin-top:.3rem;" data-i18n="stats.s1.label">of typical field-research budgets go to logistics, not analysis</div></div>
@@ -116,9 +190,6 @@
   </div>
 </section>
 
-<div style="max-width:1200px; margin:0 auto; padding: 0 5vw;">
-  <div id="divider-1"></div>
-</div>
 
 <section class="pub-section" style="padding-top:0;">
   <span class="eyebrow" style="color:var(--accent-2);" data-i18n="solution.eyebrow">The Solution</span>
@@ -130,35 +201,22 @@
   </div>
 </section>
 
-<section class="pub-section" id="jinsi" style="padding-top:0;">
-  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="how5.eyebrow">How it works</span>
-  <h2 data-i18n="how5.h2">From survey setup to a donor-ready report — five steps.</h2>
-  <div class="grid grid-5" style="margin-top:2.5rem;">
-    <div class="feature-card">
-      <span class="num" data-i18n="how5.step1.label">Step 1</span>
-      <h3 style="font-size:1rem;" data-i18n="how5.step1.title">Survey Setup</h3>
-      <p style="font-size:.85rem;" data-i18n="how5.step1.desc">Build your questionnaire, pick your channels, and set your compliance requirements.</p>
-    </div>
-    <div class="feature-card">
-      <span class="num" data-i18n="how5.step2.label">Step 2</span>
-      <h3 style="font-size:1rem;" data-i18n="how5.step2.title">Voice Collection</h3>
-      <p style="font-size:.85rem;" data-i18n="how5.step2.desc">Via phone call, WhatsApp, SMS, a web link, or an offline field app — in their own everyday language.</p>
-    </div>
-    <div class="feature-card">
-      <span class="num" data-i18n="how5.step3.label">Step 3</span>
-      <h3 style="font-size:1rem;" data-i18n="how5.step3.title">Transcription</h3>
-      <p style="font-size:.85rem;" data-i18n="how5.step3.desc">Voice is converted to text, recognizing accents, dialects, and mixed-language speech.</p>
-    </div>
-    <div class="feature-card">
-      <span class="num" data-i18n="how5.step4.label">Step 4</span>
-      <h3 style="font-size:1rem;" data-i18n="how5.step4.title">AI Analysis</h3>
-      <p style="font-size:.85rem;" data-i18n="how5.step4.desc">Topics, sentiment, and signs of fraud are detected automatically.</p>
-    </div>
-    <div class="feature-card">
-      <span class="num" data-i18n="how5.step5.label">Step 5</span>
-      <h3 style="font-size:1rem;" data-i18n="how5.step5.title">Reports</h3>
-      <p style="font-size:.85rem;" data-i18n="how5.step5.desc">A live dashboard, a donor PDF, and an analyst Excel export — every time.</p>
-    </div>
+<section class="pub-section" style="background:var(--surface); border-radius:20px;">
+  <span class="eyebrow" style="color:var(--accent);" data-i18n="aiengine.eyebrow">AI Intelligence Engine</span>
+  <h2 data-i18n="aiengine.h2">This is what happens the instant someone speaks.</h2>
+  <p style="max-width:60ch; margin-top:1rem;" data-i18n="aiengine.lead">Every single response — on every channel — runs through the same six-stage AI pipeline, automatically, in seconds.</p>
+  <div class="ai-pipeline" style="margin-top:2.5rem;">
+    <div class="ai-pipeline-node"><span class="ai-pipeline-dot"></span><div class="ai-pipeline-label" data-i18n="aiengine.n1">Voice Input</div></div>
+    <div class="ai-pipeline-arrow">→</div>
+    <div class="ai-pipeline-node"><span class="ai-pipeline-dot"></span><div class="ai-pipeline-label" data-i18n="aiengine.n2">Speech Recognition</div></div>
+    <div class="ai-pipeline-arrow">→</div>
+    <div class="ai-pipeline-node"><span class="ai-pipeline-dot"></span><div class="ai-pipeline-label" data-i18n="aiengine.n3">Language Detection</div></div>
+    <div class="ai-pipeline-arrow">→</div>
+    <div class="ai-pipeline-node"><span class="ai-pipeline-dot"></span><div class="ai-pipeline-label" data-i18n="aiengine.n4">Sentiment Analysis</div></div>
+    <div class="ai-pipeline-arrow">→</div>
+    <div class="ai-pipeline-node"><span class="ai-pipeline-dot"></span><div class="ai-pipeline-label" data-i18n="aiengine.n5">Fraud Detection</div></div>
+    <div class="ai-pipeline-arrow">→</div>
+    <div class="ai-pipeline-node"><span class="ai-pipeline-dot" style="background:var(--accent);"></span><div class="ai-pipeline-label" data-i18n="aiengine.n6">Report Generation</div></div>
   </div>
 </section>
 
@@ -199,57 +257,64 @@
   </div>
 </section>
 
-<section class="pub-section">
-  <span class="eyebrow" style="color:var(--accent);" data-i18n="dashprev.eyebrow">See it in action</span>
-  <h2 style="max-width:34ch;" data-i18n="dashprev.h2">See what decision-makers see.</h2>
-  <p style="max-width:60ch; margin-top:1rem;" data-i18n="dashprev.lead">A live look at the dashboard your team works in every day.</p>
-
-  <div class="pill-tabs" style="margin-top:2rem;">
-    <a class="dash-tab active" data-tab="responses" data-i18n="dashprev.tab1">Executive Dashboard</a>
-    <a class="dash-tab" data-tab="analytics" data-i18n="dashprev.tab2">Analytics</a>
-    <a class="dash-tab" data-tab="sentiment" data-i18n="dashprev.tab3">Live Transcript</a>
-    <a class="dash-tab" data-tab="export" data-i18n="dashprev.tab4">PDF Report</a>
-  </div>
-
-  <div class="card" id="dash-panel-responses">
-    <div class="table-wrap" style="border:none;">
-      <table>
-        <thead><tr><th>Respondent</th><th>Channel</th><th>Topic</th><th>Sentiment</th><th>Time</th></tr></thead>
-        <tbody>
-          <tr><td>+255 7XX-XX2841</td><td><span class="badge badge-neutral">WhatsApp</span></td><td>Fertilizer cost</td><td><span class="badge badge-success">Positive</span></td><td>0:14 ago</td></tr>
-          <tr><td>+255 6XX-XX9013</td><td><span class="badge badge-neutral">Phone Call</span></td><td>Water access</td><td><span class="badge badge-warn">Neutral</span></td><td>1:02 ago</td></tr>
-          <tr><td>+255 7XX-XX3357</td><td><span class="badge badge-neutral">Web</span></td><td>School attendance</td><td><span class="badge badge-danger">Negative</span></td><td>2:40 ago</td></tr>
-        </tbody>
-      </table>
+<section class="pub-section" id="jinsi" style="padding-top:0;">
+  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="how5.eyebrow">How it works</span>
+  <h2 data-i18n="how5.h2">From survey setup to a donor-ready report — five steps.</h2>
+  <div class="grid grid-5" style="margin-top:2.5rem;">
+    <div class="feature-card">
+      <span class="num" data-i18n="how5.step1.label">Step 1</span>
+      <h3 style="font-size:1rem;" data-i18n="how5.step1.title">Survey Setup</h3>
+      <p style="font-size:.85rem;" data-i18n="how5.step1.desc">Build your questionnaire, pick your channels, and set your compliance requirements.</p>
     </div>
-  </div>
-
-  <div class="card" id="dash-panel-analytics" style="display:none;">
-    <div class="grid grid-3" style="gap:1rem;">
-      <div><div class="card-title">Active Surveys</div><div class="stat-value">24</div></div>
-      <div><div class="card-title">Total Respondents</div><div class="stat-value">52,430</div></div>
-      <div><div class="card-title">Response Rate</div><div class="stat-value">83%</div></div>
+    <div class="feature-card">
+      <span class="num" data-i18n="how5.step2.label">Step 2</span>
+      <h3 style="font-size:1rem;" data-i18n="how5.step2.title">Voice Collection</h3>
+      <p style="font-size:.85rem;" data-i18n="how5.step2.desc">Via phone call, WhatsApp, SMS, a web link, or an offline field app — in their own everyday language.</p>
     </div>
-  </div>
-
-  <div class="card" id="dash-panel-sentiment" style="display:none;">
-    <div class="muted-note" style="text-transform:uppercase; font-size:.68rem; letter-spacing:.06em; margin-bottom:.6rem;">Question 3 · WhatsApp</div>
-    <div style="background:var(--surface-2); border-radius:10px 10px 10px 2px; padding:.7rem 1rem; max-width:80%; margin-bottom:.6rem;">"Je, umepata changamoto gani msimu huu wa kilimo?"</div>
-    <div style="background:var(--surface-3); border-radius:10px 10px 2px 10px; padding:.7rem 1rem; max-width:80%; margin-left:auto;">"Mavuno yameongezeka lakini bei ya mbolea imepanda sana — hilo ndilo tatizo kubwa."</div>
-    <div style="margin-top:1rem; display:flex; gap:.5rem;">
-      <span class="badge badge-success">Positive</span>
-      <span class="badge badge-neutral">Topic: Fertilizer cost</span>
+    <div class="feature-card">
+      <span class="num" data-i18n="how5.step3.label">Step 3</span>
+      <h3 style="font-size:1rem;" data-i18n="how5.step3.title">Transcription</h3>
+      <p style="font-size:.85rem;" data-i18n="how5.step3.desc">Voice is converted to text, recognizing accents, dialects, and mixed-language speech.</p>
     </div>
-  </div>
-
-  <div class="card" id="dash-panel-export" style="display:none;">
-    <div class="grid grid-3" style="gap:1rem;">
-      <div class="feature-card"><span class="num">1</span><h3 style="font-size:.95rem;">Executive Intelligence</h3><p style="font-size:.8rem;">Cover, KPIs, demographics, AI recommendations.</p></div>
-      <div class="feature-card"><span class="num">2</span><h3 style="font-size:.95rem;">Donor Impact Report</h3><p style="font-size:.8rem;">Baseline vs. current indicator scorecards.</p></div>
-      <div class="feature-card"><span class="num">→</span><h3 style="font-size:.95rem;">See a real sample</h3><p style="font-size:.8rem; margin-bottom:.5rem;">View the full format with real charts.</p><a href="/sample-report.html" class="btn btn-ghost btn-sm">View Sample Report</a></div>
+    <div class="feature-card">
+      <span class="num" data-i18n="how5.step4.label">Step 4</span>
+      <h3 style="font-size:1rem;" data-i18n="how5.step4.title">AI Analysis</h3>
+      <p style="font-size:.85rem;" data-i18n="how5.step4.desc">Topics, sentiment, and signs of fraud are detected automatically.</p>
+    </div>
+    <div class="feature-card">
+      <span class="num" data-i18n="how5.step5.label">Step 5</span>
+      <h3 style="font-size:1rem;" data-i18n="how5.step5.title">Reports</h3>
+      <p style="font-size:.85rem;" data-i18n="how5.step5.desc">A live dashboard, a donor PDF, and an analyst Excel export — every time.</p>
     </div>
   </div>
 </section>
+
+<section class="pub-section">
+  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="whouses.eyebrow">Who it's for</span>
+  <h2 style="max-width:36ch;" data-i18n="whouses.h2">Built for teams that depend on reliable data.</h2>
+  <div class="grid grid-4" style="margin-top:2.5rem;">
+    <a href="/ngos.html" class="feature-card" style="display:block; text-decoration:none;"><h3 style="font-size:1.05rem;" data-i18n="whouses.c1.title">NGOs</h3><p style="font-size:.85rem;" data-i18n="whouses.c1.desc">Programme monitoring and beneficiary feedback at field scale.</p></a>
+    <a href="/government.html" class="feature-card" style="display:block; text-decoration:none;"><h3 style="font-size:1.05rem;" data-i18n="whouses.c2.title">Governments</h3><p style="font-size:.85rem;" data-i18n="whouses.c2.desc">Citizen feedback and public service monitoring.</p></a>
+    <a href="/research-firms.html" class="feature-card" style="display:block; text-decoration:none;"><h3 style="font-size:1.05rem;" data-i18n="whouses.c3.title">Research Firms</h3><p style="font-size:.85rem;" data-i18n="whouses.c3.desc">Large-scale studies across languages and geographies.</p></a>
+    <a href="/development-partners.html" class="feature-card" style="display:block; text-decoration:none;"><h3 style="font-size:1.05rem;" data-i18n="whouses.c4.title">Development Partners</h3><p style="font-size:.85rem;" data-i18n="whouses.c4.desc">Grant monitoring and portfolio-wide impact measurement.</p></a>
+  </div>
+</section>
+
+<section class="pub-section" style="background:var(--surface); border-radius:20px;">
+  <span class="eyebrow" style="color:var(--accent);" data-i18n="samplereports.eyebrow">Sample Reports</span>
+  <h2 data-i18n="samplereports.h2">See the exact format your data would generate.</h2>
+  <p style="max-width:60ch; margin-top:1rem;" data-i18n="samplereports.lead">Four report formats, each built for a different audience — from a 60-second executive brief to a full donor-impact document.</p>
+  <div class="grid grid-4" style="margin-top:2rem;">
+    <div class="feature-card"><span class="num">1</span><h3 style="font-size:1rem;" data-i18n="samplereports.c1.title">Executive Report</h3><p style="font-size:.82rem;" data-i18n="samplereports.c1.desc">Cover, KPIs, key findings, and AI recommendations — 8 pages.</p></div>
+    <div class="feature-card"><span class="num">2</span><h3 style="font-size:1rem;" data-i18n="samplereports.c2.title">Donor Impact Report</h3><p style="font-size:.82rem;" data-i18n="samplereports.c2.desc">Baseline-vs-current indicator scorecards for grant reporting.</p></div>
+    <div class="feature-card"><span class="num">3</span><h3 style="font-size:1rem;" data-i18n="samplereports.c3.title">Analytics Snapshot</h3><p style="font-size:.82rem;" data-i18n="samplereports.c3.desc">Chart-heavy, dashboard-style export for a fast visual read.</p></div>
+    <div class="feature-card"><span class="num">4</span><h3 style="font-size:1rem;" data-i18n="samplereports.c4.title">Intelligence Brief</h3><p style="font-size:.82rem;" data-i18n="samplereports.c4.desc">One headline finding, charts, and an action matrix — 4 pages.</p></div>
+  </div>
+  <div style="text-align:center; margin-top:2rem;">
+    <a href="/sample-report.html" class="btn btn-primary" data-i18n="samplereports.cta">Download Sample Report &rarr;</a>
+  </div>
+</section>
+
 
 <section class="pub-section" id="moat" style="background:var(--surface); border-radius:20px;">
   <span class="eyebrow" style="color:var(--accent);" data-i18n="moat.eyebrow">Why us</span>
@@ -278,6 +343,31 @@
         <tr><td data-i18n="compare.r4.old">Generic, built for other markets first</td><td data-i18n="compare.r4.new">Africa-optimized — Kiswahili and code-switching from day one</td></tr>
       </tbody>
     </table>
+  </div>
+</section>
+
+<section class="pub-section" style="background:var(--surface); border-radius:20px;">
+  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="roi.eyebrow">ROI Calculator</span>
+  <h2 data-i18n="roi.h2">Compare traditional field research vs. VoiceInsights Africa.</h2>
+  <p style="max-width:60ch; margin-top:1rem;" data-i18n="roi.lead">Adjust these to match your own project — the formula is shown below so you can check our math.</p>
+  <div class="grid grid-2" style="margin-top:2rem; gap:2rem; align-items:start;">
+    <div class="card">
+      <div class="field"><label data-i18n="roi.f1">Number of field enumerators</label><input type="number" id="roi-enumerators" value="6" min="0"></div>
+      <div class="field"><label data-i18n="roi.f2">Daily rate per enumerator (USD, incl. travel/per diem)</label><input type="number" id="roi-rate" value="35" min="0"></div>
+      <div class="field"><label data-i18n="roi.f3">Field duration (days)</label><input type="number" id="roi-days" value="21" min="1"></div>
+      <div class="field"><label data-i18n="roi.f4">Number of respondents</label><input type="number" id="roi-respondents" value="1500" min="1"></div>
+    </div>
+    <div>
+      <div class="grid grid-2" style="gap:1rem;">
+        <div class="card"><div class="card-title" data-i18n="roi.traditional">Traditional Field Research</div><div class="stat-value" id="roi-traditional-cost" style="font-size:1.6rem;">–</div></div>
+        <div class="card" style="border-color:var(--accent);"><div class="card-title" data-i18n="roi.voiceinsights">VoiceInsights Africa</div><div class="stat-value" id="roi-vi-cost" style="font-size:1.6rem;">–</div></div>
+      </div>
+      <div class="card" style="margin-top:1rem; text-align:center;">
+        <div class="card-title" data-i18n="roi.savings">Estimated Savings</div>
+        <div class="stat-value" id="roi-savings" style="font-size:2.2rem; color:var(--success);">–</div>
+      </div>
+      <p class="muted-note" style="margin-top:1rem; font-size:.76rem;" id="roi-formula" data-i18n="roi.formula">Traditional = (enumerators × daily rate × field days) + (respondents × $2 data-entry/printing). VoiceInsights = prorated platform license + per-project intelligence fee. Actual figures depend on your specific project — <a href="/contact.html" style="color:var(--accent-2);">request a formal quote</a>.</p>
+    </div>
   </div>
 </section>
 
@@ -330,6 +420,54 @@
   <p style="max-width:60ch; margin-top:1.5rem; font-size:.85rem; color:var(--text-dim);" data-i18n="pricing.footnote">Project intelligence fees (per study, on top of the annual license) range from $1,500 for a small study up to $20,000+ for large national studies, depending on sample size. <a href="/contact.html" style="color:var(--accent-2);">Talk to us</a> for a tailored quote.</p>
 </section>
 
+<section class="pub-section">
+  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="secpreview.eyebrow">Security &amp; Infrastructure</span>
+  <h2 style="max-width:36ch;" data-i18n="secpreview.h2">Built to pass a government procurement review.</h2>
+  <div class="grid grid-4" style="margin-top:2rem;">
+    <div class="feature-card"><h3 style="font-size:.95rem;" data-i18n="secpreview.c1.title">Encryption</h3><p style="font-size:.82rem;" data-i18n="secpreview.c1.desc">TLS in transit, encrypted storage at rest.</p></div>
+    <div class="feature-card"><h3 style="font-size:.95rem;" data-i18n="secpreview.c2.title">Access Control</h3><p style="font-size:.82rem;" data-i18n="secpreview.c2.desc">Role-based permissions on every account.</p></div>
+    <div class="feature-card"><h3 style="font-size:.95rem;" data-i18n="secpreview.c3.title">Audit Logs</h3><p style="font-size:.82rem;" data-i18n="secpreview.c3.desc">Every access and change is tracked.</p></div>
+    <div class="feature-card"><h3 style="font-size:.95rem;" data-i18n="secpreview.c4.title">Fraud Detection</h3><p style="font-size:.82rem;" data-i18n="secpreview.c4.desc">Automated checks on every incoming response.</p></div>
+  </div>
+  <div style="margin-top:1.5rem;">
+    <a href="/security.html" style="color:var(--accent-2); font-size:.9rem; font-weight:600;" data-i18n="secpreview.link">Read the full Security &amp; Infrastructure page &rarr;</a>
+  </div>
+</section>
+
+
+<section class="pub-section" style="background:var(--surface); border-radius:20px;">
+  <span class="eyebrow" style="color:var(--accent);" data-i18n="cspreview.eyebrow">Case Studies</span>
+  <h2 style="max-width:36ch;" data-i18n="cspreview.h2">What a VoiceInsights Africa pilot looks like.</h2>
+  <p style="max-width:60ch; margin-top:1rem;" data-i18n="cspreview.lead">We're an early-stage platform working with our first pilot partners — see a representative example of how a pilot is typically structured.</p>
+  <div style="margin-top:1.5rem;">
+    <a href="/case-studies.html" class="btn btn-ghost" data-i18n="cspreview.link">View Case Studies &rarr;</a>
+  </div>
+</section>
+
+
+<section class="pub-section">
+  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="faqpreview.eyebrow">FAQ</span>
+  <h2 style="max-width:36ch;" data-i18n="faqpreview.h2">Common questions from procurement and research teams.</h2>
+  <div class="grid grid-2" style="margin-top:2rem; gap:1.5rem;">
+    <div><h3 style="font-size:.95rem;" data-i18n="faqpreview.q1">Do you need internet access to collect data?</h3><p style="font-size:.85rem;" data-i18n="faqpreview.a1">No — the offline Enumerator App syncs once a connection is available, and phone/SMS channels work on any network.</p></div>
+    <div><h3 style="font-size:.95rem;" data-i18n="faqpreview.q2">Who owns the data we collect?</h3><p style="font-size:.85rem;" data-i18n="faqpreview.a2">Your organization does, in full. We process it on your behalf and never sell or share it with third parties.</p></div>
+  </div>
+  <div style="margin-top:1.5rem;">
+    <a href="/faq.html" style="color:var(--accent-2); font-size:.9rem; font-weight:600;" data-i18n="faqpreview.link">See all FAQs &rarr;</a>
+  </div>
+</section>
+
+
+<section class="pub-section" style="text-align:center; background:var(--surface); border-radius:20px;">
+  <h2 data-i18n="finalcta.h2">Ready to see it on your own data?</h2>
+  <p style="max-width:50ch; margin:1rem auto;" data-i18n="finalcta.lead">We'll walk through a live pilot using your own survey questions before any commercial discussion.</p>
+  <div style="display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+    <a href="/contact.html" class="btn btn-primary" data-i18n="hero.cta1">Request Demo &rarr;</a>
+    <a href="/sample-report.html" class="btn btn-ghost" data-i18n="hero.cta_sample">Download Sample Report</a>
+  </div>
+</section>
+
+
 <footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
   <div style="flex:1 1 220px;">
     <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
@@ -377,15 +515,51 @@
   lucide.createIcons();
   initSiteLanguage();
 
-  document.querySelectorAll('.dash-tab').forEach(tabBtn => {
-    tabBtn.addEventListener('click', () => {
-      document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
-      tabBtn.classList.add('active');
+  document.querySelectorAll('.demo-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      const demo = card.dataset.demo;
       ['responses', 'analytics', 'sentiment', 'export'].forEach(name => {
-        document.getElementById('dash-panel-' + name).style.display = (name === tabBtn.dataset.tab) ? 'block' : 'none';
+        document.getElementById('dash-panel-' + name).style.display = (name === demo) ? 'block' : 'none';
       });
+      document.getElementById('demo-modal-backdrop').style.display = 'flex';
     });
   });
+  function closeDemoModal() { document.getElementById('demo-modal-backdrop').style.display = 'none'; }
+  document.getElementById('demo-modal-close').addEventListener('click', closeDemoModal);
+  document.getElementById('demo-modal-backdrop').addEventListener('click', (e) => {
+    if (e.target.id === 'demo-modal-backdrop') closeDemoModal();
+  });
+
+  // ---------- ROI Calculator ----------
+  function calcRoi() {
+    const enumerators = parseFloat(document.getElementById('roi-enumerators').value) || 0;
+    const rate = parseFloat(document.getElementById('roi-rate').value) || 0;
+    const days = parseFloat(document.getElementById('roi-days').value) || 0;
+    const respondents = parseFloat(document.getElementById('roi-respondents').value) || 0;
+
+    const traditionalCost = (enumerators * rate * days) + (respondents * 2);
+
+    // VoiceInsights: prorated Starter license for the field period + a project
+    // intelligence fee that scales with sample size (mirrors our real pricing tiers).
+    const proratedLicense = (3500 / 365) * days;
+    let projectFee;
+    if (respondents <= 5000) projectFee = 1500 + (respondents / 5000) * 2500;
+    else if (respondents <= 25000) projectFee = 5000 + ((respondents - 5000) / 20000) * 10000;
+    else projectFee = 20000 + ((respondents - 25000) / 10000) * 3000;
+    const viCost = proratedLicense + projectFee;
+
+    const savings = traditionalCost > 0 ? Math.max(0, Math.round(((traditionalCost - viCost) / traditionalCost) * 100)) : 0;
+
+    document.getElementById('roi-traditional-cost').textContent = '$' + Math.round(traditionalCost).toLocaleString();
+    document.getElementById('roi-vi-cost').textContent = '$' + Math.round(viCost).toLocaleString();
+    document.getElementById('roi-savings').textContent = (traditionalCost > viCost ? savings + '%' : '—');
+  }
+  ['roi-enumerators', 'roi-rate', 'roi-days', 'roi-respondents'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', calcRoi);
+  });
+  calcRoi();
 </script>
 </body>
 </html>

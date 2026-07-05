@@ -22,15 +22,22 @@
   .change-positive { color: var(--success); font-weight: 700; }
   .change-negative { color: var(--danger); font-weight: 700; }
   .toolbar { max-width: 900px; margin: 0 auto 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+  @page { margin: 1cm; size: A4; }
   @media print {
     #sidebar-mount, #topbar-mount, .toolbar, .no-print { display: none !important; }
-    body, .main, .content { margin: 0 !important; padding: 0 !important; background: #fff !important; }
-    .r-page { box-shadow: none; border-radius: 0; background: #fff; page-break-after: always; break-after: page; page-break-inside: avoid; }
-    .r-page:last-child { page-break-after: auto; break-after: auto; }
+    html, body, .main, .content { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+    .r-page {
+      box-shadow: none !important; border-radius: 0 !important; background: #fff;
+      page-break-after: always; break-after: page;
+      page-break-inside: avoid; break-inside: avoid;
+      margin: 0 !important;
+    }
+    .r-page:last-child { page-break-after: auto !important; break-after: auto !important; }
     .r-kpi, .r-chart-box, .r-quote-card { background: #f4f4f4 !important; }
     .r-page:not(.r-cover) * { color: #111 !important; }
+    .r-cover { min-height: 0 !important; overflow: visible !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .r-cover, .r-cover * { color: #fff !important; }
-    .r-cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .r-cover::before { display: none; }
   }
 </style>
 </head>

@@ -42,16 +42,23 @@
   .r-rec-col h4 { font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; margin-bottom: .8rem; }
   .r-rec-col ul { margin: 0; padding-left: 1.2rem; color: var(--text); font-size: .9rem; line-height: 1.6; }
   .toolbar { max-width: 900px; margin: 0 auto 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+  @page { margin: 1cm; size: A4; }
   @media print {
     #sidebar-mount, #topbar-mount, .toolbar { display: none !important; }
-    body, .main, .content { margin: 0 !important; padding: 0 !important; background: #fff !important; }
-    .r-page { box-shadow: none; border-radius: 0; background: #fff; page-break-after: always; break-after: page; page-break-inside: avoid; }
-    .r-page:last-child { page-break-after: auto; break-after: auto; }
+    html, body, .main, .content { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+    .r-page {
+      box-shadow: none !important; border-radius: 0 !important; background: #fff;
+      page-break-after: always; break-after: page;
+      page-break-inside: avoid; break-inside: avoid;
+      margin: 0 !important;
+    }
+    .r-page:last-child { page-break-after: auto !important; break-after: auto !important; }
     .r-kpi, .r-chart-box, .r-insight-box, .r-quote-card, .r-rec-col { background: #f4f4f4 !important; }
     .r-page:not(.r-cover) * { color: #111 !important; }
+    .r-cover { min-height: 0 !important; overflow: visible !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .r-cover, .r-cover * { color: #fff !important; }
     .r-cover-subtitle { color: #A8D9C9 !important; }
-    .r-cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .r-cover::before { display: none; }
   }
 </style>
 </head>

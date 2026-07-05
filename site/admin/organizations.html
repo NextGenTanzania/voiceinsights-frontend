@@ -100,23 +100,30 @@
   document.getElementById('new-org-create-btn').addEventListener('click', async () => {
     const errBox = document.getElementById('new-org-error');
     errBox.style.display = 'none';
+    const name = document.getElementById('new-org-name').value.trim();
+    const adminName = document.getElementById('new-org-admin-name').value.trim();
+    const adminEmail = document.getElementById('new-org-admin-email').value.trim();
+    if (!name || !adminName || !adminEmail) {
+      errBox.textContent = 'Please fill in Organization Name, Admin Full Name, and Admin Email — all three are required.';
+      errBox.style.display = 'block';
+      return;
+    }
     const btn = document.getElementById('new-org-create-btn');
     btn.disabled = true; btn.textContent = 'Creating…';
     try {
       await apiRequest('/api/superadmin/organizations', {
         method: 'POST',
         body: {
-          name: document.getElementById('new-org-name').value,
+          name,
           billing_tier: document.getElementById('new-org-tier').value,
-          admin_full_name: document.getElementById('new-org-admin-name').value,
-          admin_email: document.getElementById('new-org-admin-email').value,
+          admin_full_name: adminName,
+          admin_email: adminEmail,
         },
       });
       location.reload();
     } catch (err) {
-      errBox.textContent = err.message;
+      errBox.textContent = err.message || 'Something went wrong — please try again.';
       errBox.style.display = 'block';
-    } finally {
       btn.disabled = false; btn.textContent = 'Create Organization & Send Login →';
     }
   });

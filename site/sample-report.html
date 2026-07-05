@@ -44,16 +44,24 @@
   .r-rec-col ul { margin: 0; padding-left: 1.2rem; color: var(--text); font-size: .9rem; line-height: 1.6; }
   .sample-banner { max-width: 900px; margin: 0 auto 1.5rem; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px; padding: .9rem 1.25rem; color: var(--text-muted); font-size: .85rem; }
   .toolbar { max-width: 900px; margin: 0 auto 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+  @page { margin: 1cm; size: A4; }
   @media print {
     .sample-banner, .toolbar, nav, footer { display: none !important; }
-    body { background: #fff !important; }
-    .r-page { box-shadow: none; background: #fff; page-break-after: always; break-after: page; page-break-inside: avoid; }
-    .r-page:last-child { page-break-after: auto; break-after: auto; }
+    html, body { background: #fff !important; }
+    .r-page {
+      box-shadow: none !important; background: #fff; border-radius: 0 !important;
+      page-break-after: always; break-after: page;
+      page-break-before: auto; break-before: auto;
+      page-break-inside: avoid; break-inside: avoid;
+      margin: 0 !important;
+    }
+    .r-page:last-child { page-break-after: auto !important; break-after: auto !important; }
     .r-kpi, .r-chart-box, .r-insight-box, .r-quote-card, .r-rec-col { background: #f4f4f4 !important; }
     .r-page:not(.r-cover) * { color: #111 !important; }
+    .r-cover { min-height: 0 !important; overflow: visible !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .r-cover, .r-cover * { color: #fff !important; }
     .r-cover-subtitle { color: #A8D9C9 !important; }
-    .r-cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .r-cover::before { display: none; } /* the decorative glow can confuse some PDF print engines across a page break — drop it for print only */
   }
 </style>
 </head>

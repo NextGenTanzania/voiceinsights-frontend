@@ -382,15 +382,21 @@ function renderViaAssistant() {
   inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') ask(); });
 }
 
+function normalizeNavPath(p) {
+  // Strips .html generally (Cloudflare Pages often serves clean URLs without
+  // the extension), then collapses a trailing "/index" and trailing slash —
+  // makes the comparison work whether the live URL has .html or not.
+  return p.replace(/\.html$/, '').replace(/\/index$/, '/').replace(/\/$/, '') || '/';
+}
 function highlightActiveTopNav() {
-  const currentPath = window.location.pathname.replace(/\/index\.html$/, '/').replace(/\/$/, '') || '/';
+  const currentPath = normalizeNavPath(window.location.pathname);
   const currentHash = window.location.hash;
   document.querySelectorAll('.pub-nav-links a').forEach(a => {
     const href = a.getAttribute('href') || '';
     const hasHash = href.includes('#');
     const hrefPathRaw = hasHash ? href.split('#')[0] : href;
     const hrefHash = hasHash ? '#' + href.split('#')[1] : '';
-    const hrefPath = hrefPathRaw.replace(/\/index\.html$/, '/').replace(/\/$/, '') || '/';
+    const hrefPath = normalizeNavPath(hrefPathRaw);
     // Anchor links (e.g. Pricing → /index.html#pricing) only light up when the
     // hash itself matches — otherwise they'd falsely activate on every homepage visit.
     const isMatch = hasHash ? (hrefPath === currentPath && hrefHash === currentHash) : (hrefPath === currentPath);

@@ -220,16 +220,27 @@ export default {
 
       if (path === '/api/users/invite' && method === 'POST') {
         const claims = await requireAuth(request, env);
-        if (claims.role !== 'org_admin') return error('Only an Org Admin can invite users', 403);
-        const { email, full_name, role, region, phone, invite_method, campaign_id } = await request.json();
+        if (claims.role !== 'org_admin' && claims.role !== 'super_admin') return error('Only an Org Admin can invite users', 403);
+        const { email, full_name, role, region, phone, invite_method, campaign_id, organization_id } = await request.json();
         if (!email || !full_name) return error('email and full_name are required');
         if ((invite_method === 'sms' || invite_method === 'whatsapp') && !phone) return error('Phone number is required for SMS/WhatsApp invites', 400);
         const existing = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(email).first();
         if (existing) return error('A user with this email already exists', 409);
 
+        // A Super Admin manages multiple client organizations and must say which
+        // one this invite is for; a regular Org Admin can only ever invite into
+        // their own organization — this is enforced server-side either way.
+        let targetOrgId = claims.org;
+        if (claims.role === 'super_admin') {
+          if (!organization_id) return error('organization_id is required when inviting as Super Admin', 400);
+          const targetOrg = await env.DB.prepare('SELECT id FROM organizations WHERE id = ?').bind(organization_id).first();
+          if (!targetOrg) return error('That organization was not found', 400);
+          targetOrgId = organization_id;
+        }
+
         let campaignName = null;
         if (campaign_id) {
-          const campaign = await env.DB.prepare('SELECT id, name FROM campaigns WHERE id = ? AND organization_id = ?').bind(campaign_id, claims.org).first();
+          const campaign = await env.DB.prepare('SELECT id, name FROM campaigns WHERE id = ? AND organization_id = ?').bind(campaign_id, targetOrgId).first();
           if (!campaign) return error('That project/campaign was not found', 400);
           campaignName = campaign.name;
         }
@@ -240,7 +251,7 @@ export default {
         await env.DB.prepare(
           `INSERT INTO users (id, organization_id, email, password_hash, password_salt, full_name, role, is_active)
            VALUES (?, ?, ?, ?, ?, ?, ?, 1)`
-        ).bind(userId, claims.org, email, hash, salt, full_name, role || 'me_officer').run();
+        ).bind(userId, targetOrgId, email, hash, salt, full_name, role || 'me_officer').run();
 
         if (region || phone) {
           await env.DB.prepare(
@@ -295,7 +306,7 @@ export default {
           });
         }
 
-        await logAudit(env, { org: claims.org, userId: claims.sub, action: 'user_invited', resourceType: 'user', resourceId: userId, request });
+        await logAudit(env, { org: targetOrgId, userId: claims.sub, action: 'user_invited', resourceType: 'user', resourceId: userId, request });
         return json({ ok: true, delivered_via: delivered, user: { id: userId, email, full_name, role: role || 'me_officer', region: region || null, campaign_id: campaign_id || null } }, 201);
       }
 

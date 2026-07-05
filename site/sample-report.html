@@ -58,7 +58,14 @@
     .r-page:last-child { page-break-after: auto !important; break-after: auto !important; }
     .r-kpi, .r-chart-box, .r-insight-box, .r-quote-card, .r-rec-col { background: #f4f4f4 !important; }
     .r-page:not(.r-cover) * { color: #111 !important; }
-    .r-cover { min-height: 0 !important; overflow: visible !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .r-cover {
+      display: block !important; min-height: 0 !important; height: auto !important; overflow: visible !important;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .r-cover > div:nth-child(2) { margin: 2.5rem 0 !important; }
+    .r-cover > div:nth-child(3) { margin-top: 2.5rem !important; }
+    .r-cover-title { font-size: 32pt !important; } /* vw-based clamp() can render unpredictably across print engines — fix it to an absolute size for print */
+    .r-cover-wave-big { height: 100px !important; }
     .r-cover, .r-cover * { color: #fff !important; }
     .r-cover-subtitle { color: #A8D9C9 !important; }
     .r-cover::before { display: none; } /* the decorative glow can confuse some PDF print engines across a page break — drop it for print only */

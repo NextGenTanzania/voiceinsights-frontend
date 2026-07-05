@@ -313,7 +313,7 @@ export default {
       const deactivateMatch = path.match(/^\/api\/users\/([a-zA-Z0-9_]+)\/deactivate$/);
       if (deactivateMatch && method === 'POST') {
         const claims = await requireAuth(request, env);
-        if (claims.role !== 'org_admin') return error('Only an Org Admin can deactivate users', 403);
+        if (claims.role !== 'org_admin' && claims.role !== 'super_admin') return error('Only an Org Admin can deactivate users', 403);
         await env.DB.prepare('UPDATE users SET is_active = 0 WHERE id = ? AND organization_id = ?').bind(deactivateMatch[1], claims.org).run();
         await logAudit(env, { org: claims.org, userId: claims.sub, action: 'user_deactivated', resourceType: 'user', resourceId: deactivateMatch[1], request });
         return json({ ok: true });
@@ -642,7 +642,12 @@ export default {
       }
 
       if (path === '/api/leads' && method === 'GET') {
-        await requireAuth(request, env);
+        const claims = await requireAuth(request, env);
+        // Leads are VoiceInsights Africa's OWN sales prospects — never a client
+        // organization's data. Any authenticated client user (org_admin,
+        // me_officer, enumerator) must never see this, regardless of which
+        // organization they belong to.
+        if (claims.role !== 'super_admin') return error('Super Admin access required', 403);
         const { results } = await env.DB.prepare('SELECT * FROM leads ORDER BY created_at DESC LIMIT 200').all();
         return json({ leads: results });
       }
@@ -682,8 +687,18 @@ export default {
       // ---------- AUDIO STREAMING (from R2) ----------
       const audioMatch = path.match(/^\/api\/audio\/(.+)$/);
       if (audioMatch && method === 'GET') {
-        await requireAuth(request, env);
+        const claims = await requireAuth(request, env);
         const key = decodeURIComponent(audioMatch[1]);
+        // Verify this specific audio file actually belongs to the requesting
+        // user's own organization before streaming it — otherwise any logged-in
+        // user from ANY client organization could listen to another
+        // organization's respondent recordings just by knowing the R2 key.
+        if (claims.role !== 'super_admin') {
+          const owner = await env.DB.prepare(
+            `SELECT c.organization_id FROM answers a JOIN responses r ON a.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id WHERE a.audio_r2_key = ?`
+          ).bind(key).first();
+          if (!owner || owner.organization_id !== claims.org) return error('Audio not found', 404);
+        }
         const obj = await env.AUDIO_BUCKET.get(key);
         if (!obj) return error('Audio not found', 404);
         return new Response(obj.body, {
@@ -809,6 +824,9 @@ export default {
       // ---------- AI REPORT INTELLIGENCE (Key Findings + Recommendations for the PDF report) ----------
       if (path === '/api/reports/intelligence' && method === 'GET') {
         const claims = await requireAuth(request, env);
+        const reportLangParam = new URL(request.url).searchParams.get('lang');
+        const REPORT_LANG_NAMES = { en: 'English', fr: 'French', pt: 'Portuguese', sw: 'Swahili' };
+        const reportLang = REPORT_LANG_NAMES[reportLangParam] ? reportLangParam : 'en';
 
         const { results: sentimentRows } = await env.DB.prepare(
           `SELECT r.overall_sentiment, COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id
@@ -883,6 +901,8 @@ ${quoteRows.map(q => `- [${q.overall_sentiment || 'unrated'}, ${q.region || 'uns
             messages: [{
               role: 'user',
               content: `You are a senior research analyst producing an executive intelligence report for an NGO/donor/government audience. Your output will be read by people deciding whether to award a $25K-$500K contract based on data quality — generic, vague, or template-sounding analysis is an immediate credibility failure. Every finding must be specific, evidence-grounded, and non-obvious.
+
+CRITICAL LANGUAGE INSTRUCTION: Write your ENTIRE response — every "text" field, "narrative", "action", and recommendation string — in ${REPORT_LANG_NAMES[reportLang]}, regardless of what language the source verbatim quotes and data below are in (they may be in Swahili even though your output must be in ${REPORT_LANG_NAMES[reportLang]}). Do not mix languages within a single field.
 
 STRICT RULES:
 - Every key finding MUST cite a specific number, percentage, or comparison FROM THE DATA BELOW. Never write a finding that could apply to any survey anywhere (e.g. banning phrases like "respondents shared valuable feedback" or "the data shows important insights").
@@ -1011,10 +1031,13 @@ Respond with ONLY valid JSON in this exact shape, no markdown, no preamble:
             // first question directly — their reply is then handled by the
             // exact same inbound webhook logic already in place.
             try {
-              const session = await getOrCreateSession(env, { sessionKey: phone, channel, campaignId: campaign.id, language: lang });
+              const session = await getOrCreateSession(env, { sessionKey: phone, channel, campaignId: campaign.id, language: lang, consentGiven: true }); // Notice-based consent: the outbound message itself states participation is voluntary — see the message body below.
               const questions = await getQuestions(env, session.survey_id);
               const q = questions[session.current_index];
-              const messageBody = q ? q.question_text : 'Thank you for participating.';
+              const consentPrefix = lang === 'en'
+                ? 'Hi, this is VoiceInsights Africa. By replying, you agree to take part in this research (reply STOP to opt out).\n\n'
+                : 'Habari, huu ni ujumbe kutoka VoiceInsights Africa. Kwa kujibu, unakubali kushiriki kwenye utafiti huu (jibu STOP kujiondoa).\n\n';
+              const messageBody = consentPrefix + (q ? q.question_text : 'Thank you for participating.');
               const sendResult = await sendTwilioMessage(env, { to: phone, body: messageBody, whatsapp: channel === 'whatsapp' });
               results.push({ phone, ok: sendResult.ok, reason: sendResult.reason });
             } catch (e) {
@@ -1030,7 +1053,7 @@ Respond with ONLY valid JSON in this exact shape, no markdown, no preamble:
       // ---------- AUDIT LOG (real security trail — logins, invites, 2FA changes) ----------
       if (path === '/api/audit-logs' && method === 'GET') {
         const claims = await requireAuth(request, env);
-        if (claims.role !== 'org_admin') return error('Only an Org Admin can view the audit log', 403);
+        if (claims.role !== 'org_admin' && claims.role !== 'super_admin') return error('Only an Org Admin can view the audit log', 403);
         const { results } = await env.DB.prepare(
           `SELECT al.action, al.resource_type, al.resource_id, al.ip_address, al.created_at, u.full_name, u.email
            FROM audit_logs al LEFT JOIN users u ON al.user_id = u.id
@@ -1078,7 +1101,7 @@ Respond with ONLY valid JSON in this exact shape, no markdown, no preamble:
 // ============================================================
 // SESSIONS — one survey walk-through per respondent, shared by every channel.
 // ============================================================
-async function getOrCreateSession(env, { sessionKey, channel, campaignId, language }) {
+async function getOrCreateSession(env, { sessionKey, channel, campaignId, language, consentGiven }) {
   campaignId = campaignId || env.DEFAULT_CAMPAIGN_ID || 'camp_default';
 
   // First, look for ANY in-progress session for this session_key+channel, regardless
@@ -1109,8 +1132,8 @@ async function getOrCreateSession(env, { sessionKey, channel, campaignId, langua
 
   const respondentId = newId('resp');
   await env.DB.prepare(
-    `INSERT INTO respondents (id, organization_id, phone_number, consent_given) VALUES (?, ?, ?, 1)`
-  ).bind(respondentId, campaign.organization_id, channel === 'web_link' ? null : sessionKey).run();
+    `INSERT INTO respondents (id, organization_id, phone_number, consent_given) VALUES (?, ?, ?, ?)`
+  ).bind(respondentId, campaign.organization_id, channel === 'web_link' ? null : sessionKey, consentGiven ? 1 : 0).run();
 
   const responseId = newId('response');
   await env.DB.prepare(
@@ -1322,9 +1345,21 @@ async function handleWhatsAppWebhook(request, env) {
   const hasAudio = numMedia > 0 && mediaUrl && (mediaType || '').startsWith('audio');
   const hasText = bodyText.length > 0;
 
+  // Honor an opt-out immediately — we promise "reply STOP" in every outbound
+  // message, so this must actually work, not just be words in a text.
+  if (/^stop$/i.test(bodyText)) {
+    await env.DB.prepare(
+      `UPDATE responses SET status = 'withdrawn' WHERE id = (
+         SELECT response_id FROM sessions WHERE session_key = ? AND channel = 'whatsapp' AND status = 'in_progress' ORDER BY started_at DESC LIMIT 1
+       )`
+    ).bind(from).run();
+    await env.DB.prepare(`UPDATE sessions SET status = 'withdrawn' WHERE session_key = ? AND channel = 'whatsapp' AND status = 'in_progress'`).bind(from).run();
+    return twiml('You have been unsubscribed and no further questions will be sent. Thank you for your time.');
+  }
+
   let session;
   try {
-    session = await getOrCreateSession(env, { sessionKey: from, channel: 'whatsapp', campaignId, language: /^2$/.test(bodyText) ? 'en' : 'sw' });
+    session = await getOrCreateSession(env, { sessionKey: from, channel: 'whatsapp', campaignId, language: /^2$/.test(bodyText) ? 'en' : 'sw', consentGiven: true }); // Notice-based consent: the welcome message states participation is voluntary and how to opt out.
   } catch (e) {
     return twiml('Sorry, this survey is not currently active.');
   }
@@ -1334,7 +1369,7 @@ async function handleWhatsAppWebhook(request, env) {
   // Accepts a reply either as a voice note or as typed text — respondent's choice.
   if (session.current_index === 0 && !hasAudio && !hasText) {
     const q = questions[0];
-    return twiml(`Welcome to VoiceInsights! Reply with a voice note or type your answer.\n\n${q ? q.question_text : 'Thank you.'}`);
+    return twiml(`Welcome to VoiceInsights! By replying, you agree to take part in this research — your answers are recorded and analyzed for this study only. Reply STOP at any time to opt out.\n\nReply with a voice note or type your answer.\n\n${q ? q.question_text : 'Thank you.'}`);
   }
   if (!hasAudio && !hasText) {
     const q = questions[session.current_index];
@@ -1386,15 +1421,15 @@ async function handleVoiceOutboundConnected(request, env) {
 
   let session;
   try {
-    session = await getOrCreateSession(env, { sessionKey: callSid, channel: 'phone_call', campaignId, language });
+    session = await getOrCreateSession(env, { sessionKey: callSid, channel: 'phone_call', campaignId, language, consentGiven: true }); // Notice-based consent: the voice greeting states participation is voluntary before any question is asked.
   } catch (e) {
     return voiceTwiml(language === 'en' ? 'Sorry, this survey is not currently active. Goodbye.' : 'Samahani, utafiti huu haupo hai kwa sasa. Kwaheri.');
   }
   const questions = await getQuestions(env, session.survey_id);
   const q = questions[0];
   const greeting = language === 'en'
-    ? 'Hello, this is a call from VoiceInsights Africa. We would like to ask you a few questions.'
-    : 'Habari, huu ni ujumbe kutoka VoiceInsights Africa. Tungependa kukuuliza maswali machache.';
+    ? 'Hello, this is a call from VoiceInsights Africa. We would like to ask you a few questions. By staying on the line and answering, you agree to take part in this research — your answer will be recorded and analyzed for this study.'
+    : 'Habari, huu ni ujumbe kutoka VoiceInsights Africa. Tungependa kukuuliza maswali machache. Kwa kubaki kwenye simu na kujibu, unakubali kushiriki kwenye utafiti huu.';
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
   <Say voice="Polly.Joanna">${escapeXml(greeting)}</Say>
@@ -1414,14 +1449,18 @@ async function handleVoiceLanguage(request, env) {
 
   let session;
   try {
-    session = await getOrCreateSession(env, { sessionKey: callSid, channel: 'phone_call', campaignId: env.DEFAULT_CAMPAIGN_ID || 'camp_default', language });
+    session = await getOrCreateSession(env, { sessionKey: callSid, channel: 'phone_call', campaignId: env.DEFAULT_CAMPAIGN_ID || 'camp_default', language, consentGiven: true });
   } catch (e) {
     return voiceTwiml('Sorry, this survey is not currently active. Goodbye.');
   }
   const questions = await getQuestions(env, session.survey_id);
   const q = questions[0];
+  const consentNotice = language === 'en'
+    ? 'By staying on the line and answering, you agree to take part in this research. Your answer will be recorded and analyzed for this study.'
+    : 'Kwa kubaki kwenye simu na kujibu, unakubali kushiriki kwenye utafiti huu. Jibu lako litarekodiwa na kuchambuliwa kwa ajili ya utafiti huu.';
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
+  <Say voice="Polly.Joanna">${escapeXml(consentNotice)}</Say>
   <Say voice="Polly.Joanna">${escapeXml(q ? q.question_text : 'Thank you.')}</Say>
   <Record maxLength="120" playBeep="true" action="${base}/api/voice/recording" method="POST" trim="trim-silence"/>
   <Say>We did not receive a recording. Goodbye.</Say>
@@ -1468,16 +1507,26 @@ async function handleSmsWebhook(request, env) {
   const bodyText = (form.get('Body') || '').trim();
   const campaignId = env.DEFAULT_CAMPAIGN_ID || 'camp_default';
 
+  if (/^stop$/i.test(bodyText)) {
+    await env.DB.prepare(
+      `UPDATE responses SET status = 'withdrawn' WHERE id = (
+         SELECT response_id FROM sessions WHERE session_key = ? AND channel = 'sms' AND status = 'in_progress' ORDER BY started_at DESC LIMIT 1
+       )`
+    ).bind(from).run();
+    await env.DB.prepare(`UPDATE sessions SET status = 'withdrawn' WHERE session_key = ? AND channel = 'sms' AND status = 'in_progress'`).bind(from).run();
+    return twiml('You have been unsubscribed and no further questions will be sent. Thank you for your time.');
+  }
+
   let session;
   try {
-    session = await getOrCreateSession(env, { sessionKey: from, channel: 'sms', campaignId, language: 'sw' });
+    session = await getOrCreateSession(env, { sessionKey: from, channel: 'sms', campaignId, language: 'sw', consentGiven: true }); // Notice-based consent: the welcome SMS states participation is voluntary.
   } catch (e) {
     return twiml('Sorry, this survey is not currently active.');
   }
   const questions = await getQuestions(env, session.survey_id);
 
   if (session.current_index === 0 && !bodyText) {
-    return twiml(`VoiceInsights survey. Reply by text to answer.\n\n${questions[0] ? questions[0].question_text : 'Thank you.'}`);
+    return twiml(`VoiceInsights survey. By replying, you agree to take part in this research — reply STOP anytime to opt out.\n\n${questions[0] ? questions[0].question_text : 'Thank you.'}`);
   }
   if (!bodyText) {
     const q = questions[session.current_index];
@@ -1517,11 +1566,16 @@ async function handleWebSubmit(request, env) {
   const gpsLat = form.get('gps_lat') ? parseFloat(form.get('gps_lat')) : null;
   const gpsLng = form.get('gps_lng') ? parseFloat(form.get('gps_lng')) : null;
   const gpsAccuracy = form.get('gps_accuracy') ? parseFloat(form.get('gps_accuracy')) : null;
+  // Consent defaults to true only when the caller doesn't send the field at
+  // all (older cached enumerator app versions, or the outbound-initiated
+  // flow) — respondent.html and the updated Enumerator App always send an
+  // explicit value once the person has actually been asked.
+  const consentGiven = form.has('consent') ? form.get('consent') === '1' : true;
   if (!audioFile || typeof audioFile === 'string') return error('audio file is required');
 
   let session;
   try {
-    session = await getOrCreateSession(env, { sessionKey, channel: 'web_link', campaignId, language });
+    session = await getOrCreateSession(env, { sessionKey, channel: 'web_link', campaignId, language, consentGiven });
   } catch (e) {
     if (e.code === 'ALREADY_SUBMITTED') return error('This device has already submitted a response for this survey.', 409);
     return error('Campaign not found or inactive', 404);

@@ -109,7 +109,7 @@ const NAV_ADMIN = [
   ]},
   { groupKey: 'app.nav.group.operations', group: 'Operations', items: [
     { href: '/admin/dashboard.html', icon: 'layout-dashboard', key: 'app.nav.overview', label: 'Overview' },
-    { href: '/admin/leads.html', icon: 'inbox', key: 'app.nav.leads', label: 'Leads' },
+    { href: '/admin/leads.html', icon: 'inbox', key: 'app.nav.leads', label: 'Leads', superAdminOnly: true },
     { href: '/admin/clients.html', icon: 'building-2', key: 'app.nav.clients', label: 'Clients' },
     { href: '/admin/call-monitoring.html', icon: 'phone-call', key: 'app.nav.call_monitoring', label: 'Call Monitoring' },
   ]},

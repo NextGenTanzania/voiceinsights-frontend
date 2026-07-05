@@ -55,7 +55,14 @@
     .r-page:last-child { page-break-after: auto !important; break-after: auto !important; }
     .r-kpi, .r-chart-box, .r-insight-box, .r-quote-card, .r-rec-col { background: #f4f4f4 !important; }
     .r-page:not(.r-cover) * { color: #111 !important; }
-    .r-cover { min-height: 0 !important; overflow: visible !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .r-cover {
+      display: block !important; min-height: 0 !important; height: auto !important; overflow: visible !important;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .r-cover > div:nth-child(2) { margin: 2.5rem 0 !important; }
+    .r-cover > div:nth-child(3) { margin-top: 2.5rem !important; }
+    .r-cover-title { font-size: 28pt !important; }
+    .r-cover-wave-big { height: 100px !important; }
     .r-cover, .r-cover * { color: #fff !important; }
     .r-cover-subtitle { color: #A8D9C9 !important; }
     .r-cover::before { display: none; }
@@ -77,6 +84,12 @@
             <a class="report-mode-tab" data-mode="narrative" style="cursor:pointer;">Narrative</a>
             <a class="report-mode-tab" data-mode="full" style="cursor:pointer;">Full Detailed</a>
           </div>
+          <select id="report-lang-select" style="padding:.5rem .8rem; font-size:.82rem;" title="Language the AI writes findings and recommendations in">
+            <option value="en">🇬🇧 English</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="pt">🇵🇹 Português</option>
+            <option value="sw">🇹🇿 Kiswahili</option>
+          </select>
           <select id="mode-select" style="padding:.5rem .8rem; font-size:.82rem;">
             <option value="full">Full Report (all sections)</option>
             <option value="brief">Executive Brief (summary only)</option>
@@ -262,6 +275,19 @@
           <div class="muted-note" style="margin-top:1rem;">Sustainability and Coherence require program-level context AI cannot infer from voice data alone — set them once in Compliance and every report will include them automatically.</div>
         </div>
 
+        <!-- OUTCOME INDICATORS -->
+        <div class="r-page" data-section="full">
+          <div class="r-eyebrow">Outcome Indicators <span style="color:var(--text-dim); text-transform:none; font-weight:400;">— Donor Impact Report add-on</span></div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">Baseline vs. Current — measurable change.</h2>
+          <div class="table-wrap" style="margin-top:1.5rem;" id="indicators-table-wrap">
+            <table>
+              <thead><tr><th>Indicator</th><th>Baseline</th><th>Current</th><th>Change</th></tr></thead>
+              <tbody id="indicators-tbody"><tr><td colspan="4" class="muted-note">Loading…</td></tr></tbody>
+            </table>
+          </div>
+          <div class="muted-note" style="margin-top:1rem;">Baseline and current values are entered by your team in Analytics → Indicators — auditable, not just AI-inferred. Add indicators there and they will appear here automatically.</div>
+        </div>
+
         <!-- FORECASTING & BENCHMARKING (illustrative, clearly labeled) -->
         <div class="r-page" data-section="full">
           <div class="r-eyebrow">Forecasting <span style="color:var(--text-dim); text-transform:none; font-weight:400;">— illustrative capability</span></div>
@@ -269,6 +295,15 @@
           <div class="r-insight-box" style="border-left-color:var(--accent-2);">
             <div class="r-insight-label" style="color:var(--accent-2);">Note</div>
             <div class="muted-note">Real forecasts require at least 2-3 rounds of the same survey collected over time. Run this project again in a future period and this section will show a genuine trend line automatically.</div>
+          </div>
+        </div>
+
+        <div class="r-page" data-section="full">
+          <div class="r-eyebrow">Benchmarking <span style="color:var(--text-dim); text-transform:none; font-weight:400;">— illustrative capability</span></div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">What a period-over-period comparison would look like.</h2>
+          <div class="r-insight-box" style="border-left-color:var(--accent-2);">
+            <div class="r-insight-label" style="color:var(--accent-2);">Note</div>
+            <div class="muted-note">This becomes real and automatic once you run this same project again in a later period — VoiceInsights Africa keeps every round on record for exactly this comparison.</div>
           </div>
         </div>
 
@@ -438,6 +473,17 @@
     document.querySelectorAll('[data-section="full"]').forEach(el => el.style.display = showFull ? 'block' : 'none');
   });
 
+  // Report language is independent of the language respondents answered in —
+  // Claude rewrites the findings/narrative/recommendations in whichever
+  // language is picked here, regardless of the source data's language.
+  const reportLangSelect = document.getElementById('report-lang-select');
+  reportLangSelect.value = new URLSearchParams(window.location.search).get('lang') || 'en';
+  reportLangSelect.addEventListener('change', (e) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', e.target.value);
+    window.location.href = url.toString();
+  });
+
   const SENTIMENT_COLOR = { positive: '#6FBF8B', neutral: '#9FB3AB', negative: '#D9634A', distressed: '#E4C23A' };
   const SENTIMENT_LABEL = { positive: 'Positive', neutral: 'Neutral', negative: 'Negative', distressed: 'Distress' };
   const CHART_COLORS = ['#E4A23A', '#4FA490', '#D9634A', '#E4C23A', '#6FBF8B', '#9FB3AB'];
@@ -458,13 +504,14 @@
 
   (async () => {
     try {
-      const [stats, analytics, org, intelligence, quality, oecdDac] = await Promise.all([
+      const [stats, analytics, org, intelligence, quality, oecdDac, indicatorsResp] = await Promise.all([
         apiRequest('/api/dashboard/stats'),
         apiRequest('/api/analytics/summary'),
         apiRequest('/api/organizations/me'),
-        apiRequest('/api/reports/intelligence').catch(() => ({ key_findings: [], recommendations: { immediate: [], strategic: [], policy: [] }, risk_if_ignored: null, top_recommendation: null, narrative: null })),
+        apiRequest(`/api/reports/intelligence?lang=${new URLSearchParams(window.location.search).get('lang') || 'en'}`).catch(() => ({ key_findings: [], recommendations: { immediate: [], strategic: [], policy: [] }, risk_if_ignored: null, top_recommendation: null, narrative: null })),
         apiRequest('/api/admin/model-stats').catch(() => null),
         apiRequest('/api/oecd-dac-assessment').catch(() => ({ sustainability_note: '', coherence_note: '' })),
+        apiRequest('/api/indicators').catch(() => ({ indicators: [] })),
       ]);
 
       if (quality) {
@@ -645,6 +692,16 @@
       }
 
       document.getElementById('narrative-dac-note').innerHTML = `<p><b>Assessed against the OECD-DAC evaluation standard.</b> On efficiency: ${efficiencyText} On sustainability and coherence: ${oecdDac.sustainability_note || oecdDac.coherence_note ? '' : 'not yet set by your team — '}${oecdDac.sustainability_note ? 'Sustainability — ' + oecdDac.sustainability_note + ' ' : ''}${oecdDac.coherence_note ? 'Coherence — ' + oecdDac.coherence_note : (oecdDac.sustainability_note ? '' : 'add these once in Compliance → Evaluation Standard and every report will include them automatically.')}</p>`;
+
+      // ---------- Outcome Indicators (real, org-entered) ----------
+      const indicators = indicatorsResp.indicators || [];
+      document.getElementById('indicators-tbody').innerHTML = indicators.length
+        ? indicators.map(i => {
+            const change = (i.current_value != null && i.baseline_value != null) ? (i.current_value - i.baseline_value) : null;
+            const changeStr = change != null ? (change >= 0 ? '+' : '') + change.toFixed(1) + (i.unit || '') : '—';
+            return `<tr><td>${i.name}</td><td>${i.baseline_value != null ? i.baseline_value + (i.unit || '') : '—'}</td><td>${i.current_value != null ? i.current_value + (i.unit || '') : '—'}</td><td style="color:${change > 0 ? 'var(--success)' : 'var(--text)'}; font-weight:600;">${changeStr}</td></tr>`;
+          }).join('')
+        : '<tr><td colspan="4" class="muted-note">No indicators tracked yet — add them in Analytics → Indicators.</td></tr>';
 
       document.getElementById('report-status').textContent = 'Ready.';
       document.getElementById('report-doc').style.display = 'block';

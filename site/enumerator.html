@@ -229,7 +229,12 @@
   }
 
   newHouseholdBtn.addEventListener('click', () => {
-    currentHousehold = { id: 'hh_' + Date.now() + '_' + Math.random().toString(36).slice(2), label: '', answers: [], createdAt: Date.now(), synced: false, deviceId: getEnumeratorDeviceId(), gpsLat: null, gpsLng: null, gpsAccuracy: null };
+    // The enumerator (not the respondent) confirms here that verbal consent was
+    // actually obtained out loud before recording starts — this flag travels
+    // with every answer submitted for this household, same as the Web channel.
+    const consentGiven = confirm('Have you asked this person for their consent to participate, and did they agree?\n\nTap OK only if they said yes.');
+    if (!consentGiven) return;
+    currentHousehold = { id: 'hh_' + Date.now() + '_' + Math.random().toString(36).slice(2), label: '', answers: [], createdAt: Date.now(), synced: false, deviceId: getEnumeratorDeviceId(), gpsLat: null, gpsLng: null, gpsAccuracy: null, consentGiven: true };
     captureGpsForHousehold(currentHousehold);
     currentIndex = 0;
     labelInput.value = '';
@@ -337,6 +342,7 @@
           form.append('language', 'sw');
           if (ans.questionId) form.append('question_id', ans.questionId); // pins this answer to the exact question it was recorded against, even if the survey has since been edited
           if (h.deviceId) form.append('device_id', h.deviceId);
+          form.append('consent', h.consentGiven ? '1' : '0');
           if (h.gpsLat != null) {
             form.append('gps_lat', h.gpsLat);
             form.append('gps_lng', h.gpsLng);

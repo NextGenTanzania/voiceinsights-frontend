@@ -38,6 +38,10 @@
     .r-cover { min-height: 0 !important; overflow: visible !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .r-cover, .r-cover * { color: #fff !important; }
     .r-cover::before { display: none; }
+    /* The cover on THIS report still uses inline flex/min-height styling (not
+       the .r-cover class) — override that inline layout for print specifically. */
+    .r-page[style*="justify-content:space-between"] { display: block !important; min-height: 0 !important; }
+    .r-page[style*="justify-content:space-between"] > div { margin: 1.5rem 0 !important; }
   }
 </style>
 </head>
@@ -56,6 +60,12 @@
             <a class="report-mode-tab" data-mode="narrative" style="cursor:pointer;">Narrative</a>
             <a class="report-mode-tab" data-mode="full" style="cursor:pointer;">Full Detailed</a>
           </div>
+          <select id="report-lang-select" style="padding:.5rem .8rem; font-size:.82rem;" title="Language the AI writes findings and recommendations in">
+            <option value="en">🇬🇧 English</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="pt">🇵🇹 Português</option>
+            <option value="sw">🇹🇿 Kiswahili</option>
+          </select>
           <button class="btn btn-ghost btn-sm" id="word-download-btn">📄 Download Word</button>
           <button class="btn btn-primary btn-sm" id="print-btn">🖨 Download as PDF</button>
         </div>
@@ -138,6 +148,25 @@
             <input id="new-ind-baseline" placeholder="Baseline (e.g. 41%)" style="flex:1; min-width:100px;">
             <input id="new-ind-current" placeholder="Current (e.g. 67%)" style="flex:1; min-width:100px;">
             <button class="btn btn-ghost btn-sm" id="add-ind-btn">+ Add Indicator</button>
+          </div>
+        </div>
+
+        <!-- FORECASTING & BENCHMARKING (illustrative, clearly labeled) -->
+        <div class="r-page">
+          <div class="r-eyebrow">Forecasting <span style="color:var(--text-dim); text-transform:none; font-weight:400;">— illustrative capability</span></div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">What a trend projection would look like.</h2>
+          <div class="r-insight-box" style="border-left-color:var(--accent-2); background:var(--surface-2); border-left:3px solid var(--accent-2); border-radius:0 10px 10px 0; padding:1rem 1.25rem;">
+            <div style="font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color:var(--accent-2); font-weight:700; margin-bottom:.4rem;">Note</div>
+            <div class="muted-note">Real forecasts require at least 2-3 rounds of the same survey collected over time. Run this project again in a future period and this section will show a genuine trend line automatically.</div>
+          </div>
+        </div>
+
+        <div class="r-page">
+          <div class="r-eyebrow">Benchmarking <span style="color:var(--text-dim); text-transform:none; font-weight:400;">— illustrative capability</span></div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;">What a period-over-period comparison would look like.</h2>
+          <div class="r-insight-box" style="background:var(--surface-2); border-left:3px solid var(--accent-2); border-radius:0 10px 10px 0; padding:1rem 1.25rem;">
+            <div style="font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color:var(--accent-2); font-weight:700; margin-bottom:.4rem;">Note</div>
+            <div class="muted-note">This becomes real and automatic once you run this same project again in a later period — VoiceInsights Africa keeps every round on record for exactly this comparison.</div>
           </div>
         </div>
 
@@ -290,6 +319,14 @@
 
   document.getElementById('print-btn').addEventListener('click', () => window.print());
 
+  const reportLangSelect = document.getElementById('report-lang-select');
+  reportLangSelect.value = new URLSearchParams(window.location.search).get('lang') || 'en';
+  reportLangSelect.addEventListener('change', (e) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', e.target.value);
+    window.location.href = url.toString();
+  });
+
   document.querySelectorAll('.report-mode-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.report-mode-tab').forEach(t => t.classList.remove('active'));
@@ -396,7 +433,7 @@
         apiRequest('/api/dashboard/stats'),
         apiRequest('/api/analytics/summary'),
         apiRequest('/api/organizations/me'),
-        apiRequest('/api/reports/intelligence').catch(() => ({ key_findings: [], recommendations: { immediate: [], strategic: [] }, risk_if_ignored: null, narrative: null })),
+        apiRequest(`/api/reports/intelligence?lang=${new URLSearchParams(window.location.search).get('lang') || 'en'}`).catch(() => ({ key_findings: [], recommendations: { immediate: [], strategic: [] }, risk_if_ignored: null, narrative: null })),
         apiRequest('/api/admin/model-stats').catch(() => null),
         apiRequest('/api/oecd-dac-assessment').catch(() => ({ sustainability_note: '', coherence_note: '' })),
       ]);

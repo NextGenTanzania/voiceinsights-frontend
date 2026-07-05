@@ -21,7 +21,16 @@
       </div>
     </div>
 
-    <div class="card" id="q-card">
+    <div class="card" id="consent-card">
+      <h2 style="font-size:1.2rem; margin-bottom:1rem;" id="consent-title">Before we begin</h2>
+      <p style="font-size:.9rem; line-height:1.6;" id="consent-text">We'd like to ask you a few questions for research purposes. Your answers are recorded and analyzed to help improve programs and services. Participation is voluntary — you can stop at any time, and your answers will only be used for this research.</p>
+      <div style="display:flex; gap:.7rem; margin-top:1.3rem; flex-wrap:wrap;">
+        <button class="btn btn-primary" id="consent-yes-btn" style="flex:1; justify-content:center;">Yes, I agree to take part</button>
+        <button class="btn btn-ghost" id="consent-no-btn" style="flex:1; justify-content:center;">No, thank you</button>
+      </div>
+    </div>
+
+    <div class="card" id="q-card" style="display:none;">
       <div class="muted-note" id="progress-label" style="margin-bottom:.5rem;">Loading…</div>
       <div class="progress" style="margin-bottom:1.4rem;"><span id="progress-bar" style="width:0%"></span></div>
 
@@ -60,6 +69,9 @@
       micDenied: 'Microphone access denied — please allow microphone access and try again.',
       loadError: 'Could not load this survey. The link may be invalid or expired.',
       progress: (i, n) => `Question ${i} of ${n}`,
+      consentTitle: 'Before we begin', consentText: "We'd like to ask you a few questions for research purposes. Your answers are recorded and analyzed to help improve programs and services. Participation is voluntary — you can stop at any time, and your answers will only be used for this research.",
+      consentYes: 'Yes, I agree to take part', consentNo: 'No, thank you',
+      consentDeclined: 'Thank you for your time', consentDeclinedNote: 'No answers have been recorded. You may close this page at any time.',
     },
     sw: {
       header: 'Hauhitaji akaunti', instruction: 'Bonyeza kitufe hapa chini kisha zungumza jibu lako. Bonyeza tena kusitisha, kisha tuma.',
@@ -72,6 +84,9 @@
       micDenied: 'Ruhusa ya kipaza sauti imekataliwa — tafadhali ruhusu kipaza sauti na ujaribu tena.',
       loadError: 'Imeshindwa kupakia utafiti huu. Kiungo kinaweza kuwa batili au kimeisha muda.',
       progress: (i, n) => `Swali la ${i} kati ya ${n}`,
+      consentTitle: 'Kabla hatujaanza', consentText: 'Tungependa kukuuliza maswali machache kwa madhumuni ya utafiti. Majibu yako yanarekodiwa na kuchambuliwa kusaidia kuboresha huduma na programu. Kushiriki ni kwa hiari — unaweza kusitisha wakati wowote, na majibu yako yatatumika kwa utafiti huu pekee.',
+      consentYes: 'Ndiyo, nakubali kushiriki', consentNo: 'Hapana, asante',
+      consentDeclined: 'Asante kwa muda wako', consentDeclinedNote: 'Hakuna majibu yaliyorekodiwa. Unaweza kufunga ukurasa huu wakati wowote.',
     },
   };
   let lang = 'en';
@@ -90,6 +105,13 @@
     document.getElementById('rec-status').textContent = recording ? t('recording') : (audioBlob ? t('ready') : t('tapToRecord'));
     document.getElementById('submit-btn').textContent = questions.length ? t('submit') : t('submit');
     document.getElementById('footer-note').textContent = t('footer');
+    const consentTitleEl = document.getElementById('consent-title');
+    if (consentTitleEl) {
+      consentTitleEl.textContent = t('consentTitle');
+      document.getElementById('consent-text').textContent = t('consentText');
+      document.getElementById('consent-yes-btn').textContent = t('consentYes');
+      document.getElementById('consent-no-btn').textContent = t('consentNo');
+    }
     if (questions.length) updateProgressLabel();
   }
 
@@ -142,6 +164,25 @@
     }
   })();
 
+  // ---------- Consent gate — no question is shown, and nothing is recorded,
+  // until the respondent explicitly agrees. This is real, not decorative:
+  // the consent flag travels with the first answer submitted to the server. ----------
+  applyStrings();
+  let hasConsented = false;
+  document.getElementById('consent-yes-btn').addEventListener('click', () => {
+    hasConsented = true;
+    document.getElementById('consent-card').style.display = 'none';
+    document.getElementById('q-card').style.display = 'block';
+  });
+  document.getElementById('consent-no-btn').addEventListener('click', () => {
+    document.getElementById('consent-card').innerHTML = `
+      <div style="text-align:center; padding: 1rem 0;">
+        <div style="font-size:2rem; margin-bottom:.8rem;">🙏</div>
+        <h2 style="font-size:1.1rem; margin-bottom:.5rem;">${t('consentDeclined')}</h2>
+        <p class="muted-note">${t('consentDeclinedNote')}</p>
+      </div>`;
+  });
+
   btn.addEventListener('click', async () => {
     if (!recording) {
       try {
@@ -185,6 +226,7 @@
       form.append('audio', audioBlob, 'answer.webm');
       form.append('session_key', sessionKey);
       form.append('language', lang);
+      form.append('consent', hasConsented ? '1' : '0');
       if (campaignId) form.append('campaign_id', campaignId);
 
       const res = await fetch(`${API_BASE_URL}/api/web/submit`, { method: 'POST', body: form });

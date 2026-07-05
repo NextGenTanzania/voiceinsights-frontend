@@ -110,7 +110,6 @@ const NAV_ADMIN = [
   { groupKey: 'app.nav.group.operations', group: 'Operations', items: [
     { href: '/admin/dashboard.html', icon: 'layout-dashboard', key: 'app.nav.overview', label: 'Overview' },
     { href: '/admin/leads.html', icon: 'inbox', key: 'app.nav.leads', label: 'Leads', superAdminOnly: true },
-    { href: '/admin/clients.html', icon: 'building-2', key: 'app.nav.clients', label: 'Clients' },
     { href: '/admin/call-monitoring.html', icon: 'phone-call', key: 'app.nav.call_monitoring', label: 'Call Monitoring' },
   ]},
   { groupKey: 'app.nav.group.quality', group: 'Quality & Safety', items: [
@@ -138,7 +137,7 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
   // Full-access roles see everything; a plain M&E Officer or Enumerator gets a
   // reduced, focused nav (no Billing, no Compliance edit, no Leads) — reflecting
   // real permission differences. Enumerators additionally don't manage surveys.
-  const RESTRICTED_FOR_ME_OFFICER = ['/app/billing.html', '/app/settings.html', '/admin/leads.html', '/admin/clients.html'];
+  const RESTRICTED_FOR_ME_OFFICER = ['/app/billing.html', '/app/settings.html', '/admin/leads.html'];
   const RESTRICTED_FOR_ENUMERATOR = [...RESTRICTED_FOR_ME_OFFICER, '/app/surveys.html', '/app/campaigns.html', '/app/compliance.html'];
 
   let nav = role === 'admin' ? NAV_ADMIN : NAV_APP;

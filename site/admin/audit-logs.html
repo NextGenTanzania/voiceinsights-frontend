@@ -64,7 +64,7 @@
 
   (async () => {
     try {
-      const { logs } = await apiRequest('/api/audit-logs');
+      const { logs } = await apiRequest(`/api/audit-logs${new URLSearchParams(window.location.search).get('org_id') ? '?org_id=' + new URLSearchParams(window.location.search).get('org_id') : ''}`);
       allLogs = logs;
       render('');
     } catch (e) {

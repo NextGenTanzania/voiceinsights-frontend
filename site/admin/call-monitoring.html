@@ -42,7 +42,7 @@
   (async () => {
     const tbody = document.getElementById('calls-tbody');
     try {
-      const { interviews } = await apiRequest('/api/interviews');
+      const { interviews } = await apiRequest(`/api/interviews${new URLSearchParams(window.location.search).get('org_id') ? '?org_id=' + new URLSearchParams(window.location.search).get('org_id') : ''}`);
       const voiceOnly = interviews.filter(iv => iv.channel === 'phone_call' || iv.channel === 'whatsapp');
 
       document.getElementById('stat-voice-total').textContent = voiceOnly.length;

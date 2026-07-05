@@ -194,6 +194,62 @@ CREATE TABLE IF NOT EXISTS response_metadata (
 
 -- Simple sliding-window rate limiting — no extra Cloudflare product needed,
 -- just a small D1 table. Cleared rows are cheap; old rows are pruned on write.
+-- Short, human-speakable codes respondents reply with FIRST on shared-number
+-- channels (WhatsApp/SMS) so the system knows EXACTLY which campaign/project
+-- this specific conversation belongs to — without this, every WhatsApp/SMS
+-- reply on a shared number would be unable to tell which organization or
+-- project it's even for.
+CREATE TABLE IF NOT EXISTS campaign_access_codes (
+  code          TEXT PRIMARY KEY,
+  campaign_id   TEXT NOT NULL REFERENCES campaigns(id),
+  created_at    TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Links one campaign as a later ROUND of an earlier one (baseline → midline →
+-- endline), the standard M&E design for measuring change over time. Kept as
+-- its own table rather than a column so no ALTER TABLE is ever needed.
+CREATE TABLE IF NOT EXISTS campaign_panel_links (
+  campaign_id           TEXT PRIMARY KEY REFERENCES campaigns(id),
+  baseline_campaign_id  TEXT NOT NULL REFERENCES campaigns(id),
+  round_label           TEXT NOT NULL DEFAULT 'Follow-up',
+  created_at            TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Tracks a sales lead's progress through the pipeline — the lightweight CRM
+-- layer that lets more than one person work leads without everything living
+-- in one founder's head.
+CREATE TABLE IF NOT EXISTS lead_pipeline (
+  lead_id       TEXT PRIMARY KEY REFERENCES leads(id),
+  stage         TEXT NOT NULL DEFAULT 'new',  -- new | contacted | proposal_sent | negotiating | won | lost
+  owner_note    TEXT,
+  updated_at    TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- DHIS2 connection details for an organization's OWN DHIS2 instance (Ministry
+-- of Health systems, standard across African health M&E). Stores a Personal
+-- Access Token (PAT), not a password — the modern, safer DHIS2 auth method.
+-- This is the org's OWN credential for their OWN system, configured by them,
+-- same pattern as any SaaS "connect your API" settings page.
+CREATE TABLE IF NOT EXISTS dhis2_integrations (
+  organization_id   TEXT PRIMARY KEY REFERENCES organizations(id),
+  instance_url       TEXT NOT NULL,
+  api_token          TEXT NOT NULL,
+  default_org_unit   TEXT,
+  default_dataset_id TEXT,
+  enabled            INTEGER NOT NULL DEFAULT 1,
+  updated_at         TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Maps ONE of our Outcome Indicators to a specific DHIS2 Data Element — every
+-- DHIS2 instance has its own IDs, so this mapping is what makes push actually
+-- land in the right place for each client's specific configuration.
+CREATE TABLE IF NOT EXISTS dhis2_indicator_mapping (
+  indicator_id        TEXT PRIMARY KEY REFERENCES impact_indicators(id),
+  dhis2_data_element_id TEXT NOT NULL,
+  dhis2_category_option_combo TEXT,
+  created_at           TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 CREATE TABLE IF NOT EXISTS rate_limits (
   rate_key    TEXT PRIMARY KEY,
   count       INTEGER NOT NULL DEFAULT 1,

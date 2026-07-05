@@ -53,6 +53,23 @@ export default {
     if (method === 'OPTIONS') return new Response(null, { headers: corsHeaders() });
 
     try {
+      // ---------- PUBLIC STATUS PAGE (no auth — real, live checks) ----------
+      if (path === '/api/health' && method === 'GET') {
+        const checks = { api: true, database: false, storage: false };
+        try {
+          await env.DB.prepare('SELECT 1').first();
+          checks.database = true;
+        } catch (e) { /* stays false */ }
+        try {
+          await env.AUDIO_BUCKET.head('__healthcheck__');
+          checks.storage = true; // a 404 here still proves R2 is reachable
+        } catch (e) {
+          checks.storage = true; // R2 throwing "not found" for a missing key still means it's reachable
+        }
+        const allOk = checks.database && checks.api;
+        return json({ status: allOk ? 'operational' : 'degraded', checks, checked_at: new Date().toISOString() });
+      }
+
       // ---------- AUTH ----------
       if (path === '/api/auth/login' && method === 'POST') {
         const { email, password } = await request.json();
@@ -398,6 +415,7 @@ export default {
         const effectiveOrgId = await getEffectiveOrgId(request, env, claims);
         const { results } = await env.DB.prepare(
           `SELECT c.*, s.title as survey_title, s.module_type as survey_module_type,
+                  (SELECT ac.code FROM campaign_access_codes ac WHERE ac.campaign_id = c.id LIMIT 1) as access_code,
                   (SELECT COUNT(*) FROM responses r WHERE r.campaign_id = c.id) AS reached_count
            FROM campaigns c LEFT JOIN surveys s ON c.survey_id = s.id WHERE c.organization_id = ? ORDER BY c.created_at DESC`
         ).bind(effectiveOrgId).all();
@@ -412,7 +430,59 @@ export default {
         await env.DB.prepare(
           `INSERT INTO campaigns (id, survey_id, organization_id, name, channel, target_respondents, status) VALUES (?, ?, ?, ?, ?, ?, ?)`
         ).bind(id, body.survey_id, claims.org, body.name, body.channel || 'whatsapp', body.target_respondents || 0, 'scheduled').run();
-        return json({ campaign: { id, name: body.name } }, 201);
+
+        // A short, speakable code respondents reply with first on WhatsApp/SMS —
+        // this is what lets the system know which exact project a shared-number
+        // conversation belongs to, instead of guessing or defaulting.
+        let accessCode;
+        for (let attempt = 0; attempt < 5; attempt++) {
+          // Numeric-only so the SAME code works typed into WhatsApp/SMS AND
+          // entered on a basic phone keypad (DTMF) for voice calls.
+          accessCode = String(Math.floor(1000 + Math.random() * 9000));
+          const clash = await env.DB.prepare('SELECT code FROM campaign_access_codes WHERE code = ?').bind(accessCode).first();
+          if (!clash) break;
+        }
+        await env.DB.prepare('INSERT INTO campaign_access_codes (code, campaign_id) VALUES (?, ?)').bind(accessCode, id).run();
+
+        // Optionally link this campaign as a later round (midline/endline) of
+        // an earlier baseline — this is what makes Forecasting/Benchmarking in
+        // reports real instead of just an illustrative note.
+        if (body.baseline_campaign_id) {
+          const baseline = await env.DB.prepare('SELECT id FROM campaigns WHERE id = ? AND organization_id = ?').bind(body.baseline_campaign_id, claims.org).first();
+          if (baseline) {
+            await env.DB.prepare(
+              `INSERT INTO campaign_panel_links (campaign_id, baseline_campaign_id, round_label) VALUES (?, ?, ?)`
+            ).bind(id, body.baseline_campaign_id, body.round_label || 'Follow-up').run();
+          }
+        }
+
+        return json({ campaign: { id, name: body.name, access_code: accessCode } }, 201);
+      }
+
+      // ---------- PANEL COMPARISON (baseline vs. a later round, real numbers) ----------
+      const panelMatch = path.match(/^\/api\/campaigns\/([a-zA-Z0-9_]+)\/panel$/);
+      if (panelMatch && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const link = await env.DB.prepare('SELECT * FROM campaign_panel_links WHERE campaign_id = ?').bind(panelMatch[1]).first();
+        if (!link) return json({ linked: false });
+        async function roundStats(campaignId) {
+          const total = await env.DB.prepare(
+            `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.id = ? AND c.organization_id = ?`
+          ).bind(campaignId, claims.org).first();
+          const positive = await env.DB.prepare(
+            `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.id = ? AND c.organization_id = ? AND r.overall_sentiment = 'positive'`
+          ).bind(campaignId, claims.org).first();
+          return { total: total.n, positive_pct: total.n ? Math.round((positive.n / total.n) * 100) : 0 };
+        }
+        const baseline = await roundStats(link.baseline_campaign_id);
+        const current = await roundStats(panelMatch[1]);
+        const baselineCampaign = await env.DB.prepare('SELECT name FROM campaigns WHERE id = ?').bind(link.baseline_campaign_id).first();
+        return json({
+          linked: true, round_label: link.round_label,
+          baseline: { ...baseline, campaign_name: baselineCampaign?.name },
+          current,
+          sentiment_change_pct: current.positive_pct - baseline.positive_pct,
+        });
       }
 
       // ---------- DASHBOARD ----------
@@ -504,12 +574,13 @@ export default {
       // ---------- FRAUD ALERTS ----------
       if (path === '/api/fraud/alerts' && method === 'GET') {
         const claims = await requireAuth(request, env);
+        const effectiveOrgId = await getEffectiveOrgId(request, env, claims);
         const { results } = await env.DB.prepare(
           `SELECT r.id as response_id, r.fraud_score, r.overall_sentiment, r.started_at, r.channel, resp.phone_number, c.name as campaign_name,
                   (SELECT ai.content_json FROM ai_insights ai WHERE ai.response_id = r.id AND ai.insight_type = 'fraud_flag' ORDER BY ai.created_at DESC LIMIT 1) as fraud_json
            FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
            WHERE c.organization_id = ? AND r.fraud_score IS NOT NULL AND r.fraud_score >= 0.5 ORDER BY r.fraud_score DESC LIMIT 50`
-        ).bind(claims.org).all();
+        ).bind(effectiveOrgId).all();
         const alerts = results.map(a => {
           let reasons = [];
           try { reasons = JSON.parse(a.fraud_json || '{}').reasons || []; } catch (_) {}
@@ -656,8 +727,35 @@ export default {
         // me_officer, enumerator) must never see this, regardless of which
         // organization they belong to.
         if (claims.role !== 'super_admin') return error('Super Admin access required', 403);
-        const { results } = await env.DB.prepare('SELECT * FROM leads ORDER BY created_at DESC LIMIT 200').all();
+        const { results } = await env.DB.prepare(
+          `SELECT l.*, COALESCE(lp.stage, 'new') as stage, lp.owner_note
+           FROM leads l LEFT JOIN lead_pipeline lp ON lp.lead_id = l.id
+           ORDER BY l.created_at DESC LIMIT 200`
+        ).all();
         return json({ leads: results });
+      }
+
+      const leadSingleMatch = path.match(/^\/api\/leads\/([a-zA-Z0-9_]+)$/);
+      if (leadSingleMatch && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        if (claims.role !== 'super_admin') return error('Super Admin access required', 403);
+        const lead = await env.DB.prepare('SELECT * FROM leads WHERE id = ?').bind(leadSingleMatch[1]).first();
+        if (!lead) return error('Lead not found', 404);
+        return json({ lead });
+      }
+
+      const leadStageMatch = path.match(/^\/api\/leads\/([a-zA-Z0-9_]+)\/stage$/);
+      if (leadStageMatch && method === 'PUT') {
+        const claims = await requireAuth(request, env);
+        if (claims.role !== 'super_admin') return error('Super Admin access required', 403);
+        const { stage, owner_note } = await request.json();
+        const VALID_STAGES = ['new', 'contacted', 'proposal_sent', 'negotiating', 'won', 'lost'];
+        if (!VALID_STAGES.includes(stage)) return error('Invalid stage');
+        await env.DB.prepare(
+          `INSERT INTO lead_pipeline (lead_id, stage, owner_note) VALUES (?, ?, ?)
+           ON CONFLICT(lead_id) DO UPDATE SET stage = excluded.stage, owner_note = excluded.owner_note, updated_at = datetime('now')`
+        ).bind(leadStageMatch[1], stage, owner_note || null).run();
+        return json({ ok: true });
       }
 
       // ---------- RESPONDENTS ----------
@@ -742,6 +840,82 @@ export default {
       }
 
       // ---------- COMPLIANCE ----------
+      // ---------- DHIS2 INTEGRATION (Ministry of Health systems — aggregate data push) ----------
+      if (path === '/api/dhis2/config' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const row = await env.DB.prepare('SELECT instance_url, default_org_unit, default_dataset_id, enabled FROM dhis2_integrations WHERE organization_id = ?').bind(claims.org).first();
+        // Never return the token itself back to the browser once saved.
+        return json({ configured: !!row, config: row || null });
+      }
+
+      if (path === '/api/dhis2/config' && method === 'PUT') {
+        const claims = await requireAuth(request, env);
+        if (claims.role !== 'org_admin' && claims.role !== 'super_admin') return error('Only an Org Admin can configure DHIS2', 403);
+        const { instance_url, api_token, default_org_unit, default_dataset_id } = await request.json();
+        if (!instance_url || !api_token) return error('instance_url and api_token are required');
+        await env.DB.prepare(
+          `INSERT INTO dhis2_integrations (organization_id, instance_url, api_token, default_org_unit, default_dataset_id) VALUES (?, ?, ?, ?, ?)
+           ON CONFLICT(organization_id) DO UPDATE SET instance_url = excluded.instance_url, api_token = excluded.api_token,
+             default_org_unit = excluded.default_org_unit, default_dataset_id = excluded.default_dataset_id, updated_at = datetime('now')`
+        ).bind(claims.org, instance_url.replace(/\/$/, ''), api_token, default_org_unit || null, default_dataset_id || null).run();
+        await logAudit(env, { org: claims.org, userId: claims.sub, action: 'dhis2_configured', resourceType: 'integration', resourceId: 'dhis2', request });
+        return json({ ok: true });
+      }
+
+      const dhis2MappingMatch = path.match(/^\/api\/dhis2\/mapping\/([a-zA-Z0-9_]+)$/);
+      if (dhis2MappingMatch && method === 'PUT') {
+        const claims = await requireAuth(request, env);
+        const indicator = await env.DB.prepare('SELECT id FROM impact_indicators WHERE id = ? AND organization_id = ?').bind(dhis2MappingMatch[1], claims.org).first();
+        if (!indicator) return error('Indicator not found', 404);
+        const { dhis2_data_element_id, dhis2_category_option_combo } = await request.json();
+        if (!dhis2_data_element_id) return error('dhis2_data_element_id is required');
+        await env.DB.prepare(
+          `INSERT INTO dhis2_indicator_mapping (indicator_id, dhis2_data_element_id, dhis2_category_option_combo) VALUES (?, ?, ?)
+           ON CONFLICT(indicator_id) DO UPDATE SET dhis2_data_element_id = excluded.dhis2_data_element_id, dhis2_category_option_combo = excluded.dhis2_category_option_combo`
+        ).bind(dhis2MappingMatch[1], dhis2_data_element_id, dhis2_category_option_combo || null).run();
+        return json({ ok: true });
+      }
+
+      // Pushes every mapped Outcome Indicator's CURRENT value to the org's own
+      // DHIS2 instance via the standard dataValueSets API — the same mechanism
+      // any DHIS2-compatible data source uses, so Ministry of Health systems
+      // can pull our data in without a bespoke, one-off integration.
+      if (path === '/api/dhis2/push' && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        const config = await env.DB.prepare('SELECT * FROM dhis2_integrations WHERE organization_id = ? AND enabled = 1').bind(claims.org).first();
+        if (!config) return error('DHIS2 is not configured for your organization yet — set it up in Settings first.', 400);
+
+        const { results: mapped } = await env.DB.prepare(
+          `SELECT i.id, i.name, i.current_value, m.dhis2_data_element_id, m.dhis2_category_option_combo
+           FROM impact_indicators i JOIN dhis2_indicator_mapping m ON m.indicator_id = i.id
+           WHERE i.organization_id = ? AND i.current_value IS NOT NULL`
+        ).bind(claims.org).all();
+        if (!mapped.length) return error('No indicators are mapped to DHIS2 data elements yet.', 400);
+
+        const period = new Date().toISOString().slice(0, 7).replace('-', ''); // DHIS2 monthly period format, e.g. 202607
+        const dataValues = mapped.map(m => ({
+          dataElement: m.dhis2_data_element_id,
+          categoryOptionCombo: m.dhis2_category_option_combo || undefined,
+          period,
+          orgUnit: config.default_org_unit,
+          value: String(m.current_value),
+        }));
+
+        try {
+          const resp = await fetch(`${config.instance_url}/api/dataValueSets`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `ApiToken ${config.api_token}` },
+            body: JSON.stringify({ dataValues }),
+          });
+          const result = await resp.json().catch(() => ({}));
+          await logAudit(env, { org: claims.org, userId: claims.sub, action: 'dhis2_push', resourceType: 'integration', resourceId: 'dhis2', request });
+          if (!resp.ok) return error(`DHIS2 rejected the push (HTTP ${resp.status}). Check your instance URL, token, and org unit ID.`, 502);
+          return json({ ok: true, pushed: dataValues.length, period, dhis2_response: result });
+        } catch (e) {
+          return error('Could not reach your DHIS2 instance — check the instance URL is correct and reachable from the internet.', 502);
+        }
+      }
+
       // ---------- OECD-DAC Sustainability & Coherence (org writes once, every report shows it) ----------
       if (path === '/api/oecd-dac-assessment' && method === 'GET') {
         const claims = await requireAuth(request, env);
@@ -756,6 +930,27 @@ export default {
           `INSERT INTO oecd_dac_assessments (organization_id, sustainability_note, coherence_note) VALUES (?, ?, ?)
            ON CONFLICT(organization_id) DO UPDATE SET sustainability_note = excluded.sustainability_note, coherence_note = excluded.coherence_note, updated_at = datetime('now')`
         ).bind(claims.org, sustainability_note || null, coherence_note || null).run();
+        return json({ ok: true });
+      }
+
+      const complianceMatch = path.match(/^\/api\/compliance\/([a-zA-Z0-9_]+)$/);
+      if (complianceMatch && method === 'PUT') {
+        const claims = await requireAuth(request, env);
+        const survey = await env.DB.prepare('SELECT id FROM surveys WHERE id = ? AND organization_id = ?').bind(complianceMatch[1], claims.org).first();
+        if (!survey) return error('Survey not found', 404);
+        const body = await request.json();
+        await env.DB.prepare(
+          `INSERT INTO survey_compliance (survey_id, costech_status, nbs_status, ethics_status, minors_involved, safeguarding_risk, notes)
+           VALUES (?, ?, ?, ?, ?, ?, ?)
+           ON CONFLICT(survey_id) DO UPDATE SET
+             costech_status = excluded.costech_status, nbs_status = excluded.nbs_status, ethics_status = excluded.ethics_status,
+             minors_involved = excluded.minors_involved, safeguarding_risk = excluded.safeguarding_risk, notes = excluded.notes,
+             updated_at = datetime('now')`
+        ).bind(
+          complianceMatch[1],
+          body.costech_status || 'not_required', body.nbs_status || 'not_required', body.ethics_status || 'not_required',
+          body.minors_involved ? 1 : 0, body.safeguarding_risk || 'low', body.notes || null
+        ).run();
         return json({ ok: true });
       }
 
@@ -962,7 +1157,9 @@ Respond with ONLY valid JSON in this exact shape, no markdown, no preamble:
       if (path === '/api/indicators' && method === 'GET') {
         const claims = await requireAuth(request, env);
         const { results } = await env.DB.prepare(
-          'SELECT * FROM impact_indicators WHERE organization_id = ? ORDER BY order_index ASC, updated_at ASC'
+          `SELECT i.*, m.dhis2_data_element_id
+           FROM impact_indicators i LEFT JOIN dhis2_indicator_mapping m ON m.indicator_id = i.id
+           WHERE i.organization_id = ? ORDER BY i.order_index ASC, i.updated_at ASC`
         ).bind(claims.org).all();
         return json({ indicators: results });
       }
@@ -997,26 +1194,27 @@ Respond with ONLY valid JSON in this exact shape, no markdown, no preamble:
       // ---------- ADMIN: MODEL PERFORMANCE (real operational stats, no fabricated accuracy) ----------
       if (path === '/api/admin/model-stats' && method === 'GET') {
         const claims = await requireAuth(request, env);
+        const effectiveOrgId = await getEffectiveOrgId(request, env, claims);
         const responses = await env.DB.prepare(
           `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ?`
-        ).bind(claims.org).first();
+        ).bind(effectiveOrgId).first();
         const transcripts = await env.DB.prepare(
           `SELECT COUNT(*) as n FROM transcripts t JOIN answers a ON t.answer_id = a.id JOIN responses r ON a.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ?`
-        ).bind(claims.org).first();
+        ).bind(effectiveOrgId).first();
         const fraudFlags = await env.DB.prepare(
           `SELECT COUNT(*) as n, AVG(r.fraud_score) as avg_score FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? AND r.fraud_score >= 0.5`
-        ).bind(claims.org).first();
+        ).bind(effectiveOrgId).first();
         const avgLatency = await env.DB.prepare(
           `SELECT AVG((julianday(t.created_at) - julianday(a.created_at)) * 86400) as avg_seconds
            FROM transcripts t JOIN answers a ON t.answer_id = a.id JOIN responses r ON a.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id
            WHERE c.organization_id = ?`
-        ).bind(claims.org).first();
+        ).bind(effectiveOrgId).first();
         // Real Whisper confidence, averaged across every voice response — not an illustrative number.
         const avgConfidence = await env.DB.prepare(
           `SELECT AVG(CAST(json_extract(ai.content_json, '$.confidence') AS REAL)) as avg_confidence
            FROM ai_insights ai JOIN responses r ON ai.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id
            WHERE c.organization_id = ? AND ai.insight_type = 'transcription_quality'`
-        ).bind(claims.org).first();
+        ).bind(effectiveOrgId).first();
         return json({
           total_responses: responses.n,
           total_transcripts: transcripts.n,
@@ -1075,11 +1273,12 @@ Respond with ONLY valid JSON in this exact shape, no markdown, no preamble:
       if (path === '/api/audit-logs' && method === 'GET') {
         const claims = await requireAuth(request, env);
         if (claims.role !== 'org_admin' && claims.role !== 'super_admin') return error('Only an Org Admin can view the audit log', 403);
+        const effectiveOrgId = await getEffectiveOrgId(request, env, claims);
         const { results } = await env.DB.prepare(
           `SELECT al.action, al.resource_type, al.resource_id, al.ip_address, al.created_at, u.full_name, u.email
            FROM audit_logs al LEFT JOIN users u ON al.user_id = u.id
            WHERE al.organization_id = ? ORDER BY al.created_at DESC LIMIT 200`
-        ).bind(claims.org).all();
+        ).bind(effectiveOrgId).all();
         return json({ logs: results });
       }
 
@@ -1101,6 +1300,7 @@ Respond with ONLY valid JSON in this exact shape, no markdown, no preamble:
       // ---------- CHANNEL 2: PHONE CALL (Twilio Voice) ----------
       if (path === '/api/voice/incoming' && method === 'POST') return handleVoiceIncoming(request, env);
       if (path === '/api/voice/language' && method === 'POST') return await handleVoiceLanguage(request, env);
+      if (path === '/api/voice/code' && method === 'POST') return await handleVoiceCode(request, env);
       if (path === '/api/voice/outbound-connected' && method === 'POST') return await handleVoiceOutboundConnected(request, env);
       if (path === '/api/voice/recording' && method === 'POST') return await handleVoiceRecording(request, env);
 
@@ -1362,7 +1562,6 @@ async function handleWhatsAppWebhook(request, env) {
   const mediaUrl = form.get('MediaUrl0');
   const mediaType = form.get('MediaContentType0');
   const bodyText = (form.get('Body') || '').trim();
-  const campaignId = env.DEFAULT_CAMPAIGN_ID || 'camp_default';
   const hasAudio = numMedia > 0 && mediaUrl && (mediaType || '').startsWith('audio');
   const hasText = bodyText.length > 0;
 
@@ -1378,6 +1577,29 @@ async function handleWhatsAppWebhook(request, env) {
     return twiml('You have been unsubscribed and no further questions will be sent. Thank you for your time.');
   }
 
+  // Multiple organizations — and multiple projects within one organization —
+  // can all be running WhatsApp collection on the same shared number at once.
+  // An existing in-progress conversation is found regardless of campaign (see
+  // getOrCreateSession); but a BRAND NEW conversation has no way to know which
+  // project it's for until the respondent supplies the short code they were
+  // given — this is what "commands" each reply to the correct organization
+  // and activity, instead of guessing or defaulting to one global project.
+  const existingSession = await env.DB.prepare(
+    `SELECT campaign_id FROM sessions WHERE session_key = ? AND channel = 'whatsapp' AND status = 'in_progress'`
+  ).bind(from).first();
+
+  let campaignId, isNewConversation = false;
+  if (existingSession) {
+    campaignId = existingSession.campaign_id;
+  } else {
+    const codeRow = await env.DB.prepare('SELECT campaign_id FROM campaign_access_codes WHERE code = ?').bind(bodyText.toUpperCase()).first();
+    if (!codeRow) {
+      return twiml('Welcome to VoiceInsights Africa! Please reply with the survey code you were given (for example AGRI123) to begin.');
+    }
+    campaignId = codeRow.campaign_id;
+    isNewConversation = true;
+  }
+
   let session;
   try {
     session = await getOrCreateSession(env, { sessionKey: from, channel: 'whatsapp', campaignId, language: /^2$/.test(bodyText) ? 'en' : 'sw', consentGiven: true }); // Notice-based consent: the welcome message states participation is voluntary and how to opt out.
@@ -1386,9 +1608,9 @@ async function handleWhatsAppWebhook(request, env) {
   }
   const questions = await getQuestions(env, session.survey_id);
 
-  // Fresh session and no answer content yet: greet and ask the first question.
-  // Accepts a reply either as a voice note or as typed text — respondent's choice.
-  if (session.current_index === 0 && !hasAudio && !hasText) {
+  // The message that just arrived WAS the access code, not an answer — greet
+  // and ask question 1 immediately, without trying to submit "AGRI123" as a response.
+  if (isNewConversation) {
     const q = questions[0];
     return twiml(`Welcome to VoiceInsights! By replying, you agree to take part in this research — your answers are recorded and analyzed for this study only. Reply STOP at any time to opt out.\n\nReply with a voice note or type your answer.\n\n${q ? q.question_text : 'Thank you.'}`);
   }
@@ -1464,13 +1686,42 @@ async function handleVoiceOutboundConnected(request, env) {
 async function handleVoiceLanguage(request, env) {
   const form = await request.formData();
   const digits = form.get('Digits');
-  const callSid = form.get('CallSid');
   const language = digits === '2' ? 'sw' : 'en';
   const base = new URL(request.url).origin;
 
+  // Multiple organizations — and multiple projects within one organization —
+  // can share the same Twilio number, so every inbound call must supply the
+  // survey code (entered on the keypad) before we know which campaign this
+  // call is even for. This is the phone equivalent of the WhatsApp/SMS code.
+  const prompt = language === 'en'
+    ? 'Please enter the survey code you were given, using your keypad, then press pound.'
+    : 'Tafadhali bonyeza namba za utafiti ulizopewa, kisha bonyeza alama ya pound.';
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Gather numDigits="6" finishOnKey="#" action="${base}/api/voice/code?language=${language}" method="POST" timeout="10">
+    <Say voice="Polly.Joanna">${escapeXml(prompt)}</Say>
+  </Gather>
+  <Say voice="Polly.Joanna">${escapeXml(language === 'en' ? 'We did not receive a code. Goodbye.' : 'Hatujapokea namba. Kwaheri.')}</Say>
+</Response>`;
+  return new Response(xml, { headers: { 'Content-Type': 'text/xml' } });
+}
+
+async function handleVoiceCode(request, env) {
+  const url = new URL(request.url);
+  const language = url.searchParams.get('language') === 'sw' ? 'sw' : 'en';
+  const form = await request.formData();
+  const digits = (form.get('Digits') || '').replace('#', '');
+  const callSid = form.get('CallSid');
+  const base = url.origin;
+
+  const codeRow = await env.DB.prepare('SELECT campaign_id FROM campaign_access_codes WHERE code = ?').bind(digits).first();
+  if (!codeRow) {
+    return voiceTwiml(language === 'en' ? 'Sorry, that code was not recognized. Please call back and try again. Goodbye.' : 'Samahani, namba hizo hazitambuliki. Tafadhali piga tena. Kwaheri.');
+  }
+
   let session;
   try {
-    session = await getOrCreateSession(env, { sessionKey: callSid, channel: 'phone_call', campaignId: env.DEFAULT_CAMPAIGN_ID || 'camp_default', language, consentGiven: true });
+    session = await getOrCreateSession(env, { sessionKey: callSid, channel: 'phone_call', campaignId: codeRow.campaign_id, language, consentGiven: true });
   } catch (e) {
     return voiceTwiml('Sorry, this survey is not currently active. Goodbye.');
   }
@@ -1526,7 +1777,6 @@ async function handleSmsWebhook(request, env) {
   const form = await request.formData();
   const from = form.get('From');
   const bodyText = (form.get('Body') || '').trim();
-  const campaignId = env.DEFAULT_CAMPAIGN_ID || 'camp_default';
 
   if (/^stop$/i.test(bodyText)) {
     await env.DB.prepare(
@@ -1538,6 +1788,25 @@ async function handleSmsWebhook(request, env) {
     return twiml('You have been unsubscribed and no further questions will be sent. Thank you for your time.');
   }
 
+  // Same shared-number problem as WhatsApp — an SMS number is typically shared
+  // across organizations/projects, so a brand new conversation must supply the
+  // survey code first to be routed to the correct one.
+  const existingSession = await env.DB.prepare(
+    `SELECT campaign_id FROM sessions WHERE session_key = ? AND channel = 'sms' AND status = 'in_progress'`
+  ).bind(from).first();
+
+  let campaignId, isNewConversation = false;
+  if (existingSession) {
+    campaignId = existingSession.campaign_id;
+  } else {
+    const codeRow = await env.DB.prepare('SELECT campaign_id FROM campaign_access_codes WHERE code = ?').bind(bodyText.toUpperCase()).first();
+    if (!codeRow) {
+      return twiml('Welcome to VoiceInsights Africa! Reply with the survey code you were given (e.g. AGRI123) to begin.');
+    }
+    campaignId = codeRow.campaign_id;
+    isNewConversation = true;
+  }
+
   let session;
   try {
     session = await getOrCreateSession(env, { sessionKey: from, channel: 'sms', campaignId, language: 'sw', consentGiven: true }); // Notice-based consent: the welcome SMS states participation is voluntary.
@@ -1546,7 +1815,7 @@ async function handleSmsWebhook(request, env) {
   }
   const questions = await getQuestions(env, session.survey_id);
 
-  if (session.current_index === 0 && !bodyText) {
+  if (isNewConversation) {
     return twiml(`VoiceInsights survey. By replying, you agree to take part in this research — reply STOP anytime to opt out.\n\n${questions[0] ? questions[0].question_text : 'Thank you.'}`);
   }
   if (!bodyText) {

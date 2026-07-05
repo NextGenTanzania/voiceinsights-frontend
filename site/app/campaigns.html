@@ -49,6 +49,11 @@
             <button class="btn btn-primary btn-sm" id="share-copy-btn">Copy</button>
           </div>
           <p class="muted-note" style="margin-top:1rem; font-size:.78rem;">Anyone with this link can answer your survey — no login required. Share it via WhatsApp, SMS, email, or print the QR code for in-person collection.</p>
+          <div style="border-top:1px solid var(--border); margin-top:1.2rem; padding-top:1.2rem;">
+            <div class="card-title" style="font-size:.7rem;">For WhatsApp / SMS / Phone respondents</div>
+            <p class="muted-note" style="font-size:.78rem; margin-bottom:.6rem;">Give respondents this number to text or call, and this code to reply/enter first — that's what tells the system which project their answers belong to. On a phone call, they enter it on the keypad followed by #.</p>
+            <div id="share-access-code" style="font-family:var(--font-mono); font-size:1.4rem; font-weight:700; letter-spacing:.1em; background:var(--surface-2); border-radius:8px; padding:.6rem; color:var(--accent);">—</div>
+          </div>
         </div>
       </div>
 
@@ -77,6 +82,39 @@
           <div id="outbound-result" style="display:none; font-size:.85rem; margin-bottom:.8rem;"></div>
           <button class="btn btn-primary" id="outbound-start-btn" style="width:100%; justify-content:center;">Start Outbound Batch →</button>
           <p class="muted-note" style="margin-top:1rem; font-size:.76rem;">For phone calls, each person receives a real automated call asking the survey questions aloud. For SMS/WhatsApp, they receive the first question as a text and reply to continue — same as if they'd texted in themselves.</p>
+        </div>
+      </div>
+
+      <div id="new-campaign-modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; align-items:center; justify-content:center; padding:5vw;">
+        <div class="card" style="max-width:480px; width:100%; position:relative;">
+          <button id="new-campaign-modal-close" aria-label="Close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
+          <div class="card-title">New Campaign</div>
+          <div class="field"><label>Campaign Name</label><input id="new-camp-name" placeholder="e.g. Access to Finance — Round 1 (Baseline)"></div>
+          <div class="field">
+            <label>Survey</label>
+            <select id="new-camp-survey"><option value="">Loading surveys…</option></select>
+          </div>
+          <div class="field">
+            <label>Primary Channel</label>
+            <select id="new-camp-channel">
+              <option value="whatsapp">WhatsApp</option>
+              <option value="sms">SMS</option>
+              <option value="phone_call">Phone Call</option>
+              <option value="web_link">Web Link</option>
+              <option value="app">Offline Enumerator App</option>
+            </select>
+          </div>
+          <div class="field"><label>Target Respondents</label><input id="new-camp-target" type="number" placeholder="e.g. 100"></div>
+          <div class="field">
+            <label>Is this a follow-up round of an earlier study? <span class="muted-note">(optional — enables real Benchmarking/Forecasting)</span></label>
+            <select id="new-camp-baseline"><option value="">No — this is a new, standalone study</option></select>
+          </div>
+          <div id="new-camp-round-label-field" class="field" style="display:none;">
+            <label>Round label</label>
+            <select id="new-camp-round-label"><option>Midline</option><option>Endline</option><option>Follow-up</option></select>
+          </div>
+          <div id="new-camp-error" style="display:none; color:var(--danger); font-size:.82rem; margin-bottom:.8rem;"></div>
+          <button class="btn btn-primary" id="new-camp-create-btn" style="width:100%; justify-content:center;">Create Campaign →</button>
         </div>
       </div>
     </div>
@@ -120,7 +158,7 @@
           <td>${reached}</td>
           <td style="width:150px;"><div class="progress"><span style="width:${pct}%"></span></div></td>
           <td><span class="badge ${badgeClass}">${c.status}</span></td>
-          <td style="display:flex; gap:.4rem;"><button class="btn btn-ghost btn-sm share-link-btn" data-id="${c.id}" data-name="${c.name}">🔗 Share</button><button class="btn btn-ghost btn-sm outbound-btn" data-id="${c.id}" data-name="${c.name}">📞 Call/Text Respondents</button></td>
+          <td style="display:flex; gap:.4rem;"><button class="btn btn-ghost btn-sm share-link-btn" data-id="${c.id}" data-name="${c.name}" data-code="${c.access_code || ''}">🔗 Share</button><button class="btn btn-ghost btn-sm outbound-btn" data-id="${c.id}" data-name="${c.name}">📞 Call/Text Respondents</button></td>
         </tr>`;
       }).join('');
       document.getElementById('stat-active').textContent = activeCount;
@@ -131,8 +169,58 @@
     }
   })();
 
-  document.getElementById('new-campaign-btn').addEventListener('click', () => {
-    window.location.href = '/app/surveys.html';
+  document.getElementById('new-campaign-btn').addEventListener('click', async () => {
+    document.getElementById('new-camp-error').style.display = 'none';
+    document.getElementById('new-camp-name').value = '';
+    document.getElementById('new-camp-target').value = '';
+    document.getElementById('new-camp-round-label-field').style.display = 'none';
+    document.getElementById('new-campaign-modal-backdrop').style.display = 'flex';
+    try {
+      const [{ surveys }, { campaigns: existingCampaigns }] = await Promise.all([apiRequest('/api/surveys'), apiRequest('/api/campaigns')]);
+      const surveySelect = document.getElementById('new-camp-survey');
+      surveySelect.innerHTML = surveys.length
+        ? surveys.map(s => `<option value="${s.id}">${s.title}</option>`).join('')
+        : '<option value="">No surveys yet — create one first in Surveys</option>';
+      const baselineSelect = document.getElementById('new-camp-baseline');
+      baselineSelect.innerHTML = '<option value="">No — this is a new, standalone study</option>' +
+        existingCampaigns.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+    } catch (e) { /* selects stay empty, error shows on submit */ }
+  });
+  document.getElementById('new-campaign-modal-close').addEventListener('click', () => {
+    document.getElementById('new-campaign-modal-backdrop').style.display = 'none';
+  });
+  document.getElementById('new-camp-baseline').addEventListener('change', (e) => {
+    document.getElementById('new-camp-round-label-field').style.display = e.target.value ? 'block' : 'none';
+  });
+  document.getElementById('new-camp-create-btn').addEventListener('click', async () => {
+    const errBox = document.getElementById('new-camp-error');
+    errBox.style.display = 'none';
+    const name = document.getElementById('new-camp-name').value.trim();
+    const surveyId = document.getElementById('new-camp-survey').value;
+    if (!name || !surveyId) {
+      errBox.textContent = 'Please enter a campaign name and choose a survey.';
+      errBox.style.display = 'block';
+      return;
+    }
+    const btn = document.getElementById('new-camp-create-btn');
+    btn.disabled = true; btn.textContent = 'Creating…';
+    try {
+      await apiRequest('/api/campaigns', {
+        method: 'POST',
+        body: {
+          name, survey_id: surveyId,
+          channel: document.getElementById('new-camp-channel').value,
+          target_respondents: parseInt(document.getElementById('new-camp-target').value) || 0,
+          baseline_campaign_id: document.getElementById('new-camp-baseline').value || null,
+          round_label: document.getElementById('new-camp-round-label').value,
+        },
+      });
+      location.reload();
+    } catch (e) {
+      errBox.textContent = e.message;
+      errBox.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Create Campaign →';
+    }
   });
 
   document.addEventListener('click', (e) => {
@@ -141,6 +229,7 @@
       document.getElementById('share-campaign-name').textContent = e.target.dataset.name;
       document.getElementById('share-link-input').value = link;
       document.getElementById('share-qr-img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(link);
+      document.getElementById('share-access-code').textContent = e.target.dataset.code || 'Not available';
       document.getElementById('share-modal-backdrop').style.display = 'flex';
     }
   });

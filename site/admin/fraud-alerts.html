@@ -42,7 +42,7 @@
   (async () => {
     const tbody = document.getElementById('fraud-tbody');
     try {
-      const { alerts } = await apiRequest('/api/fraud/alerts');
+      const { alerts } = await apiRequest(`/api/fraud/alerts${new URLSearchParams(window.location.search).get('org_id') ? '?org_id=' + new URLSearchParams(window.location.search).get('org_id') : ''}`);
       if (!alerts.length) {
         tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem;">${t('fa.empty', 'No fraud signals detected yet. This updates automatically as WhatsApp responses come in.')}</td></tr>`;
         return;

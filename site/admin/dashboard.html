@@ -15,27 +15,52 @@
   <main class="main">
     <div id="topbar-mount"></div>
     <div class="content">
-      <p class="muted-note" style="margin-bottom:1rem;">Real operational figures for your organization. VoiceInsights Africa currently runs as a single-tenant deployment per client — cross-client aggregation will appear here once the platform serves multiple organizations from one console.</p>
-      <div class="grid grid-4" style="margin-bottom:1.5rem;">
-        <div class="card"><div class="card-title">Total Responses</div><div class="stat-value" id="stat-responses">–</div></div>
-        <div class="card"><div class="card-title">Transcripts Generated</div><div class="stat-value" id="stat-transcripts">–</div></div>
-        <div class="card"><div class="card-title" data-tooltip="Fraud flags raised divided by total responses.">Fraud Flag Rate</div><div class="stat-value" id="stat-flagrate" style="color:var(--warn);">–</div></div>
-        <div class="card"><div class="card-title">Avg. Processing Time</div><div class="stat-value" id="stat-latency">–</div></div>
+      <div id="super-admin-view-banner" style="display:none; background:linear-gradient(135deg, var(--accent), #C88A2E); color:var(--accent-ink); padding:.7rem 1.2rem; border-radius:10px; margin-bottom:1.2rem; font-size:.85rem; font-weight:600;">
+        🔍 Super Admin view — viewing <span id="viewed-org-name">this organization's</span> data. <a href="/admin/organizations.html" style="color:var(--accent-ink); text-decoration:underline;">← Back to all organizations</a>
       </div>
 
-      <div class="grid grid-2" style="margin-bottom:1.5rem;">
-        <div class="card"><div class="card-title">Responses by Channel</div><div style="position:relative; height:220px;"><canvas id="chartChannel"></canvas></div></div>
-        <div class="card"><div class="card-title">Sentiment Breakdown</div><div style="position:relative; height:220px;"><canvas id="chartSentiment"></canvas></div></div>
+      <!-- PLATFORM-WIDE OVERVIEW (Super Admin, no specific org selected) -->
+      <div id="platform-overview" style="display:none;">
+        <p class="muted-note" style="margin-bottom:1rem;">Aggregated across every client organization on the platform. Click any organization below — or use Organizations in the sidebar — to drill into its own numbers.</p>
+        <div class="grid grid-4" style="margin-bottom:1.5rem;">
+          <div class="card"><div class="card-title">Organizations</div><div class="stat-value" id="plat-orgs">–</div></div>
+          <div class="card"><div class="card-title">Total Responses (all orgs)</div><div class="stat-value" id="plat-responses">–</div></div>
+          <div class="card"><div class="card-title">Active Users (all orgs)</div><div class="stat-value" id="plat-users">–</div></div>
+          <div class="card"><div class="card-title">Organizations Active This Month</div><div class="stat-value" id="plat-active-orgs">–</div></div>
+        </div>
+        <div class="section-head"><h2 style="font-size:1.05rem;">Organizations by Activity</h2><a href="/admin/organizations.html" class="muted-note" style="font-size:.8rem;">Manage organizations →</a></div>
+        <div class="table-wrap" style="margin-bottom:1.5rem;">
+          <table>
+            <thead><tr><th>Organization</th><th>Responses</th><th>Users</th><th>Status</th><th></th></tr></thead>
+            <tbody id="top-orgs-tbody"><tr><td colspan="5" class="muted-note" style="padding:1.5rem;">Loading…</td></tr></tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="section-head"><h2 style="font-size:1.05rem;">Recent Security Events</h2><a href="/admin/audit-logs.html" class="muted-note" style="font-size:.8rem;">View full audit log →</a></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Time</th><th>User</th><th>Event</th></tr></thead>
-          <tbody id="events-tbody">
-            <tr><td colspan="3" class="muted-note" style="padding:1.5rem;">Loading…</td></tr>
-          </tbody>
-        </table>
+      <!-- SINGLE-ORGANIZATION VIEW (Super Admin viewing one org, or a regular Org Admin) -->
+      <div id="single-org-view" style="display:none;">
+        <p class="muted-note" style="margin-bottom:1rem;" id="single-org-note">Real operational figures for your organization.</p>
+        <div class="grid grid-4" style="margin-bottom:1.5rem;">
+          <div class="card"><div class="card-title">Total Responses</div><div class="stat-value" id="stat-responses">–</div></div>
+          <div class="card"><div class="card-title">Transcripts Generated</div><div class="stat-value" id="stat-transcripts">–</div></div>
+          <div class="card"><div class="card-title" data-tooltip="Fraud flags raised divided by total responses.">Fraud Flag Rate</div><div class="stat-value" id="stat-flagrate" style="color:var(--warn);">–</div></div>
+          <div class="card"><div class="card-title">Avg. Processing Time</div><div class="stat-value" id="stat-latency">–</div></div>
+        </div>
+
+        <div class="grid grid-2" style="margin-bottom:1.5rem;">
+          <div class="card"><div class="card-title">Responses by Channel</div><div style="position:relative; height:220px;"><canvas id="chartChannel"></canvas></div></div>
+          <div class="card"><div class="card-title">Sentiment Breakdown</div><div style="position:relative; height:220px;"><canvas id="chartSentiment"></canvas></div></div>
+        </div>
+
+        <div class="section-head"><h2 style="font-size:1.05rem;">Recent Security Events</h2><a href="/admin/audit-logs.html" class="muted-note" style="font-size:.8rem;">View full audit log →</a></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Time</th><th>User</th><th>Event</th></tr></thead>
+            <tbody id="events-tbody">
+              <tr><td colspan="3" class="muted-note" style="padding:1.5rem;">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </main>
@@ -52,42 +77,89 @@
     user_invited: 'Invited a team member', user_deactivated: 'Deactivated a team member',
   };
   const CHANNEL_LABEL = { whatsapp: 'WhatsApp', phone_call: 'Phone Call', sms: 'SMS', web_link: 'Web', app: 'Offline App' };
+  const STATUS_BADGE = { active: 'badge-success', suspended: 'badge-danger', trial: 'badge-warn' };
 
-  (async () => {
-    try {
-      const [modelStats, dashStats, audit] = await Promise.all([
-        apiRequest('/api/admin/model-stats'),
-        apiRequest('/api/dashboard/stats'),
-        apiRequest('/api/audit-logs').catch(() => ({ logs: [] })),
-      ]);
+  const storedUser = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  const isSuperAdmin = storedUser?.role === 'super_admin';
+  const viewingOrgId = new URLSearchParams(window.location.search).get('org_id');
 
-      document.getElementById('stat-responses').textContent = modelStats.total_responses;
-      document.getElementById('stat-transcripts').textContent = modelStats.total_transcripts;
-      document.getElementById('stat-flagrate').textContent = modelStats.total_responses ? ((modelStats.fraud_flags / modelStats.total_responses) * 100).toFixed(1) + '%' : '—';
-      document.getElementById('stat-latency').textContent = modelStats.avg_processing_seconds != null ? modelStats.avg_processing_seconds.toFixed(1) + 's' : '—';
+  if (isSuperAdmin && !viewingOrgId) {
+    // ---------- PLATFORM-WIDE OVERVIEW ----------
+    document.getElementById('platform-overview').style.display = 'block';
+    (async () => {
+      try {
+        const { organizations } = await apiRequest('/api/superadmin/organizations');
+        const totalResponses = organizations.reduce((s, o) => s + (o.response_count || 0), 0);
+        const totalUsers = organizations.reduce((s, o) => s + (o.user_count || 0), 0);
+        const activeOrgs = organizations.filter(o => o.status === 'active').length;
+        document.getElementById('plat-orgs').textContent = organizations.length;
+        document.getElementById('plat-responses').textContent = totalResponses;
+        document.getElementById('plat-users').textContent = totalUsers;
+        document.getElementById('plat-active-orgs').textContent = activeOrgs;
 
-      const byChannel = dashStats.by_channel || [];
-      if (typeof Chart !== 'undefined') {
-        new Chart(document.getElementById('chartChannel'), { type: 'bar',
-          data: { labels: byChannel.map(c => CHANNEL_LABEL[c.channel] || c.channel), datasets: [{ data: byChannel.map(c => c.n), backgroundColor: '#E4A23A' }] },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#9FB3AB' } }, y: { grid: { color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', precision: 0 } } } } });
-
-        const sentimentRows = dashStats.sentiment_breakdown || [];
-        new Chart(document.getElementById('chartSentiment'), { type: 'doughnut',
-          data: { labels: sentimentRows.map(s => s.overall_sentiment || 'Unrated'), datasets: [{ data: sentimentRows.map(s => s.n), backgroundColor: ['#6FBF8B', '#9FB3AB', '#D9634A', '#E4C23A'] }] },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9FB3AB' } } } } });
+        const sorted = [...organizations].sort((a, b) => (b.response_count || 0) - (a.response_count || 0));
+        document.getElementById('top-orgs-tbody').innerHTML = sorted.length
+          ? sorted.slice(0, 10).map(o => `
+              <tr>
+                <td>${o.name}</td>
+                <td>${o.response_count}</td>
+                <td>${o.user_count}</td>
+                <td><span class="badge ${STATUS_BADGE[o.status] || 'badge-neutral'}">${o.status}</span></td>
+                <td><a class="btn btn-ghost btn-sm" href="/app/dashboard.html?org_id=${o.id}">View →</a></td>
+              </tr>`).join('')
+          : '<tr><td colspan="5" class="muted-note" style="padding:1.5rem;">No organizations yet.</td></tr>';
+      } catch (e) {
+        document.getElementById('top-orgs-tbody').innerHTML = `<tr><td colspan="5" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
       }
-
-      const tbody = document.getElementById('events-tbody');
-      tbody.innerHTML = audit.logs.length
-        ? audit.logs.slice(0, 8).map(l => `<tr><td style="font-family:var(--font-mono); font-size:.8rem;">${new Date(l.created_at + 'Z').toLocaleString()}</td><td>${l.full_name || l.email || 'System'}</td><td>${ACTION_LABEL[l.action] || l.action}</td></tr>`).join('')
-        : '<tr><td colspan="3" class="muted-note" style="padding:1.5rem;">No events recorded yet.</td></tr>';
-    } catch (e) {
-      console.warn('Could not load admin overview:', e.message);
-      ['stat-responses', 'stat-transcripts', 'stat-flagrate', 'stat-latency'].forEach(id => document.getElementById(id).textContent = '—');
-      document.getElementById('events-tbody').innerHTML = `<tr><td colspan="3" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+    })();
+  } else {
+    // ---------- SINGLE-ORGANIZATION VIEW ----------
+    document.getElementById('single-org-view').style.display = 'block';
+    if (viewingOrgId) {
+      document.getElementById('super-admin-view-banner').style.display = 'block';
+      apiRequest(`/api/organizations/me?org_id=${viewingOrgId}`).then(({ organization }) => {
+        document.getElementById('viewed-org-name').textContent = organization.name + "'s";
+        document.getElementById('single-org-note').textContent = `Real operational figures for ${organization.name}.`;
+      }).catch(() => {});
     }
-  })();
+    const qs = viewingOrgId ? `?org_id=${viewingOrgId}` : '';
+
+    (async () => {
+      try {
+        const [modelStats, dashStats, audit] = await Promise.all([
+          apiRequest(`/api/admin/model-stats${qs}`),
+          apiRequest(`/api/dashboard/stats${qs}`),
+          apiRequest(`/api/audit-logs${qs}`).catch(() => ({ logs: [] })),
+        ]);
+
+        document.getElementById('stat-responses').textContent = modelStats.total_responses;
+        document.getElementById('stat-transcripts').textContent = modelStats.total_transcripts;
+        document.getElementById('stat-flagrate').textContent = modelStats.total_responses ? ((modelStats.fraud_flags / modelStats.total_responses) * 100).toFixed(1) + '%' : '—';
+        document.getElementById('stat-latency').textContent = modelStats.avg_processing_seconds != null ? modelStats.avg_processing_seconds.toFixed(1) + 's' : '—';
+
+        const byChannel = dashStats.by_channel || [];
+        if (typeof Chart !== 'undefined') {
+          new Chart(document.getElementById('chartChannel'), { type: 'bar',
+            data: { labels: byChannel.map(c => CHANNEL_LABEL[c.channel] || c.channel), datasets: [{ data: byChannel.map(c => c.n), backgroundColor: '#E4A23A' }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#9FB3AB' } }, y: { grid: { color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', precision: 0 } } } } });
+
+          const sentimentRows = dashStats.sentiment_breakdown || [];
+          new Chart(document.getElementById('chartSentiment'), { type: 'doughnut',
+            data: { labels: sentimentRows.map(s => s.overall_sentiment || 'Unrated'), datasets: [{ data: sentimentRows.map(s => s.n), backgroundColor: ['#6FBF8B', '#9FB3AB', '#D9634A', '#E4C23A'] }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9FB3AB' } } } } });
+        }
+
+        const tbody = document.getElementById('events-tbody');
+        tbody.innerHTML = audit.logs.length
+          ? audit.logs.slice(0, 8).map(l => `<tr><td style="font-family:var(--font-mono); font-size:.8rem;">${new Date(l.created_at + 'Z').toLocaleString()}</td><td>${l.full_name || l.email || 'System'}</td><td>${ACTION_LABEL[l.action] || l.action}</td></tr>`).join('')
+          : '<tr><td colspan="3" class="muted-note" style="padding:1.5rem;">No events recorded yet.</td></tr>';
+      } catch (e) {
+        console.warn('Could not load admin overview:', e.message);
+        ['stat-responses', 'stat-transcripts', 'stat-flagrate', 'stat-latency'].forEach(id => document.getElementById(id).textContent = '—');
+        document.getElementById('events-tbody').innerHTML = `<tr><td colspan="3" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+      }
+    })();
+  }
 </script>
 </body>
 </html>

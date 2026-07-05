@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Status — VoiceInsights Africa</title>
+<meta name="description" content="Live status of the VoiceInsights Africa platform — API, database, and storage.">
+<link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<nav class="pub-nav">
+  <div class="pub-nav-row1">
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+    </a>
+  </div>
+</nav>
+
+<header class="pub-hero" style="padding-bottom:1rem; text-align:center;">
+  <span class="eyebrow">System Status</span>
+  <h1 style="font-size:clamp(2rem,4vw,2.8rem);">Live platform health.</h1>
+  <p class="lead">Real-time checks against our own API — refreshed every 30 seconds, not a static page.</p>
+</header>
+
+<section class="pub-section" style="padding-top:0; max-width:700px;">
+  <div class="card" id="status-summary-card" style="text-align:center; margin-bottom:1.5rem;">
+    <div id="status-icon" style="font-size:2.5rem; margin-bottom:.5rem;">⏳</div>
+    <h2 id="status-headline" style="font-size:1.3rem;">Checking…</h2>
+    <p class="muted-note" id="status-timestamp">—</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Component</th><th>Status</th></tr></thead>
+      <tbody id="status-tbody">
+        <tr><td>API</td><td id="status-api" class="muted-note">Checking…</td></tr>
+        <tr><td>Database (D1)</td><td id="status-db" class="muted-note">Checking…</td></tr>
+        <tr><td>Audio Storage (R2)</td><td id="status-storage" class="muted-note">Checking…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="muted-note" style="margin-top:1.5rem; font-size:.8rem;">This page checks our own live API — not a third-party monitor. A formal SLA with historical uptime tracking is available for Enterprise contracts; <a href="/contact.html" style="color:var(--accent-2);">contact us</a> for details.</p>
+</section>
+
+<footer class="pub-section" style="text-align:center; padding-top:0;">
+  <p class="muted-note" style="font-size:.78rem;">VoiceInsights Africa Ltd &middot; &copy; 2026</p>
+</footer>
+
+<script src="/assets/js/config.js"></script>
+<script>
+  const STATUS_LABEL = { true: '✓ Operational', false: '✗ Down' };
+
+  async function checkStatus() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/health`);
+      const data = await res.json();
+      const allOk = data.status === 'operational';
+
+      document.getElementById('status-icon').textContent = allOk ? '✅' : '⚠️';
+      document.getElementById('status-headline').textContent = allOk ? 'All systems operational' : 'Partial outage detected';
+      document.getElementById('status-headline').style.color = allOk ? 'var(--success)' : 'var(--warn)';
+      document.getElementById('status-timestamp').textContent = 'Last checked: ' + new Date(data.checked_at).toLocaleString();
+
+      document.getElementById('status-api').innerHTML = `<span class="badge ${data.checks.api ? 'badge-success' : 'badge-danger'}">${STATUS_LABEL[data.checks.api]}</span>`;
+      document.getElementById('status-db').innerHTML = `<span class="badge ${data.checks.database ? 'badge-success' : 'badge-danger'}">${STATUS_LABEL[data.checks.database]}</span>`;
+      document.getElementById('status-storage').innerHTML = `<span class="badge ${data.checks.storage ? 'badge-success' : 'badge-danger'}">${STATUS_LABEL[data.checks.storage]}</span>`;
+    } catch (e) {
+      document.getElementById('status-icon').textContent = '🔴';
+      document.getElementById('status-headline').textContent = 'Could not reach the API';
+      document.getElementById('status-headline').style.color = 'var(--danger)';
+      document.getElementById('status-timestamp').textContent = 'Last attempted: ' + new Date().toLocaleString();
+      ['status-api', 'status-db', 'status-storage'].forEach(id => {
+        document.getElementById(id).innerHTML = '<span class="badge badge-danger">✗ Unreachable</span>';
+      });
+    }
+  }
+  checkStatus();
+  setInterval(checkStatus, 30000);
+</script>
+</body>
+</html>

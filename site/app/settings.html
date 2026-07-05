@@ -113,6 +113,22 @@
           <button class="btn btn-ghost btn-sm" id="tfa-disable-btn" style="display:none; border-color:var(--danger); color:var(--danger);" data-i18n="set.2fa_disable_btn">Disable 2FA</button>
         </div>
       </div>
+
+      <div class="card" style="margin-top:1.5rem;">
+        <div class="card-title">DHIS2 Integration <span class="badge badge-neutral" style="font-size:.6rem;">Health Sector</span></div>
+        <p class="muted-note" style="margin-bottom:1rem;">If your organization reports into a Ministry of Health DHIS2 instance, connect it here — Outcome Indicators can then be pushed to DHIS2 as aggregate data values, standard M&amp;E integration for African health programs.</p>
+        <div class="field-row">
+          <div class="field"><label>DHIS2 Instance URL</label><input id="dhis2-url" placeholder="https://your-country.dhis2.org"></div>
+          <div class="field"><label>Personal Access Token (PAT)</label><input id="dhis2-token" type="password" placeholder="d2pat_••••••••"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Default Org Unit ID</label><input id="dhis2-orgunit" placeholder="e.g. ImspTQPwCqd"></div>
+          <div class="field"><label>Default Dataset ID (optional)</label><input id="dhis2-dataset" placeholder="e.g. BfMAe6Itzgt"></div>
+        </div>
+        <div id="dhis2-status" class="muted-note" style="margin-bottom:.8rem;"></div>
+        <button class="btn btn-primary btn-sm" id="dhis2-save-btn">Save Connection</button>
+        <p class="muted-note" style="margin-top:1rem; font-size:.76rem;">Use a Personal Access Token from a dedicated API user in DHIS2 — not a personal login. To map which Outcome Indicator sends to which DHIS2 Data Element, and to push data, go to Analytics → Indicators.</p>
+      </div>
     </div>
   </main>
 </div>
@@ -350,6 +366,51 @@
       errBox.style.display = 'block';
     } finally {
       btn.disabled = false; btn.textContent = t('set.invite_send', 'Send Invite');
+    }
+  });
+
+  // ---------- DHIS2 Integration ----------
+  (async () => {
+    try {
+      const { config } = await apiRequest('/api/dhis2/config');
+      if (config) {
+        document.getElementById('dhis2-url').value = config.instance_url || '';
+        document.getElementById('dhis2-orgunit').value = config.default_org_unit || '';
+        document.getElementById('dhis2-dataset').value = config.default_dataset_id || '';
+        document.getElementById('dhis2-status').textContent = 'Connected. Enter a new token above only if you need to replace it.';
+        document.getElementById('dhis2-status').style.color = 'var(--success)';
+      }
+    } catch (e) { /* not configured yet — leave fields blank */ }
+  })();
+
+  document.getElementById('dhis2-save-btn').addEventListener('click', async () => {
+    const statusEl = document.getElementById('dhis2-status');
+    const btn = document.getElementById('dhis2-save-btn');
+    const url = document.getElementById('dhis2-url').value.trim();
+    const token = document.getElementById('dhis2-token').value.trim();
+    if (!url || !token) {
+      statusEl.textContent = 'Instance URL and Personal Access Token are both required.';
+      statusEl.style.color = 'var(--danger)';
+      return;
+    }
+    btn.disabled = true; btn.textContent = 'Saving…';
+    try {
+      await apiRequest('/api/dhis2/config', {
+        method: 'PUT',
+        body: {
+          instance_url: url, api_token: token,
+          default_org_unit: document.getElementById('dhis2-orgunit').value.trim(),
+          default_dataset_id: document.getElementById('dhis2-dataset').value.trim(),
+        },
+      });
+      statusEl.textContent = 'Saved ✓ — you can now map indicators in Analytics → Indicators.';
+      statusEl.style.color = 'var(--success)';
+      document.getElementById('dhis2-token').value = '';
+    } catch (e) {
+      statusEl.textContent = 'Error: ' + e.message;
+      statusEl.style.color = 'var(--danger)';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Save Connection';
     }
   });
 </script>

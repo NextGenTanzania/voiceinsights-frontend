@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposal Generator — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  @page { margin: 1.5cm; size: A4; }
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    #sidebar-mount, #topbar-mount, .toolbar, .edit-only { display: none !important; }
+    html, body, .main, .content { margin:0 !important; padding:0 !important; background:#fff !important; }
+    .prop-page { box-shadow:none !important; border-radius:0 !important; }
+    .prop-page * { color:#111 !important; }
+  }
+  .prop-page { background:#fff; color:#1E2620; border-radius:16px; padding:3rem; max-width:800px; margin:0 auto; box-shadow: 0 10px 40px rgba(0,0,0,.3); }
+  .prop-page h1, .prop-page h2, .prop-page h3 { font-family: var(--font-display); }
+  .prop-table { width:100%; border-collapse:collapse; margin:1rem 0; }
+  .prop-table th, .prop-table td { border:1px solid #ddd; padding:.6rem .8rem; text-align:left; font-size:.88rem; }
+  .prop-table th { background:#f7f5f0; }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="toolbar" style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
+        <div class="muted-note" id="prop-status">Loading lead…</div>
+        <button class="btn btn-primary btn-sm" onclick="window.print()">🖨 Download as PDF</button>
+      </div>
+
+      <div class="prop-page" id="prop-page" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid #E4A23A; padding-bottom:1rem; margin-bottom:1.5rem;">
+          <div style="display:flex; align-items:center; gap:.6rem;">
+            <img src="/assets/img/logo-icon.png" style="height:34px;" alt="">
+            <span style="font-weight:700; font-size:1.15rem;">VoiceInsights Africa</span>
+          </div>
+          <div style="text-align:right; font-size:.8rem; color:#555;">
+            <div id="prop-date">—</div>
+            <div id="prop-ref">—</div>
+          </div>
+        </div>
+
+        <h1 style="font-size:1.6rem; margin-bottom:.2rem;">Proposal for Voice Research Services</h1>
+        <p style="color:#555; margin-bottom:1.5rem;">Prepared for <b id="prop-org">—</b>, attention <b id="prop-contact">—</b></p>
+
+        <h3 style="font-size:1rem; border-bottom:1px solid #ddd; padding-bottom:.4rem;">1. Understanding Your Need</h3>
+        <p class="edit-only muted-note" style="margin-bottom:.4rem;">Editable — based on what the lead told us:</p>
+        <textarea id="prop-need" rows="3" style="width:100%; border:1px solid #ddd; border-radius:6px; padding:.6rem; font-family:inherit;"></textarea>
+
+        <h3 style="font-size:1rem; border-bottom:1px solid #ddd; padding-bottom:.4rem; margin-top:1.5rem;">2. Proposed Solution</h3>
+        <p>VoiceInsights Africa will deploy its AI-powered voice research platform to collect, transcribe, analyze, and report on data via <span id="prop-channels">your preferred channels</span>, covering an estimated <input id="prop-n" type="number" value="100" style="width:70px; border:1px solid #ddd; border-radius:4px; padding:.1rem .3rem;"> respondents.</p>
+
+        <h3 style="font-size:1rem; border-bottom:1px solid #ddd; padding-bottom:.4rem; margin-top:1.5rem;">3. Deliverables</h3>
+        <ul style="font-size:.9rem; line-height:1.7;">
+          <li>Multi-channel voice data collection (Phone, WhatsApp, SMS, Web, Offline App)</li>
+          <li>AI-powered transcription, sentiment analysis, and fraud detection</li>
+          <li>Executive Intelligence Report, Donor Impact Report — Summary, Narrative, and Full Detailed formats</li>
+          <li>OECD-DAC aligned evaluation criteria (Relevance, Effectiveness, Efficiency, Impact)</li>
+          <li>PDF and Word exports, in your choice of English, French, Portuguese, or Kiswahili</li>
+        </ul>
+
+        <h3 style="font-size:1rem; border-bottom:1px solid #ddd; padding-bottom:.4rem; margin-top:1.5rem;">4. Investment</h3>
+        <table class="prop-table">
+          <thead><tr><th>Tier</th><th>Best For</th><th>Indicative Price (USD)</th></tr></thead>
+          <tbody>
+            <tr><td>Starter</td><td>Single project, up to 200 respondents</td><td>Contact for quote</td></tr>
+            <tr><td>Professional</td><td>Multiple projects, up to 1,000 respondents/month</td><td>Contact for quote</td></tr>
+            <tr><td>Enterprise</td><td>Multi-country, unlimited projects</td><td>Contact for quote</td></tr>
+          </tbody>
+        </table>
+        <p class="muted-note" style="font-size:.8rem;">Final pricing is confirmed by contract based on respondent volume, channel mix, and reporting cadence — no self-service checkout; billed via invoice against a signed agreement.</p>
+
+        <h3 style="font-size:1rem; border-bottom:1px solid #ddd; padding-bottom:.4rem; margin-top:1.5rem;">5. Next Steps</h3>
+        <p style="font-size:.9rem;">Reply to this proposal or contact us at <a href="mailto:partnerships@voiceinsightsafrica.com">partnerships@voiceinsightsafrica.com</a> to schedule a kickoff call and confirm project scope.</p>
+
+        <div style="border-top:1px solid #ddd; margin-top:2rem; padding-top:1rem; text-align:center; font-size:.78rem; color:#888;">
+          VoiceInsights Africa Ltd · Ali Hassan Mwinyi Road, Kisutu, 3rd Floor, Haidary Plaza, Dar es Salaam, Tanzania
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  const storedUserCheck = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  if (storedUserCheck?.role !== 'super_admin') {
+    document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center; padding:2rem;"><div><h2>Super Admin access required</h2></div></div>';
+    throw new Error('Access denied — not a Super Admin');
+  }
+  renderShell({ role:'admin', active:'/admin/leads.html', eyebrow:'Sales Pipeline', title:'Proposal Generator' });
+
+  const leadId = new URLSearchParams(window.location.search).get('lead_id');
+  if (!leadId) {
+    document.getElementById('prop-status').textContent = 'No lead specified. Open this from a card in the Sales Pipeline.';
+  } else {
+    (async () => {
+      try {
+        const { lead } = await apiRequest(`/api/leads/${leadId}`);
+        document.getElementById('prop-org').textContent = lead.organization || lead.full_name;
+        document.getElementById('prop-contact').textContent = `${lead.full_name} (${lead.work_email})`;
+        document.getElementById('prop-need').value = lead.message || 'No specific message was provided — confirm scope on the kickoff call.';
+        document.getElementById('prop-channels').textContent = lead.preferred_channels || 'phone, WhatsApp, SMS, and web';
+        document.getElementById('prop-n').value = lead.expected_respondents || 100;
+        document.getElementById('prop-date').textContent = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+        document.getElementById('prop-ref').textContent = 'Ref: VIA-PROP-' + leadId.slice(-6).toUpperCase();
+        document.getElementById('prop-page').style.display = 'block';
+        document.getElementById('prop-status').textContent = 'Ready — edit any field, then download as PDF.';
+      } catch (e) {
+        document.getElementById('prop-status').textContent = 'Could not load lead: ' + e.message;
+      }
+    })();
+  }
+</script>
+</body>
+</html>

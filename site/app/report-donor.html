@@ -138,11 +138,15 @@
           <p class="muted-note no-print" style="margin-top:.5rem;">Add your project's M&amp;E indicators below (these usually come from your logframe, not automatically from voice data). They'll be saved and included in every future report.</p>
           <div class="table-wrap" style="margin-top:1.25rem;">
             <table>
-              <thead><tr><th>Indicator</th><th>Baseline</th><th>Current</th><th>Change</th><th class="no-print"></th></tr></thead>
+              <thead><tr><th>Indicator</th><th>Baseline</th><th>Current</th><th>Change</th><th class="no-print">DHIS2 Data Element ID</th><th class="no-print"></th></tr></thead>
               <tbody id="indicators-tbody">
-                <tr><td colspan="5" class="muted-note" style="padding:1rem;">Loading…</td></tr>
+                <tr><td colspan="6" class="muted-note" style="padding:1rem;">Loading…</td></tr>
               </tbody>
             </table>
+          </div>
+          <div class="no-print" style="margin-top:.8rem; display:flex; gap:.6rem; align-items:center; flex-wrap:wrap;">
+            <button class="btn btn-primary btn-sm" id="dhis2-push-btn">📤 Push to DHIS2</button>
+            <span id="dhis2-push-status" class="muted-note"></span>
           </div>
           <div class="scorecard-add-row no-print" style="display:flex; gap:.5rem; margin-top:1rem; flex-wrap:wrap;">
             <input id="new-ind-name" placeholder="Indicator name (e.g. Food Security)" style="flex:2; min-width:180px;">
@@ -393,7 +397,7 @@
     try {
       const { indicators } = await apiRequest('/api/indicators');
       if (!indicators.length) {
-        tbody.innerHTML = '<tr><td colspan="5" class="muted-note" style="padding:1rem;">No indicators added yet — add your project\'s M&E indicators below.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="muted-note" style="padding:1rem;">No indicators added yet — add your project\'s M&E indicators below.</td></tr>';
         return;
       }
       tbody.innerHTML = indicators.map(i => `
@@ -402,8 +406,18 @@
           <td>${i.baseline_value || '—'}</td>
           <td>${i.current_value || '—'}</td>
           <td>${computeChange(i.baseline_value, i.current_value)}</td>
+          <td class="no-print"><input class="dhis2-map-input" data-id="${i.id}" value="${i.dhis2_data_element_id || ''}" placeholder="e.g. fbfJHSPpUQD" style="font-size:.78rem; padding:.3rem .4rem;"></td>
           <td class="no-print"><button class="btn btn-ghost btn-sm del-ind-btn" data-id="${i.id}">Remove</button></td>
         </tr>`).join('');
+      document.querySelectorAll('.dhis2-map-input').forEach(input => {
+        input.addEventListener('blur', async () => {
+          if (!input.value.trim()) return;
+          try {
+            await apiRequest(`/api/dhis2/mapping/${input.dataset.id}`, { method: 'PUT', body: { dhis2_data_element_id: input.value.trim() } });
+            showToast('DHIS2 mapping saved', 'success');
+          } catch (e) { showToast('Could not save mapping: ' + e.message, 'error'); }
+        });
+      });
       document.querySelectorAll('.del-ind-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
           await apiRequest(`/api/indicators/${btn.dataset.id}`, { method: 'DELETE' });
@@ -411,10 +425,27 @@
         });
       });
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="5" class="muted-note" style="padding:1rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" class="muted-note" style="padding:1rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
     }
   }
   loadIndicators();
+
+  document.getElementById('dhis2-push-btn').addEventListener('click', async () => {
+    const statusEl = document.getElementById('dhis2-push-status');
+    const btn = document.getElementById('dhis2-push-btn');
+    statusEl.textContent = ''; statusEl.style.color = '';
+    btn.disabled = true; btn.textContent = 'Pushing…';
+    try {
+      const result = await apiRequest('/api/dhis2/push', { method: 'POST' });
+      statusEl.textContent = `✓ Pushed ${result.pushed} indicator(s) to DHIS2 for period ${result.period}.`;
+      statusEl.style.color = 'var(--success)';
+    } catch (e) {
+      statusEl.textContent = 'Error: ' + e.message;
+      statusEl.style.color = 'var(--danger)';
+    } finally {
+      btn.disabled = false; btn.textContent = '📤 Push to DHIS2';
+    }
+  });
 
   document.getElementById('add-ind-btn').addEventListener('click', async () => {
     const name = document.getElementById('new-ind-name').value;

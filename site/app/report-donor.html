@@ -24,6 +24,7 @@
   .toolbar { max-width: 900px; margin: 0 auto 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
   @page { margin: 1cm; size: A4; }
   @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
     #sidebar-mount, #topbar-mount, .toolbar, .no-print { display: none !important; }
     html, body, .main, .content { margin: 0 !important; padding: 0 !important; background: #fff !important; }
     .r-page {

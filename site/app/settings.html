@@ -270,8 +270,9 @@
 
   async function loadProjectOptions() {
     const select = document.getElementById('invite-project');
+    const viewingOrgId = new URLSearchParams(window.location.search).get('org_id');
     try {
-      const { campaigns } = await apiRequest('/api/campaigns');
+      const { campaigns } = await apiRequest(`/api/campaigns${viewingOrgId ? '?org_id=' + viewingOrgId : ''}`);
       select.innerHTML = campaigns.length
         ? campaigns.map(c => `<option value="${c.id}">${c.name}</option>`).join('')
         : `<option value="">${t('set.invite_project_empty', 'No projects yet — create one first')}</option>`;
@@ -283,18 +284,32 @@
 
   // Super Admin manages multiple client organizations and must pick which one
   // this invite belongs to — a regular Org Admin never sees this field at all.
+  // If a Super Admin is currently VIEWING a specific organization (?org_id=
+  // in the URL, from clicking "View →" on Organizations), default the
+  // selection to that same organization — inviting someone while looking at
+  // an org's dashboard should invite them into THAT org by default.
   const storedUserForInvite = JSON.parse(localStorage.getItem('vi_user') || 'null');
   const isSuperAdminInviting = storedUserForInvite?.role === 'super_admin';
+  const viewingOrgIdForInvite = new URLSearchParams(window.location.search).get('org_id');
   if (isSuperAdminInviting) {
     document.getElementById('invite-org-field').style.display = 'block';
-    document.getElementById('invite-project-superadmin-note').style.display = 'block';
     (async () => {
       const select = document.getElementById('invite-org');
       try {
         const { organizations } = await apiRequest('/api/superadmin/organizations');
         select.innerHTML = organizations.length
-          ? organizations.map(o => `<option value="${o.id}">${o.name}</option>`).join('')
+          ? organizations.map(o => `<option value="${o.id}" ${o.id === viewingOrgIdForInvite ? 'selected' : ''}>${o.name}</option>`).join('')
           : '<option value="">No organizations yet — create one first</option>';
+        // If the org selection changes, the project list must refresh to match.
+        select.addEventListener('change', () => {
+          const viewingOrgId = select.value;
+          apiRequest(`/api/campaigns${viewingOrgId ? '?org_id=' + viewingOrgId : ''}`).then(({ campaigns }) => {
+            const projSelect = document.getElementById('invite-project');
+            projSelect.innerHTML = campaigns.length
+              ? campaigns.map(c => `<option value="${c.id}">${c.name}</option>`).join('')
+              : '<option value="">No projects yet for this organization</option>';
+          }).catch(() => {});
+        });
       } catch (e) {
         select.innerHTML = '<option value="">Could not load organizations</option>';
       }

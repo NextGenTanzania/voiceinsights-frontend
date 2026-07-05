@@ -72,6 +72,7 @@
           <td><span class="badge ${STATUS_BADGE[o.status] || 'badge-neutral'}">${o.status}</span></td>
           <td class="muted-note">${new Date(o.created_at + 'Z').toLocaleDateString()}</td>
           <td>
+            <a class="btn btn-primary btn-sm" href="/app/dashboard.html?org_id=${o.id}">View →</a>
             ${o.status === 'active'
               ? `<button class="btn btn-ghost btn-sm suspend-btn" data-id="${o.id}">Suspend</button>`
               : `<button class="btn btn-ghost btn-sm activate-btn" data-id="${o.id}">Activate</button>`}

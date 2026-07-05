@@ -395,10 +395,12 @@ export default {
       // ---------- CAMPAIGNS ----------
       if (path === '/api/campaigns' && method === 'GET') {
         const claims = await requireAuth(request, env);
+        const effectiveOrgId = await getEffectiveOrgId(request, env, claims);
         const { results } = await env.DB.prepare(
-          `SELECT c.*, (SELECT COUNT(*) FROM responses r WHERE r.campaign_id = c.id) AS reached_count
-           FROM campaigns c WHERE c.organization_id = ? ORDER BY c.created_at DESC`
-        ).bind(claims.org).all();
+          `SELECT c.*, s.title as survey_title, s.module_type as survey_module_type,
+                  (SELECT COUNT(*) FROM responses r WHERE r.campaign_id = c.id) AS reached_count
+           FROM campaigns c LEFT JOIN surveys s ON c.survey_id = s.id WHERE c.organization_id = ? ORDER BY c.created_at DESC`
+        ).bind(effectiveOrgId).all();
         return json({ campaigns: results });
       }
 
@@ -416,10 +418,11 @@ export default {
       // ---------- DASHBOARD ----------
       if (path === '/api/dashboard/stats' && method === 'GET') {
         const claims = await requireAuth(request, env);
-        const assignedCampaign = await getAssignedCampaignId(env, claims);
+        const effectiveOrgId = await getEffectiveOrgId(request, env, claims);
+        const assignedCampaign = await getEffectiveCampaignFilter(request, env, claims, effectiveOrgId);
         const campFilter = assignedCampaign ? 'AND c.id = ?' : '';
-        const bindArgs = assignedCampaign ? [claims.org, assignedCampaign] : [claims.org];
-        const surveys = await env.DB.prepare('SELECT COUNT(*) as n FROM surveys WHERE organization_id = ? AND status = "active"').bind(claims.org).first();
+        const bindArgs = assignedCampaign ? [effectiveOrgId, assignedCampaign] : [effectiveOrgId];
+        const surveys = await env.DB.prepare('SELECT COUNT(*) as n FROM surveys WHERE organization_id = ? AND status = "active"').bind(effectiveOrgId).first();
         const responses = await env.DB.prepare(
           `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? ${campFilter}`
         ).bind(...bindArgs).first();
@@ -459,13 +462,17 @@ export default {
       // ---------- ANALYTICS ----------
       if (path === '/api/analytics/summary' && method === 'GET') {
         const claims = await requireAuth(request, env);
+        const effectiveOrgId = await getEffectiveOrgId(request, env, claims);
+        const filterCampaign = await getEffectiveCampaignFilter(request, env, claims, effectiveOrgId);
+        const cf = filterCampaign ? 'AND c.id = ?' : '';
+        const bindOrgAndCf = () => filterCampaign ? [effectiveOrgId, filterCampaign] : [effectiveOrgId];
         const { results: sentimentRows } = await env.DB.prepare(
-          `SELECT r.overall_sentiment, COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? GROUP BY r.overall_sentiment`
-        ).bind(claims.org).all();
+          `SELECT r.overall_sentiment, COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? ${cf} GROUP BY r.overall_sentiment`
+        ).bind(...bindOrgAndCf()).all();
         const { results: insightRows } = await env.DB.prepare(
           `SELECT ai.content_json FROM ai_insights ai JOIN responses r ON ai.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id
-           WHERE c.organization_id = ? AND ai.insight_type = 'summary' ORDER BY ai.created_at DESC LIMIT 200`
-        ).bind(claims.org).all();
+           WHERE c.organization_id = ? ${cf} AND ai.insight_type = 'summary' ORDER BY ai.created_at DESC LIMIT 200`
+        ).bind(...bindOrgAndCf()).all();
         const topicCounts = {};
         for (const row of insightRows) {
           try { const parsed = JSON.parse(row.content_json); for (const t of parsed.topics || []) topicCounts[t] = (topicCounts[t] || 0) + 1; } catch (_) {}
@@ -474,23 +481,23 @@ export default {
         const { results: quoteRows } = await env.DB.prepare(
           `SELECT t.raw_text, r.overall_sentiment, r.started_at, r.channel FROM transcripts t
            JOIN answers a ON t.answer_id = a.id JOIN responses r ON a.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id
-           WHERE c.organization_id = ? ORDER BY t.created_at DESC LIMIT 6`
-        ).bind(claims.org).all();
+           WHERE c.organization_id = ? ${cf} ORDER BY t.created_at DESC LIMIT 6`
+        ).bind(...bindOrgAndCf()).all();
         const { results: regionRows } = await env.DB.prepare(
           `SELECT COALESCE(NULLIF(TRIM(resp.region), ''), 'Unspecified') as region, COUNT(*) as n
            FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
-           WHERE c.organization_id = ? GROUP BY region ORDER BY n DESC LIMIT 10`
-        ).bind(claims.org).all();
+           WHERE c.organization_id = ? ${cf} GROUP BY region ORDER BY n DESC LIMIT 10`
+        ).bind(...bindOrgAndCf()).all();
         const { results: genderRows } = await env.DB.prepare(
           `SELECT COALESCE(NULLIF(TRIM(resp.gender), ''), 'Unspecified') as gender, COUNT(*) as n
            FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
-           WHERE c.organization_id = ? GROUP BY gender ORDER BY n DESC`
-        ).bind(claims.org).all();
+           WHERE c.organization_id = ? ${cf} GROUP BY gender ORDER BY n DESC`
+        ).bind(...bindOrgAndCf()).all();
         const { results: ageRows } = await env.DB.prepare(
           `SELECT COALESCE(NULLIF(TRIM(resp.age_bracket), ''), 'Unspecified') as age_bracket, COUNT(*) as n
            FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
-           WHERE c.organization_id = ? GROUP BY age_bracket ORDER BY age_bracket ASC`
-        ).bind(claims.org).all();
+           WHERE c.organization_id = ? ${cf} GROUP BY age_bracket ORDER BY age_bracket ASC`
+        ).bind(...bindOrgAndCf()).all();
         return json({ sentiment: sentimentRows, topics, quotes: quoteRows, regions: regionRows, gender: genderRows, age: ageRows });
       }
 
@@ -582,9 +589,10 @@ export default {
 
       if (path === '/api/organizations/me' && method === 'GET') {
         const claims = await requireAuth(request, env);
-        const org = await env.DB.prepare('SELECT id, name, type, billing_tier, status FROM organizations WHERE id = ?').bind(claims.org).first();
+        const effectiveOrgId = await getEffectiveOrgId(request, env, claims);
+        const org = await env.DB.prepare('SELECT id, name, type, billing_tier, status FROM organizations WHERE id = ?').bind(effectiveOrgId).first();
         if (!org) return error('Organization not found', 404);
-        const keyRow = await env.DB.prepare('SELECT api_key FROM organization_api_keys WHERE organization_id = ?').bind(claims.org).first();
+        const keyRow = await env.DB.prepare('SELECT api_key FROM organization_api_keys WHERE organization_id = ?').bind(effectiveOrgId).first();
         return json({ organization: { ...org, api_key: keyRow ? keyRow.api_key : null } });
       }
 
@@ -655,18 +663,27 @@ export default {
       // ---------- RESPONDENTS ----------
       if (path === '/api/respondents' && method === 'GET') {
         const claims = await requireAuth(request, env);
+        const effectiveOrgId = await getEffectiveOrgId(request, env, claims);
+        const filterCampaign = await getEffectiveCampaignFilter(request, env, claims, effectiveOrgId);
         const { results } = await env.DB.prepare(
-          `SELECT r.id, r.phone_number, r.full_name, r.region, r.gender, r.age_bracket, r.consent_given, r.created_at,
-                  (SELECT COUNT(*) FROM responses resp WHERE resp.respondent_id = r.id) AS response_count
-           FROM respondents r WHERE r.organization_id = ? ORDER BY r.created_at DESC LIMIT 200`
-        ).bind(claims.org).all();
+          filterCampaign
+            ? `SELECT r.id, r.phone_number, r.full_name, r.region, r.gender, r.age_bracket, r.consent_given, r.created_at,
+                      (SELECT COUNT(*) FROM responses resp WHERE resp.respondent_id = r.id) AS response_count
+               FROM respondents r
+               WHERE r.organization_id = ? AND r.id IN (SELECT respondent_id FROM responses WHERE campaign_id = ?)
+               ORDER BY r.created_at DESC LIMIT 200`
+            : `SELECT r.id, r.phone_number, r.full_name, r.region, r.gender, r.age_bracket, r.consent_given, r.created_at,
+                      (SELECT COUNT(*) FROM responses resp WHERE resp.respondent_id = r.id) AS response_count
+               FROM respondents r WHERE r.organization_id = ? ORDER BY r.created_at DESC LIMIT 200`
+        ).bind(...(filterCampaign ? [effectiveOrgId, filterCampaign] : [effectiveOrgId])).all();
         return json({ respondents: results });
       }
 
       // ---------- INTERVIEWS (responses with transcript + audio) ----------
       if (path === '/api/interviews' && method === 'GET') {
         const claims = await requireAuth(request, env);
-        const assignedCampaign = await getAssignedCampaignId(env, claims);
+        const effectiveOrgId = await getEffectiveOrgId(request, env, claims);
+        const assignedCampaign = await getEffectiveCampaignFilter(request, env, claims, effectiveOrgId);
         const { results } = await env.DB.prepare(
           `SELECT r.id as response_id, r.channel, r.overall_sentiment, r.fraud_score, r.status, r.started_at,
                   resp.phone_number, c.name as campaign_name,
@@ -680,7 +697,7 @@ export default {
            LEFT JOIN response_metadata rm ON rm.response_id = r.id
            WHERE c.organization_id = ? ${assignedCampaign ? 'AND c.id = ?' : ''}
            ORDER BY r.started_at DESC LIMIT 100`
-        ).bind(...(assignedCampaign ? [claims.org, assignedCampaign] : [claims.org])).all();
+        ).bind(...(assignedCampaign ? [effectiveOrgId, assignedCampaign] : [effectiveOrgId])).all();
         return json({ interviews: results });
       }
 
@@ -824,39 +841,43 @@ export default {
       // ---------- AI REPORT INTELLIGENCE (Key Findings + Recommendations for the PDF report) ----------
       if (path === '/api/reports/intelligence' && method === 'GET') {
         const claims = await requireAuth(request, env);
+        const effectiveOrgId = await getEffectiveOrgId(request, env, claims);
         const reportLangParam = new URL(request.url).searchParams.get('lang');
         const REPORT_LANG_NAMES = { en: 'English', fr: 'French', pt: 'Portuguese', sw: 'Swahili' };
         const reportLang = REPORT_LANG_NAMES[reportLangParam] ? reportLangParam : 'en';
+        const filterCampaign = await getEffectiveCampaignFilter(request, env, claims, effectiveOrgId);
+        const cf = filterCampaign ? 'AND c.id = ?' : '';
+        const bindOrgAndCf = () => filterCampaign ? [effectiveOrgId, filterCampaign] : [effectiveOrgId];
 
         const { results: sentimentRows } = await env.DB.prepare(
           `SELECT r.overall_sentiment, COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id
-           WHERE c.organization_id = ? GROUP BY r.overall_sentiment`
-        ).bind(claims.org).all();
+           WHERE c.organization_id = ? ${cf} GROUP BY r.overall_sentiment`
+        ).bind(...bindOrgAndCf()).all();
         const { results: genderRows } = await env.DB.prepare(
           `SELECT COALESCE(NULLIF(TRIM(resp.gender), ''), 'Unspecified') as gender, COUNT(*) as n
            FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
-           WHERE c.organization_id = ? GROUP BY gender`
-        ).bind(claims.org).all();
+           WHERE c.organization_id = ? ${cf} GROUP BY gender`
+        ).bind(...bindOrgAndCf()).all();
         const { results: ageRows } = await env.DB.prepare(
           `SELECT COALESCE(NULLIF(TRIM(resp.age_bracket), ''), 'Unspecified') as age_bracket, COUNT(*) as n
            FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
-           WHERE c.organization_id = ? GROUP BY age_bracket`
-        ).bind(claims.org).all();
+           WHERE c.organization_id = ? ${cf} GROUP BY age_bracket`
+        ).bind(...bindOrgAndCf()).all();
         const { results: regionRows } = await env.DB.prepare(
           `SELECT COALESCE(NULLIF(TRIM(resp.region), ''), 'Unspecified') as region, COUNT(*) as n
            FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
-           WHERE c.organization_id = ? GROUP BY region ORDER BY n DESC LIMIT 8`
-        ).bind(claims.org).all();
+           WHERE c.organization_id = ? ${cf} GROUP BY region ORDER BY n DESC LIMIT 8`
+        ).bind(...bindOrgAndCf()).all();
         // Sentiment cross-tabulated by region — lets the AI spot *where* problems concentrate, not just that they exist.
         const { results: sentByRegionRows } = await env.DB.prepare(
           `SELECT COALESCE(NULLIF(TRIM(resp.region), ''), 'Unspecified') as region, r.overall_sentiment, COUNT(*) as n
            FROM responses r JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
-           WHERE c.organization_id = ? AND r.overall_sentiment IS NOT NULL GROUP BY region, r.overall_sentiment`
-        ).bind(claims.org).all();
+           WHERE c.organization_id = ? ${cf} AND r.overall_sentiment IS NOT NULL GROUP BY region, r.overall_sentiment`
+        ).bind(...bindOrgAndCf()).all();
         const { results: insightRows } = await env.DB.prepare(
           `SELECT ai.content_json FROM ai_insights ai JOIN responses r ON ai.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id
-           WHERE c.organization_id = ? AND ai.insight_type = 'summary' ORDER BY ai.created_at DESC LIMIT 150`
-        ).bind(claims.org).all();
+           WHERE c.organization_id = ? ${cf} AND ai.insight_type = 'summary' ORDER BY ai.created_at DESC LIMIT 150`
+        ).bind(...bindOrgAndCf()).all();
         const topicCounts = {};
         for (const row of insightRows) {
           try { const parsed = JSON.parse(row.content_json); for (const t of parsed.topics || []) topicCounts[t] = (topicCounts[t] || 0) + 1; } catch (_) {}
@@ -877,8 +898,8 @@ export default {
           `SELECT t.raw_text, r.overall_sentiment, resp.region
            FROM transcripts t JOIN answers a ON t.answer_id = a.id JOIN responses r ON a.response_id = r.id
            JOIN campaigns c ON r.campaign_id = c.id JOIN respondents resp ON r.respondent_id = resp.id
-           WHERE c.organization_id = ? ORDER BY t.created_at DESC LIMIT 25`
-        ).bind(claims.org).all();
+           WHERE c.organization_id = ? ${cf} ORDER BY t.created_at DESC LIMIT 25`
+        ).bind(...bindOrgAndCf()).all();
 
         const context = `SAMPLE SIZE: ${totalResponses} total responses
 
@@ -1779,10 +1800,41 @@ async function sendEmail(env, { to, subject, html }) {
 // ============================================================
 // Returns the campaign_id a user is restricted to, or null if they have full
 // organization access (only 'enumerator' role users can be scoped this way).
+// Determines which organization's data a request should read. A regular user
+// is ALWAYS locked to their own organization_id from the JWT — this cannot be
+// overridden from the client under any circumstance. Only a Super Admin may
+// pass ?org_id=... to drill into a SPECIFIC client organization's data (e.g.
+// Organizations → click an org → see its own Projects, Respondents,
+// Interviews, and Reports) — this is what makes the Super Admin console a
+// real oversight tool rather than just a list of organization names.
+async function getEffectiveOrgId(request, env, claims) {
+  if (claims.role !== 'super_admin') return claims.org;
+  const requestedOrgId = new URL(request.url).searchParams.get('org_id');
+  if (!requestedOrgId) return claims.org;
+  const exists = await env.DB.prepare('SELECT id FROM organizations WHERE id = ?').bind(requestedOrgId).first();
+  return exists ? requestedOrgId : claims.org;
+}
+
 async function getAssignedCampaignId(env, claims) {
   if (claims.role !== 'enumerator') return null;
   const row = await env.DB.prepare('SELECT campaign_id FROM user_campaign_assignment WHERE user_id = ?').bind(claims.sub).first();
   return row ? row.campaign_id : null;
+}
+
+// Determines which single campaign/project a dashboard, analytics, or report
+// request should be scoped to. An Enumerator is ALWAYS forced to their one
+// assigned project (cannot override via the URL). Any other role may
+// optionally scope to one project via ?campaign_id=... — this is what lets a
+// report's cover page and content genuinely reflect the specific research
+// being reported on, instead of silently blending every project an
+// organization runs together into one undifferentiated report.
+async function getEffectiveCampaignFilter(request, env, claims, effectiveOrgId) {
+  const assigned = await getAssignedCampaignId(env, claims);
+  if (assigned) return assigned;
+  const requested = new URL(request.url).searchParams.get('campaign_id');
+  if (!requested) return null;
+  const owned = await env.DB.prepare('SELECT id FROM campaigns WHERE id = ? AND organization_id = ?').bind(requested, effectiveOrgId || claims.org).first();
+  return owned ? requested : null;
 }
 
 // Sliding-window rate limiter backed by D1. Returns true if the request should

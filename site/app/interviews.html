@@ -21,6 +21,12 @@
   <main class="main">
     <div id="topbar-mount"></div>
     <div class="content">
+      <div class="section-head">
+        <div></div>
+        <select id="project-select" style="padding:.5rem .8rem; font-size:.82rem; max-width:240px;">
+          <option value="">All Projects (combined)</option>
+        </select>
+      </div>
       <div class="interview-layout">
         <div class="card" style="padding:0; max-height:75vh; overflow-y:auto;">
           <div id="interview-list"><div class="muted-note" style="padding:1.5rem;" id="iv-loading">Loading interviews…</div></div>
@@ -44,10 +50,27 @@
   const SENTIMENT_BADGE = { positive: 'badge-success', neutral: 'badge-neutral', negative: 'badge-danger', distressed: 'badge-warn' };
   let interviews = [];
 
+  const projectSelect = document.getElementById('project-select');
+  const urlCampaignId = new URLSearchParams(window.location.search).get('campaign_id') || '';
+  projectSelect.addEventListener('change', (e) => {
+    const url = new URL(window.location.href);
+    if (e.target.value) url.searchParams.set('campaign_id', e.target.value);
+    else url.searchParams.delete('campaign_id');
+    window.location.href = url.toString();
+  });
+  apiRequest(`/api/campaigns${new URLSearchParams(window.location.search).get('org_id') ? '?org_id=' + new URLSearchParams(window.location.search).get('org_id') : ''}`).then(({ campaigns }) => {
+    projectSelect.innerHTML = '<option value="">All Projects (combined)</option>' +
+      campaigns.map(c => `<option value="${c.id}" ${c.id === urlCampaignId ? 'selected' : ''}>${c.name}</option>`).join('');
+  }).catch(() => {});
+
   (async () => {
     const listEl = document.getElementById('interview-list');
     try {
-      const data = await apiRequest('/api/interviews');
+      const qs = new URLSearchParams(window.location.search);
+      const forwardParams = new URLSearchParams();
+      if (qs.get('org_id')) forwardParams.set('org_id', qs.get('org_id'));
+      if (urlCampaignId) forwardParams.set('campaign_id', urlCampaignId);
+      const data = await apiRequest(`/api/interviews${forwardParams.toString() ? '?' + forwardParams.toString() : ''}`);
       interviews = data.interviews;
       if (!interviews.length) {
         listEl.innerHTML = `<div class="muted-note" style="padding:1.5rem;">${t('iv.empty', 'No interviews yet.')}</div>`;

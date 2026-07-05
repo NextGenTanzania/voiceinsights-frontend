@@ -294,6 +294,27 @@ UPDATE users SET
   role = 'super_admin'
 WHERE id = 'user_demo_admin';
 
+-- Second Super Admin account — info@voiceinsightsafrica.com — so two people
+-- can independently access and oversee the entire platform.
+INSERT OR IGNORE INTO users (id, organization_id, email, password_hash, password_salt, full_name, role)
+VALUES (
+  'user_demo_admin_2',
+  'org_demo',
+  'info@voiceinsightsafrica.com',
+  'a68c6225c4f387eb5d95504c270484ef3cebcf90ab44466bbd48f8cb1a06a741',
+  'e1ba58cd84bc1e4e9162cd921a47db65',
+  'VoiceInsights Africa Team',
+  'super_admin'
+);
+
+UPDATE users SET
+  email = 'info@voiceinsightsafrica.com',
+  password_hash = 'a68c6225c4f387eb5d95504c270484ef3cebcf90ab44466bbd48f8cb1a06a741',
+  password_salt = 'e1ba58cd84bc1e4e9162cd921a47db65',
+  full_name = 'VoiceInsights Africa Team',
+  role = 'super_admin'
+WHERE id = 'user_demo_admin_2';
+
 -- Second demo login with a restricted role, to test role-based UI differences.
 -- Email: meofficer@nextgentanzania.com   Password: MEOfficer2026!
 INSERT OR IGNORE INTO users (id, organization_id, email, password_hash, password_salt, full_name, role)

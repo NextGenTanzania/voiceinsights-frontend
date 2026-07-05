@@ -14,7 +14,7 @@
   .r-eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent-2); font-weight: 700; }
   .r-cover {
     min-height: 620px; display:flex; flex-direction:column; justify-content:space-between;
-    background: linear-gradient(160deg, #0B3D2E 0%, #0F1614 65%);
+    background-color: #0F1614; background: linear-gradient(160deg, #0B3D2E 0%, #0F1614 65%);
     position: relative; overflow: hidden; padding: 2.5rem 3rem !important;
   }
   .r-cover::before {
@@ -44,6 +44,7 @@
   .toolbar { max-width: 900px; margin: 0 auto 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
   @page { margin: 1cm; size: A4; }
   @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
     #sidebar-mount, #topbar-mount, .toolbar { display: none !important; }
     html, body, .main, .content { margin: 0 !important; padding: 0 !important; background: #fff !important; }
     .r-page {
@@ -57,7 +58,8 @@
     .r-page:not(.r-cover) * { color: #111 !important; }
     .r-cover {
       display: block !important; min-height: 0 !important; height: auto !important; overflow: visible !important;
-      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      background-color: #0F1614 !important;
+      -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
     }
     .r-cover > div:nth-child(2) { margin: 2.5rem 0 !important; }
     .r-cover > div:nth-child(3) { margin-top: 2.5rem !important; }
@@ -79,6 +81,9 @@
       <div class="toolbar">
         <div class="muted-note" id="report-status">Generating your report…</div>
         <div style="display:flex; gap:.6rem; flex-wrap:wrap;">
+          <select id="project-select" style="padding:.5rem .8rem; font-size:.82rem; max-width:220px;" title="Which project this report covers">
+            <option value="">All Projects (combined)</option>
+          </select>
           <div class="pill-tabs" style="margin:0;">
             <a class="report-mode-tab active" data-mode="summary" style="cursor:pointer;">Summary</a>
             <a class="report-mode-tab" data-mode="narrative" style="cursor:pointer;">Narrative</a>
@@ -484,6 +489,18 @@
     window.location.href = url.toString();
   });
 
+  // Which project this report covers — reflects the ACTUAL research
+  // conducted, so the cover title genuinely varies by project instead of
+  // showing a generic "Voice Data Report" every time. Populated inside the
+  // main data-loading function below (needs data fetched there).
+  const projectSelect = document.getElementById('project-select');
+  projectSelect.addEventListener('change', (e) => {
+    const url = new URL(window.location.href);
+    if (e.target.value) url.searchParams.set('campaign_id', e.target.value);
+    else url.searchParams.delete('campaign_id');
+    window.location.href = url.toString();
+  });
+
   const SENTIMENT_COLOR = { positive: '#6FBF8B', neutral: '#9FB3AB', negative: '#D9634A', distressed: '#E4C23A' };
   const SENTIMENT_LABEL = { positive: 'Positive', neutral: 'Neutral', negative: 'Negative', distressed: 'Distress' };
   const CHART_COLORS = ['#E4A23A', '#4FA490', '#D9634A', '#E4C23A', '#6FBF8B', '#9FB3AB'];
@@ -504,15 +521,21 @@
 
   (async () => {
     try {
-      const [stats, analytics, org, intelligence, quality, oecdDac, indicatorsResp] = await Promise.all([
-        apiRequest('/api/dashboard/stats'),
-        apiRequest('/api/analytics/summary'),
-        apiRequest('/api/organizations/me'),
-        apiRequest(`/api/reports/intelligence?lang=${new URLSearchParams(window.location.search).get('lang') || 'en'}`).catch(() => ({ key_findings: [], recommendations: { immediate: [], strategic: [], policy: [] }, risk_if_ignored: null, top_recommendation: null, narrative: null })),
+      const [stats, analytics, org, intelligence, quality, oecdDac, indicatorsResp, campaignsResp] = await Promise.all([
+        apiRequest(`/api/dashboard/stats${window.location.search}`),
+        apiRequest(`/api/analytics/summary${window.location.search}`),
+        apiRequest(`/api/organizations/me${window.location.search}`),
+        apiRequest(`/api/reports/intelligence${window.location.search}`).catch(() => ({ key_findings: [], recommendations: { immediate: [], strategic: [], policy: [] }, risk_if_ignored: null, top_recommendation: null, narrative: null })),
         apiRequest('/api/admin/model-stats').catch(() => null),
         apiRequest('/api/oecd-dac-assessment').catch(() => ({ sustainability_note: '', coherence_note: '' })),
         apiRequest('/api/indicators').catch(() => ({ indicators: [] })),
+        apiRequest(`/api/campaigns${new URLSearchParams(window.location.search).get('org_id') ? '?org_id=' + new URLSearchParams(window.location.search).get('org_id') : ''}`).catch(() => ({ campaigns: [] })),
       ]);
+
+      const urlCampaignId = new URLSearchParams(window.location.search).get('campaign_id') || '';
+      const selectedCampaignInfo = campaignsResp.campaigns.find(c => c.id === urlCampaignId) || null;
+      document.getElementById('project-select').innerHTML = '<option value="">All Projects (combined)</option>' +
+        campaignsResp.campaigns.map(c => `<option value="${c.id}" ${c.id === urlCampaignId ? 'selected' : ''}>${c.name}</option>`).join('');
 
       if (quality) {
         document.getElementById('q-total').textContent = quality.total_responses;
@@ -532,8 +555,14 @@
       document.getElementById('full-cover-mount').appendChild(coverTemplate.content.cloneNode(true));
 
       document.querySelectorAll('.js-cover-org').forEach(el => { el.textContent = org.organization.name; });
-      document.querySelectorAll('.js-cover-title').forEach(el => { el.textContent = org.organization.name + ' — Voice Data Report'; });
-      document.querySelectorAll('.js-cover-subtitle').forEach(el => { el.textContent = `${new Date().toLocaleDateString(undefined, { month: 'long', year: 'numeric' })} · ${total} respondents across ${analytics.regions.length || 0} regions`; });
+      const coverTitleText = selectedCampaignInfo
+        ? (selectedCampaignInfo.survey_title || selectedCampaignInfo.name)
+        : org.organization.name + ' — Voice Data Report';
+      document.querySelectorAll('.js-cover-title').forEach(el => { el.textContent = coverTitleText; });
+      const MODULE_TYPE_LABEL = { impact_monitoring: 'Impact Monitoring', beneficiary_feedback: 'Beneficiary Feedback', call_research: 'Call-Based Research', grievance: 'Grievance Reporting', survey: 'Survey' };
+      const subtitleParts = [`${new Date().toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}`, `${total} respondents across ${analytics.regions.length || 0} regions`];
+      if (selectedCampaignInfo && selectedCampaignInfo.survey_module_type) subtitleParts.unshift(MODULE_TYPE_LABEL[selectedCampaignInfo.survey_module_type] || selectedCampaignInfo.survey_module_type);
+      document.querySelectorAll('.js-cover-subtitle').forEach(el => { el.textContent = subtitleParts.join(' · '); });
       const coverIdValue = 'VIA-' + new Date().getFullYear() + '-' + Math.random().toString(36).slice(2, 7).toUpperCase();
       document.querySelectorAll('.js-cover-id').forEach(el => { el.textContent = coverIdValue; });
       document.querySelectorAll('.js-cover-date').forEach(el => { el.textContent = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }); });

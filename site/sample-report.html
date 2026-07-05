@@ -15,7 +15,7 @@
   .r-eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent-2); font-weight: 700; }
   .r-cover {
     min-height: 640px; display:flex; flex-direction:column; justify-content:space-between;
-    background: linear-gradient(160deg, #0B3D2E 0%, #0F1614 65%);
+    background-color: #0F1614; background: linear-gradient(160deg, #0B3D2E 0%, #0F1614 65%);
     position: relative; overflow: hidden; padding: 2.5rem 3rem !important;
   }
   .r-cover::before {
@@ -46,6 +46,7 @@
   .toolbar { max-width: 900px; margin: 0 auto 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
   @page { margin: 1cm; size: A4; }
   @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
     .sample-banner, .toolbar, nav, footer { display: none !important; }
     html, body { background: #fff !important; }
     .r-page {
@@ -60,7 +61,8 @@
     .r-page:not(.r-cover) * { color: #111 !important; }
     .r-cover {
       display: block !important; min-height: 0 !important; height: auto !important; overflow: visible !important;
-      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      background-color: #0F1614 !important;
+      -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
     }
     .r-cover > div:nth-child(2) { margin: 2.5rem 0 !important; }
     .r-cover > div:nth-child(3) { margin-top: 2.5rem !important; }

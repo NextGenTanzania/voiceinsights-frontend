@@ -155,11 +155,20 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
   const brandSub = role === 'admin' ? t('app.nav.admin_console', 'Admin Console') : t('app.nav.client_dashboard', 'Client Dashboard');
   const currentLang = getAppLang();
 
+  // While a Super Admin is viewing a specific client organization's data
+  // (?org_id=... in the URL), every nav link must carry that same org_id
+  // forward — otherwise clicking from Dashboard to Respondents would
+  // silently drop back to the Super Admin's own organization.
+  const viewingOrgId = new URLSearchParams(window.location.search).get('org_id');
+  function withOrgId(href) {
+    return viewingOrgId ? `${href}?org_id=${viewingOrgId}` : href;
+  }
+
   const navHtml = nav.map(g => `
     <div class="nav-group">
       <div class="nav-label">${t(g.groupKey, g.group)}</div>
       ${g.items.map(it => `
-        <a class="nav-item ${active === it.href ? 'active' : ''}" href="${it.href}">
+        <a class="nav-item ${active === it.href ? 'active' : ''}" href="${withOrgId(it.href)}">
           ${iconSvg(it.icon)} <span>${t(it.key, it.label)}</span>
         </a>`).join('')}
     </div>`).join('');

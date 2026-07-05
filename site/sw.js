@@ -3,9 +3,12 @@
 // with zero network afterwards. Must be served from the site root so its
 // scope covers the whole app.
 
-const CACHE_NAME = 'voiceinsights-enumerator-v1';
+const CACHE_NAME = 'voiceinsights-enumerator-v2';
 const SHELL_FILES = [
   '/enumerator.html',
+  '/manifest.json',
+  '/assets/img/icon-192.png',
+  '/assets/img/icon-512.png',
   '/assets/css/style.css',
   '/assets/js/app.js',
   '/assets/js/config.js',

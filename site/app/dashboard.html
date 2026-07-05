@@ -16,6 +16,9 @@
   <main class="main">
     <div id="topbar-mount"></div>
     <div class="content">
+      <div id="super-admin-view-banner" style="display:none; background:linear-gradient(135deg, var(--accent), #C88A2E); color:var(--accent-ink); padding:.7rem 1.2rem; border-radius:10px; margin-bottom:1.2rem; font-size:.85rem; font-weight:600;">
+        🔍 Super Admin view — viewing <span id="viewed-org-name">this organization's</span> data. <a href="/admin/organizations.html" style="color:var(--accent-ink); text-decoration:underline;">← Back to all organizations</a>
+      </div>
 
       <div class="grid grid-4" style="margin-bottom:1.5rem;">
         <div class="card">
@@ -75,13 +78,21 @@
 
   renderShell({ role: 'client', active: '/app/dashboard.html', eyebrow: 'Overview', title: 'Hello, ' + VI.user.name.split(' ')[0] });
 
+  const viewedOrgId = new URLSearchParams(window.location.search).get('org_id');
+  if (viewedOrgId) {
+    document.getElementById('super-admin-view-banner').style.display = 'block';
+    apiRequest(`/api/organizations/me?org_id=${viewedOrgId}`).then(({ organization }) => {
+      document.getElementById('viewed-org-name').textContent = organization.name + "'s";
+    }).catch(() => {});
+  }
+
   const SENTIMENT_COLOR = { positive: '#6FBF8B', neutral: '#9FB3AB', negative: '#D9634A', distressed: '#E4C23A' };
   const SENTIMENT_LABEL = { positive: 'Positive', neutral: 'Neutral', negative: 'Negative', distressed: 'Distress' };
 
   (async () => {
     let stats;
     try {
-      stats = await apiRequest('/api/dashboard/stats');
+      stats = await apiRequest(`/api/dashboard/stats${window.location.search.includes('org_id') ? window.location.search : ''}`);
       document.getElementById('stat-surveys').textContent = stats.active_surveys;
       document.getElementById('stat-responses').textContent = stats.total_responses;
       document.getElementById('stat-rate').textContent = stats.total_responses ? stats.response_rate + '%' : '—';

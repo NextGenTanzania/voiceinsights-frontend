@@ -390,3 +390,103 @@ footer.pub-footer { padding: 3rem 5vw; max-width: 1200px; margin: 2rem auto 0; b
   .pub-hero h1 { font-size: 1.7rem; }
   .btn { font-size: .85rem; padding: .6em 1.05em; }
 }
+
+/* ============================================================
+   EXECUTIVE INFOGRAPHIC ENGINE (Phase 16) — reusable component styles.
+   Uses only existing design tokens (--accent, --surface, --border, etc.)
+   already confirmed dark-mode compatible (Task 13). Responsive by
+   default via CSS Grid auto-fit. Print-friendly page breaks included.
+   ============================================================ */
+.ig-page { margin-bottom: 2rem; padding: 1.5rem; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); page-break-inside: avoid; }
+.ig-section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+.ig-disclosure { font-size: .78rem; color: var(--text-dim); font-style: italic; margin: .4rem 0 1rem; }
+.ig-unavailable { display: inline-block; font-size: .72rem; padding: .2rem .5rem; background: var(--bg); border-radius: 6px; color: var(--text-dim); cursor: help; }
+.ig-inline-label { font-size: .8rem; margin-left: .4rem; }
+
+.ig-demo-banner { background: #3a2a0a; color: var(--accent); text-align: center; padding: .5rem; border-radius: 8px; font-weight: 600; font-size: .85rem; margin-bottom: 1rem; }
+.ig-cover { text-align: center; padding: 3rem 1.5rem; }
+.ig-logo { max-height: 60px; margin-bottom: 1rem; }
+.ig-eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: 1px; font-size: .8rem; font-weight: 700; }
+.ig-title { font-size: 2rem; margin: .5rem 0; }
+.ig-subtitle { color: var(--text-muted); margin-bottom: 1.5rem; }
+.ig-cover-stats { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin: 1.5rem 0; }
+.ig-cover-stats strong { display: block; font-size: 1.8rem; color: var(--accent); }
+.ig-cover-stats span { font-size: .8rem; color: var(--text-muted); }
+.ig-generated { font-size: .78rem; color: var(--text-dim); }
+
+.ig-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; }
+.ig-kpi-card { background: var(--bg); border-radius: 10px; padding: 1rem; text-align: center; }
+.ig-kpi-value { display: block; font-size: 1.6rem; font-weight: 700; color: var(--accent); }
+.ig-kpi-label { font-size: .78rem; color: var(--text-muted); }
+.ig-kpi-na { opacity: .7; }
+
+.ig-bar-list { display: flex; flex-direction: column; gap: .5rem; margin: 1rem 0; }
+.ig-bar-row { display: grid; grid-template-columns: 100px 1fr 90px; align-items: center; gap: .6rem; font-size: .82rem; }
+.ig-bar-track { background: var(--bg); border-radius: 6px; height: 14px; overflow: hidden; }
+.ig-bar-fill { background: var(--accent); height: 100%; }
+
+.ig-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
+@media (max-width: 640px) { .ig-two-col { grid-template-columns: 1fr; } .ig-bar-row { grid-template-columns: 80px 1fr 70px; } }
+
+.ig-demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.ig-demo-block h3 { font-size: .9rem; margin-bottom: .4rem; }
+.ig-demo-list { font-size: .82rem; list-style: none; padding: 0; }
+
+.ig-funnel { display: flex; flex-direction: column; gap: .4rem; margin: 1rem 0; }
+.ig-funnel-stage { background: var(--accent); color: #1a1a1a; padding: .6rem 1rem; border-radius: 6px; display: flex; justify-content: space-between; }
+
+.ig-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+.ig-finding-card, .ig-quote-card, .ig-insight-card, .ig-rec-card { background: var(--bg); border-radius: 10px; padding: 1rem; }
+.ig-finding-icon { font-size: 1.6rem; margin-bottom: .4rem; }
+.ig-finding-headline { font-weight: 600; font-size: .88rem; }
+.ig-finding-evidence { font-size: .78rem; color: var(--text-muted); margin-top: .4rem; }
+.ig-quote-card { font-style: italic; }
+.ig-quote-card footer { font-style: normal; font-size: .72rem; color: var(--text-dim); margin-top: .5rem; }
+
+.ig-badge-row { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: .5rem; }
+.ig-badge { font-size: .68rem; padding: .2rem .5rem; background: var(--surface-2, var(--bg)); border-radius: 6px; color: var(--text-muted); }
+.ig-badge-lg { font-size: .9rem; padding: .4rem .8rem; font-weight: 700; color: var(--accent); }
+
+/* Traffic-light indicators: color AND text label together (WCAG 2.2 —
+   never rely on color alone for colorblind accessibility). */
+.ig-severity-gauge, .ig-risk-row { display: flex; align-items: center; gap: .6rem; margin-bottom: .6rem; }
+.ig-traffic-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+.ig-traffic-text, .ig-traffic-text-sm { font-size: .85rem; }
+.ig-traffic-text-sm { font-size: .72rem; font-weight: 700; text-transform: uppercase; }
+.ig-risk-matrix { display: flex; flex-direction: column; gap: .6rem; }
+.ig-risk-row p { margin: 0; font-size: .85rem; }
+
+.ig-tier-heading { font-size: 1rem; margin: 1rem 0 .5rem; color: var(--accent); }
+.ig-rec-list { display: flex; flex-direction: column; gap: .6rem; margin-bottom: .5rem; }
+
+@media print {
+  .ig-page { break-inside: avoid; page-break-before: always; border: none; }
+  .ig-cover { page-break-before: auto; }
+}
+
+/* ============================================================
+   EXECUTIVE DECISION INTELLIGENCE ENGINE (Phase 17) — additive to the
+   Phase 16 .ig-* styles above, same design tokens reused.
+   ============================================================ */
+.dc-card-list { display: flex; flex-direction: column; gap: 1rem; }
+.dc-card { background: var(--bg); border-radius: 10px; padding: 1rem; border-left: 3px solid var(--accent); }
+.dc-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: .4rem; }
+.dc-kpi-name { font-weight: 700; }
+.dc-risk-badge { font-size: .68rem; font-weight: 700; padding: .2rem .5rem; border-radius: 6px; color: #1a1a1a; }
+.dc-value { font-size: 1.1rem; color: var(--accent); font-weight: 700; margin-bottom: .6rem; }
+.dc-field { font-size: .82rem; margin-bottom: .4rem; }
+.dc-recommendation { background: var(--surface); padding: .5rem; border-radius: 6px; }
+.dc-confidence { font-size: .72rem; color: var(--text-dim); font-style: italic; margin-top: .5rem; }
+.dc-opp-tag { display: inline-block; font-size: .68rem; background: var(--surface-2, var(--surface)); padding: .15rem .4rem; border-radius: 5px; margin: .15rem .3rem .15rem 0; }
+
+.dc-dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.dc-top10-block h3, .dc-talking-block h3 { font-size: .9rem; margin-bottom: .4rem; color: var(--accent); }
+.dc-top10-block ol, .dc-talking-block ul { font-size: .8rem; padding-left: 1.2rem; }
+.dc-risk-inline { color: var(--text-dim); font-size: .72rem; }
+
+.dc-matrix-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .8rem; }
+.dc-matrix-col h3 { font-size: .85rem; color: var(--accent); margin-bottom: .5rem; }
+.dc-matrix-item { background: var(--bg); border-radius: 6px; padding: .5rem; font-size: .78rem; margin-bottom: .5rem; }
+.dc-matrix-owner { display: block; font-size: .68rem; color: var(--text-dim); margin-top: .3rem; }
+
+@media (max-width: 640px) { .dc-dashboard-grid, .dc-matrix-grid { grid-template-columns: 1fr; } }

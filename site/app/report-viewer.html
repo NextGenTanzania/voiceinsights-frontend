@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
   @media print { .no-print { display: none !important; } body { background: #fff; } }
@@ -34,6 +35,25 @@
           <button class="btn btn-ghost btn-sm" id="export-json-btn">JSON</button>
         </div>
       </div>
+
+      <div class="no-print" style="margin:.6rem 0 1.5rem; padding:1rem; background:var(--surface); border-radius:10px;">
+        <div class="muted-note" style="font-size:.78rem; margin-bottom:.6rem; font-weight:600;">Multi-Format Reports (Phase 15) — every download renders from this same report, nothing is regenerated:</div>
+        <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
+          <button class="btn btn-ghost btn-sm format-download-btn" data-format="executive_summary" data-ext="txt">Executive Summary</button>
+          <button class="btn btn-ghost btn-sm format-download-btn" data-format="management_report" data-ext="txt">Management Report</button>
+          <button class="btn btn-ghost btn-sm" id="tech-report-btn">Full Technical Report</button>
+          <button class="btn btn-ghost btn-sm format-download-btn" data-format="donor_brief" data-ext="txt">Donor Brief</button>
+          <button class="btn btn-ghost btn-sm format-download-btn" data-format="policy_brief" data-ext="txt">Policy Brief</button>
+          <button class="btn btn-ghost btn-sm format-download-btn" data-format="infographic" data-ext="txt">Infographic</button>
+          <button class="btn btn-ghost btn-sm format-download-btn" data-format="statistical_annex" data-ext="json">Statistical Annex</button>
+          <button class="btn btn-ghost btn-sm format-download-btn" data-format="dataset_appendix" data-ext="json">Dataset Appendix</button>
+          <button class="btn btn-ghost btn-sm format-download-btn" data-format="ai_talking_points" data-ext="txt">AI Presentation Notes</button>
+        </div>
+      </div>
+
+      <div id="infographic-container"></div>
+
+      <div id="decision-container"></div>
 
       <div id="report-body"><p class="muted-note">Loading report…</p></div>
 
@@ -68,6 +88,8 @@
     </div>
   </main>
 </div>
+<script src="/assets/js/infographic-components.js"></script>
+<script src="/assets/js/decision-intelligence-components.js"></script>
 <script src="/assets/js/config.js"></script>
 <script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/app.js"></script>
@@ -119,8 +141,49 @@
       const dm = reportData.document_model;
       document.getElementById('report-status-line').textContent = `${dm.metadata.template_name} · v${reportData.version} · ${reportData.status} · Generated ${new Date(dm.metadata.generated_at).toLocaleString()}`;
       renderBody(dm);
+      loadInfographic();
     } catch (e) {
       document.getElementById('report-body').innerHTML = `<p class="muted-note" style="color:var(--danger);">Could not load report: ${e.message}</p>`;
+    }
+  }
+
+  // Phase 16: Executive Infographic Engine — fetches the SAME report's
+  // infographic-data and renders it as the FIRST pages of the report,
+  // using the shared, reusable component library (identical to the
+  // public sample-report-viewer.html).
+  async function loadInfographic() {
+    try {
+      const data = await apiRequest(`/api/reports/${reportId}/infographic-data`);
+      document.getElementById('infographic-container').innerHTML = window.IgComponents.renderFullInfographic(data);
+      if (window.lucide) lucide.createIcons();
+      const qrContainer = document.getElementById('ig-qr-container');
+      if (qrContainer && data.closing_page?.qr_target_url && window.QRCode) {
+        new QRCode(qrContainer, { text: data.closing_page.qr_target_url, width: 120, height: 120 });
+      }
+    } catch (e) {
+      console.error('Infographic could not be loaded:', e.message);
+    }
+    loadDecisionIntelligence();
+  }
+
+  // Phase 17: Executive Decision Intelligence Engine — rendered
+  // immediately after the Executive Infographic. Internal, authenticated
+  // endpoints (4 separate calls, since apiRequest already carries auth,
+  // unlike the public page's combined endpoint used to reduce round-trips
+  // for anonymous visitors).
+  async function loadDecisionIntelligence() {
+    try {
+      const [allCards, decisionDashboard, boardMeeting, actionMatrix] = await Promise.all([
+        apiRequest(`/api/reports/${reportId}/decision-cards`),
+        apiRequest(`/api/reports/${reportId}/decision-dashboard`),
+        apiRequest(`/api/reports/${reportId}/board-meeting-modes`),
+        apiRequest(`/api/reports/${reportId}/action-matrix`),
+      ]);
+      document.getElementById('decision-container').innerHTML = window.DecisionComponents.renderExecutiveDecisionPages({
+        allCards, decisionDashboard, boardMeeting, actionMatrix,
+      });
+    } catch (e) {
+      console.error('Decision intelligence could not be loaded:', e.message);
     }
   }
 
@@ -214,28 +277,112 @@
     downloadBlob(blob, `report-${reportId}.doc`);
   });
 
-  document.getElementById('export-pptx-btn').addEventListener('click', () => {
+  document.getElementById('export-pptx-btn').addEventListener('click', async () => {
     const dm = reportData.document_model;
     const narrative = dm.narrative || {};
     const pptx = new PptxGenJS();
     const ACCENT = (dm.branding.primary_color || '#E4A23A').replace('#', ''), DARK = (dm.branding.secondary_color || '#1E2620').replace('#', '');
 
+    // Phase 17: reuses the SAME Executive Infographic Engine data
+    // (Phase 16) already computed for the on-screen dashboard — no
+    // recomputation of regions/sentiment/risk/recommendations here.
+    let ig;
+    try {
+      ig = await apiRequest(`/api/reports/${reportId}/infographic-data`);
+    } catch (e) {
+      showToast('Could not load infographic data for PowerPoint: ' + e.message, 'error');
+      return;
+    }
+
+    function addContentSlide(title, bulletLines, notes) {
+      const slide = pptx.addSlide();
+      slide.addText(title, { x: 0.5, y: 0.3, fontSize: 22, bold: true, color: DARK });
+      if (bulletLines?.length) {
+        slide.addText(bulletLines.map(f => ({ text: f + '\n', options: { bullet: true, fontSize: 14, breakLine: true } })), { x: 0.5, y: 1.1, w: 9 });
+      }
+      if (notes) slide.addNotes(notes);
+      return slide;
+    }
+
     let slide = pptx.addSlide();
     slide.background = { color: DARK };
-    slide.addText(dm.branding.header_text || dm.metadata.organization_name, { x: 0.5, y: 0.4, fontSize: 12, color: ACCENT, bold: true });
-    slide.addText(dm.metadata.template_name, { x: 0.5, y: 2.0, fontSize: 28, color: 'FFFFFF', bold: true, w: 9 });
+    if (ig.cover.is_demo) slide.addText('Demonstration Report — demo data only', { x: 0.5, y: 0.3, fontSize: 11, color: ACCENT, bold: true });
+    slide.addText(ig.cover.organization_name, { x: 0.5, y: 0.7, fontSize: 12, color: ACCENT, bold: true });
+    slide.addText(ig.cover.report_type, { x: 0.5, y: 2.0, fontSize: 28, color: 'FFFFFF', bold: true, w: 9 });
+    slide.addText(`${ig.cover.project || ''} · ${ig.cover.country || ''}`, { x: 0.5, y: 3.0, fontSize: 16, color: 'CCCCCC' });
+    slide.addText(`${ig.cover.respondents} respondents · ${ig.cover.completion_rate_pct}% completion · ${ig.cover.response_rate_pct}% response rate`, { x: 0.5, y: 3.6, fontSize: 13, color: ACCENT });
+    slide.addNotes('Cover slide, built from the Executive Infographic Engine\'s cover data.');
+
+    addContentSlide('Executive Summary', [narrative.executive_summary || 'Not enough data has been collected yet.'],
+      'Read the executive summary at a measured pace.');
 
     slide = pptx.addSlide();
-    slide.addText('At a Glance', { x: 0.5, y: 0.3, fontSize: 22, bold: true });
-    slide.addText(`${dm.kpis.total_responses} responses · ${dm.kpis.response_rate_pct}% response rate · ${dm.kpis.regions_covered} regions`, { x: 0.5, y: 1.2, fontSize: 16 });
+    slide.addText('Executive KPI Dashboard', { x: 0.5, y: 0.3, fontSize: 22, bold: true, color: DARK });
+    const kpiEntries = [
+      ['Total Respondents', ig.kpi_page.total_respondents], ['Female', ig.kpi_page.female], ['Male', ig.kpi_page.male],
+      ['Completion Rate', ig.kpi_page.completion_rate_pct + '%'], ['Positive Sentiment', ig.kpi_page.sentiment_positive_pct + '%'], ['Data Quality Score', ig.kpi_page.data_quality_score],
+    ].filter(([, v]) => v !== null && v !== undefined && !String(v).includes('null'));
+    kpiEntries.forEach(([label, value], i) => {
+      const col = i % 3, row = Math.floor(i / 3);
+      slide.addText(`${value}`, { x: 0.5 + col * 3.2, y: 1.2 + row * 1.8, fontSize: 30, bold: true, color: ACCENT });
+      slide.addText(label, { x: 0.5 + col * 3.2, y: 2.0 + row * 1.8, fontSize: 11 });
+    });
+    slide.addNotes('KPIs computed once by the Executive Infographic Engine, reused identically here.');
 
-    if (narrative.key_findings?.length) {
+    if (ig.geographic_intelligence.regional_coverage?.length) {
       slide = pptx.addSlide();
-      slide.addText('Key Findings', { x: 0.5, y: 0.3, fontSize: 22, bold: true });
-      slide.addText(narrative.key_findings.map(f => ({ text: f + '\n', options: { bullet: true, fontSize: 14, breakLine: true } })), { x: 0.5, y: 1.1, w: 9 });
+      slide.addText('Geographic Dashboard', { x: 0.5, y: 0.3, fontSize: 22, bold: true, color: DARK });
+      slide.addChart(pptx.ChartType.bar, [{ name: 'Responses', labels: ig.geographic_intelligence.regional_coverage.map(r => r.region), values: ig.geographic_intelligence.regional_coverage.map(r => r.responses) }],
+        { x: 0.5, y: 1.1, w: 9, h: 4, chartColors: [ACCENT] });
+      slide.addNotes(ig.geographic_intelligence.map_type_disclosure);
     }
-    pptx.writeFile({ fileName: `report-${reportId}.pptx` });
+
+    addContentSlide('Demographic Dashboard', [
+      ig.demographic_intelligence.gender?.length ? `Gender: ${ig.demographic_intelligence.gender.map(g => `${g.label} ${g.n}`).join(', ')}` : null,
+      ig.demographic_intelligence.age?.length ? `Age: ${ig.demographic_intelligence.age.map(a => `${a.label} ${a.n}`).join(', ')}` : null,
+    ].filter(Boolean), 'Confirm demographic representativeness.');
+
+    if (ig.executive_findings?.length) {
+      addContentSlide('Executive Findings', ig.executive_findings.map(f => `${f.icon} ${f.headline}`), 'Each finding\'s evidence is shown in the infographic dashboard.');
+    }
+
+    addContentSlide('Risk Dashboard', [
+      `Overall Risk: ${ig.risk_dashboard.overall_traffic_light.toUpperCase()} (${ig.risk_dashboard.overall_severity_pct}% severity basis)`,
+      ...ig.risk_dashboard.risk_matrix.map(r => `[${r.traffic_light.toUpperCase()}] ${r.description}`),
+    ], ig.risk_dashboard.basis);
+
+    if (ig.recommendation_dashboard.items?.length) {
+      addContentSlide('Recommendation Dashboard', ig.recommendation_dashboard.items.map(i => `[${i.tier_label}] ${i.action} (Owner: ${i.owner})`), ig.recommendation_dashboard.note);
+    }
+
+    addContentSlide('SDG Alignment', ig.sdg_dashboard.applicable ? ig.sdg_dashboard.sdg_tags : ['No SDG alignment applies to this report type.'], ig.sdg_dashboard.note);
+
+    if (ig.trend_intelligence.available !== false) {
+      addContentSlide('Trend Dashboard', [
+        ig.trend_intelligence.previous_campaign ? `Previous campaign: ${ig.trend_intelligence.previous_campaign.name} — ${ig.trend_intelligence.previous_campaign.total_responses} responses` : 'No previous campaign on record.',
+        `Same period last year: ${ig.trend_intelligence.same_period_last_year?.total_responses ?? 0} responses`,
+      ], 'Reused directly from the Benchmark Engine.');
+    }
+
+    if (ig.benchmark_dashboard.available !== false) {
+      addContentSlide('Benchmark Dashboard', [
+        `Organization average: ${ig.benchmark_dashboard.organization_average?.avg_responses_per_campaign ?? '—'} responses/campaign`,
+        ig.benchmark_dashboard.sector_average?.available === false ? `Sector average: ${ig.benchmark_dashboard.sector_average.reason}` : `Sector average: ${ig.benchmark_dashboard.sector_average?.avg_responses_per_campaign ?? '—'}`,
+      ], 'Reused directly from the existing Benchmark Engine (Task 9.4).');
+    }
+
+    addContentSlide('Conclusion', [narrative.conclusions || 'Not enough data has been collected yet.'], 'Close with the single most important takeaway.');
+    slide = pptx.addSlide();
+    slide.background = { color: DARK };
+    slide.addText('Thank You', { x: 0.5, y: 1.5, fontSize: 28, color: 'FFFFFF', bold: true });
+    slide.addText(`Overall Quality Score: ${ig.closing_page.overall_score}`, { x: 0.5, y: 2.3, fontSize: 16, color: ACCENT });
+    if (ig.closing_page.next_steps?.length) slide.addText(ig.closing_page.next_steps.map(n => ({ text: n + '\n', options: { bullet: true, fontSize: 12, color: 'CCCCCC', breakLine: true } })), { x: 0.5, y: 3.0, w: 9 });
+    slide.addText(ig.closing_page.contact || 'partnerships@voiceinsightsafrica.com', { x: 0.5, y: 4.8, fontSize: 14, color: ACCENT });
+    slide.addNotes('Closing slide, built from the Executive Infographic Engine\'s closing-page data.');
+
+    pptx.writeFile({ fileName: `board-presentation-${reportId}.pptx` });
   });
+
 
   function downloadBlob(blob, filename) {
     const a = document.createElement('a');
@@ -243,6 +390,44 @@
     a.download = filename;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
   }
+
+  // Phase 15: Multi-Format Rendering Engine — every button fetches a
+  // FORMAT of this SAME report (never a new report, never regenerated)
+  // via the internal, authenticated format endpoint.
+  function textFromFormat(data) {
+    const lines = [`${data.title || ''}`.toUpperCase(), '='.repeat(40), ''];
+    if (data.is_demo) lines.push('DEMONSTRATION REPORT — DEMO DATA ONLY', '');
+    for (const [key, value] of Object.entries(data)) {
+      if (['format', 'title', 'is_demo', 'branding'].includes(key)) continue;
+      const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      lines.push(label, '-'.repeat(label.length));
+      if (Array.isArray(value)) {
+        value.forEach(item => lines.push(typeof item === 'object' ? JSON.stringify(item) : `• ${item}`));
+      } else if (typeof value === 'object' && value !== null) {
+        lines.push(JSON.stringify(value, null, 2));
+      } else {
+        lines.push(String(value ?? ''));
+      }
+      lines.push('');
+    }
+    return lines.join('\n');
+  }
+
+  async function downloadFormat(formatName, ext) {
+    try {
+      const data = await apiRequest(`/api/reports/${reportId}/format/${formatName}`);
+      const content = ext === 'json' ? JSON.stringify(data, null, 2) : textFromFormat(data);
+      const blob = new Blob([content], { type: ext === 'json' ? 'application/json' : 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = `${formatName}-${reportId}.${ext}`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    } catch (e) { showToast('Could not generate this format: ' + e.message, 'error'); }
+  }
+
+  document.querySelectorAll('.format-download-btn').forEach(btn => {
+    btn.addEventListener('click', () => downloadFormat(btn.dataset.format, btn.dataset.ext));
+  });
+  document.getElementById('tech-report-btn').addEventListener('click', () => window.print());
 
   loadReport();
   loadStyles();

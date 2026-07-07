@@ -115,6 +115,51 @@
       </div>
 
       <div class="card" style="margin-top:1.5rem;">
+        <div class="card-title">Roles &amp; Permissions</div>
+        <p class="muted-note" style="margin-bottom:.8rem;">See exactly what each role can and can't do.</p>
+        <a href="/app/roles.html" class="btn btn-ghost btn-sm">View Roles Reference →</a>
+      </div>
+
+      <div class="card" style="margin-top:1.5rem;">
+        <div class="card-title">Security Dashboard</div>
+        <p class="muted-note" style="margin-bottom:.8rem;">2FA adoption across your team, recent logins, and security events.</p>
+        <a href="/app/security-dashboard.html" class="btn btn-ghost btn-sm">Open Security Dashboard →</a>
+      </div>
+
+      <div class="card" style="margin-top:1.5rem;">
+        <div class="card-title">Data Export &amp; Backup</div>
+        <p class="muted-note" style="margin-bottom:.8rem;">Your data lives on Cloudflare's globally-replicated infrastructure (D1 + R2), backed up continuously by the platform itself. For your own copy, every report includes a CSV export of the underlying data — go to Reports, pick a project, and use the export option there.</p>
+        <table style="width:100%; font-size:.82rem; margin-bottom:.8rem;">
+          <tr><td class="muted-note" style="padding:.3rem 0; width:45%;">Database replication</td><td>Cloudflare D1 (SQLite, multi-region)</td></tr>
+          <tr><td class="muted-note" style="padding:.3rem 0;">Audio file storage</td><td>Cloudflare R2 (object storage, durable)</td></tr>
+          <tr><td class="muted-note" style="padding:.3rem 0;">Your own exportable copy</td><td>CSV export, available anytime from Reports</td></tr>
+          <tr><td class="muted-note" style="padding:.3rem 0;">Point-in-time restore</td><td class="muted-note">Not yet self-service — contact us if you need a specific historical snapshot restored</td></tr>
+        </table>
+        <a href="/app/reports.html" class="btn btn-ghost btn-sm">Go to Reports →</a>
+      </div>
+
+      <div class="card" style="margin-top:1.5rem;">
+        <div class="card-title">Report Branding</div>
+        <p class="muted-note" style="margin-bottom:1rem;">Every generated report automatically uses this — logo, colors, and footer text. Until you set this up, reports use VoiceInsights Africa's default branding.</p>
+        <div class="field-row">
+          <div class="field"><label>Primary Color</label><input type="color" id="brand-primary" value="#E4A23A"></div>
+          <div class="field"><label>Secondary Color</label><input type="color" id="brand-secondary" value="#1E2620"></div>
+        </div>
+        <div class="field"><label>Header Text</label><input id="brand-header" placeholder="e.g. Your Organization Name"></div>
+        <div class="field"><label>Footer Text</label><input id="brand-footer" placeholder="e.g. Prepared by Your Organization"></div>
+        <div class="field"><label>Disclaimer</label><textarea id="brand-disclaimer" rows="2" placeholder="Standard disclaimer text shown on every report"></textarea></div>
+        <div class="field"><label>Confidentiality Label</label><input id="brand-confidentiality" placeholder="e.g. Confidential — Not for external distribution"></div>
+        <div class="field"><label>Contact Details</label><input id="brand-contact" placeholder="e.g. info@yourorg.org"></div>
+        <div class="field"><label>Logo</label>
+          <div id="brand-logo-preview" class="muted-note" style="margin-bottom:.5rem; font-size:.8rem;">No logo uploaded yet.</div>
+          <input type="file" id="brand-logo-file" accept="image/*">
+          <button class="btn btn-ghost btn-sm" id="brand-logo-upload-btn" style="margin-left:.5rem;">Upload Logo</button>
+        </div>
+        <button class="btn btn-primary btn-sm" id="brand-save-btn" style="margin-top:.8rem;">Save Branding</button>
+        <span id="brand-save-status" class="muted-note" style="margin-left:.6rem;"></span>
+      </div>
+
+      <div class="card" style="margin-top:1.5rem;">
         <div class="card-title">DHIS2 Integration <span class="badge badge-neutral" style="font-size:.6rem;">Health Sector</span></div>
         <p class="muted-note" style="margin-bottom:1rem;">If your organization reports into a Ministry of Health DHIS2 instance, connect it here — Outcome Indicators can then be pushed to DHIS2 as aggregate data values, standard M&amp;E integration for African health programs.</p>
         <div class="field-row">
@@ -411,6 +456,62 @@
       statusEl.style.color = 'var(--danger)';
     } finally {
       btn.disabled = false; btn.textContent = 'Save Connection';
+    }
+  });
+
+  // ---------- Report Branding (Task 8.4) ----------
+  (async () => {
+    try {
+      const { branding } = await apiRequest('/api/organizations/branding');
+      if (branding) {
+        document.getElementById('brand-primary').value = branding.primary_color || '#E4A23A';
+        document.getElementById('brand-secondary').value = branding.secondary_color || '#1E2620';
+        document.getElementById('brand-header').value = branding.header_text || '';
+        document.getElementById('brand-footer').value = branding.footer_text || '';
+        document.getElementById('brand-disclaimer').value = branding.disclaimer_text || '';
+        document.getElementById('brand-confidentiality').value = branding.confidentiality_text || '';
+        document.getElementById('brand-contact').value = branding.contact_details || '';
+        if (branding.logo_r2_key) {
+          document.getElementById('brand-logo-preview').innerHTML = `<img src="${API_BASE_URL}/api/documents/${encodeURIComponent(branding.logo_r2_key)}?token=${encodeURIComponent(localStorage.getItem('vi_token'))}" alt="Organization logo" style="max-height:60px;">`;
+        }
+      }
+    } catch (e) { /* no branding configured yet — defaults shown, fine */ }
+  })();
+
+  document.getElementById('brand-save-btn').addEventListener('click', async () => {
+    const statusEl = document.getElementById('brand-save-status');
+    statusEl.textContent = 'Saving…'; statusEl.style.color = '';
+    try {
+      await apiRequest('/api/organizations/branding', { method: 'PUT', body: {
+        primary_color: document.getElementById('brand-primary').value,
+        secondary_color: document.getElementById('brand-secondary').value,
+        header_text: document.getElementById('brand-header').value.trim(),
+        footer_text: document.getElementById('brand-footer').value.trim(),
+        disclaimer_text: document.getElementById('brand-disclaimer').value.trim(),
+        confidentiality_text: document.getElementById('brand-confidentiality').value.trim(),
+        contact_details: document.getElementById('brand-contact').value.trim(),
+      }});
+      statusEl.textContent = '✓ Saved — future reports will use this branding.';
+    } catch (e) {
+      statusEl.textContent = 'Error: ' + e.message; statusEl.style.color = 'var(--danger)';
+    }
+  });
+
+  document.getElementById('brand-logo-upload-btn').addEventListener('click', async () => {
+    const fileInput = document.getElementById('brand-logo-file');
+    if (!fileInput.files.length) { showToast('Choose a logo file first.', 'error'); return; }
+    const form = new FormData();
+    form.append('file', fileInput.files[0]);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/organizations/branding/logo`, {
+        method: 'POST', headers: { Authorization: `Bearer ${localStorage.getItem('vi_token')}` }, body: form,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Upload failed');
+      document.getElementById('brand-logo-preview').innerHTML = `<img src="${API_BASE_URL}/api/documents/${encodeURIComponent(data.logo_r2_key)}?token=${encodeURIComponent(localStorage.getItem('vi_token'))}" alt="Organization logo" style="max-height:60px;">`;
+      showToast('Logo uploaded', 'success');
+    } catch (e) {
+      showToast('Could not upload logo: ' + e.message, 'error');
     }
   });
 </script>

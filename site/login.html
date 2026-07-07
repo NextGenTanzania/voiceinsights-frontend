@@ -121,7 +121,7 @@
       }
       localStorage.setItem('vi_token', data.token);
       localStorage.setItem('vi_user', JSON.stringify(data.user));
-      window.location.href = '/app/dashboard.html';
+      window.location.href = data.user.role === 'enumerator' ? '/app/my-work.html' : '/app/dashboard.html';
     } catch (err) {
       errBox.textContent = err.message.includes('Failed to fetch')
         ? 'Cannot reach the backend. Have you deployed it and set API_BASE_URL in config.js?'
@@ -148,7 +148,7 @@
       });
       localStorage.setItem('vi_token', data.token);
       localStorage.setItem('vi_user', JSON.stringify(data.user));
-      window.location.href = '/app/dashboard.html';
+      window.location.href = data.user.role === 'enumerator' ? '/app/my-work.html' : '/app/dashboard.html';
     } catch (err) {
       errBox.textContent = err.message;
       errBox.style.display = 'block';

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostics Center — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+
+      <p class="muted-note" style="margin-bottom:1.5rem;">Configuration and environment troubleshooting — never shows secret values, only whether each is configured, plus live connectivity checks.</p>
+
+      <div class="grid grid-2" style="gap:1.5rem; align-items:flex-start; margin-bottom:1.5rem;">
+        <div class="card">
+          <div class="card-title">Secrets Configured</div>
+          <div id="secrets-list"><p class="muted-note">Loading…</p></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Bindings</div>
+          <div id="bindings-list"><p class="muted-note">Loading…</p></div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="gap:1.5rem; align-items:flex-start;">
+        <div class="card">
+          <div class="card-title">Table Sanity Counts</div>
+          <div id="table-counts-list"><p class="muted-note">Loading…</p></div>
+        </div>
+        <div class="card">
+          <div class="card-title">AI Retry Configuration</div>
+          <div id="ai-config-list"><p class="muted-note">Loading…</p></div>
+        </div>
+      </div>
+
+      <div style="text-align:right; margin-top:1.5rem;">
+        <button class="btn btn-ghost btn-sm" id="refresh-btn">↻ Re-run Diagnostics</button>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  const storedUserCheck = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  if (storedUserCheck?.role !== 'super_admin') {
+    document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center; padding:2rem;"><div><h2>Super Admin access required</h2></div></div>';
+    throw new Error('Access denied — not a Super Admin');
+  }
+  renderShell({ role:'admin', active:'/admin/diagnostics.html', eyebrow:'Enterprise Operations', title:'Diagnostics Center' });
+
+  function row(label, ok, detail) {
+    return `<div style="display:flex; justify-content:space-between; padding:.4rem 0; border-bottom:1px solid var(--border); font-size:.85rem;"><span>${label}</span><span>${ok ? '<span class="badge badge-success">✓ Set</span>' : '<span class="badge badge-danger">✗ Missing</span>'} ${detail ? `<span class="muted-note" style="margin-left:.4rem;">${detail}</span>` : ''}</span></div>`;
+  }
+
+  async function loadDiagnostics() {
+    try {
+      const data = await apiRequest('/api/superadmin/diagnostics');
+
+      document.getElementById('secrets-list').innerHTML = Object.entries(data.secrets_configured)
+        .map(([name, isSet]) => row(name, isSet)).join('');
+
+      document.getElementById('bindings-list').innerHTML =
+        row('D1 Database', data.bindings.d1.reachable, data.bindings.d1.latency_ms != null ? data.bindings.d1.latency_ms + 'ms' : '') +
+        row('R2 Storage (Audio/Photos/Documents)', data.bindings.r2.reachable);
+
+      document.getElementById('table-counts-list').innerHTML = Object.entries(data.table_counts)
+        .map(([table, count]) => `<div style="display:flex; justify-content:space-between; padding:.4rem 0; border-bottom:1px solid var(--border); font-size:.85rem;"><span>${table}</span><b>${count != null ? count : 'error'}</b></div>`).join('');
+
+      document.getElementById('ai-config-list').innerHTML = Object.entries(data.ai_retry_config)
+        .map(([key, value]) => `<div style="display:flex; justify-content:space-between; padding:.4rem 0; border-bottom:1px solid var(--border); font-size:.85rem;"><span>${key}</span><b>${value}</b></div>`).join('');
+    } catch (e) {
+      document.getElementById('secrets-list').innerHTML = `<p class="muted-note" style="color:var(--danger);">Could not load: ${e.message}</p>`;
+    }
+  }
+
+  document.getElementById('refresh-btn').addEventListener('click', loadDiagnostics);
+  loadDiagnostics();
+</script>
+</body>
+</html>

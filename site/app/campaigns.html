@@ -152,7 +152,7 @@
         const pct = targeted > 0 ? Math.min(100, Math.round((reached / targeted) * 100)) : (reached > 0 ? 100 : 0);
         const badgeClass = STATUS_BADGE[c.status] || 'badge-neutral';
         return `<tr>
-          <td>${c.name}</td>
+          <td><a href="/app/project.html?id=${c.id}" style="color:inherit; font-weight:600;">${c.name}</a></td>
           <td><span class="badge badge-neutral">${CHANNEL_LABEL[c.channel] || c.channel}</span></td>
           <td>${targeted || '—'}</td>
           <td>${reached}</td>

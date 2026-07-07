@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Production Readiness — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+
+      <div id="overall-banner" class="card" style="text-align:center; padding:1.5rem; margin-bottom:1.5rem;">
+        <span style="font-size:2rem;" id="overall-icon">⏳</span>
+        <h2 id="overall-text" style="margin-top:.5rem;">Checking…</h2>
+        <p class="muted-note" id="overall-sub"></p>
+      </div>
+
+      <div id="checklist-container"></div>
+
+      <div style="text-align:right; margin-top:1.5rem; display:flex; justify-content:flex-end; gap:.6rem;">
+        <button class="btn btn-ghost btn-sm" id="export-btn">⬇ Export Report (JSON)</button>
+        <button class="btn btn-ghost btn-sm" id="refresh-btn">↻ Re-check</button>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  const storedUserCheck = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  if (storedUserCheck?.role !== 'super_admin') {
+    document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center; padding:2rem;"><div><h2>Super Admin access required</h2></div></div>';
+    throw new Error('Access denied — not a Super Admin');
+  }
+  renderShell({ role:'admin', active:'/admin/production-readiness.html', eyebrow:'Enterprise Operations', title:'Production Readiness' });
+
+  const STATUS_META = {
+    pass: { icon: '✅', badge: 'badge-success' },
+    warn: { icon: '⚠️', badge: 'badge-warn' },
+    fail: { icon: '🔴', badge: 'badge-danger' },
+  };
+  const OVERALL_META = {
+    ready: { icon: '✅', text: 'Ready for Production', color: 'var(--success)' },
+    ready_with_caveats: { icon: '⚠️', text: 'Ready With Caveats — Review Warnings', color: 'var(--warn)' },
+    not_ready: { icon: '🔴', text: 'Not Ready — Critical Items Failing', color: 'var(--danger)' },
+  };
+
+  let lastReport = null;
+
+  async function loadReadiness() {
+    try {
+      const data = await apiRequest('/api/superadmin/production-readiness');
+      lastReport = data;
+
+      const meta = OVERALL_META[data.overall];
+      document.getElementById('overall-icon').textContent = meta.icon;
+      document.getElementById('overall-text').textContent = meta.text;
+      document.getElementById('overall-text').style.color = meta.color;
+      document.getElementById('overall-sub').textContent = `${data.fail_count} failing · ${data.warn_count} warnings · checked ${new Date(data.generated_at).toLocaleString()}`;
+
+      const byCategory = {};
+      data.checklist.forEach(item => { (byCategory[item.category] = byCategory[item.category] || []).push(item); });
+
+      document.getElementById('checklist-container').innerHTML = Object.entries(byCategory).map(([category, items]) => `
+        <div class="card" style="margin-bottom:1rem;">
+          <div class="card-title">${category}</div>
+          ${items.map(item => `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:.5rem 0; border-bottom:1px solid var(--border);">
+              <span style="font-size:.88rem;">${item.item}</span>
+              <span style="text-align:right;">
+                <span class="badge ${STATUS_META[item.status].badge}">${STATUS_META[item.status].icon} ${item.status.toUpperCase()}</span>
+                ${item.detail ? `<div class="muted-note" style="font-size:.72rem; margin-top:.2rem;">${item.detail}</div>` : ''}
+              </span>
+            </div>`).join('')}
+        </div>`).join('');
+    } catch (e) {
+      document.getElementById('overall-text').textContent = 'Could not load: ' + e.message;
+    }
+  }
+
+  document.getElementById('refresh-btn').addEventListener('click', loadReadiness);
+  document.getElementById('export-btn').addEventListener('click', () => {
+    if (!lastReport) return;
+    const blob = new Blob([JSON.stringify(lastReport, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `production-readiness-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  });
+
+  loadReadiness();
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Communications Health — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+
+      <p class="muted-note" style="margin-bottom:1.5rem;">Real connectivity checks and recent send failures — never shows secret values, only configuration status.</p>
+
+      <div class="grid grid-2" style="gap:1rem; margin-bottom:1.5rem;">
+        <div class="card">
+          <div class="card-title">Twilio (SMS / WhatsApp / Voice)</div>
+          <div id="twilio-status"><p class="muted-note">Loading…</p></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Email (Resend)</div>
+          <div id="email-status"><p class="muted-note">Loading…</p></div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="gap:1.5rem; align-items:flex-start; margin-bottom:1.5rem;">
+        <div class="card">
+          <div class="card-title">Channel Volume (24h)</div>
+          <div id="channel-volume-list"><p class="muted-note">Loading…</p></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Recent Send Failures (24h)</div>
+          <div id="failures-list" style="max-height:280px; overflow-y:auto;"><p class="muted-note">Loading…</p></div>
+        </div>
+      </div>
+
+      <div style="text-align:right;">
+        <button class="btn btn-ghost btn-sm" id="refresh-btn">↻ Refresh</button>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  const storedUserCheck = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  if (storedUserCheck?.role !== 'super_admin') {
+    document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center; padding:2rem;"><div><h2>Super Admin access required</h2></div></div>';
+    throw new Error('Access denied — not a Super Admin');
+  }
+  renderShell({ role:'admin', active:'/admin/communications-health.html', eyebrow:'Enterprise Operations', title:'Communications Health' });
+
+  const CHANNEL_LABEL = { whatsapp: 'WhatsApp', phone_call: 'Phone Call', sms: 'SMS', web_link: 'Web', app: 'Offline App', api: 'Public API' };
+
+  function statusBadge(ok, unknownText) {
+    if (ok === null) return `<span class="badge badge-neutral">${unknownText || '– Not checked'}</span>`;
+    return ok ? '<span class="badge badge-success">✓ OK</span>' : '<span class="badge badge-danger">✗ Failing</span>';
+  }
+
+  async function loadCommsHealth() {
+    try {
+      const data = await apiRequest('/api/superadmin/communications-health');
+
+      document.getElementById('twilio-status').innerHTML = `
+        <div style="display:flex; justify-content:space-between; padding:.4rem 0; border-bottom:1px solid var(--border); font-size:.85rem;"><span>Configured</span>${statusBadge(data.twilio.configured)}</div>
+        <div style="display:flex; justify-content:space-between; padding:.4rem 0; border-bottom:1px solid var(--border); font-size:.85rem;"><span>Credentials Valid (live check)</span>${statusBadge(data.twilio.credentials_valid, 'Not configured')}</div>
+        <div style="display:flex; justify-content:space-between; padding:.4rem 0; font-size:.85rem;"><span>Failures (24h)</span><b style="color:${data.twilio.failures_24h > 0 ? 'var(--danger)' : 'inherit'};">${data.twilio.failures_24h}</b></div>`;
+
+      document.getElementById('email-status').innerHTML = `
+        <div style="display:flex; justify-content:space-between; padding:.4rem 0; border-bottom:1px solid var(--border); font-size:.85rem;"><span>Configured</span>${statusBadge(data.email.configured)}</div>
+        <div style="display:flex; justify-content:space-between; padding:.4rem 0; font-size:.85rem;"><span>Failures (24h)</span><b style="color:${data.email.failures_24h > 0 ? 'var(--danger)' : 'inherit'};">${data.email.failures_24h}</b></div>`;
+
+      document.getElementById('channel-volume-list').innerHTML = data.channel_volume_24h.length
+        ? data.channel_volume_24h.map(c => `<div style="display:flex; justify-content:space-between; padding:.4rem 0; border-bottom:1px solid var(--border); font-size:.85rem;"><span>${CHANNEL_LABEL[c.channel] || c.channel}</span><b>${c.n}</b></div>`).join('')
+        : '<p class="muted-note">No responses in the last 24 hours.</p>';
+
+      document.getElementById('failures-list').innerHTML = data.recent_failures.length
+        ? data.recent_failures.map(f => `<div style="padding:.4rem 0; border-bottom:1px solid var(--border); font-size:.8rem;">${f.action === 'twilio_send_failed' ? '📱' : '✉️'} ${f.action.replace(/_/g, ' ')} — ${f.resource_type} <span class="muted-note">${new Date(f.created_at + 'Z').toLocaleString()}</span></div>`).join('')
+        : '<p class="muted-note">No send failures in the last 24 hours. 🎉</p>';
+    } catch (e) {
+      document.getElementById('twilio-status').innerHTML = `<p class="muted-note" style="color:var(--danger);">Could not load: ${e.message}</p>`;
+    }
+  }
+
+  document.getElementById('refresh-btn').addEventListener('click', loadCommsHealth);
+  loadCommsHealth();
+</script>
+</body>
+</html>

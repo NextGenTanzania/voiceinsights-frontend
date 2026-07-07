@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Center — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <p class="muted-note" style="margin-bottom:1.5rem;">Each service's health is measured from real coverage over the last 48 hours — the percentage of eligible responses that actually got that stage's output — not a static status label.</p>
+      <div id="ai-services-grid" class="grid grid-2" style="gap:1rem;">
+        <p class="muted-note" style="padding:1.5rem;">Loading…</p>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="ai-refresh-btn" style="margin-top:1.5rem;">↻ Refresh</button>
+
+      <div class="section-head" style="margin-top:2rem;">
+        <h2 style="font-size:1.05rem;">Dead-Letter Queue — AI Enrichment</h2>
+        <a href="/admin/ai-retry-health.html" class="btn btn-ghost btn-sm">Full Retry Health Dashboard →</a>
+      </div>
+      <p class="muted-note" style="margin-top:-.5rem; margin-bottom:1rem;">Answers whose sentiment/fraud analysis permanently failed after 5 attempts. The respondent's answer itself is safe and unaffected — only enrichment is missing.</p>
+      <div id="dead-letter-list" style="margin-top:1rem;">
+        <p class="muted-note" style="padding:1.5rem;">Loading…</p>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  const storedUserCheck = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  if (storedUserCheck?.role !== 'super_admin') {
+    document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center; padding:2rem;"><div><h2>Super Admin access required</h2></div></div>';
+    throw new Error('Access denied — not a Super Admin');
+  }
+  renderShell({ role:'admin', active:'/admin/ai-center.html', eyebrow:'Platform', title:'AI Center' });
+
+  const COLOR_MAP = { success: 'var(--success)', warn: 'var(--warn)', danger: 'var(--danger)', neutral: 'var(--text-dim)' };
+
+  async function loadHealth() {
+    const grid = document.getElementById('ai-services-grid');
+    try {
+      const { services } = await apiRequest('/api/superadmin/ai-health');
+      grid.innerHTML = services.map(s => `
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="card-title">${s.name}</div>
+            <span class="badge badge-${s.color}">● ${s.label}</span>
+          </div>
+          <div class="stat-value" style="margin-top:.5rem;">${s.coverage_pct != null ? s.coverage_pct + '%' : '—'}</div>
+          <div class="progress" style="margin-top:.5rem;"><span style="width:${s.coverage_pct || 0}%; background:${COLOR_MAP[s.color]};"></span></div>
+          <p class="muted-note" style="margin-top:.6rem; font-size:.78rem;">${s.detail}</p>
+        </div>`).join('');
+    } catch (e) {
+      grid.innerHTML = `<p class="muted-note" style="color:var(--danger); padding:1.5rem;">Could not load: ${e.message}</p>`;
+    }
+  }
+  loadHealth();
+  document.getElementById('ai-refresh-btn').addEventListener('click', loadHealth);
+
+  async function loadDeadLetter() {
+    const listEl = document.getElementById('dead-letter-list');
+    try {
+      const { dead_letter_items } = await apiRequest('/api/superadmin/ai-retry-dead-letter');
+      listEl.innerHTML = dead_letter_items.length
+        ? dead_letter_items.map(item => `
+            <div class="card" style="margin-bottom:.8rem;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:.6rem;">
+                <div>
+                  <div style="font-weight:600;">${item.organization_name} — ${item.campaign_name}</div>
+                  <div class="muted-note" style="font-size:.78rem;">${item.phone_number || 'Unknown respondent'} · Failed after ${item.attempts} attempts · Last: ${new Date(item.updated_at + 'Z').toLocaleString()}</div>
+                </div>
+                <button class="btn btn-primary btn-sm dl-retry-btn" data-id="${item.id}">↻ Retry Now</button>
+              </div>
+              <div style="margin-top:.6rem; font-size:.82rem; color:var(--danger);">Last error: ${item.last_error || 'Unknown'}</div>
+              ${item.attempt_history && item.attempt_history.length ? `
+                <details style="margin-top:.6rem;">
+                  <summary class="muted-note" style="font-size:.78rem; cursor:pointer;">Full attempt history (${item.attempt_history.length})</summary>
+                  <div style="margin-top:.5rem; font-size:.78rem;">
+                    ${item.attempt_history.map(a => `<div style="padding:.3rem 0; border-bottom:1px solid var(--border);">#${a.attempt_number} — ${a.outcome} — ${new Date(a.attempted_at + 'Z').toLocaleString()}${a.error ? ' — ' + a.error : ''}</div>`).join('')}
+                  </div>
+                </details>` : ''}
+            </div>`).join('')
+        : '<p class="muted-note" style="padding:1.5rem;">No items in the dead-letter queue. 🎉</p>';
+
+      document.querySelectorAll('.dl-retry-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          btn.disabled = true; btn.textContent = 'Retrying…';
+          try {
+            const result = await apiRequest(`/api/superadmin/ai-retry-dead-letter/${btn.dataset.id}/retry`, { method: 'POST' });
+            showToast(result.message, 'success');
+            loadDeadLetter();
+          } catch (e) {
+            showToast('Could not retry: ' + e.message, 'error');
+            btn.disabled = false; btn.textContent = '↻ Retry Now';
+          }
+        });
+      });
+    } catch (e) {
+      listEl.innerHTML = `<p class="muted-note" style="color:var(--danger); padding:1.5rem;">Could not load: ${e.message}</p>`;
+    }
+  }
+  loadDeadLetter();
+</script>
+</body>
+</html>

@@ -44,3 +44,33 @@ self.addEventListener('fetch', (event) => {
   // no interception. If there's no network, they simply fail and the app
   // catches that and stores the data locally instead.
 });
+
+// ---------- PUSH NOTIFICATIONS (Task 6.2) ----------
+// Additive — does not touch the offline-caching logic above at all.
+self.addEventListener('push', (event) => {
+  let payload = { title: 'VoiceInsights Africa', body: 'You have a new notification.', link: '/' };
+  try {
+    if (event.data) {
+      const data = event.data.json();
+      payload = {
+        title: data.notification?.title || payload.title,
+        body: data.notification?.body || payload.body,
+        link: data.data?.link || '/',
+      };
+    }
+  } catch (e) { /* fall back to the default payload above */ }
+
+  event.waitUntil(
+    self.registration.showNotification(payload.title, {
+      body: payload.body,
+      icon: '/assets/img/icon-192.png',
+      data: { link: payload.link },
+    })
+  );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const link = event.notification.data?.link || '/';
+  event.waitUntil(clients.openWindow(link));
+});

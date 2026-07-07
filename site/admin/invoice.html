@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice Generator — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  @page { margin: 1.5cm; size: A4; }
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    #sidebar-mount, #topbar-mount, .toolbar, .edit-only { display: none !important; }
+    html, body, .main, .content { margin:0 !important; padding:0 !important; background:#fff !important; }
+    .inv-page { box-shadow:none !important; border-radius:0 !important; }
+    .inv-page * { color:#111 !important; }
+  }
+  .inv-page { background:#fff; color:#1E2620; border-radius:16px; padding:3rem; max-width:800px; margin:0 auto; box-shadow: 0 10px 40px rgba(0,0,0,.3); }
+  .inv-table { width:100%; border-collapse:collapse; margin:1rem 0; }
+  .inv-table th, .inv-table td { border:1px solid #ddd; padding:.6rem .8rem; text-align:left; font-size:.88rem; }
+  .inv-table th { background:#f7f5f0; }
+  .inv-table input { width:100%; border:none; font-size:.88rem; font-family:inherit; background:transparent; }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="toolbar" style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
+        <div class="muted-note" id="inv-status">Loading…</div>
+        <div style="display:flex; gap:.6rem;">
+          <button class="btn btn-ghost btn-sm edit-only" id="add-line-btn">+ Add Line Item</button>
+          <button class="btn btn-primary btn-sm" onclick="window.print()">🖨 Download as PDF</button>
+        </div>
+      </div>
+
+      <div class="inv-page" id="inv-page" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid #E4A23A; padding-bottom:1rem; margin-bottom:1.5rem;">
+          <div style="display:flex; align-items:center; gap:.6rem;">
+            <img src="/assets/img/logo-icon.png" style="height:34px;" alt="">
+            <span style="font-weight:700; font-size:1.15rem;">VoiceInsights Africa</span>
+          </div>
+          <div style="text-align:right; font-size:.8rem; color:#555;">
+            <div>Invoice #<span id="inv-number">—</span></div>
+            <div id="inv-date">—</div>
+          </div>
+        </div>
+
+        <h1 style="font-size:1.6rem; margin-bottom:.2rem;">Invoice</h1>
+        <p style="color:#555; margin-bottom:1.5rem;">Billed to <b id="inv-org">—</b></p>
+
+        <table class="inv-table">
+          <thead><tr><th>Description</th><th style="width:120px;">Amount (USD)</th></tr></thead>
+          <tbody id="inv-lines"></tbody>
+          <tfoot><tr><td style="text-align:right; font-weight:700;">Total</td><td style="font-weight:700;" id="inv-total">$0</td></tr></tfoot>
+        </table>
+
+        <div class="edit-only" style="margin-top:1rem;">
+          <label class="muted-note" style="font-size:.8rem;">Due Date</label>
+          <input type="date" id="inv-due-date">
+        </div>
+        <p style="font-size:.85rem; margin-top:1.5rem;">Payment due within 30 days via bank transfer. Contact <a href="mailto:partnerships@voiceinsightsafrica.com">partnerships@voiceinsightsafrica.com</a> for banking details.</p>
+
+        <div style="border-top:1px solid #ddd; margin-top:2rem; padding-top:1rem; text-align:center; font-size:.78rem; color:#888;">
+          VoiceInsights Africa Ltd · Ali Hassan Mwinyi Road, Kisutu, 3rd Floor, Haidary Plaza, Dar es Salaam, Tanzania
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  const storedUserCheck = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  if (storedUserCheck?.role !== 'super_admin') {
+    document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center; padding:2rem;"><div><h2>Super Admin access required</h2></div></div>';
+    throw new Error('Access denied — not a Super Admin');
+  }
+  renderShell({ role:'admin', active:'/admin/organizations.html', eyebrow:'Billing', title:'Invoice Generator' });
+
+  const orgId = new URLSearchParams(window.location.search).get('org_id');
+  let lineItems = [{ desc: 'VoiceInsights Africa — Subscription (1 month)', amount: 0 }];
+
+  function renderLines() {
+    document.getElementById('inv-lines').innerHTML = lineItems.map((li, i) => `
+      <tr>
+        <td><input value="${li.desc}" data-i="${i}" data-field="desc" class="line-input"></td>
+        <td><input type="number" value="${li.amount}" data-i="${i}" data-field="amount" class="line-input"></td>
+      </tr>`).join('');
+    document.querySelectorAll('.line-input').forEach(inp => {
+      inp.addEventListener('input', (e) => {
+        lineItems[e.target.dataset.i][e.target.dataset.field] = e.target.dataset.field === 'amount' ? parseFloat(e.target.value) || 0 : e.target.value;
+        updateTotal();
+      });
+    });
+    updateTotal();
+  }
+  function updateTotal() {
+    const total = lineItems.reduce((s, li) => s + (li.amount || 0), 0);
+    document.getElementById('inv-total').textContent = '$' + total.toLocaleString();
+  }
+  document.getElementById('add-line-btn').addEventListener('click', () => {
+    lineItems.push({ desc: '', amount: 0 });
+    renderLines();
+  });
+
+  if (!orgId) {
+    document.getElementById('inv-status').textContent = 'No organization specified.';
+  } else {
+    (async () => {
+      try {
+        const { organization } = await apiRequest(`/api/organizations/me?org_id=${orgId}`);
+        document.getElementById('inv-org').textContent = organization.name;
+        document.getElementById('inv-number').textContent = 'VIA-' + orgId.slice(-6).toUpperCase();
+        document.getElementById('inv-date').textContent = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+        renderLines();
+        document.getElementById('inv-page').style.display = 'block';
+        document.getElementById('inv-status').textContent = 'Ready — edit line items, then download as PDF.';
+      } catch (e) {
+        document.getElementById('inv-status').textContent = 'Could not load organization: ' + e.message;
+      }
+    })();
+  }
+</script>
+</body>
+</html>

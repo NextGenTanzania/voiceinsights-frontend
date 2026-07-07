@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Dashboard — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="grid grid-2" style="margin-bottom:1.5rem; gap:1rem;">
+        <div class="card" style="text-align:center;"><div class="card-title">Active Users</div><div class="stat-value" id="sd-total-users">–</div></div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title">2FA Adoption</div>
+          <div class="stat-value" id="sd-2fa-pct">–</div>
+          <div class="progress" style="margin-top:.5rem;"><span id="sd-2fa-bar" style="width:0%;"></span></div>
+          <div class="muted-note" style="font-size:.76rem; margin-top:.4rem;" id="sd-2fa-detail">—</div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="gap:1.5rem; align-items:flex-start;">
+        <div class="card">
+          <div class="card-title">Recent Logins</div>
+          <div id="sd-logins"><p class="muted-note" style="padding:1rem 0;">Loading…</p></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Security Events</div>
+          <div id="sd-events"><p class="muted-note" style="padding:1rem 0;">Loading…</p></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:1.5rem;">
+        <div class="card-title">Recommendations</div>
+        <div id="sd-recommendations"></div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/settings.html', eyebrow:'Trust & Safety', title:'Security Dashboard' });
+
+  const EVENT_LABEL = { '2fa_enabled': '2FA enabled', '2fa_disabled': '2FA disabled', password_reset: 'Password reset', user_deactivated: 'User deactivated' };
+
+  (async () => {
+    try {
+      const qs = new URLSearchParams(window.location.search).get('org_id');
+      const data = await apiRequest(`/api/security-dashboard${qs ? '?org_id=' + qs : ''}`);
+      document.getElementById('sd-total-users').textContent = data.total_users;
+      document.getElementById('sd-2fa-pct').textContent = data.twofa_adoption_pct + '%';
+      document.getElementById('sd-2fa-bar').style.width = data.twofa_adoption_pct + '%';
+      document.getElementById('sd-2fa-detail').textContent = `${data.users_with_2fa} of ${data.total_users} users`;
+
+      document.getElementById('sd-logins').innerHTML = data.recent_logins.length
+        ? data.recent_logins.map(l => `<div style="padding:.5rem 0; border-bottom:1px solid var(--border); font-size:.85rem;"><b>${l.full_name}</b><div class="muted-note" style="font-size:.72rem;">${new Date(l.created_at + 'Z').toLocaleString()} · ${l.ip_address || 'unknown IP'}</div></div>`).join('')
+        : '<p class="muted-note" style="padding:1rem 0;">No recent logins recorded.</p>';
+
+      document.getElementById('sd-events').innerHTML = data.security_events.length
+        ? data.security_events.map(e => `<div style="padding:.5rem 0; border-bottom:1px solid var(--border); font-size:.85rem;">${EVENT_LABEL[e.action] || e.action} — <b>${e.full_name || 'System'}</b><div class="muted-note" style="font-size:.72rem;">${new Date(e.created_at + 'Z').toLocaleString()}</div></div>`).join('')
+        : '<p class="muted-note" style="padding:1rem 0;">No security events recorded.</p>';
+
+      const recs = [];
+      if (data.twofa_adoption_pct < 100) recs.push(`${data.total_users - data.users_with_2fa} user(s) do not have 2FA enabled — encourage everyone to enable it in Settings.`);
+      if (!recs.length) recs.push('Everything looks good — all active users have 2FA enabled.');
+      document.getElementById('sd-recommendations').innerHTML = recs.map(r => `<p style="font-size:.85rem; margin-bottom:.4rem;">⚠️ ${r}</p>`).join('');
+    } catch (e) {
+      document.getElementById('sd-logins').innerHTML = `<p class="muted-note" style="color:var(--danger);">Could not load: ${e.message}</p>`;
+    }
+  })();
+</script>
+</body>
+</html>

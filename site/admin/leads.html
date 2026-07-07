@@ -23,7 +23,7 @@
   <main class="main">
     <div id="topbar-mount"></div>
     <div class="content">
-      <p class="muted-note" style="margin-bottom:1rem;">Every "Request Demo" and "Contact Sales" submission lands here automatically. Move a lead across stages as you work it — nothing lives only in one person's head.</p>
+      <p class="muted-note" style="margin-bottom:1rem;">Every "Request Demo" and "Contact Sales" submission becomes a Business Inquiry here automatically — AI-scored, and ready to become a real Organization with one click when won.</p>
       <div class="pipeline-board" id="pipeline-board">
         <div class="muted-note" style="padding:1.5rem;">Loading pipeline…</div>
       </div>
@@ -40,7 +40,7 @@
     document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center; padding:2rem;"><div><h2>Super Admin access required</h2><p class="muted-note">You do not have permission to view this page.</p><a href="/app/dashboard.html" class="btn btn-primary" style="margin-top:1rem;">Go to Dashboard</a></div></div>';
     throw new Error('Access denied — not a Super Admin');
   }
-  renderShell({ role:'admin', active:'/admin/leads.html', eyebrow:'Sales Pipeline', title:'Leads & Proposals' });
+  renderShell({ role:'admin', active:'/admin/leads.html', eyebrow:'Sales Pipeline', title:'Business Inquiries' });
 
   const STAGES = [
     { key: 'new', label: 'New' },
@@ -53,6 +53,8 @@
 
   let allLeads = [];
 
+  const PRIORITY_BADGE = { high: 'badge-danger', medium: 'badge-warn', low: 'badge-neutral' };
+
   function render() {
     const board = document.getElementById('pipeline-board');
     board.innerHTML = STAGES.map(stage => {
@@ -61,33 +63,14 @@
         <div class="pipeline-col">
           <div class="pipeline-col-title"><span>${stage.label}</span><span>${stageLeads.length}</span></div>
           ${stageLeads.map(l => `
-            <div class="lead-card">
+            <a href="/admin/lead-profile.html?lead_id=${l.id}" class="lead-card" style="display:block; text-decoration:none; color:inherit;">
               <h4>${l.full_name}</h4>
               <div class="muted-note">${l.organization || 'No org given'}</div>
               <div class="muted-note">${l.work_email}</div>
-              <div class="muted-note">${l.country || ''} ${l.organization_type ? '· ' + l.organization_type : ''}</div>
-              <a href="/admin/proposal.html?lead_id=${l.id}" class="btn btn-ghost btn-sm" style="width:100%; justify-content:center; margin-top:.5rem; font-size:.72rem;">📄 Generate Proposal</a>
-              <select class="stage-select" data-lead-id="${l.id}">
-                ${STAGES.map(s => `<option value="${s.key}" ${s.key === stage.key ? 'selected' : ''}>${s.label}</option>`).join('')}
-              </select>
-            </div>`).join('') || '<p class="muted-note" style="font-size:.72rem;">Empty</p>'}
+              ${l.score != null ? `<div style="margin-top:.4rem; display:flex; gap:.3rem; align-items:center;"><span class="badge ${PRIORITY_BADGE[l.priority] || 'badge-neutral'}" style="font-size:.62rem;">${l.score}%</span>${l.estimated_deal_usd ? `<span class="muted-note" style="font-size:.68rem;">$${l.estimated_deal_usd.toLocaleString()}</span>` : ''}</div>` : '<div class="muted-note" style="font-size:.68rem; margin-top:.4rem;">Not scored yet</div>'}
+            </a>`).join('') || '<p class="muted-note" style="font-size:.72rem;">Empty</p>'}
         </div>`;
     }).join('');
-
-    document.querySelectorAll('.stage-select').forEach(sel => {
-      sel.addEventListener('change', async (e) => {
-        const leadId = e.target.dataset.leadId;
-        const newStage = e.target.value;
-        try {
-          await apiRequest(`/api/leads/${leadId}/stage`, { method: 'PUT', body: { stage: newStage } });
-          const lead = allLeads.find(l => l.id === leadId);
-          if (lead) lead.stage = newStage;
-          render();
-        } catch (err) {
-          showToast('Could not update stage: ' + err.message, 'error');
-        }
-      });
-    });
   }
 
   (async () => {

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Communications — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <p class="muted-note" style="margin-bottom:1.5rem;">Every WhatsApp and SMS survey conversation in one inbox — real sessions, not a marketing message center.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Channel</th><th>Respondent</th><th>Project</th><th>Progress</th><th>Status</th><th>Last Activity</th><th></th></tr></thead>
+          <tbody id="comm-tbody"><tr><td colspan="7" class="muted-note" style="padding:1.5rem;">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/admin/communications.html', eyebrow:'Inbox', title:'Communications' });
+
+  const CHANNEL_ICON = { whatsapp: '💬 WhatsApp', sms: '📱 SMS' };
+  const STATUS_BADGE = { in_progress: 'badge-warn', completed: 'badge-success', withdrawn: 'badge-danger' };
+
+  (async () => {
+    const tbody = document.getElementById('comm-tbody');
+    try {
+      const qs = new URLSearchParams(window.location.search).get('org_id');
+      const { conversations } = await apiRequest(`/api/communications${qs ? '?org_id=' + qs : ''}`);
+      tbody.innerHTML = conversations.length
+        ? conversations.map(c => `
+            <tr>
+              <td>${CHANNEL_ICON[c.channel] || c.channel}</td>
+              <td>${c.respondent_name || c.session_key}</td>
+              <td>${c.campaign_name}</td>
+              <td>${c.answers_count} answered</td>
+              <td><span class="badge ${STATUS_BADGE[c.status] || 'badge-neutral'}">${c.status.replace('_', ' ')}</span></td>
+              <td class="muted-note">${new Date(c.updated_at + 'Z').toLocaleString()}</td>
+              <td><a class="btn btn-ghost btn-sm" href="/app/interviews.html">View →</a></td>
+            </tr>`).join('')
+        : '<tr><td colspan="7" class="muted-note" style="padding:1.5rem;">No WhatsApp or SMS conversations yet.</td></tr>';
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="7" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+    }
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Viewer — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+  @media print { .no-print { display: none !important; } body { background: #fff; } }
+  .r-section { margin-bottom: 2rem; padding: 1.5rem; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); }
+  .r-kpi { display: inline-block; text-align: center; padding: 1rem 1.5rem; margin: 0 .5rem .5rem 0; background: var(--bg); border-radius: 10px; min-width: 140px; }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content" id="report-content">
+
+      <div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:.6rem;">
+        <div class="muted-note" id="report-status-line">Loading…</div>
+        <div style="display:flex; gap:.5rem; flex-wrap:wrap; align-items:center;">
+          <select id="style-select" style="font-size:.8rem;"><option value="">Default Style</option></select>
+          <button class="btn btn-primary btn-sm" id="export-pdf-btn">🖨 PDF</button>
+          <button class="btn btn-ghost btn-sm" id="export-pptx-btn">📊 PowerPoint</button>
+          <button class="btn btn-ghost btn-sm" id="export-word-btn">📄 Word</button>
+          <button class="btn btn-ghost btn-sm" id="export-excel-btn">📈 Excel</button>
+          <button class="btn btn-ghost btn-sm" id="export-csv-btn">CSV</button>
+          <button class="btn btn-ghost btn-sm" id="export-json-btn">JSON</button>
+        </div>
+      </div>
+
+      <div id="report-body"><p class="muted-note">Loading report…</p></div>
+
+      <div class="r-section no-print" style="margin-top:1.5rem;">
+        <h2>Drill Down</h2>
+        <p class="muted-note" style="font-size:.8rem;">Filter this report's findings by region or demographic without regenerating the whole report.</p>
+        <div style="display:flex; gap:.6rem; flex-wrap:wrap; align-items:flex-end;">
+          <div class="field"><label>Region</label><input id="filter-region" placeholder="e.g. Dodoma"></div>
+          <div class="field"><label>Gender</label><input id="filter-gender" placeholder="e.g. Female"></div>
+          <button class="btn btn-primary btn-sm" id="drilldown-apply-btn">Apply Filter</button>
+          <button class="btn btn-ghost btn-sm" id="drilldown-clear-btn">Clear</button>
+        </div>
+        <div id="drilldown-result" style="margin-top:1rem;"></div>
+      </div>
+
+      <div class="r-section no-print" style="margin-top:1.5rem;">
+        <h2>Ask This Report</h2>
+        <p class="muted-note" style="font-size:.8rem;">Ask a question about this report specifically — the AI answers only from this report's own data.</p>
+        <div id="assistant-log" style="margin:1rem 0; max-height:300px; overflow-y:auto;"></div>
+        <div style="display:flex; gap:.5rem;">
+          <input id="assistant-input" placeholder="e.g. What are the biggest risks?" style="flex:1;">
+          <button class="btn btn-primary btn-sm" id="assistant-ask-btn">Ask</button>
+        </div>
+        <div style="display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.6rem;">
+          <button class="btn btn-ghost btn-sm suggested-q" style="font-size:.72rem;">Summarize this report</button>
+          <button class="btn btn-ghost btn-sm suggested-q" style="font-size:.72rem;">What are the biggest risks?</button>
+          <button class="btn btn-ghost btn-sm suggested-q" style="font-size:.72rem;">What are the gender gaps?</button>
+          <button class="btn btn-ghost btn-sm suggested-q" style="font-size:.72rem;">Compare regions</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'admin', active:'', eyebrow:'Reporting Platform', title:'Report Viewer' });
+
+  const reportId = new URLSearchParams(window.location.search).get('report_id');
+  let reportData = null;
+  let currentNarrative = null; // whichever narrative (default or styled) is currently displayed
+
+  async function loadStyles() {
+    try {
+      const { styles } = await apiRequest('/api/report-styles');
+      const select = document.getElementById('style-select');
+      select.innerHTML = '<option value="">Default Style</option>' + styles.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+      select.addEventListener('change', async () => {
+        const styleId = select.value;
+        if (!styleId) {
+          renderBody(reportData.document_model, reportData.document_model.narrative || {});
+          return;
+        }
+        const body = document.getElementById('report-body');
+        const previousHtml = body.innerHTML;
+        body.innerHTML = '<p class="muted-note">Rewriting for this audience…</p>';
+        try {
+          const result = await apiRequest(`/api/reports/${reportId}/style/${styleId}`);
+          renderBody(reportData.document_model, result.narrative);
+        } catch (e) {
+          showToast('Could not apply style: ' + e.message, 'error');
+          body.innerHTML = previousHtml;
+          select.value = '';
+        }
+      });
+    } catch (e) { /* style selector is a bonus feature — a failure here shouldn't block viewing the report itself */ }
+  }
+
+  // ============================================================
+  // UNIFIED EXPORT ENGINE (Task 8.6) — every export below reads from the
+  // SAME reportData.document_model fetched once. No format re-queries the
+  // database or duplicates data-assembly logic; they only differ in how
+  // they PRESENT the identical source of truth.
+  // ============================================================
+
+  async function loadReport() {
+    if (!reportId) { document.getElementById('report-body').innerHTML = '<p class="muted-note">No report_id provided.</p>'; return; }
+    try {
+      reportData = await apiRequest(`/api/reports/${reportId}`);
+      const dm = reportData.document_model;
+      document.getElementById('report-status-line').textContent = `${dm.metadata.template_name} · v${reportData.version} · ${reportData.status} · Generated ${new Date(dm.metadata.generated_at).toLocaleString()}`;
+      renderBody(dm);
+    } catch (e) {
+      document.getElementById('report-body').innerHTML = `<p class="muted-note" style="color:var(--danger);">Could not load report: ${e.message}</p>`;
+    }
+  }
+
+  function renderBody(dm, narrativeOverride) {
+    const brand = dm.branding;
+    const narrative = narrativeOverride || dm.narrative || {};
+    document.getElementById('report-body').innerHTML = `
+      <div class="r-section" style="background:${brand.secondary_color}; color:#fff;">
+        <div style="font-size:.8rem; text-transform:uppercase; letter-spacing:1px; color:${brand.primary_color};">${brand.header_text || dm.metadata.organization_name}</div>
+        <h1 style="color:#fff; margin:.5rem 0;">${dm.metadata.template_name}</h1>
+        <p style="color:#ccc;">${dm.metadata.campaign_name || ''} · ${dm.metadata.standards.join(', ')}</p>
+      </div>
+
+      <div class="r-section">
+        <h2>At a Glance</h2>
+        <div class="r-kpi"><div style="font-size:1.6rem; font-weight:700;">${dm.kpis.total_responses}</div><div class="muted-note">Total Responses</div></div>
+        <div class="r-kpi"><div style="font-size:1.6rem; font-weight:700;">${dm.kpis.response_rate_pct ?? '—'}%</div><div class="muted-note">Response Rate</div></div>
+        <div class="r-kpi"><div style="font-size:1.6rem; font-weight:700;">${dm.kpis.regions_covered}</div><div class="muted-note">Regions Covered</div></div>
+      </div>
+
+      ${narrative.executive_summary ? `<div class="r-section"><h2>Executive Summary</h2><p>${narrative.executive_summary}</p></div>` : ''}
+      ${narrative.key_findings?.length ? `<div class="r-section"><h2>Key Findings</h2><ul>${narrative.key_findings.map(f => `<li>${f}</li>`).join('')}</ul></div>` : ''}
+      ${narrative.discussion ? `<div class="r-section"><h2>Discussion</h2><p>${narrative.discussion}</p></div>` : ''}
+      ${narrative.conclusions ? `<div class="r-section"><h2>Conclusions</h2><p>${narrative.conclusions}</p></div>` : ''}
+
+      ${dm.recommendations ? `<div class="r-section"><h2>Recommendations</h2>
+        ${dm.recommendations.immediate?.length ? `<b>Immediate</b><ul>${dm.recommendations.immediate.map(r => `<li>${r}</li>`).join('')}</ul>` : ''}
+        ${dm.recommendations.medium_term?.length ? `<b>Medium-term</b><ul>${dm.recommendations.medium_term.map(r => `<li>${r}</li>`).join('')}</ul>` : ''}
+        ${dm.recommendations.long_term?.length ? `<b>Long-term</b><ul>${dm.recommendations.long_term.map(r => `<li>${r}</li>`).join('')}</ul>` : ''}
+      </div>` : '<div class="r-section no-print"><p class="muted-note">AI narrative not yet generated for this report.</p></div>'}
+
+      <div class="r-section">
+        <h2>Demographics</h2>
+        <p><b>Gender:</b> ${dm.demographics.gender.map(g => `${g.label}: ${g.n}`).join(', ')}</p>
+        <p><b>Regions:</b> ${dm.demographics.regions.map(r => `${r.label}: ${r.n}`).join(', ')}</p>
+      </div>
+
+      <div class="r-section" style="font-size:.8rem; color:var(--text-dim); border-top:2px solid ${brand.primary_color};">
+        ${brand.footer_text || ''} ${brand.confidentiality_text ? '· ' + brand.confidentiality_text : ''}
+        ${brand.disclaimer_text ? `<p style="margin-top:.5rem;">${brand.disclaimer_text}</p>` : ''}
+      </div>
+    `;
+  }
+
+  document.getElementById('export-pdf-btn').addEventListener('click', () => window.print());
+
+  document.getElementById('export-json-btn').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify(reportData.document_model, null, 2)], { type: 'application/json' });
+    downloadBlob(blob, `report-${reportId}.json`);
+  });
+
+  document.getElementById('export-csv-btn').addEventListener('click', () => {
+    const dm = reportData.document_model;
+    const rows = ['Section,Label,Value'];
+    Object.entries(dm.annexes.statistical_tables).forEach(([section, data]) => {
+      data.forEach(row => rows.push(`${section},"${row.label}",${row.n}`));
+    });
+    const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+    downloadBlob(blob, `report-${reportId}.csv`);
+  });
+
+  document.getElementById('export-excel-btn').addEventListener('click', () => {
+    const dm = reportData.document_model;
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet([dm.kpis]), 'KPIs');
+    Object.entries(dm.annexes.statistical_tables).forEach(([section, data]) => {
+      if (data.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), section.slice(0, 31)); // sheet names capped at 31 chars (Excel limit)
+    });
+    XLSX.writeFile(wb, `report-${reportId}.xlsx`);
+  });
+
+  document.getElementById('export-word-btn').addEventListener('click', () => {
+    // Word can open well-formed HTML served with the application/msword
+    // mime type — a real, long-standing, working technique for text-based
+    // Word export without a heavy client-side DOCX-building library.
+    const dm = reportData.document_model;
+    const narrative = dm.narrative || {};
+    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+      <head><meta charset="utf-8"><title>${dm.metadata.template_name}</title></head>
+      <body style="font-family:Calibri,sans-serif;">
+        <h1>${dm.metadata.template_name}</h1>
+        <p>${dm.metadata.organization_name} — ${dm.metadata.campaign_name || ''}</p>
+        <h2>Executive Summary</h2><p>${narrative.executive_summary || 'Not yet generated.'}</p>
+        <h2>Key Findings</h2><ul>${(narrative.key_findings || []).map(f => `<li>${f}</li>`).join('')}</ul>
+        <h2>Discussion</h2><p>${narrative.discussion || ''}</p>
+        <h2>Conclusions</h2><p>${narrative.conclusions || ''}</p>
+        <h2>Demographics</h2><p>${dm.demographics.gender.map(g => `${g.label}: ${g.n}`).join(', ')}</p>
+        <p style="font-size:9pt; color:#666;">${dm.branding.disclaimer_text || ''}</p>
+      </body></html>`;
+    const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+    downloadBlob(blob, `report-${reportId}.doc`);
+  });
+
+  document.getElementById('export-pptx-btn').addEventListener('click', () => {
+    const dm = reportData.document_model;
+    const narrative = dm.narrative || {};
+    const pptx = new PptxGenJS();
+    const ACCENT = (dm.branding.primary_color || '#E4A23A').replace('#', ''), DARK = (dm.branding.secondary_color || '#1E2620').replace('#', '');
+
+    let slide = pptx.addSlide();
+    slide.background = { color: DARK };
+    slide.addText(dm.branding.header_text || dm.metadata.organization_name, { x: 0.5, y: 0.4, fontSize: 12, color: ACCENT, bold: true });
+    slide.addText(dm.metadata.template_name, { x: 0.5, y: 2.0, fontSize: 28, color: 'FFFFFF', bold: true, w: 9 });
+
+    slide = pptx.addSlide();
+    slide.addText('At a Glance', { x: 0.5, y: 0.3, fontSize: 22, bold: true });
+    slide.addText(`${dm.kpis.total_responses} responses · ${dm.kpis.response_rate_pct}% response rate · ${dm.kpis.regions_covered} regions`, { x: 0.5, y: 1.2, fontSize: 16 });
+
+    if (narrative.key_findings?.length) {
+      slide = pptx.addSlide();
+      slide.addText('Key Findings', { x: 0.5, y: 0.3, fontSize: 22, bold: true });
+      slide.addText(narrative.key_findings.map(f => ({ text: f + '\n', options: { bullet: true, fontSize: 14, breakLine: true } })), { x: 0.5, y: 1.1, w: 9 });
+    }
+    pptx.writeFile({ fileName: `report-${reportId}.pptx` });
+  });
+
+  function downloadBlob(blob, filename) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  }
+
+  loadReport();
+  loadStyles();
+
+  // ---------- Drill-Down (Task 9.3) ----------
+  document.getElementById('drilldown-apply-btn').addEventListener('click', async () => {
+    const region = document.getElementById('filter-region').value.trim();
+    const gender = document.getElementById('filter-gender').value.trim();
+    const resultEl = document.getElementById('drilldown-result');
+    resultEl.innerHTML = '<p class="muted-note">Filtering…</p>';
+    try {
+      const params = new URLSearchParams();
+      if (region) params.set('region', region);
+      if (gender) params.set('gender', gender);
+      const drilldown = await apiRequest(`/api/reports/${reportId}/drilldown?${params}`);
+      resultEl.innerHTML = `
+        <div class="r-kpi"><div style="font-size:1.4rem; font-weight:700;">${drilldown.total_responses}</div><div class="muted-note">Matching Responses</div></div>
+        <p style="margin-top:.8rem;"><b>Sentiment:</b> ${drilldown.sentiment.map(s => `${s.label}: ${s.n}`).join(', ') || 'None'}</p>
+      `;
+    } catch (e) {
+      resultEl.innerHTML = `<p class="muted-note" style="color:var(--danger);">${e.message}</p>`;
+    }
+  });
+  document.getElementById('drilldown-clear-btn').addEventListener('click', () => {
+    document.getElementById('filter-region').value = '';
+    document.getElementById('filter-gender').value = '';
+    document.getElementById('drilldown-result').innerHTML = '';
+  });
+
+  // ---------- AI Report Assistant (Task 9.2) ----------
+  async function askQuestion(question) {
+    if (!question || !question.trim()) return;
+    const log = document.getElementById('assistant-log');
+    log.innerHTML += `<div style="padding:.5rem 0; font-size:.85rem;"><b>You:</b> ${question}</div><div id="pending-answer" class="muted-note" style="padding:.5rem 0; font-size:.85rem;">Thinking…</div>`;
+    log.scrollTop = log.scrollHeight;
+    try {
+      const result = await apiRequest(`/api/reports/${reportId}/ask`, { method: 'POST', body: { question } });
+      document.getElementById('pending-answer').outerHTML = `<div style="padding:.5rem 0; font-size:.85rem; border-bottom:1px solid var(--border);"><b>Assistant:</b> ${result.answer}</div>`;
+    } catch (e) {
+      document.getElementById('pending-answer').outerHTML = `<div style="padding:.5rem 0; font-size:.85rem; color:var(--danger);">Could not answer: ${e.message}</div>`;
+    }
+    log.scrollTop = log.scrollHeight;
+  }
+
+  document.getElementById('assistant-ask-btn').addEventListener('click', () => {
+    const input = document.getElementById('assistant-input');
+    askQuestion(input.value);
+    input.value = '';
+  });
+  document.getElementById('assistant-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') document.getElementById('assistant-ask-btn').click();
+  });
+  document.querySelectorAll('.suggested-q').forEach(btn => {
+    btn.addEventListener('click', () => askQuestion(btn.textContent));
+  });
+</script>
+</body>
+</html>

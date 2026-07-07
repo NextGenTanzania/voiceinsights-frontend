@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enumerators — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <p class="muted-note" style="margin-bottom:1.5rem;">Every enumerator's assigned project and that project's response volume. Individual attribution (below) now works for responses submitted while logged into the Offline Enumerator App — older data collected before this update is not attributed to a specific person.</p>
+
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-title">🏆 This Week's Leaderboard</div>
+        <p class="muted-note" style="margin-bottom:.8rem; font-size:.8rem;">Based on responses submitted while logged in via the Offline Enumerator App — older submissions without a login session are not attributed.</p>
+        <div id="leaderboard-list"><p class="muted-note">Loading…</p></div>
+      </div>
+
+      <div id="enum-grid" class="grid grid-3" style="gap:1rem;">
+        <p class="muted-note" style="padding:1.5rem;">Loading…</p>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/admin/enumerators.html', eyebrow:'People', title:'Enumerators' });
+
+  (async () => {
+    try {
+      const qs0 = new URLSearchParams(window.location.search).get('org_id');
+      const { leaderboard } = await apiRequest(`/api/enumerators/leaderboard${qs0 ? '?org_id=' + qs0 : ''}`);
+      const medals = ['🥇', '🥈', '🥉'];
+      document.getElementById('leaderboard-list').innerHTML = leaderboard.length
+        ? leaderboard.map((l, i) => `<div style="display:flex; justify-content:space-between; padding:.5rem 0; border-bottom:1px solid var(--border); font-size:.88rem;"><span>${medals[i] || (i + 1) + '.'} ${l.full_name}</span><b>${l.response_count}</b></div>`).join('')
+        : '<p class="muted-note">No attributed responses this week yet.</p>';
+    } catch (e) {
+      document.getElementById('leaderboard-list').innerHTML = `<p class="muted-note" style="color:var(--danger);">Could not load: ${e.message}</p>`;
+    }
+  })();
+
+  (async () => {
+    const grid = document.getElementById('enum-grid');
+    try {
+      const qs = new URLSearchParams(window.location.search).get('org_id');
+      const { enumerators } = await apiRequest(`/api/enumerators${qs ? '?org_id=' + qs : ''}`);
+      grid.innerHTML = enumerators.length
+        ? enumerators.map(e => {
+            const initials = e.full_name.split(' ').map(n => n[0]).slice(0, 2).join('');
+            const lastLogin = e.last_login_at ? new Date(e.last_login_at + 'Z') : null;
+            const recentlyActive = lastLogin && (Date.now() - lastLogin.getTime()) < 24 * 60 * 60 * 1000;
+            return `
+              <div class="card" style="text-align:center;">
+                <div style="width:52px; height:52px; border-radius:50%; background:var(--accent); color:var(--accent-ink); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.1rem; margin:0 auto .7rem;">${initials}</div>
+                <div style="font-weight:600;">${e.full_name}</div>
+                <div class="muted-note" style="font-size:.78rem;">${e.email}</div>
+                <div style="margin:.6rem 0;">
+                  <span class="badge ${e.is_active ? (recentlyActive ? 'badge-success' : 'badge-neutral') : 'badge-danger'}">${e.is_active ? (recentlyActive ? '● Active today' : '○ Inactive today') : '✗ Deactivated'}</span>
+                </div>
+                <div class="muted-note" style="font-size:.78rem;">${e.region || 'No region set'}</div>
+                ${e.battery_pct != null ? `<div class="muted-note" style="font-size:.76rem; margin-top:.3rem;">🔋 ${Math.round(e.battery_pct)}%</div>` : ''}
+                <div style="border-top:1px solid var(--border); margin-top:.8rem; padding-top:.8rem; font-size:.82rem;">
+                  <div><b>${e.assigned_project || 'No project assigned'}</b></div>
+                  ${e.assigned_project ? `<div class="muted-note" style="font-size:.76rem; margin-top:.3rem;">Project total: ${e.project_total_responses} · Today: ${e.project_today_responses}</div>` : ''}
+                </div>
+              </div>`;
+          }).join('')
+        : '<p class="muted-note" style="padding:1.5rem;">No enumerators yet — invite them from Settings.</p>';
+    } catch (e) {
+      grid.innerHTML = `<p class="muted-note" style="color:var(--danger); padding:1.5rem;">Could not load: ${e.message}</p>`;
+    }
+  })();
+</script>
+</body>
+</html>

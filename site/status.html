@@ -44,6 +44,14 @@
   </div>
 
   <p class="muted-note" style="margin-top:1.5rem; font-size:.8rem;">This page checks our own live API — not a third-party monitor. A formal SLA with historical uptime tracking is available for Enterprise contracts; <a href="/contact.html" style="color:var(--accent-2);">contact us</a> for details.</p>
+
+  <div class="card" style="margin-top:1.5rem;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.6rem;">
+      <span style="font-weight:600; font-size:.9rem;">Recent History (24h)</span>
+      <span class="muted-note" id="incident-count-text" style="font-size:.78rem;"></span>
+    </div>
+    <div id="history-strip" style="display:flex; gap:2px; flex-wrap:wrap;"></div>
+  </div>
 </section>
 
 <footer class="pub-section" style="text-align:center; padding-top:0;">
@@ -80,6 +88,23 @@
   }
   checkStatus();
   setInterval(checkStatus, 30000);
+
+  async function loadHistory() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/status-history`);
+      const data = await res.json();
+      document.getElementById('incident-count-text').textContent = data.incident_count_24h > 0
+        ? `${data.incident_count_24h} degraded check(s) in the last 24 hours`
+        : 'No degraded checks in the last 24 hours';
+      document.getElementById('history-strip').innerHTML = data.history.length
+        ? data.history.map(h => `<div title="${h.service} — ${h.status} — ${new Date(h.checked_at + 'Z').toLocaleString()}${h.error_message ? ' — ' + h.error_message : ''}" style="width:8px; height:20px; border-radius:2px; background:${h.status === 'operational' ? 'var(--success)' : 'var(--danger)'};"></div>`).join('')
+        : '<p class="muted-note" style="font-size:.8rem;">No history recorded yet — checks run automatically every 5 minutes.</p>';
+    } catch (e) {
+      document.getElementById('history-strip').innerHTML = '<p class="muted-note" style="font-size:.8rem;">Could not load history.</p>';
+    }
+  }
+  loadHistory();
+  setInterval(loadHistory, 60000);
 </script>
 </body>
 </html>

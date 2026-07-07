@@ -90,11 +90,16 @@ const NAV_APP = [
   ]},
   { groupKey: 'app.nav.group.voice', group: 'Voice Data', items: [
     { href: '/app/respondents.html', icon: 'users', key: 'app.nav.respondents', label: 'Respondents' },
+    { href: '/admin/enumerators.html', icon: 'user-check', key: 'app.nav.enumerators', label: 'Enumerators' },
+    { href: '/admin/communications.html', icon: 'message-circle', key: 'app.nav.communications', label: 'Communications' },
+    { href: '/admin/communications-health.html', icon: 'radio-tower', key: 'app.nav.communications_health', label: 'Communications Health', superAdminOnly: true },
+    { href: '/admin/quality-control.html', icon: 'shield-check', key: 'app.nav.quality_control', label: 'Quality Control' },
     { href: '/app/interviews.html', icon: 'headphones', key: 'app.nav.interviews', label: 'Interviews' },
   ]},
   { groupKey: 'app.nav.group.analytics', group: 'Analytics', items: [
     { href: '/app/analytics.html', icon: 'bar-chart-3', key: 'app.nav.analytics', label: 'Analytics' },
     { href: '/app/reports.html', icon: 'file-text', key: 'app.nav.reports', label: 'Reports' },
+    { href: '/app/report-library.html', icon: 'library', key: 'app.nav.report_library', label: 'Report Library' },
     { href: '/app/compliance.html', icon: 'shield-check', key: 'app.nav.compliance', label: 'Compliance' },
   ]},
   { groupKey: 'app.nav.group.account', group: 'Account', items: [
@@ -109,11 +114,18 @@ const NAV_ADMIN = [
   ]},
   { groupKey: 'app.nav.group.operations', group: 'Operations', items: [
     { href: '/admin/dashboard.html', icon: 'layout-dashboard', key: 'app.nav.overview', label: 'Overview' },
-    { href: '/admin/leads.html', icon: 'inbox', key: 'app.nav.leads', label: 'Leads', superAdminOnly: true },
+    { href: '/admin/leads.html', icon: 'inbox', key: 'app.nav.leads', label: 'Business Inquiries', superAdminOnly: true },
     { href: '/admin/call-monitoring.html', icon: 'phone-call', key: 'app.nav.call_monitoring', label: 'Call Monitoring' },
   ]},
   { groupKey: 'app.nav.group.quality', group: 'Quality & Safety', items: [
     { href: '/admin/fraud-alerts.html', icon: 'shield-alert', key: 'app.nav.fraud_alerts', label: 'Fraud Alerts' },
+    { href: '/admin/system-health.html', icon: 'heart-pulse', key: 'app.nav.system_health', label: 'System Health', superAdminOnly: true },
+    { href: '/admin/audit-center.html', icon: 'scroll-text', key: 'app.nav.audit_center', label: 'Audit Center', superAdminOnly: true },
+    { href: '/admin/diagnostics.html', icon: 'stethoscope', key: 'app.nav.diagnostics', label: 'Diagnostics Center', superAdminOnly: true },
+    { href: '/admin/production-readiness.html', icon: 'clipboard-check', key: 'app.nav.production_readiness', label: 'Production Readiness', superAdminOnly: true },
+    { href: '/admin/ai-center.html', icon: 'cpu', key: 'app.nav.ai_center', label: 'AI Center', superAdminOnly: true },
+    { href: '/admin/vault-health.html', icon: 'shield', key: 'app.nav.vault_health', label: 'Vault Health', superAdminOnly: true },
+    { href: '/admin/ai-retry-health.html', icon: 'activity', key: 'app.nav.ai_retry_health', label: 'AI Retry Health', superAdminOnly: true },
     { href: '/admin/model-performance.html', icon: 'cpu', key: 'app.nav.model_performance', label: 'AI Model Performance' },
     { href: '/admin/audit-logs.html', icon: 'scroll-text', key: 'app.nav.audit_logs', label: 'Audit Logs' },
   ]},
@@ -147,7 +159,11 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
   if (role === 'client' && userRole === 'me_officer') {
     nav = nav.map(g => ({ ...g, items: g.items.filter(it => !RESTRICTED_FOR_ME_OFFICER.includes(it.href)) })).filter(g => g.items.length);
   } else if (role === 'client' && userRole === 'enumerator') {
-    nav = nav.map(g => ({ ...g, items: g.items.filter(it => !RESTRICTED_FOR_ENUMERATOR.includes(it.href)) })).filter(g => g.items.length);
+    // Blueprint calls for a deliberately minimal interface for Enumerators —
+    // just their work, not the full client dashboard.
+    nav = [{ group: 'Today', groupKey: 'app.nav.group_today', items: [
+      { href: '/app/my-work.html', icon: 'clipboard-check', key: 'app.nav.my_work', label: 'My Work' },
+    ] }];
   }
 
   const brandName = 'VoiceInsights Africa';
@@ -211,6 +227,10 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
           </div>
         </div>
         <div style="display:flex; align-items:center; gap:.9rem;">
+          <div style="position:relative;">
+            <button class="btn btn-ghost btn-sm" id="notif-bell-btn" title="Notifications" aria-label="Notifications" style="padding:.5em .7em; position:relative;">🔔<span id="notif-badge" style="display:none; position:absolute; top:2px; right:2px; width:8px; height:8px; border-radius:50%; background:var(--danger);"></span></button>
+            <div id="notif-dropdown" style="display:none; position:absolute; top:110%; right:0; width:320px; max-height:400px; overflow-y:auto; background:var(--surface); border:1px solid var(--border); border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.3); z-index:400; padding:.5rem;"></div>
+          </div>
           <button class="btn btn-ghost btn-sm" id="cmdk-hint-btn" title="Quick jump" aria-label="Open quick navigation search" style="padding:.5em .8em; font-size:.72rem; color:var(--text-dim);">⌘K</button>
           <button class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">${getTheme() === 'light' ? '🌙' : '☀️'}</span></button>
           <div class="lang-toggle" id="app-lang-toggle">
@@ -229,6 +249,61 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
   if (themeToggleBtn && !themeToggleBtn.dataset.bound) { themeToggleBtn.dataset.bound = '1'; themeToggleBtn.addEventListener('click', toggleTheme); }
   const cmdkHintBtn = document.getElementById('cmdk-hint-btn');
   if (cmdkHintBtn && !cmdkHintBtn.dataset.bound) { cmdkHintBtn.dataset.bound = '1'; cmdkHintBtn.addEventListener('click', () => { if (window.__openCmdK) window.__openCmdK(); }); }
+
+  const notifBellBtn = document.getElementById('notif-bell-btn');
+  if (notifBellBtn && !notifBellBtn.dataset.bound) {
+    notifBellBtn.dataset.bound = '1';
+    const dropdown = document.getElementById('notif-dropdown');
+    let lastNotifications = [];
+
+    function renderDropdown() {
+      dropdown.innerHTML = lastNotifications.length
+        ? `<div style="display:flex; justify-content:flex-end; padding:.3rem .5rem;"><button id="notif-mark-all-btn" style="background:none; border:none; color:var(--accent-2); font-size:.72rem; cursor:pointer;">Mark all read</button></div>` +
+          lastNotifications.map(n => `<a href="${n.link}" data-key="${n.key}" class="notif-item" style="display:block; padding:.6rem .5rem; border-bottom:1px solid var(--border); text-decoration:none; color:inherit; font-size:.82rem; ${n.is_read ? 'opacity:.55;' : ''}">${n.is_read ? '' : '<span style="color:var(--accent-2);">●</span> '}${n.icon} ${n.message}<div class="muted-note" style="font-size:.68rem; margin-top:.2rem;">${new Date(n.created_at).toLocaleString()}</div></a>`).join('')
+        : '<p class="muted-note" style="padding:1rem; font-size:.82rem;">No notifications right now.</p>';
+
+      document.querySelectorAll('.notif-item').forEach(el => {
+        el.addEventListener('click', () => { apiRequest(`/api/notifications/${encodeURIComponent(el.dataset.key)}/read`, { method: 'POST' }).catch(() => {}); });
+      });
+      const markAllBtn = document.getElementById('notif-mark-all-btn');
+      if (markAllBtn) {
+        markAllBtn.addEventListener('click', async (e) => {
+          e.preventDefault(); e.stopPropagation();
+          try {
+            await apiRequest('/api/notifications/mark-all-read', { method: 'POST', body: { keys: lastNotifications.map(n => n.key) } });
+            lastNotifications.forEach(n => n.is_read = true);
+            renderDropdown();
+            document.getElementById('notif-badge').style.display = 'none';
+          } catch (err) { /* silent — not critical */ }
+        });
+      }
+    }
+
+    notifBellBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.style.display === 'block';
+      dropdown.style.display = isOpen ? 'none' : 'block';
+      if (!isOpen) {
+        dropdown.innerHTML = '<p class="muted-note" style="padding:1rem; font-size:.82rem;">Loading…</p>';
+        try {
+          const qs = new URLSearchParams(window.location.search).get('org_id');
+          const { notifications } = await apiRequest(`/api/notifications${qs ? '?org_id=' + qs : ''}`);
+          lastNotifications = notifications;
+          renderDropdown();
+        } catch (err) {
+          dropdown.innerHTML = `<p class="muted-note" style="padding:1rem; font-size:.82rem; color:var(--danger);">Could not load notifications.</p>`;
+        }
+      }
+    });
+    document.addEventListener('click', () => { dropdown.style.display = 'none'; });
+    (async () => {
+      try {
+        const qs = new URLSearchParams(window.location.search).get('org_id');
+        const { unread_count } = await apiRequest(`/api/notifications${qs ? '?org_id=' + qs : ''}`);
+        if (unread_count > 0) document.getElementById('notif-badge').style.display = 'block';
+      } catch (e) { /* silent — badge just stays hidden */ }
+    })();
+  }
 
   if (window.lucide) lucide.createIcons();
 
@@ -455,3 +530,41 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
+
+// ============================================================
+// PUSH NOTIFICATIONS (Task 6.2) — registration helper.
+// ------------------------------------------------------------
+// REQUIRES: the Firebase Web SDK loaded via <script> tag on the calling
+// page, and window.__FIREBASE_CONFIG__ set to your REAL project config
+// (apiKey, projectId, messagingSenderId, appId) plus a REAL VAPID key —
+// none of these are secret (Firebase web config is meant to be public),
+// but they must be your actual project's values, which this codebase does
+// not have access to. Call this function from any page that should offer
+// push notifications (wired into Enumerator/Admin pages in Tasks 6.3/6.4).
+// ============================================================
+async function registerForPushNotifications() {
+  if (!window.firebase || !window.__FIREBASE_CONFIG__) {
+    console.warn('Push notifications: Firebase SDK or config not present on this page — skipping.');
+    return false;
+  }
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+    console.warn('Push notifications: not supported in this browser.');
+    return false;
+  }
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') return false;
+
+    if (!firebase.apps?.length) firebase.initializeApp(window.__FIREBASE_CONFIG__);
+    const messaging = firebase.messaging();
+    const registration = await navigator.serviceWorker.ready;
+    const token = await messaging.getToken({ vapidKey: window.__FIREBASE_VAPID_KEY__, serviceWorkerRegistration: registration });
+    if (!token) return false;
+
+    await apiRequest('/api/push/register', { method: 'POST', body: { token, device_type: 'web' } });
+    return true;
+  } catch (e) {
+    console.error('Push registration failed:', e.message);
+    return false;
+  }
+}

@@ -22,9 +22,10 @@
       </div>
 
       <div class="section-head"><h2 style="font-size:1.05rem;">Usage This Period</h2></div>
-      <div class="grid grid-3" style="margin-bottom:1.5rem;">
+      <div class="grid grid-4" style="margin-bottom:1.5rem;">
         <div class="card"><div class="card-title">Interviews Processed</div><div class="stat-value" id="usage-responses">–</div></div>
         <div class="card"><div class="card-title">Active Surveys</div><div class="stat-value" id="usage-surveys">–</div></div>
+        <div class="card"><div class="card-title">Voice Minutes Used</div><div class="stat-value" id="usage-voice-minutes">–</div><div class="muted-note" style="margin-top:.3rem; font-size:.72rem;">Estimated at ~90s per voice response</div></div>
         <div class="card"><div class="card-title">Storage (Audio)</div><div class="stat-value" id="usage-storage">–</div><div class="muted-note" style="margin-top:.3rem;">Estimated from recordings processed</div></div>
       </div>
 
@@ -89,6 +90,9 @@
       const stats = await apiRequest('/api/dashboard/stats');
       document.getElementById('usage-responses').textContent = stats.total_responses;
       document.getElementById('usage-surveys').textContent = stats.active_surveys;
+      const voiceChannelCount = (stats.by_channel || []).filter(c => ['whatsapp', 'phone_call', 'app'].includes(c.channel)).reduce((s, c) => s + c.n, 0);
+      const estimatedMinutes = Math.round((voiceChannelCount * 90) / 60);
+      document.getElementById('usage-voice-minutes').textContent = estimatedMinutes.toLocaleString() + ' min';
       const estimatedMB = (stats.total_responses * 0.5).toFixed(1);
       document.getElementById('usage-storage').textContent = estimatedMB + ' MB';
     } catch (e) {

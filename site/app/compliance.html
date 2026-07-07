@@ -33,6 +33,9 @@
       </div>
 
       <div id="panel-consent" style="display:none;">
+        <div style="display:flex; justify-content:flex-end; margin-bottom:.8rem;">
+          <button class="btn btn-ghost btn-sm" id="consent-export-btn">⬇ Export Consent Audit (CSV)</button>
+        </div>
         <div class="table-wrap">
           <table>
             <thead><tr><th data-i18n="comp.th_respondent">Respondent</th><th data-i18n="comp.th_consent">Consent</th><th data-i18n="comp.th_timestamp">Timestamp</th></tr></thead>
@@ -70,6 +73,27 @@
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n'), el.textContent); });
   document.getElementById('comp-loading').textContent = t('comp.loading', 'Loading…');
   document.getElementById('consent-loading').textContent = t('comp.loading', 'Loading…');
+
+  document.getElementById('consent-export-btn').addEventListener('click', async () => {
+    const btn = document.getElementById('consent-export-btn');
+    btn.disabled = true; btn.textContent = 'Preparing…';
+    try {
+      const qs = new URLSearchParams(window.location.search).get('org_id');
+      const res = await fetch(`${API_BASE_URL}/api/compliance/consent-export${qs ? '?org_id=' + qs : ''}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('vi_token')}` },
+      });
+      if (!res.ok) throw new Error('Export failed');
+      const blob = await res.blob();
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `consent-audit-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    } catch (e) {
+      showToast('Could not export: ' + e.message, 'error');
+    } finally {
+      btn.disabled = false; btn.textContent = '⬇ Export Consent Audit (CSV)';
+    }
+  });
 
   document.querySelectorAll('.ctab').forEach(tab => {
     tab.addEventListener('click', () => {

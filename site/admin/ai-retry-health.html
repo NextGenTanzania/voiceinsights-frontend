@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Retry Health — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+
+      <div id="dl-warning-banner" class="card" style="display:none; margin-bottom:1.5rem; border-color:var(--danger); text-align:center; padding:1rem;">
+        <span style="font-size:1.3rem;">⚠️</span>
+        <span style="font-weight:700;" id="dl-warning-text"></span>
+        <a href="/admin/ai-center.html" class="btn btn-ghost btn-sm" style="margin-left:.8rem;">Review Dead-Letter Queue →</a>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:.8rem;">
+        <div class="muted-note" id="arh-generated-at">Loading…</div>
+        <div style="display:flex; gap:.6rem;">
+          <button class="btn btn-ghost btn-sm" id="arh-refresh-btn">↻ Refresh</button>
+          <button class="btn btn-ghost btn-sm" id="arh-export-btn">⬇ Export Health Report</button>
+        </div>
+      </div>
+
+      <div class="grid grid-4" style="margin-bottom:1.5rem; gap:1rem;">
+        <div class="card" style="text-align:center;"><div class="card-title">Pending</div><div class="stat-value" id="arh-pending">–</div></div>
+        <div class="card" style="text-align:center;"><div class="card-title">Processing</div><div class="stat-value" id="arh-processing">–</div></div>
+        <div class="card" style="text-align:center;"><div class="card-title">Completed</div><div class="stat-value" id="arh-completed" style="color:var(--success);">–</div></div>
+        <div class="card" style="text-align:center;"><div class="card-title">Dead-Letter</div><div class="stat-value" id="arh-dead-letter" style="color:var(--danger);">–</div></div>
+      </div>
+
+      <div class="grid grid-4" style="margin-bottom:1.5rem; gap:1rem;">
+        <div class="card" style="text-align:center;"><div class="card-title">Retry Success Rate (7d)</div><div class="stat-value" id="arh-success-rate" style="font-size:1.4rem;">–</div></div>
+        <div class="card" style="text-align:center;"><div class="card-title">Avg. Retry Count</div><div class="stat-value" id="arh-avg-retries" style="font-size:1.4rem;">–</div></div>
+        <div class="card" style="text-align:center;"><div class="card-title">Completed (24h)</div><div class="stat-value" id="arh-throughput" style="font-size:1.4rem;">–</div></div>
+        <div class="card" style="text-align:center;"><div class="card-title">Oldest Pending</div><div class="stat-value" id="arh-oldest" style="font-size:1rem;">–</div></div>
+      </div>
+
+      <div class="grid grid-2" style="gap:1.5rem; margin-bottom:1.5rem;">
+        <div class="card"><div class="card-title">Last Successful Cron Run</div><div id="arh-last-success">–</div></div>
+        <div class="card"><div class="card-title">Last Failed Cron Run</div><div id="arh-last-failed">–</div></div>
+      </div>
+
+      <div class="grid grid-2" style="gap:1.5rem; align-items:flex-start; margin-bottom:1.5rem;">
+        <div class="card">
+          <div class="card-title">Retry Trend (14 days)</div>
+          <div style="position:relative; height:240px;"><canvas id="arh-trend-chart"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Failure Reason Breakdown (7d)</div>
+          <div id="arh-failure-breakdown"><p class="muted-note">Loading…</p></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  const storedUserCheck = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  if (storedUserCheck?.role !== 'super_admin') {
+    document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center; padding:2rem;"><div><h2>Super Admin access required</h2></div></div>';
+    throw new Error('Access denied — not a Super Admin');
+  }
+  renderShell({ role:'admin', active:'/admin/ai-center.html', eyebrow:'Platform Reliability', title:'AI Retry Health' });
+
+  let lastData = null;
+  let trendChartInstance = null;
+
+  async function loadHealth() {
+    try {
+      const data = await apiRequest('/api/superadmin/ai-retry-health');
+      lastData = data;
+
+      document.getElementById('arh-generated-at').textContent = 'Last checked: ' + new Date(data.generated_at).toLocaleString();
+      document.getElementById('arh-pending').textContent = data.pending_jobs;
+      document.getElementById('arh-processing').textContent = data.processing_jobs;
+      document.getElementById('arh-completed').textContent = data.completed_jobs;
+      document.getElementById('arh-dead-letter').textContent = data.dead_letter_jobs;
+      document.getElementById('arh-success-rate').textContent = data.retry_success_rate_7d != null ? data.retry_success_rate_7d + '%' : '—';
+      document.getElementById('arh-avg-retries').textContent = data.average_retry_count;
+      document.getElementById('arh-throughput').textContent = data.completed_last_24h;
+      document.getElementById('arh-oldest').textContent = data.oldest_pending_item_at ? new Date(data.oldest_pending_item_at + 'Z').toLocaleString() : 'None pending';
+
+      document.getElementById('arh-last-success').innerHTML = data.last_successful_cron
+        ? `${new Date(data.last_successful_cron.started_at + 'Z').toLocaleString()} — processed ${data.last_successful_cron.items_processed} item(s)`
+        : '<span class="muted-note">No successful run recorded yet.</span>';
+      document.getElementById('arh-last-failed').innerHTML = data.last_failed_cron
+        ? `<span style="color:var(--danger);">${new Date(data.last_failed_cron.started_at + 'Z').toLocaleString()}</span> — ${data.last_failed_cron.error}`
+        : '<span class="muted-note">No failed run recorded. 🎉</span>';
+
+      // Dead-letter warning banner — only shown when there's actually
+      // something to act on, never a permanent fixture.
+      const banner = document.getElementById('dl-warning-banner');
+      if (data.dead_letter_jobs > 0) {
+        document.getElementById('dl-warning-text').textContent = `${data.dead_letter_jobs} item(s) in the dead-letter queue need review.`;
+        banner.style.display = 'block';
+      } else {
+        banner.style.display = 'none';
+      }
+
+      renderTrendChart(data.daily_trend);
+      renderFailureBreakdown(data.failure_breakdown);
+    } catch (e) {
+      document.getElementById('arh-generated-at').textContent = 'Could not load: ' + e.message;
+    }
+  }
+
+  function renderTrendChart(trend) {
+    if (trendChartInstance) trendChartInstance.destroy();
+    if (!trend.length) return;
+    trendChartInstance = new Chart(document.getElementById('arh-trend-chart'), {
+      type: 'bar',
+      data: {
+        labels: trend.map(t => t.day),
+        datasets: [
+          { label: 'Successes', data: trend.map(t => t.successes), backgroundColor: '#4FA490' },
+          { label: 'Failures', data: trend.map(t => t.failures), backgroundColor: '#D9634A' },
+        ],
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom', labels: { color: '#9FB3AB', font: { size: 11 } } } },
+        scales: { x: { stacked: true, grid: { display: false }, ticks: { color: '#9FB3AB', font: { size: 10 } } }, y: { stacked: true, grid: { color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', precision: 0 } } },
+      },
+    });
+  }
+
+  function renderFailureBreakdown(breakdown) {
+    document.getElementById('arh-failure-breakdown').innerHTML = breakdown.length
+      ? breakdown.map(f => `<div style="display:flex; justify-content:space-between; padding:.5rem 0; border-bottom:1px solid var(--border); font-size:.82rem;"><span style="max-width:75%;">${f.error}</span><b>${f.n}</b></div>`).join('')
+      : '<p class="muted-note">No failures in the last 7 days. 🎉</p>';
+  }
+
+  document.getElementById('arh-refresh-btn').addEventListener('click', loadHealth);
+  document.getElementById('arh-export-btn').addEventListener('click', () => {
+    if (!lastData) return;
+    const blob = new Blob([JSON.stringify(lastData, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `ai-retry-health-report-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  });
+
+  loadHealth();
+  setInterval(loadHealth, 30000);
+</script>
+</body>
+</html>

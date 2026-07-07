@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Health — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+
+      <div id="overall-banner" class="card" style="text-align:center; padding:1.2rem; margin-bottom:1.5rem;">
+        <span style="font-size:1.5rem;" id="overall-icon">⏳</span>
+        <span style="font-weight:700; font-size:1.15rem;" id="overall-text">Checking platform health…</span>
+      </div>
+
+      <div class="grid grid-4" style="gap:1rem; margin-bottom:1.5rem;">
+        <div class="card" style="text-align:center;">
+          <div class="card-title">Worker</div>
+          <div id="worker-badge" class="stat-value" style="font-size:1.4rem;">–</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title">Secret Vault</div>
+          <div id="vault-badge" class="stat-value" style="font-size:1.4rem;">–</div>
+          <div class="muted-note" id="vault-detail" style="font-size:.75rem; margin-top:.3rem;"></div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title">AI Retry Queue</div>
+          <div id="queue-badge" class="stat-value" style="font-size:1.4rem;">–</div>
+          <div class="muted-note" id="queue-detail" style="font-size:.75rem; margin-top:.3rem;"></div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title">Cron Trigger</div>
+          <div id="cron-badge" class="stat-value" style="font-size:1.4rem;">–</div>
+          <div class="muted-note" id="cron-detail" style="font-size:.75rem; margin-top:.3rem;"></div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="gap:1rem; margin-bottom:1.5rem;">
+        <a href="/admin/vault-health.html" class="card" style="text-decoration:none; color:inherit;">
+          <div class="card-title">Vault Health Dashboard →</div>
+          <p class="muted-note" style="font-size:.82rem;">Rotation jobs, per-secret-type failures, full audit trail.</p>
+        </a>
+        <a href="/admin/ai-retry-health.html" class="card" style="text-decoration:none; color:inherit;">
+          <div class="card-title">AI Retry Health Dashboard →</div>
+          <p class="muted-note" style="font-size:.82rem;">Retry trend charts, failure breakdown, dead-letter queue.</p>
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Last Key Rotation Job</div>
+        <div id="rotation-detail"><p class="muted-note">Loading…</p></div>
+      </div>
+
+      <div style="text-align:right; margin-top:1rem;">
+        <button class="btn btn-ghost btn-sm" id="refresh-btn">↻ Refresh</button>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  const storedUserCheck = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  if (storedUserCheck?.role !== 'super_admin') {
+    document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center; padding:2rem;"><div><h2>Super Admin access required</h2></div></div>';
+    throw new Error('Access denied — not a Super Admin');
+  }
+  renderShell({ role:'admin', active:'/admin/system-health.html', eyebrow:'Enterprise Operations', title:'System Health' });
+
+  const STATUS_META = {
+    healthy:  { icon: '✅', color: 'var(--success)', badge: 'badge-success' },
+    degraded: { icon: '⚠️', color: 'var(--warn)', badge: 'badge-warn' },
+    critical: { icon: '🔴', color: 'var(--danger)', badge: 'badge-danger' },
+    unknown:  { icon: '❔', color: 'var(--text-dim)', badge: 'badge-neutral' },
+  };
+
+  function badge(status, label) {
+    const meta = STATUS_META[status] || STATUS_META.unknown;
+    return `<span class="badge ${meta.badge}">${meta.icon} ${label}</span>`;
+  }
+
+  async function loadHealth() {
+    try {
+      const data = await apiRequest('/api/superadmin/system-health');
+
+      document.getElementById('worker-badge').innerHTML = badge(data.worker.status, 'Healthy');
+      document.getElementById('vault-badge').innerHTML = badge(data.vault.status, data.vault.status[0].toUpperCase() + data.vault.status.slice(1));
+      document.getElementById('vault-detail').textContent = `${data.vault.active_secrets} secrets · ${data.vault.failed_decryptions_24h} failures (24h)`;
+      document.getElementById('queue-badge').innerHTML = badge(data.ai_retry_queue.status, data.ai_retry_queue.status[0].toUpperCase() + data.ai_retry_queue.status.slice(1));
+      document.getElementById('queue-detail').textContent = `${data.ai_retry_queue.pending} pending · ${data.ai_retry_queue.dead_letter} dead-letter`;
+      document.getElementById('cron-badge').innerHTML = badge(data.cron.status, data.cron.status[0].toUpperCase() + data.cron.status.slice(1));
+      document.getElementById('cron-detail').textContent = data.cron.last_run ? `Last: ${new Date(data.cron.last_run.started_at + 'Z').toLocaleString()}` : 'No runs recorded yet';
+
+      const job = data.key_rotation.last_job;
+      document.getElementById('rotation-detail').innerHTML = job
+        ? `<span class="badge ${STATUS_META[job.status === 'complete' ? 'healthy' : job.status === 'running' ? 'unknown' : 'degraded'].badge}">${job.status}</span> — ${job.rotated_count}/${job.total_secrets} secrets, started ${new Date(job.started_at + 'Z').toLocaleString()}`
+        : '<p class="muted-note">No key rotation job has run yet.</p>';
+
+      // Overall banner reflects the WORST status across all subsystems.
+      const statuses = [data.vault.status, data.ai_retry_queue.status, data.cron.status];
+      const overall = statuses.includes('critical') ? 'critical' : statuses.includes('degraded') ? 'degraded' : 'healthy';
+      const overallMeta = STATUS_META[overall];
+      document.getElementById('overall-icon').textContent = overallMeta.icon;
+      document.getElementById('overall-text').textContent = overall === 'healthy' ? 'All Systems Operational' : overall === 'degraded' ? 'Some Systems Degraded — Review Below' : 'Critical Issue Detected — Immediate Review Needed';
+      document.getElementById('overall-text').style.color = overallMeta.color;
+    } catch (e) {
+      document.getElementById('overall-text').textContent = 'Could not load system health: ' + e.message;
+    }
+  }
+
+  document.getElementById('refresh-btn').addEventListener('click', loadHealth);
+  loadHealth();
+  setInterval(loadHealth, 30000);
+</script>
+</body>
+</html>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Workspace — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <a href="/app/campaigns.html" class="muted-note" style="font-size:.82rem;">← Back to Projects</a>
+
+      <div id="proj-loading" class="muted-note" style="padding:2rem;">Loading project…</div>
+
+      <div id="proj-body" style="display:none; margin-top:1rem;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <h1 id="proj-name" style="font-size:1.5rem;">—</h1>
+            <div class="muted-note" id="proj-survey">—</div>
+          </div>
+          <span class="badge" id="proj-status-badge">—</span>
+        </div>
+
+        <div class="pill-tabs" style="margin-bottom:1.5rem;">
+          <a class="ptab active" data-tab="overview">Overview</a>
+          <a class="ptab" data-tab="timeline">Timeline</a>
+          <a class="ptab" data-tab="map">Map</a>
+          <a class="ptab" data-tab="team">Team &amp; Enumerators</a>
+          <a class="ptab" data-tab="responses">Responses</a>
+          <a class="ptab" data-tab="reports">Reports</a>
+          <a class="ptab" data-tab="documents">Documents</a>
+        </div>
+
+        <!-- TIMELINE -->
+        <div class="ptab-panel" data-panel="timeline" style="display:none;">
+          <p class="muted-note" style="margin-bottom:1rem;">Deployment, Data Collection, and AI Processing are detected automatically from real activity. The other stages you mark yourself as the project progresses.</p>
+          <div id="lifecycle-list"></div>
+        </div>
+
+        <!-- MAP -->
+        <div class="ptab-panel" data-panel="map" style="display:none;">
+          <p class="muted-note" style="margin-bottom:1rem;" id="map-note">Loading GPS-tagged responses…</p>
+          <div id="project-map" style="height:420px; border-radius:12px;"></div>
+        </div>
+
+        <!-- OVERVIEW -->
+        <div class="ptab-panel" data-panel="overview">
+          <div class="grid grid-4" style="margin-bottom:1.5rem;">
+            <div class="card"><div class="card-title">Responses</div><div class="stat-value" id="ov-responses">–</div></div>
+            <div class="card"><div class="card-title">Completed</div><div class="stat-value" id="ov-completed">–</div></div>
+            <div class="card"><div class="card-title">Target</div><div class="stat-value" id="ov-target">–</div></div>
+            <div class="card"><div class="card-title">Completion</div><div class="stat-value" id="ov-pct">–</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Project Details</div>
+            <table style="width:100%; font-size:.88rem;">
+              <tr><td class="muted-note" style="padding:.4rem 0; width:35%;">Survey (question set)</td><td id="ov-survey-title">—</td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Primary Channel</td><td id="ov-channel">—</td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Survey Access Code</td><td><span id="ov-code" style="font-family:var(--font-mono); font-weight:700; color:var(--accent);">—</span> <span class="muted-note">(for WhatsApp/SMS/Phone respondents)</span></td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Panel Link</td><td id="ov-panel">Not linked to an earlier round.</td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Created</td><td id="ov-created">—</td></tr>
+            </table>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="clone-project-btn" style="margin-top:1rem;">📋 Clone as New Round (Midline/Endline)</button>
+          <button class="btn btn-ghost btn-sm" id="remind-btn" style="margin-top:1rem;">🔔 Remind Incomplete Respondents</button>
+        </div>
+
+        <!-- TEAM -->
+        <div class="ptab-panel" data-panel="team" style="display:none;">
+          <div class="section-head"><h2 style="font-size:1.05rem;">Assigned Enumerators</h2>
+            <select id="team-add-select" style="max-width:220px;"><option value="">+ Add enumerator…</option></select>
+          </div>
+          <div id="team-list" class="grid grid-3" style="gap:1rem; margin-top:1rem;">
+            <p class="muted-note">Loading…</p>
+          </div>
+
+          <div class="card" style="margin-top:1.5rem;">
+            <div class="card-title">Post an Announcement to This Team</div>
+            <p class="muted-note" style="margin-bottom:.8rem;">Enumerators assigned to this project will see this in their "Messages" tab.</p>
+            <textarea id="announce-text" rows="3" placeholder="e.g. Please prioritize Mwanza region this week."></textarea>
+            <button class="btn btn-primary btn-sm" id="announce-send-btn" style="margin-top:.6rem;">Send Announcement</button>
+          </div>
+
+          <div class="card" style="margin-top:1.5rem;">
+            <div class="card-title">Training Materials</div>
+            <p class="muted-note" style="margin-bottom:.8rem;">Visible to enumerators in their "Training" tab.</p>
+            <div id="training-list" style="margin-bottom:1rem;"></div>
+            <div class="field-row">
+              <div class="field"><label>Title</label><input id="train-title" placeholder="e.g. Survey Introduction Script"></div>
+              <div class="field"><label>Link (optional)</label><input id="train-url" placeholder="https://..."></div>
+            </div>
+            <textarea id="train-notes" rows="2" placeholder="Optional notes"></textarea>
+            <button class="btn btn-primary btn-sm" id="train-add-btn" style="margin-top:.6rem;">+ Add Material</button>
+          </div>
+        </div>
+
+        <!-- RESPONSES -->
+        <div class="ptab-panel" data-panel="responses" style="display:none;">
+          <div class="card" style="margin-bottom:1.5rem;">
+            <div class="card-title">Bulk Import (CSV)</div>
+            <p class="muted-note" style="margin-bottom:.8rem;">For data already collected on paper or another tool. CSV columns: <code>phone_number, full_name, region, q1, q2, q3...</code> (q1/q2/q3 map to this project's questions in order).</p>
+            <input type="file" id="csv-import-file" accept=".csv" style="margin-bottom:.6rem;">
+            <button class="btn btn-primary btn-sm" id="csv-import-btn">Import</button>
+            <span id="csv-import-status" class="muted-note" style="margin-left:.6rem;"></span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Channel</th><th>Sentiment</th><th>Status</th><th>Date</th></tr></thead>
+              <tbody id="responses-tbody"><tr><td colspan="4" class="muted-note" style="padding:1.5rem;">Loading…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- REPORTS -->
+        <div class="ptab-panel" data-panel="reports" style="display:none;">
+          <div class="grid grid-2" style="gap:1rem;">
+            <a class="card" id="report-exec-link" style="text-decoration:none; color:inherit;">
+              <div class="card-title">Executive Intelligence Report</div>
+              <p class="muted-note">Key findings, sentiment, recommendations — for this project only.</p>
+            </a>
+            <a class="card" id="report-donor-link" style="text-decoration:none; color:inherit;">
+              <div class="card-title">Donor Impact Report</div>
+              <p class="muted-note">Outcome indicators, OECD-DAC criteria — for this project only.</p>
+            </a>
+          </div>
+        </div>
+
+        <!-- DOCUMENTS -->
+        <div class="ptab-panel" data-panel="documents" style="display:none;">
+          <p class="muted-note" style="margin-bottom:1rem;">Upload a real file (stored securely, only your organization can access it), or paste a shareable link if the file already lives somewhere like Google Drive.</p>
+          <div id="docs-list" style="margin-bottom:1rem;"></div>
+
+          <div class="card" style="margin-bottom:1rem;">
+            <div class="card-title" style="font-size:.85rem;">Upload a File</div>
+            <div class="field-row">
+              <div class="field"><label>Document name</label><input id="doc-upload-name" placeholder="e.g. Signed Contract"></div>
+              <div class="field"><label>Category</label>
+                <select id="doc-upload-category">
+                  <option value="contract">Contract</option>
+                  <option value="tor">TOR</option>
+                  <option value="training">Training</option>
+                  <option value="consent">Consent</option>
+                  <option value="photo">Photo</option>
+                  <option value="video">Video</option>
+                  <option value="report">Report</option>
+                  <option value="invoice">Invoice</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <input type="file" id="doc-upload-file" style="margin:.6rem 0;">
+            <button class="btn btn-primary btn-sm" id="doc-upload-btn">⬆ Upload File</button>
+            <span id="doc-upload-status" class="muted-note" style="margin-left:.6rem;"></span>
+          </div>
+
+          <div class="card">
+            <div class="card-title" style="font-size:.85rem;">Or Paste a Link</div>
+            <div class="field-row">
+              <div class="field"><label>Document name</label><input id="doc-name" placeholder="e.g. Signed Contract"></div>
+              <div class="field"><label>Link</label><input id="doc-url" placeholder="https://..."></div>
+              <div class="field"><label>Category</label>
+                <select id="doc-category">
+                  <option value="contract">Contract</option>
+                  <option value="tor">TOR</option>
+                  <option value="training">Training</option>
+                  <option value="consent">Consent</option>
+                  <option value="photo">Photo</option>
+                  <option value="video">Video</option>
+                  <option value="report">Report</option>
+                  <option value="invoice">Invoice</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="doc-add-btn">+ Add Document Link</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/campaigns.html', eyebrow:'Project', title:'Workspace' });
+
+  const projectId = new URLSearchParams(window.location.search).get('id');
+  const STATUS_BADGE = { active: 'badge-success', suspended: 'badge-danger', trial: 'badge-warn', scheduled: 'badge-neutral', completed: 'badge-success' };
+  const CHANNEL_LABEL = { whatsapp: 'WhatsApp', phone_call: 'Phone Call', sms: 'SMS', web_link: 'Web Link', app: 'Offline App' };
+
+  if (!projectId) {
+    document.getElementById('proj-loading').textContent = 'No project specified.';
+  } else {
+    (async () => {
+      try {
+        const { campaign, panel_link } = await apiRequest(`/api/campaigns/${projectId}`);
+        document.getElementById('proj-name').textContent = campaign.name;
+        document.getElementById('proj-survey').textContent = campaign.survey_title || '';
+        document.getElementById('proj-status-badge').textContent = campaign.status;
+        document.getElementById('proj-status-badge').className = 'badge ' + (STATUS_BADGE[campaign.status] || 'badge-neutral');
+
+        document.getElementById('ov-responses').textContent = campaign.response_count;
+        document.getElementById('ov-completed').textContent = campaign.completed_count;
+        document.getElementById('ov-target').textContent = campaign.target_respondents || '—';
+        document.getElementById('ov-pct').textContent = campaign.target_respondents ? Math.round((campaign.response_count / campaign.target_respondents) * 100) + '%' : '—';
+        document.getElementById('ov-survey-title').textContent = campaign.survey_title || '—';
+        document.getElementById('ov-channel').textContent = CHANNEL_LABEL[campaign.channel] || campaign.channel;
+        document.getElementById('ov-code').textContent = campaign.access_code || 'Not generated';
+        document.getElementById('ov-created').textContent = new Date(campaign.created_at + 'Z').toLocaleDateString();
+        if (panel_link) document.getElementById('ov-panel').textContent = `${panel_link.round_label} of "${panel_link.baseline_name}"`;
+
+        document.getElementById('report-exec-link').href = `/app/report.html?campaign_id=${projectId}`;
+        document.getElementById('report-donor-link').href = `/app/report-donor.html?campaign_id=${projectId}`;
+
+        document.getElementById('proj-loading').style.display = 'none';
+        document.getElementById('proj-body').style.display = 'block';
+        loadTeam();
+        loadResponses();
+        loadDocuments();
+        loadLifecycle();
+        loadTraining();
+      } catch (e) {
+        document.getElementById('proj-loading').textContent = 'Could not load project: ' + e.message;
+      }
+    })();
+  }
+
+  let mapLoaded = false, mapInstance = null;
+  document.querySelectorAll('.ptab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('.ptab-panel').forEach(p => p.style.display = p.dataset.panel === tab.dataset.tab ? 'block' : 'none');
+      if (tab.dataset.tab === 'map' && !mapLoaded) { mapLoaded = true; loadProjectMap(); }
+    });
+  });
+
+  async function loadProjectMap() {
+    try {
+      const { points } = await apiRequest(`/api/campaigns/${projectId}/gps-points`);
+      if (!points.length) {
+        document.getElementById('map-note').textContent = 'No GPS-tagged responses yet — GPS is captured automatically by the Offline Enumerator App.';
+        return;
+      }
+      document.getElementById('map-note').textContent = `${points.length} GPS-tagged response(s) shown below.`;
+      mapInstance = L.map('project-map').setView([points[0].gps_lat, points[0].gps_lng], 8);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors', maxZoom: 18 }).addTo(mapInstance);
+      points.forEach(p => {
+        L.circleMarker([p.gps_lat, p.gps_lng], { radius: 6, color: '#E4A23A', fillOpacity: 0.7 })
+          .addTo(mapInstance)
+          .bindPopup(`${p.region || 'Unknown region'}<br>${new Date(p.started_at + 'Z').toLocaleDateString()}`);
+      });
+    } catch (e) {
+      document.getElementById('map-note').textContent = 'Could not load map: ' + e.message;
+    }
+  }
+
+  document.getElementById('clone-project-btn').addEventListener('click', async () => {
+    const roundLabel = prompt('What is this round called? (e.g. Midline, Endline)', 'Midline');
+    if (!roundLabel) return;
+    const btn = document.getElementById('clone-project-btn');
+    btn.disabled = true; btn.textContent = 'Cloning…';
+    try {
+      const result = await apiRequest(`/api/campaigns/${projectId}/clone`, { method: 'POST', body: { round_label: roundLabel } });
+      showToast('New round created — access code ' + result.access_code, 'success');
+      setTimeout(() => { window.location.href = `/app/project.html?id=${result.campaign_id}`; }, 1000);
+    } catch (e) {
+      showToast('Could not clone: ' + e.message, 'error');
+      btn.disabled = false; btn.textContent = '📋 Clone as New Round (Midline/Endline)';
+    }
+  });
+
+  document.getElementById('remind-btn').addEventListener('click', async () => {
+    if (!confirm('Send a reminder to everyone who started but has not finished (via WhatsApp/SMS)?')) return;
+    const btn = document.getElementById('remind-btn');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    try {
+      const result = await apiRequest(`/api/campaigns/${projectId}/remind`, { method: 'POST' });
+      showToast(`Sent ${result.sent} of ${result.eligible} reminder(s)`, 'success');
+    } catch (e) {
+      showToast('Could not send reminders: ' + e.message, 'error');
+    } finally {
+      btn.disabled = false; btn.textContent = '🔔 Remind Incomplete Respondents';
+    }
+  });
+
+  async function loadLifecycle() {
+    const listEl = document.getElementById('lifecycle-list');
+    try {
+      const { stages } = await apiRequest(`/api/campaigns/${projectId}/lifecycle`);
+      listEl.innerHTML = stages.map(s => `
+        <div style="display:flex; align-items:center; gap:.8rem; padding:.7rem 0; border-bottom:1px solid var(--border);">
+          <span style="font-size:1.2rem;">${s.done ? '✅' : '⬜'}</span>
+          <div style="flex:1;">
+            <div style="font-weight:600; font-size:.9rem;">${s.label}</div>
+            <div class="muted-note" style="font-size:.72rem;">${s.auto ? 'Detected automatically from real activity' : 'Marked manually'}</div>
+          </div>
+          ${!s.auto ? `<button class="btn btn-ghost btn-sm lifecycle-toggle-btn" data-stage="${s.key}" data-done="${s.done}" style="font-size:.72rem;">${s.done ? 'Mark Undone' : 'Mark Done'}</button>` : ''}
+        </div>`).join('');
+      document.querySelectorAll('.lifecycle-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const wasDone = btn.dataset.done === 'true';
+          try {
+            await apiRequest(`/api/campaigns/${projectId}/lifecycle`, { method: 'POST', body: { stage: btn.dataset.stage, done: !wasDone } });
+            loadLifecycle();
+          } catch (e) { showToast('Could not update: ' + e.message, 'error'); }
+        });
+      });
+    } catch (e) {
+      listEl.innerHTML = `<p class="muted-note" style="color:var(--danger);">Could not load timeline: ${e.message}</p>`;
+    }
+  }
+
+  async function loadTeam() {
+    const listEl = document.getElementById('team-list');
+    try {
+      const { team, available_enumerators } = await apiRequest(`/api/campaigns/${projectId}/team`);
+      listEl.innerHTML = team.length
+        ? team.map(u => `
+            <div class="card" style="text-align:center;">
+              <div style="width:44px; height:44px; border-radius:50%; background:var(--accent); color:var(--accent-ink); display:flex; align-items:center; justify-content:center; font-weight:700; margin:0 auto .6rem;">${u.full_name.split(' ').map(n => n[0]).slice(0,2).join('')}</div>
+              <div style="font-weight:600; font-size:.9rem;">${u.full_name}</div>
+              <div class="muted-note" style="font-size:.76rem;">${u.email}</div>
+              <button class="btn btn-ghost btn-sm remove-team-btn" data-id="${u.id}" style="margin-top:.6rem; font-size:.72rem; color:var(--danger);">Remove</button>
+            </div>`).join('')
+        : '<p class="muted-note">No enumerators assigned yet.</p>';
+      document.getElementById('team-add-select').innerHTML = '<option value="">+ Add enumerator…</option>' +
+        available_enumerators.map(u => `<option value="${u.id}">${u.full_name}</option>`).join('');
+      document.querySelectorAll('.remove-team-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          try { await apiRequest(`/api/campaigns/${projectId}/team/${btn.dataset.id}`, { method: 'DELETE' }); loadTeam(); }
+          catch (e) { showToast('Could not remove: ' + e.message, 'error'); }
+        });
+      });
+    } catch (e) {
+      listEl.innerHTML = `<p class="muted-note" style="color:var(--danger);">Could not load team: ${e.message}</p>`;
+    }
+  }
+  document.getElementById('team-add-select').addEventListener('change', async (e) => {
+    if (!e.target.value) return;
+    try {
+      await apiRequest(`/api/campaigns/${projectId}/team`, { method: 'POST', body: { user_id: e.target.value } });
+      loadTeam();
+    } catch (err) { showToast('Could not add: ' + err.message, 'error'); }
+  });
+
+  document.getElementById('announce-send-btn').addEventListener('click', async () => {
+    const text = document.getElementById('announce-text').value.trim();
+    if (!text) return;
+    const btn = document.getElementById('announce-send-btn');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    try {
+      await apiRequest(`/api/campaigns/${projectId}/announcements`, { method: 'POST', body: { message: text } });
+      document.getElementById('announce-text').value = '';
+      showToast('Announcement sent to the team', 'success');
+    } catch (e) {
+      showToast('Could not send: ' + e.message, 'error');
+    } finally {
+      btn.disabled = false; btn.textContent = 'Send Announcement';
+    }
+  });
+
+  document.getElementById('csv-import-btn').addEventListener('click', async () => {
+    const fileInput = document.getElementById('csv-import-file');
+    const statusEl = document.getElementById('csv-import-status');
+    if (!fileInput.files.length) { statusEl.textContent = 'Choose a CSV file first.'; return; }
+    const form = new FormData();
+    form.append('campaign_id', projectId);
+    form.append('file', fileInput.files[0]);
+    statusEl.textContent = 'Importing…';
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/campaigns/import-csv`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${localStorage.getItem('vi_token')}` },
+        body: form,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Import failed');
+      statusEl.textContent = `✓ Imported ${data.imported}, skipped ${data.skipped}.`;
+      loadResponses();
+    } catch (e) {
+      statusEl.textContent = 'Error: ' + e.message;
+    }
+  });
+
+  async function loadTraining() {
+    const listEl = document.getElementById('training-list');
+    try {
+      const { materials } = await apiRequest(`/api/campaigns/${projectId}/training`);
+      listEl.innerHTML = materials.length
+        ? materials.map(m => `<div style="padding:.5rem 0; border-bottom:1px solid var(--border); font-size:.85rem;"><b>${m.title}</b>${m.url ? ` — <a href="${m.url}" target="_blank">link</a>` : ''}</div>`).join('')
+        : '<p class="muted-note" style="font-size:.82rem;">No materials added yet.</p>';
+    } catch (e) { listEl.innerHTML = `<p class="muted-note" style="color:var(--danger);">Could not load: ${e.message}</p>`; }
+  }
+  document.getElementById('train-add-btn').addEventListener('click', async () => {
+    const title = document.getElementById('train-title').value.trim();
+    if (!title) return;
+    try {
+      await apiRequest(`/api/campaigns/${projectId}/training`, { method: 'POST', body: {
+        title, url: document.getElementById('train-url').value.trim(), notes: document.getElementById('train-notes').value.trim(),
+      }});
+      document.getElementById('train-title').value = ''; document.getElementById('train-url').value = ''; document.getElementById('train-notes').value = '';
+      loadTraining();
+    } catch (e) { showToast('Could not add: ' + e.message, 'error'); }
+  });
+
+  async function loadResponses() {
+    const tbody = document.getElementById('responses-tbody');
+    try {
+      const { interviews } = await apiRequest(`/api/interviews?campaign_id=${projectId}`);
+      tbody.innerHTML = interviews.length
+        ? interviews.slice(0, 50).map(iv => `
+            <tr><td>${CHANNEL_LABEL[iv.channel] || iv.channel}</td><td>${iv.overall_sentiment || '—'}</td><td>${iv.status}</td><td class="muted-note">${new Date(iv.started_at + 'Z').toLocaleDateString()}</td></tr>`).join('')
+        : '<tr><td colspan="4" class="muted-note" style="padding:1.5rem;">No responses yet for this project.</td></tr>';
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="4" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+    }
+  }
+
+  // Documents — now persisted server-side, visible to the whole team, not
+  // just whoever's browser had it in localStorage.
+  const CATEGORY_LABEL = { contract: '📄 Contracts', tor: '📋 TOR', training: '🎓 Training', consent: '✅ Consent', photo: '📷 Photos', video: '🎥 Videos', report: '📊 Reports', invoice: '💰 Invoices', other: '📁 Other' };
+  async function loadDocuments() {
+    const listEl = document.getElementById('docs-list');
+    try {
+      const { documents } = await apiRequest(`/api/campaigns/${projectId}/documents`);
+      if (!documents.length) { listEl.innerHTML = '<p class="muted-note">No documents linked yet.</p>'; return; }
+      const grouped = {};
+      documents.forEach(d => { (grouped[d.category] = grouped[d.category] || []).push(d); });
+      listEl.innerHTML = Object.entries(grouped).map(([cat, docs]) => `
+        <div style="margin-bottom:1rem;">
+          <div class="muted-note" style="font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4rem;">${CATEGORY_LABEL[cat] || cat}</div>
+          ${docs.map(d => {
+            const isUploaded = d.url.startsWith('r2:');
+            const href = isUploaded
+              ? `${API_BASE_URL}/api/documents/${encodeURIComponent(d.url.slice(3))}?token=${encodeURIComponent(localStorage.getItem('vi_token'))}`
+              : d.url;
+            return `<div style="display:flex; justify-content:space-between; align-items:center; padding:.5rem 0; border-bottom:1px solid var(--border);"><a href="${href}" target="_blank" rel="noopener">${isUploaded ? '📎 ' : '🔗 '}${d.name}</a><button class="btn btn-ghost btn-sm remove-doc-btn" data-id="${d.id}" style="font-size:.7rem;">Remove</button></div>`;
+          }).join('')}
+        </div>`).join('');
+      document.querySelectorAll('.remove-doc-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          try { await apiRequest(`/api/campaigns/${projectId}/documents/${btn.dataset.id}`, { method: 'DELETE' }); loadDocuments(); }
+          catch (e) { showToast('Could not remove: ' + e.message, 'error'); }
+        });
+      });
+    } catch (e) {
+      listEl.innerHTML = `<p class="muted-note" style="color:var(--danger);">Could not load documents: ${e.message}</p>`;
+    }
+  }
+  document.getElementById('doc-upload-btn').addEventListener('click', async () => {
+    const name = document.getElementById('doc-upload-name').value.trim();
+    const fileInput = document.getElementById('doc-upload-file');
+    const statusEl = document.getElementById('doc-upload-status');
+    if (!name || !fileInput.files.length) { statusEl.textContent = 'Choose a file and enter a name first.'; return; }
+    const form = new FormData();
+    form.append('name', name);
+    form.append('category', document.getElementById('doc-upload-category').value);
+    form.append('file', fileInput.files[0]);
+    statusEl.textContent = 'Uploading…';
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/campaigns/${projectId}/documents/upload`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${localStorage.getItem('vi_token')}` },
+        body: form,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Upload failed');
+      statusEl.textContent = '✓ Uploaded';
+      document.getElementById('doc-upload-name').value = ''; fileInput.value = '';
+      loadDocuments();
+    } catch (e) {
+      statusEl.textContent = 'Error: ' + e.message;
+    }
+  });
+
+  document.getElementById('doc-add-btn').addEventListener('click', async () => {
+    const name = document.getElementById('doc-name').value.trim();
+    const url = document.getElementById('doc-url').value.trim();
+    const category = document.getElementById('doc-category').value;
+    if (!name || !url) return;
+    try {
+      await apiRequest(`/api/campaigns/${projectId}/documents`, { method: 'POST', body: { name, url, category } });
+      document.getElementById('doc-name').value = ''; document.getElementById('doc-url').value = '';
+      loadDocuments();
+    } catch (e) { showToast('Could not add document: ' + e.message, 'error'); }
+  });
+</script>
+</body>
+</html>

@@ -21,14 +21,38 @@
 
       <!-- PLATFORM-WIDE OVERVIEW (Super Admin, no specific org selected) -->
       <div id="platform-overview" style="display:none;">
-        <p class="muted-note" style="margin-bottom:1rem;">Aggregated across every client organization on the platform. Click any organization below — or use Organizations in the sidebar — to drill into its own numbers.</p>
-        <div class="grid grid-4" style="margin-bottom:1.5rem;">
-          <div class="card"><div class="card-title">Organizations</div><div class="stat-value" id="plat-orgs">–</div></div>
-          <div class="card"><div class="card-title">Total Responses (all orgs)</div><div class="stat-value" id="plat-responses">–</div></div>
-          <div class="card"><div class="card-title">Active Users (all orgs)</div><div class="stat-value" id="plat-users">–</div></div>
-          <div class="card"><div class="card-title">Organizations Active This Month</div><div class="stat-value" id="plat-active-orgs">–</div></div>
+        <div style="text-align:center; margin-bottom:1.5rem;">
+          <div style="font-size:.7rem; text-transform:uppercase; letter-spacing:.1em; color:var(--accent-2); font-weight:700;">VoiceInsights Africa</div>
+          <h1 style="font-size:1.6rem; margin-top:.2rem;">Mission Control</h1>
         </div>
-        <div class="section-head"><h2 style="font-size:1.05rem;">Organizations by Activity</h2><a href="/admin/organizations.html" class="muted-note" style="font-size:.8rem;">Manage organizations →</a></div>
+        <div class="grid grid-4" style="margin-bottom:1.5rem; gap:1rem;">
+          <div class="card" style="text-align:center;"><div class="card-title">Organizations</div><div class="stat-value" id="mc-orgs">–</div></div>
+          <div class="card" style="text-align:center;"><div class="card-title">Projects Running</div><div class="stat-value" id="mc-projects">–</div></div>
+          <div class="card" style="text-align:center;"><div class="card-title">Enumerators</div><div class="stat-value" id="mc-enumerators">–</div></div>
+          <div class="card" style="text-align:center;"><div class="card-title">Today's Interviews</div><div class="stat-value" id="mc-interviews">–</div></div>
+        </div>
+        <div class="grid grid-2" style="margin-bottom:1.5rem; gap:1rem;">
+          <div class="card" style="text-align:center;"><div class="card-title">Fraud Alerts Today</div><div class="stat-value" id="mc-fraud" style="color:var(--warn);">–</div></div>
+          <div class="card" style="text-align:center;"><div class="card-title">AI Processing</div><div class="stat-value" style="color:var(--success); font-size:1.1rem;">● Running</div></div>
+        </div>
+
+        <div class="grid grid-2" style="gap:1.5rem; align-items:flex-start;">
+          <div class="card">
+            <div class="card-title">Live Projects</div>
+            <div id="mc-live-projects"><p class="muted-note" style="padding:1rem 0;">Loading…</p></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Live Activity</div>
+            <div id="mc-activity"><p class="muted-note" style="padding:1rem 0;">Loading…</p></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:1.5rem;">
+          <div class="card-title" style="color:var(--accent);">Today's AI Summary</div>
+          <p id="mc-ai-summary" class="muted-note">Generating…</p>
+        </div>
+
+        <div class="section-head" style="margin-top:1.5rem;"><h2 style="font-size:1.05rem;">Organizations by Activity</h2><a href="/admin/organizations.html" class="muted-note" style="font-size:.8rem;">Manage organizations →</a></div>
         <div class="table-wrap" style="margin-bottom:1.5rem;">
           <table>
             <thead><tr><th>Organization</th><th>Responses</th><th>Users</th><th>Status</th><th></th></tr></thead>
@@ -84,19 +108,44 @@
   const viewingOrgId = new URLSearchParams(window.location.search).get('org_id');
 
   if (isSuperAdmin && !viewingOrgId) {
-    // ---------- PLATFORM-WIDE OVERVIEW ----------
+    // ---------- MISSION CONTROL ----------
     document.getElementById('platform-overview').style.display = 'block';
     (async () => {
       try {
-        const { organizations } = await apiRequest('/api/superadmin/organizations');
-        const totalResponses = organizations.reduce((s, o) => s + (o.response_count || 0), 0);
-        const totalUsers = organizations.reduce((s, o) => s + (o.user_count || 0), 0);
-        const activeOrgs = organizations.filter(o => o.status === 'active').length;
-        document.getElementById('plat-orgs').textContent = organizations.length;
-        document.getElementById('plat-responses').textContent = totalResponses;
-        document.getElementById('plat-users').textContent = totalUsers;
-        document.getElementById('plat-active-orgs').textContent = activeOrgs;
+        const [mc, { organizations }] = await Promise.all([
+          apiRequest('/api/superadmin/mission-control'),
+          apiRequest('/api/superadmin/organizations'),
+        ]);
 
+        document.getElementById('mc-orgs').textContent = mc.organizations_active;
+        document.getElementById('mc-projects').textContent = mc.projects_running;
+        document.getElementById('mc-enumerators').textContent = mc.enumerators_total;
+        document.getElementById('mc-interviews').textContent = mc.today_interviews;
+        document.getElementById('mc-fraud').textContent = mc.fraud_alerts_today;
+
+        document.getElementById('mc-live-projects').innerHTML = mc.live_projects.length
+          ? mc.live_projects.map(p => `
+              <div style="padding:.7rem 0; border-bottom:1px solid var(--border);">
+                <div style="display:flex; justify-content:space-between; font-size:.85rem;"><b>${p.org_name}</b><span class="muted-note">${p.completion_pct != null ? p.completion_pct + '%' : p.response_count + ' responses'}</span></div>
+                <div class="muted-note" style="font-size:.78rem; margin-bottom:.3rem;">${p.name}</div>
+                ${p.completion_pct != null ? `<div class="progress"><span style="width:${p.completion_pct}%"></span></div>` : ''}
+              </div>`).join('')
+          : '<p class="muted-note" style="padding:1rem 0;">No active projects right now.</p>';
+
+        const ACTION_LABEL = { login: 'logged in', user_invited: 'invited a team member', dhis2_push: 'pushed data to DHIS2', outbound_campaign_started: 'started an outbound campaign', lead_converted: 'converted a lead to an organization' };
+        document.getElementById('mc-activity').innerHTML = mc.recent_activity.length
+          ? mc.recent_activity.map(a => `
+              <div style="padding:.5rem 0; border-bottom:1px solid var(--border); font-size:.82rem;">
+                <b>${a.org_name}</b> — ${a.full_name || 'System'} ${ACTION_LABEL[a.action] || a.action}
+                <div class="muted-note" style="font-size:.72rem;">${new Date(a.created_at + 'Z').toLocaleString()}</div>
+              </div>`).join('')
+          : '<p class="muted-note" style="padding:1rem 0;">No recent activity.</p>';
+
+        apiRequest('/api/superadmin/mission-control/summary', { method: 'POST' })
+          .then(r => { document.getElementById('mc-ai-summary').textContent = r.summary; })
+          .catch(() => { document.getElementById('mc-ai-summary').textContent = 'Could not generate summary right now.'; });
+
+        const totalResponses = organizations.reduce((s, o) => s + (o.response_count || 0), 0);
         const sorted = [...organizations].sort((a, b) => (b.response_count || 0) - (a.response_count || 0));
         document.getElementById('top-orgs-tbody').innerHTML = sorted.length
           ? sorted.slice(0, 10).map(o => `

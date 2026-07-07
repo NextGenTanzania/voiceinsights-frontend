@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit Center — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+
+      <div class="section-head">
+        <p class="muted-note" style="margin:0;">Every admin action across every organization on the platform, plus the Secret Vault's own encrypt/decrypt/rotate trail.</p>
+        <button class="btn btn-ghost btn-sm" id="export-btn">⬇ Export CSV</button>
+      </div>
+
+      <div class="card" style="margin:1rem 0;">
+        <div style="display:flex; gap:.8rem; flex-wrap:wrap; align-items:flex-end;">
+          <div class="field" style="flex:1; min-width:160px;">
+            <label>Time Range</label>
+            <select id="days-filter">
+              <option value="1">Last 24 hours</option>
+              <option value="7" selected>Last 7 days</option>
+              <option value="30">Last 30 days</option>
+              <option value="90">Last 90 days</option>
+            </select>
+          </div>
+          <div class="field" style="flex:1; min-width:160px;">
+            <label>Action</label>
+            <select id="action-filter"><option value="">All actions</option></select>
+          </div>
+          <div class="field" style="flex:2; min-width:200px;">
+            <label>Search (name, email, resource)</label>
+            <input id="search-input" placeholder="Type to filter…">
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="gap:1.5rem; align-items:flex-start; margin-bottom:1.5rem;">
+        <div class="card">
+          <div class="card-title">Most Frequent Actions</div>
+          <div id="action-counts-list"><p class="muted-note">Loading…</p></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Vault Activity (Encrypt/Decrypt/Rotate)</div>
+          <div id="vault-logs-list" style="max-height:260px; overflow-y:auto;"><p class="muted-note">Loading…</p></div>
+        </div>
+      </div>
+
+      <div class="section-head"><h2 style="font-size:1.05rem;">General Audit Trail</h2></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Action</th><th>Organization</th><th>User</th><th>Resource</th><th>IP</th><th>When</th></tr></thead>
+          <tbody id="logs-tbody"><tr><td colspan="6" class="muted-note" style="padding:1.5rem;">Loading…</td></tr></tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  const storedUserCheck = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  if (storedUserCheck?.role !== 'super_admin') {
+    document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center; padding:2rem;"><div><h2>Super Admin access required</h2></div></div>';
+    throw new Error('Access denied — not a Super Admin');
+  }
+  renderShell({ role:'admin', active:'/admin/audit-center.html', eyebrow:'Enterprise Operations', title:'Audit Center' });
+
+  let lastLogs = [];
+
+  async function loadAuditCenter() {
+    const days = document.getElementById('days-filter').value;
+    const action = document.getElementById('action-filter').value;
+    try {
+      const params = new URLSearchParams({ days });
+      if (action) params.set('action', action);
+      const data = await apiRequest(`/api/superadmin/audit-center?${params}`);
+      lastLogs = data.general_logs;
+
+      document.getElementById('action-counts-list').innerHTML = data.action_counts.length
+        ? data.action_counts.map(a => `<div style="display:flex; justify-content:space-between; padding:.4rem 0; border-bottom:1px solid var(--border); font-size:.85rem;"><span>${a.action}</span><b>${a.n}</b></div>`).join('')
+        : '<p class="muted-note">No activity in this window.</p>';
+
+      // Populate the action filter dropdown once, from whatever actions actually occurred.
+      if (!document.getElementById('action-filter').dataset.populated) {
+        document.getElementById('action-filter').innerHTML = '<option value="">All actions</option>' + data.action_counts.map(a => `<option value="${a.action}">${a.action}</option>`).join('');
+        document.getElementById('action-filter').dataset.populated = '1';
+      }
+
+      document.getElementById('vault-logs-list').innerHTML = data.vault_logs.length
+        ? data.vault_logs.map(v => `<div style="padding:.4rem 0; border-bottom:1px solid var(--border); font-size:.8rem;">${v.operation} <span class="badge ${v.outcome === 'success' ? 'badge-success' : 'badge-danger'}" style="font-size:.6rem;">${v.outcome}</span> — ${v.secret_type || ''} <span class="muted-note">${new Date(v.created_at + 'Z').toLocaleString()}</span></div>`).join('')
+        : '<p class="muted-note">No vault activity in this window.</p>';
+
+      renderLogsTable();
+    } catch (e) {
+      document.getElementById('logs-tbody').innerHTML = `<tr><td colspan="6" class="muted-note" style="color:var(--danger); padding:1.5rem;">Could not load: ${e.message}</td></tr>`;
+    }
+  }
+
+  function renderLogsTable() {
+    const search = (document.getElementById('search-input').value || '').toLowerCase();
+    const filtered = lastLogs.filter(l => !search ||
+      (l.full_name || '').toLowerCase().includes(search) ||
+      (l.email || '').toLowerCase().includes(search) ||
+      (l.organization_name || '').toLowerCase().includes(search) ||
+      (l.resource_id || '').toLowerCase().includes(search));
+    document.getElementById('logs-tbody').innerHTML = filtered.length
+      ? filtered.map(l => `<tr><td>${l.action}</td><td>${l.organization_name || '—'}</td><td>${l.full_name || 'System'}</td><td class="muted-note">${l.resource_type || ''} ${l.resource_id ? '· ' + l.resource_id.slice(0, 12) : ''}</td><td class="muted-note">${l.ip_address || '—'}</td><td class="muted-note">${new Date(l.created_at + 'Z').toLocaleString()}</td></tr>`).join('')
+      : '<tr><td colspan="6" class="muted-note" style="padding:1.5rem;">No matching entries.</td></tr>';
+  }
+
+  document.getElementById('days-filter').addEventListener('change', loadAuditCenter);
+  document.getElementById('action-filter').addEventListener('change', loadAuditCenter);
+  document.getElementById('search-input').addEventListener('input', renderLogsTable);
+  document.getElementById('export-btn').addEventListener('click', () => {
+    const header = 'action,organization,user,email,resource_type,resource_id,ip,created_at\n';
+    const rows = lastLogs.map(l => [l.action, l.organization_name || '', l.full_name || '', l.email || '', l.resource_type || '', l.resource_id || '', l.ip_address || '', l.created_at].map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([header + rows], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `audit-log-export-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  });
+
+  loadAuditCenter();
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roles & Permissions — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <p class="muted-note" style="margin-bottom:1.5rem;">Roles are fixed for now, not custom-configurable — this keeps permissions predictable and auditable. Support for custom roles (Client Viewer, Donor Viewer) is on the roadmap.</p>
+
+      <div class="grid grid-2" style="gap:1rem;">
+        <div class="card">
+          <div class="card-title" style="color:var(--accent);">Super Admin</div>
+          <p class="muted-note" style="margin-bottom:.8rem; font-size:.8rem;">Maximum permissions. Currently held by 2 people.</p>
+          <ul style="font-size:.85rem; line-height:1.7;">
+            <li>Access every organization</li>
+            <li>Create organizations &amp; projects</li>
+            <li>Invite users, assign to any organization/project</li>
+            <li>Suspend organizations</li>
+            <li>Manage billing, AI engines, integrations, security</li>
+            <li>Monitor fraud across the whole platform</li>
+            <li>View into (impersonate) any organization for support</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title" style="color:var(--accent-2);">Org Admin / M&amp;E / Data Controller</div>
+          <p class="muted-note" style="margin-bottom:.8rem; font-size:.8rem;">Assigned by a Super Admin. Scoped to their own organization only.</p>
+          <ul style="font-size:.85rem; line-height:1.7;">
+            <li>Manage projects within their organization</li>
+            <li>Invite enumerators, assign to projects</li>
+            <li>Monitor collection progress</li>
+            <li>View reports, generate AI reports</li>
+            <li>Monitor data quality</li>
+            <li style="color:var(--text-dim);">Cannot manage billing</li>
+            <li style="color:var(--text-dim);">Cannot access other organizations</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">M&amp;E Officer</div>
+          <p class="muted-note" style="margin-bottom:.8rem; font-size:.8rem;">A restricted variant of Org Admin — same organization, fewer settings.</p>
+          <ul style="font-size:.85rem; line-height:1.7;">
+            <li>View reports, respondents, interviews</li>
+            <li>View analytics and compliance status</li>
+            <li style="color:var(--text-dim);">Cannot manage billing or settings</li>
+            <li style="color:var(--text-dim);">Cannot invite users</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Enumerator</div>
+          <p class="muted-note" style="margin-bottom:.8rem; font-size:.8rem;">The simplest interface — only what's needed to collect data.</p>
+          <ul style="font-size:.85rem; line-height:1.7;">
+            <li>See only their one assigned project</li>
+            <li>Collect interviews (offline-capable)</li>
+            <li>See their own today's/total count</li>
+            <li style="color:var(--text-dim);">No access to settings, billing, or other projects</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/app/settings.html', eyebrow:'Settings', title:'Roles & Permissions' });
+</script>
+</body>
+</html>

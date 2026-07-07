@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Work — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content" style="max-width:600px;">
+      <div id="mw-loading" class="muted-note" style="padding:2rem;">Loading your work…</div>
+
+      <div id="mw-body" style="display:none;">
+        <div class="card" style="text-align:center; padding:2.5rem 1.5rem;">
+          <div style="font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--accent-2); font-weight:700;">Your Project</div>
+          <h1 id="mw-project-name" style="font-size:1.5rem; margin-top:.4rem;">—</h1>
+          <p class="muted-note" id="mw-survey-title">—</p>
+
+          <div class="grid grid-2" style="margin-top:1.5rem; gap:1rem;">
+            <div><div class="stat-value" id="mw-today">–</div><div class="muted-note" style="font-size:.78rem;">Completed Today</div></div>
+            <div><div class="stat-value" id="mw-total">–</div><div class="muted-note" style="font-size:.78rem;">Total Completed</div></div>
+          </div>
+
+          <a href="/enumerator.html" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:2rem; padding:1rem;">▶ Start Collecting</a>
+        </div>
+
+        <div class="pill-tabs" style="margin:1.5rem 0;">
+          <a class="mwtab active" data-tab="completed">Completed</a>
+          <a class="mwtab" data-tab="training">Training</a>
+          <a class="mwtab" data-tab="messages">Messages</a>
+          <a class="mwtab" data-tab="profile">Profile</a>
+        </div>
+
+        <div class="mwtab-panel" data-panel="training" style="display:none;">
+          <div id="mw-training-list"><p class="muted-note" style="padding:1rem 0;">Loading…</p></div>
+        </div>
+
+        <div class="mwtab-panel" data-panel="messages" style="display:none;">
+          <div id="mw-messages-list"><p class="muted-note" style="padding:1rem 0;">Loading…</p></div>
+        </div>
+
+        <div class="mwtab-panel" data-panel="completed">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Respondent</th><th>Region</th><th>Status</th><th>Date</th></tr></thead>
+              <tbody id="mw-completed-tbody"><tr><td colspan="4" class="muted-note" style="padding:1.5rem;">Loading…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="mwtab-panel" data-panel="profile" style="display:none;">
+          <div class="card">
+            <div class="card-title">Your Profile</div>
+            <table style="width:100%; font-size:.88rem;">
+              <tr><td class="muted-note" style="padding:.4rem 0; width:35%;">Full Name</td><td id="mw-profile-name">—</td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Email</td><td id="mw-profile-email">—</td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Role</td><td>Enumerator</td></tr>
+            </table>
+            <p class="muted-note" style="margin-top:1rem; font-size:.78rem;">To update your details, contact your supervisor.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="mw-empty" style="display:none; text-align:center; padding:3rem 1.5rem;">
+        <div style="font-size:2.5rem; margin-bottom:1rem;">📋</div>
+        <h2 style="font-size:1.2rem;">No project assigned yet</h2>
+        <p class="muted-note">Your supervisor will assign you to a project soon. Check back later.</p>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  const storedUser = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  renderShell({ role:'client', active:'/app/my-work.html', eyebrow:'Today', title: 'Hello, ' + (storedUser?.full_name?.split(' ')[0] || 'there') });
+
+  (async () => {
+    try {
+      const data = await apiRequest('/api/my-work');
+      document.getElementById('mw-loading').style.display = 'none';
+      if (!data.assigned) {
+        document.getElementById('mw-empty').style.display = 'block';
+        return;
+      }
+      document.getElementById('mw-project-name').textContent = data.campaign.name;
+      document.getElementById('mw-survey-title').textContent = data.campaign.survey_title || '';
+      document.getElementById('mw-today').textContent = data.today_count;
+      document.getElementById('mw-total').textContent = data.total_count;
+      document.getElementById('mw-body').style.display = 'block';
+    } catch (e) {
+      document.getElementById('mw-loading').textContent = 'Could not load: ' + e.message;
+    }
+  })();
+
+  document.querySelectorAll('.mwtab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.mwtab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('.mwtab-panel').forEach(p => p.style.display = p.dataset.panel === tab.dataset.tab ? 'block' : 'none');
+    });
+  });
+
+  (async () => {
+    try {
+      const { completed } = await apiRequest('/api/my-work/completed');
+      document.getElementById('mw-completed-tbody').innerHTML = completed.length
+        ? completed.map(c => `<tr><td>${c.full_name || 'Unnamed'}</td><td>${c.region || '—'}</td><td>${c.status}</td><td class="muted-note">${new Date(c.started_at + 'Z').toLocaleDateString()}</td></tr>`).join('')
+        : '<tr><td colspan="4" class="muted-note" style="padding:1.5rem;">No completed interviews yet.</td></tr>';
+    } catch (e) {
+      document.getElementById('mw-completed-tbody').innerHTML = `<tr><td colspan="4" class="muted-note" style="color:var(--danger); padding:1.5rem;">Could not load: ${e.message}</td></tr>`;
+    }
+  })();
+
+  document.getElementById('mw-profile-name').textContent = storedUser?.full_name || '—';
+  document.getElementById('mw-profile-email').textContent = storedUser?.email || '—';
+
+  (async () => {
+    try {
+      const { materials } = await apiRequest('/api/my-work/training');
+      document.getElementById('mw-training-list').innerHTML = materials.length
+        ? materials.map(m => `<div class="card" style="margin-bottom:.8rem;"><div style="font-weight:600;">${m.title}</div>${m.notes ? `<p class="muted-note" style="font-size:.82rem; margin-top:.3rem;">${m.notes}</p>` : ''}${m.url ? `<a href="${m.url}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="margin-top:.5rem;">Open →</a>` : ''}</div>`).join('')
+        : '<p class="muted-note" style="padding:1rem 0;">No training materials added for your project yet.</p>';
+    } catch (e) {
+      document.getElementById('mw-training-list').innerHTML = `<p class="muted-note" style="color:var(--danger);">Could not load: ${e.message}</p>`;
+    }
+  })();
+
+  (async () => {
+    try {
+      const { messages } = await apiRequest('/api/my-work/messages');
+      document.getElementById('mw-messages-list').innerHTML = messages.length
+        ? messages.map(m => `<div class="card" style="margin-bottom:.8rem;"><p style="font-size:.9rem;">${m.message}</p><div class="muted-note" style="font-size:.72rem; margin-top:.4rem;">${m.posted_by || 'Supervisor'} · ${new Date(m.created_at + 'Z').toLocaleString()}</div></div>`).join('')
+        : '<p class="muted-note" style="padding:1rem 0;">No messages from your supervisor yet.</p>';
+    } catch (e) {
+      document.getElementById('mw-messages-list').innerHTML = `<p class="muted-note" style="color:var(--danger);">Could not load: ${e.message}</p>`;
+    }
+  })();
+</script>
+</body>
+</html>

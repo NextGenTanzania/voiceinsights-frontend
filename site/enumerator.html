@@ -75,6 +75,14 @@
           <audio id="playback" controls style="display:none; width:100%; margin-top:.5rem;"></audio>
         </div>
 
+        <div style="margin:.8rem 0; text-align:center;">
+          <label for="photo-input" class="btn btn-ghost btn-sm" style="cursor:pointer; display:inline-flex; align-items:center; gap:.4rem;">
+            <i data-lucide="camera" style="width:16px; height:16px;"></i> <span id="photo-label-text">Add Photo (optional)</span>
+          </label>
+          <input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none;">
+          <img id="photo-preview" alt="Photo preview" style="display:none; max-width:120px; max-height:120px; border-radius:8px; margin-top:.5rem;">
+        </div>
+
         <button class="btn btn-primary" id="save-answer-btn" style="width:100%; justify-content:center;" disabled>Save & Next</button>
       </div>
     </div>
@@ -88,6 +96,51 @@
   lucide.createIcons();
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {/* offline on very first visit — fine */});
+  }
+
+  // ---------- SYNC REMINDER (Task 6.3) ----------
+  // The server has NO visibility into what's still sitting unsynced in this
+  // device's local IndexedDB — a genuine architectural limit, not something
+  // a server-side push can solve. This is therefore a LOCAL notification
+  // (Notification API directly, no FCM/server round-trip needed), shown if
+  // pending data has been sitting unsynced for more than 2 hours.
+  const SYNC_REMINDER_HOURS = 2;
+  async function checkSyncReminder() {
+    try {
+      const households = await OfflineDB.getAllHouseholds();
+      const pending = households.filter(h => !h.synced);
+      if (!pending.length) { localStorage.removeItem('vi_first_pending_at'); return; }
+
+      let firstPendingAt = localStorage.getItem('vi_first_pending_at');
+      if (!firstPendingAt) {
+        firstPendingAt = Date.now().toString();
+        localStorage.setItem('vi_first_pending_at', firstPendingAt);
+        return;
+      }
+      const hoursWaiting = (Date.now() - parseInt(firstPendingAt)) / (1000 * 60 * 60);
+      if (hoursWaiting >= SYNC_REMINDER_HOURS && Notification.permission === 'granted') {
+        new Notification('Unsynced Interviews Waiting', {
+          body: `You have ${pending.length} interview(s) waiting to sync. Connect to the internet and open the app to sync them.`,
+          icon: '/assets/img/icon-192.png',
+        });
+        localStorage.setItem('vi_first_pending_at', Date.now().toString()); // reset so it doesn't repeat every load
+      }
+    } catch (e) { /* best-effort only — never block the app over this */ }
+  }
+  checkSyncReminder();
+  setInterval(checkSyncReminder, 30 * 60 * 1000); // re-check every 30 minutes while the app is open
+
+  // Best-effort battery reporting — lets a supervisor see if a field device is
+  // running low, without blocking anything if the Battery API isn't available
+  // (it's been removed from some browsers for privacy reasons).
+  if (navigator.getBattery) {
+    navigator.getBattery().then(battery => {
+      function reportBattery() {
+        apiRequest('/api/my-work/device-status', { method: 'POST', body: { battery_pct: battery.level * 100 } }).catch(() => {});
+      }
+      reportBattery();
+      battery.addEventListener('levelchange', reportBattery);
+    }).catch(() => {});
   }
 
   const campaignId = new URLSearchParams(window.location.search).get('campaign') || 'camp_default';
@@ -204,7 +257,7 @@
   const qText = document.getElementById('rec-question-text');
   const labelInput = document.getElementById('household-label');
 
-  let currentHousehold = null, currentIndex = 0, mediaRecorder, chunks = [], audioBlob = null, recording = false, waveTimer;
+  let currentHousehold = null, currentIndex = 0, mediaRecorder, chunks = [], audioBlob = null, photoBlob = null, recording = false, waveTimer;
 
   // A persistent per-device ID (same value across all interviews on this
   // tablet/phone) — lets an admin later see which device collected what,
@@ -264,6 +317,10 @@
     progressLabel.textContent = `Question ${currentIndex + 1} of ${questions.length}`;
     progressBar.style.width = Math.round((currentIndex / questions.length) * 100) + '%';
     audioBlob = null;
+    photoBlob = null;
+    document.getElementById('photo-preview').style.display = 'none';
+    document.getElementById('photo-label-text').textContent = 'Add Photo (optional)';
+    document.getElementById('photo-input').value = '';
     playback.style.display = 'none';
     saveAnswerBtn.disabled = true;
     status.textContent = 'Tap to record the respondent\'s answer';
@@ -304,11 +361,21 @@
     }
   });
 
+  document.getElementById('photo-input').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    photoBlob = file;
+    const preview = document.getElementById('photo-preview');
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = 'block';
+    document.getElementById('photo-label-text').textContent = 'Photo attached ✓ (tap to change)';
+  });
+
   saveAnswerBtn.addEventListener('click', async () => {
     if (!audioBlob) return;
     const q = questions[currentIndex];
     currentHousehold.label = labelInput.value.trim();
-    currentHousehold.answers.push({ questionIndex: currentIndex, questionId: q.id, blob: audioBlob, synced: false });
+    currentHousehold.answers.push({ questionIndex: currentIndex, questionId: q.id, blob: audioBlob, photoBlob: photoBlob || null, synced: false });
 
     currentIndex++;
     if (currentIndex >= questions.length) {
@@ -344,6 +411,7 @@
         try {
           const form = new FormData();
           form.append('audio', ans.blob, 'answer.webm');
+          if (ans.photoBlob) form.append('photo', ans.photoBlob, 'photo.jpg');
           form.append('session_key', sessionKey);
           form.append('campaign_id', campaignId);
           form.append('language', 'sw');
@@ -355,7 +423,11 @@
             form.append('gps_lng', h.gpsLng);
             form.append('gps_accuracy', h.gpsAccuracy);
           }
-          const res = await fetch(`${API_BASE_URL}/api/web/submit`, { method: 'POST', body: form });
+          const token = localStorage.getItem('vi_token');
+          const res = await fetch(`${API_BASE_URL}/api/web/submit`, {
+            method: 'POST', body: form,
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+          });
           if (!res.ok) { allSynced = false; break; } // stop at the first failure — don't skip ahead out of order
           ans.synced = true;
           await OfflineDB.saveHousehold(h); // persist immediately, so a crash right after this doesn't lose the confirmation

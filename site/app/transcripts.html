@@ -54,6 +54,7 @@
           <div class="chat-bubble-q">${turn.question_text}</div>
           <div class="chat-label" style="text-align:right; margin-top:.5rem;">${t('tr.respondent', 'Respondent')}</div>
           <div class="chat-bubble-a">${turn.raw_text ? '"' + turn.raw_text + '"' : '<span class="muted-note">' + t('tr.no_transcript_answer', 'No transcript for this answer.') + '</span>'}</div>
+          ${turn.photo_r2_key ? `<img src="${API_BASE_URL}/api/photos/${encodeURIComponent(turn.photo_r2_key)}?token=${encodeURIComponent(localStorage.getItem('vi_token'))}" style="max-width:220px; border-radius:8px; margin-top:.6rem; display:block;" alt="Field photo">` : ''}
         </div>`).join('');
     } catch (e) {
       container.innerHTML = `<div class="muted-note" style="color:var(--danger);">${t('tr.error', 'Could not load transcript:')} ${e.message}</div>`;

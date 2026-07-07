@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compare Organizations — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-title">Choose 2–5 Organizations to Compare</div>
+        <select id="org-select" multiple size="6" style="width:100%; margin-bottom:.8rem;"></select>
+        <button class="btn btn-primary btn-sm" id="compare-btn">Compare →</button>
+      </div>
+      <div class="table-wrap" id="compare-table-wrap" style="display:none;">
+        <table>
+          <thead><tr><th>Organization</th><th>Tier</th><th>Projects</th><th>Responses</th><th>Users</th><th>Avg. Sentiment</th></tr></thead>
+          <tbody id="compare-tbody"></tbody>
+        </table>
+      </div>
+      <div class="card" id="compare-chart-card" style="display:none; margin-top:1.5rem;">
+        <div class="card-title">Responses by Organization</div>
+        <div style="position:relative; height:280px;"><canvas id="compareChart"></canvas></div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  const storedUserCheck = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  if (storedUserCheck?.role !== 'super_admin') {
+    document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center; padding:2rem;"><div><h2>Super Admin access required</h2></div></div>';
+    throw new Error('Access denied — not a Super Admin');
+  }
+  renderShell({ role:'admin', active:'/admin/organizations.html', eyebrow:'Analytics', title:'Compare Organizations' });
+
+  (async () => {
+    try {
+      const { organizations } = await apiRequest('/api/superadmin/organizations');
+      document.getElementById('org-select').innerHTML = organizations.map(o => `<option value="${o.id}">${o.name}</option>`).join('');
+    } catch (e) { /* select stays empty */ }
+  })();
+
+  document.getElementById('compare-btn').addEventListener('click', async () => {
+    const selected = [...document.getElementById('org-select').selectedOptions].map(o => o.value);
+    if (selected.length < 2) { showToast('Select at least 2 organizations', 'error'); return; }
+    try {
+      const { organizations } = await apiRequest(`/api/superadmin/compare?org_ids=${selected.join(',')}`);
+      document.getElementById('compare-tbody').innerHTML = organizations.map(o => `
+        <tr>
+          <td><b>${o.name}</b></td>
+          <td>${o.billing_tier}</td>
+          <td>${o.project_count}</td>
+          <td>${o.response_count}</td>
+          <td>${o.user_count}</td>
+          <td>${o.avg_sentiment_score != null ? o.avg_sentiment_score.toFixed(2) : '—'}</td>
+        </tr>`).join('');
+      document.getElementById('compare-table-wrap').style.display = 'block';
+
+      document.getElementById('compare-chart-card').style.display = 'block';
+      if (window.__compareChartInstance) window.__compareChartInstance.destroy();
+      window.__compareChartInstance = new Chart(document.getElementById('compareChart'), {
+        type: 'bar',
+        data: {
+          labels: organizations.map(o => o.name),
+          datasets: [{ label: 'Responses', data: organizations.map(o => o.response_count), backgroundColor: '#E4A23A' }],
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+          scales: { x: { grid: { display: false }, ticks: { color: '#9FB3AB' } }, y: { grid: { color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', precision: 0 } } } },
+      });
+    } catch (e) {
+      showToast('Could not compare: ' + e.message, 'error');
+    }
+  });
+</script>
+</body>
+</html>

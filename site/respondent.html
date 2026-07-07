@@ -251,7 +251,26 @@
             <div style="font-size:2.5rem; margin-bottom:1rem;">✓</div>
             <h2 style="font-size:1.2rem; margin-bottom:.5rem;">${t('done')}</h2>
             <p class="muted-note">${t('doneNote')}</p>
+            <div id="satisfaction-block" style="margin-top:1.5rem; border-top:1px solid var(--border); padding-top:1.2rem;">
+              <p class="muted-note" style="margin-bottom:.6rem;">How was your experience answering these questions?</p>
+              <div id="satisfaction-stars" style="display:flex; justify-content:center; gap:.4rem; font-size:1.6rem;">
+                ${[1,2,3,4,5].map(n => `<span class="sat-star" data-rating="${n}" style="cursor:pointer;">☆</span>`).join('')}
+              </div>
+            </div>
           </div>`;
+        document.querySelectorAll('.sat-star').forEach(star => {
+          star.addEventListener('click', async () => {
+            const rating = parseInt(star.dataset.rating);
+            document.querySelectorAll('.sat-star').forEach((s, i) => { s.textContent = i < rating ? '★' : '☆'; });
+            try {
+              await fetch(`${API_BASE_URL}/api/public/satisfaction`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ campaign_id: campaignId, rating }),
+              });
+              document.getElementById('satisfaction-block').innerHTML = '<p class="muted-note">Thank you for your feedback! 🙏</p>';
+            } catch (e) { /* best-effort — don't bother the respondent with an error here */ }
+          });
+        });
       } else {
         currentIndex++;
         qText.textContent = data.next_question.question_text;

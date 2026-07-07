@@ -70,6 +70,7 @@
     .r-cover::before { display: none; }
   }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -89,6 +90,11 @@
             <a class="report-mode-tab" data-mode="narrative" style="cursor:pointer;">Narrative</a>
             <a class="report-mode-tab" data-mode="full" style="cursor:pointer;">Full Detailed</a>
           </div>
+          <select id="report-style-select" style="padding:.5rem .8rem; font-size:.82rem;" title="Framing and tone for the intended audience">
+            <option value="executive">Executive Style</option>
+            <option value="government">Government Style</option>
+            <option value="academic">Academic Style</option>
+          </select>
           <select id="report-lang-select" style="padding:.5rem .8rem; font-size:.82rem;" title="Language the AI writes findings and recommendations in">
             <option value="en">🇬🇧 English</option>
             <option value="fr">🇫🇷 Français</option>
@@ -101,6 +107,8 @@
           </select>
           <button class="btn btn-ghost btn-sm" id="word-download-btn">📄 Download Word</button>
           <button class="btn btn-primary btn-sm" id="print-btn">🖨 Download as PDF</button>
+          <button class="btn btn-ghost btn-sm" id="pptx-btn">📊 Download as PowerPoint</button>
+          <button class="btn btn-ghost btn-sm" id="email-report-btn">✉️ Email Report</button>
         </div>
       </div>
 
@@ -260,6 +268,13 @@
           </div>
         </div>
 
+        <!-- URGENT ALERT (standalone, dramatic treatment — same data as Risk if Ignored above) -->
+        <div class="r-page" id="urgent-alert-page" style="border-left: 3px solid var(--danger); display:none;">
+          <div class="r-eyebrow" style="color:var(--danger);">Urgent Alert</div>
+          <h2 style="font-size:1.4rem; margin-top:.5rem;" id="urgent-alert-headline">—</h2>
+          <p class="muted-note" style="margin-top:.8rem;">Flagged from the same AI analysis as the Risk if Ignored note above — surfaced here on its own page so it isn't missed in a longer report.</p>
+        </div>
+
         <!-- OECD-DAC EVALUATION CRITERIA (real efficiency stat + org-entered notes) -->
         <div class="r-page" data-section="full">
           <div class="r-eyebrow">OECD-DAC Evaluation Criteria</div>
@@ -304,11 +319,23 @@
         </div>
 
         <div class="r-page" data-section="full">
-          <div class="r-eyebrow">Benchmarking <span style="color:var(--text-dim); text-transform:none; font-weight:400;">— illustrative capability</span></div>
-          <h2 style="font-size:1.5rem; margin-top:.5rem;">What a period-over-period comparison would look like.</h2>
-          <div class="r-insight-box" style="border-left-color:var(--accent-2);">
+          <div class="r-eyebrow">Benchmarking <span id="benchmark-illustrative-tag" style="color:var(--text-dim); text-transform:none; font-weight:400;">— illustrative capability</span></div>
+          <h2 style="font-size:1.5rem; margin-top:.5rem;" id="benchmark-title">What a period-over-period comparison would look like.</h2>
+          <div id="benchmark-illustrative-note" class="r-insight-box" style="border-left-color:var(--accent-2);">
             <div class="r-insight-label" style="color:var(--accent-2);">Note</div>
-            <div class="muted-note">This becomes real and automatic once you run this same project again in a later period — VoiceInsights Africa keeps every round on record for exactly this comparison.</div>
+            <div class="muted-note">This becomes real and automatic once you run this same project again in a later period — VoiceInsights Africa keeps every round on record for exactly this comparison. To link one, use "Is this a follow-up round?" when creating a Campaign.</div>
+          </div>
+          <div id="benchmark-real-data" style="display:none;">
+            <div class="table-wrap" style="margin-top:1rem;">
+              <table>
+                <thead><tr><th></th><th id="benchmark-baseline-label">Baseline</th><th id="benchmark-current-label">This Round</th><th>Change</th></tr></thead>
+                <tbody>
+                  <tr><td>Responses collected</td><td id="benchmark-baseline-n">–</td><td id="benchmark-current-n">–</td><td id="benchmark-n-change">–</td></tr>
+                  <tr><td>Positive sentiment</td><td id="benchmark-baseline-pct">–</td><td id="benchmark-current-pct">–</td><td id="benchmark-pct-change">–</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="muted-note" style="margin-top:.8rem;">Real comparison — both rounds pulled directly from your own collected data, not an estimate.</div>
           </div>
         </div>
 
@@ -434,6 +461,92 @@
   renderShell({ role:'client', active:'/app/reports.html', eyebrow:'Reports', title:'Research Intelligence Report' });
 
   document.getElementById('print-btn').addEventListener('click', () => window.print());
+  document.getElementById('pptx-btn').addEventListener('click', async () => {
+    const btn = document.getElementById('pptx-btn');
+    if (!window.__reportData) { showToast('Report data is still loading — try again in a moment.', 'error'); return; }
+    btn.disabled = true; btn.textContent = 'Generating…';
+    try {
+      const { stats, analytics, intelligence, selectedCampaignInfo, orgName } = window.__reportData;
+      const pptx = new PptxGenJS();
+      pptx.defineLayout({ name: 'VIA', width: 10, height: 5.63 });
+      pptx.layout = 'VIA';
+      const ACCENT = 'E4A23A', DARK = '1E2620', TEXT = '2A332C', MUTED = '6B7A70';
+
+      // ---- Slide 1: Cover ----
+      let slide = pptx.addSlide();
+      slide.background = { color: DARK };
+      slide.addText('VoiceInsights Africa', { x: 0.5, y: 0.4, fontSize: 12, color: ACCENT, bold: true, charSpacing: 2 });
+      slide.addText(selectedCampaignInfo ? (selectedCampaignInfo.survey_title || selectedCampaignInfo.name) : 'Executive Intelligence Report', { x: 0.5, y: 2.0, fontSize: 30, color: 'FFFFFF', bold: true, w: 9 });
+      slide.addText(`${orgName} · ${new Date().toLocaleDateString(undefined, { month: 'long', year: 'numeric' })} · ${stats.total_responses} respondents`, { x: 0.5, y: 3.0, fontSize: 14, color: 'A8D9C9' });
+
+      // ---- Slide 2: KPI Cards ----
+      slide = pptx.addSlide();
+      slide.addText('At a Glance', { x: 0.5, y: 0.3, fontSize: 22, color: TEXT, bold: true });
+      const kpis = [
+        ['Total Responses', String(stats.total_responses)],
+        ['Response Rate', stats.total_responses ? stats.response_rate + '%' : '—'],
+        ['Regions Covered', String(analytics.regions.length || 0)],
+        ['Active Surveys', String(stats.active_surveys)],
+      ];
+      kpis.forEach((k, i) => {
+        const x = 0.5 + (i % 2) * 4.6, y = 1.1 + Math.floor(i / 2) * 1.7;
+        slide.addShape('roundRect', { x, y, w: 4.2, h: 1.4, fill: { color: 'F4EFE6' }, line: { color: 'DDD6C4' }, rectRadius: 0.1 });
+        slide.addText(k[1], { x: x + 0.2, y: y + 0.15, fontSize: 26, bold: true, color: DARK });
+        slide.addText(k[0], { x: x + 0.2, y: y + 0.9, fontSize: 12, color: MUTED });
+      });
+
+      // ---- Slide 3: Key Findings ----
+      slide = pptx.addSlide();
+      slide.addText('Key Findings', { x: 0.5, y: 0.3, fontSize: 22, color: TEXT, bold: true });
+      const findings = (intelligence.key_findings || []).slice(0, 6).map(f => ({ text: `${(f.severity || 'medium').toUpperCase()}: ${f.text}\n`, options: { bullet: true, fontSize: 14, color: TEXT, breakLine: true } }));
+      slide.addText(findings.length ? findings : [{ text: 'Findings will appear here once enough responses are collected.', options: { fontSize: 14, color: MUTED } }], { x: 0.5, y: 1.1, w: 9, h: 4 });
+
+      // ---- Slide 4: Recommendations ----
+      slide = pptx.addSlide();
+      slide.addText('Recommendations', { x: 0.5, y: 0.3, fontSize: 22, color: TEXT, bold: true });
+      const recSections = [['Immediate', intelligence.recommendations?.immediate], ['Strategic', intelligence.recommendations?.strategic], ['Policy', intelligence.recommendations?.policy]];
+      let ry = 1.1;
+      recSections.forEach(([label, items]) => {
+        if (!items || !items.length) return;
+        slide.addText(label, { x: 0.5, y: ry, fontSize: 14, bold: true, color: ACCENT });
+        slide.addText(items.slice(0, 3).map(t => ({ text: t + '\n', options: { bullet: true, fontSize: 12, color: TEXT, breakLine: true } })), { x: 0.5, y: ry + 0.35, w: 9 });
+        ry += 0.35 + items.slice(0, 3).length * 0.35 + 0.2;
+      });
+
+      // ---- Slide 5: Methodology ----
+      slide = pptx.addSlide();
+      slide.addText('Methodology', { x: 0.5, y: 0.3, fontSize: 22, color: TEXT, bold: true });
+      slide.addText(
+        `Data collected via WhatsApp Voice, WhatsApp Chat, SMS, Phone Call, Web Form, and the Offline Enumerator App. ` +
+        `Every response passes through the same AI pipeline: transcription (Whisper), sentiment and topic analysis (Claude), and automated fraud screening. ` +
+        `${stats.total_responses} total responses across ${analytics.regions.length || 0} regions as of ${new Date().toLocaleDateString()}.`,
+        { x: 0.5, y: 1.1, w: 9, fontSize: 13, color: TEXT, valign: 'top' }
+      );
+
+      // ---- Slide 6: Summary / Narrative ----
+      slide = pptx.addSlide();
+      slide.addText('Summary', { x: 0.5, y: 0.3, fontSize: 22, color: TEXT, bold: true });
+      slide.addText(intelligence.narrative || intelligence.top_recommendation?.action || 'A narrative summary will appear here once enough responses are collected.',
+        { x: 0.5, y: 1.1, w: 9, h: 4, fontSize: 13, color: TEXT, valign: 'top' });
+
+      await pptx.writeFile({ fileName: `voiceinsights-report-${new Date().toISOString().slice(0, 10)}.pptx` });
+    } catch (e) {
+      showToast('Could not generate PowerPoint: ' + e.message, 'error');
+    } finally {
+      btn.disabled = false; btn.textContent = '📊 Download as PowerPoint';
+    }
+  });
+
+  document.getElementById('email-report-btn').addEventListener('click', async () => {
+    const to = prompt('Send this report link to which email address?');
+    if (!to) return;
+    try {
+      await apiRequest('/api/reports/email', { method: 'POST', body: { to, report_url: window.location.href, report_name: 'Executive Intelligence Report' } });
+      showToast('Report link emailed to ' + to, 'success');
+    } catch (e) {
+      showToast('Could not send: ' + e.message, 'error');
+    }
+  });
 
   document.querySelectorAll('.report-mode-tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -489,6 +602,17 @@
     window.location.href = url.toString();
   });
 
+  const reportStyleSelect = document.getElementById('report-style-select');
+  const currentStyle = new URLSearchParams(window.location.search).get('style') || 'executive';
+  reportStyleSelect.value = currentStyle;
+  reportStyleSelect.addEventListener('change', (e) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('style', e.target.value);
+    window.location.href = url.toString();
+  });
+  const STYLE_LABEL = { executive: 'Executive Intelligence Report', government: 'Government Policy Brief', academic: 'Research Report' };
+  const STYLE_EYEBROW = { executive: 'Executive Summary', government: 'Policy Implications', academic: 'Methodology & Findings' };
+
   // Which project this report covers — reflects the ACTUAL research
   // conducted, so the cover title genuinely varies by project instead of
   // showing a generic "Voice Data Report" every time. Populated inside the
@@ -534,6 +658,11 @@
 
       const urlCampaignId = new URLSearchParams(window.location.search).get('campaign_id') || '';
       const selectedCampaignInfo = campaignsResp.campaigns.find(c => c.id === urlCampaignId) || null;
+
+      // Stashed here (not just used inline) so the PowerPoint export button,
+      // which runs later on a user click, can build slides from the exact
+      // same data already on screen — no second round of API calls needed.
+      window.__reportData = { stats, analytics, intelligence, selectedCampaignInfo, orgName: org.organization ? org.organization.name : 'VoiceInsights Africa' };
       document.getElementById('project-select').innerHTML = '<option value="">All Projects (combined)</option>' +
         campaignsResp.campaigns.map(c => `<option value="${c.id}" ${c.id === urlCampaignId ? 'selected' : ''}>${c.name}</option>`).join('');
 
@@ -562,10 +691,34 @@
       const MODULE_TYPE_LABEL = { impact_monitoring: 'Impact Monitoring', beneficiary_feedback: 'Beneficiary Feedback', call_research: 'Call-Based Research', grievance: 'Grievance Reporting', survey: 'Survey' };
       const subtitleParts = [`${new Date().toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}`, `${total} respondents across ${analytics.regions.length || 0} regions`];
       if (selectedCampaignInfo && selectedCampaignInfo.survey_module_type) subtitleParts.unshift(MODULE_TYPE_LABEL[selectedCampaignInfo.survey_module_type] || selectedCampaignInfo.survey_module_type);
+      subtitleParts.unshift(STYLE_LABEL[currentStyle]);
       document.querySelectorAll('.js-cover-subtitle').forEach(el => { el.textContent = subtitleParts.join(' · '); });
       const coverIdValue = 'VIA-' + new Date().getFullYear() + '-' + Math.random().toString(36).slice(2, 7).toUpperCase();
       document.querySelectorAll('.js-cover-id').forEach(el => { el.textContent = coverIdValue; });
       document.querySelectorAll('.js-cover-date').forEach(el => { el.textContent = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }); });
+
+      // ---------- Benchmarking (real Round 1 vs Round 2+ comparison, when linked) ----------
+      if (urlCampaignId) {
+        try {
+          const panel = await apiRequest(`/api/campaigns/${urlCampaignId}/panel`);
+          if (panel.linked) {
+            document.getElementById('benchmark-illustrative-tag').style.display = 'none';
+            document.getElementById('benchmark-title').textContent = `${panel.round_label} vs. Baseline — real, measured change.`;
+            document.getElementById('benchmark-illustrative-note').style.display = 'none';
+            document.getElementById('benchmark-real-data').style.display = 'block';
+            document.getElementById('benchmark-baseline-label').textContent = panel.baseline.campaign_name || 'Baseline';
+            document.getElementById('benchmark-current-label').textContent = panel.round_label;
+            document.getElementById('benchmark-baseline-n').textContent = panel.baseline.total;
+            document.getElementById('benchmark-current-n').textContent = panel.current.total;
+            document.getElementById('benchmark-n-change').textContent = (panel.current.total - panel.baseline.total >= 0 ? '+' : '') + (panel.current.total - panel.baseline.total);
+            document.getElementById('benchmark-baseline-pct').textContent = panel.baseline.positive_pct + '%';
+            document.getElementById('benchmark-current-pct').textContent = panel.current.positive_pct + '%';
+            const pctChangeEl = document.getElementById('benchmark-pct-change');
+            pctChangeEl.textContent = (panel.sentiment_change_pct >= 0 ? '+' : '') + panel.sentiment_change_pct + 'pp';
+            pctChangeEl.style.color = panel.sentiment_change_pct >= 0 ? 'var(--success)' : 'var(--danger)';
+          }
+        } catch (e) { /* not linked or failed — illustrative note stays showing, which is correct */ }
+      }
       document.querySelectorAll('.js-cover-wave').forEach(el => { el.innerHTML = makeWaveform(48, false); });
 
       document.getElementById('kpi-responses').textContent = total;
@@ -634,6 +787,10 @@
       document.getElementById('decision-immediate').textContent = (intelligence.recommendations && intelligence.recommendations.immediate && intelligence.recommendations.immediate[0]) || 'Not enough data yet.';
       document.getElementById('decision-strategic').textContent = (intelligence.recommendations && intelligence.recommendations.strategic && intelligence.recommendations.strategic[0]) || 'Not enough data yet.';
       document.getElementById('decision-risk').textContent = intelligence.risk_if_ignored || 'Not enough data yet to assess risk.';
+      if (intelligence.risk_if_ignored) {
+        document.getElementById('urgent-alert-headline').textContent = intelligence.risk_if_ignored;
+        document.getElementById('urgent-alert-page').style.display = 'block';
+      }
 
       // ---------- Top Recommendation AI Scoring (real AI output) ----------
       const topRecEl = document.getElementById('top-rec-scoring');

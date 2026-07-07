@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quality Control — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <div class="section-head"><h2 style="font-size:1.05rem;">Completion &amp; Confidence by Question</h2></div>
+      <p class="muted-note" style="margin-bottom:1rem;">Low completion or confidence on a specific question often points to unclear wording, translation issues, or a question that's hard to answer by voice — worth reviewing before drawing conclusions from that question's data.</p>
+      <div class="table-wrap" style="margin-bottom:1.5rem;">
+        <table>
+          <thead><tr><th>#</th><th>Question</th><th>Answers</th><th>Completion Rate</th><th>Avg. Transcription Confidence</th></tr></thead>
+          <tbody id="qc-tbody"><tr><td colspan="5" class="muted-note" style="padding:1.5rem;">Loading…</td></tr></tbody>
+        </table>
+      </div>
+
+      <div class="section-head"><h2 style="font-size:1.05rem;">Flagged Responses Pending Review</h2></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Channel</th><th>Phone</th><th>Project</th><th>Date</th><th>QA Status</th><th></th></tr></thead>
+          <tbody id="qc-review-tbody"><tr><td colspan="6" class="muted-note" style="padding:1.5rem;">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  renderShell({ role:'client', active:'/admin/quality-control.html', eyebrow:'Trust & Safety', title:'Quality Control' });
+
+  const CHANNEL_LABEL = { whatsapp: 'WhatsApp', phone_call: 'Phone Call', sms: 'SMS', web_link: 'Web', app: 'Offline App' };
+
+  (async () => {
+    try {
+      const qs = new URLSearchParams(window.location.search).get('org_id');
+      const { per_question, pending_review } = await apiRequest(`/api/quality-control${qs ? '?org_id=' + qs : ''}`);
+
+      const qcBody = document.getElementById('qc-tbody');
+      qcBody.innerHTML = per_question.length
+        ? per_question.map((q, i) => {
+            const compPct = q.completion_rate != null ? Math.round(q.completion_rate * 100) : null;
+            const compColor = compPct == null ? 'var(--text-dim)' : compPct >= 80 ? 'var(--success)' : compPct >= 50 ? 'var(--warn)' : 'var(--danger)';
+            return `<tr>
+              <td>${i + 1}</td>
+              <td style="max-width:320px;">${q.question_text}</td>
+              <td>${q.answer_count}</td>
+              <td style="color:${compColor}; font-weight:600;">${compPct != null ? compPct + '%' : '—'}</td>
+              <td>${q.avg_confidence != null ? Math.round(q.avg_confidence * 100) + '%' : '—'}</td>
+            </tr>`;
+          }).join('')
+        : '<tr><td colspan="5" class="muted-note" style="padding:1.5rem;">No question data yet.</td></tr>';
+
+      const reviewBody = document.getElementById('qc-review-tbody');
+      const QA_BADGE = { approved: 'badge-success', rejected: 'badge-danger' };
+      reviewBody.innerHTML = pending_review.length
+        ? pending_review.map(r => `
+            <tr>
+              <td>${CHANNEL_LABEL[r.channel] || r.channel}</td><td>${r.phone_number || '—'}</td><td>${r.campaign_name}</td>
+              <td class="muted-note">${new Date(r.started_at + 'Z').toLocaleDateString()}</td>
+              <td>${r.qa_decision ? `<span class="badge ${QA_BADGE[r.qa_decision]}">${r.qa_decision}</span>` : '<span class="muted-note">Not reviewed</span>'}</td>
+              <td>
+                <button class="btn btn-ghost btn-sm qa-btn" data-id="${r.id}" data-decision="approved" style="color:var(--success);">✓ Approve</button>
+                <button class="btn btn-ghost btn-sm qa-btn" data-id="${r.id}" data-decision="rejected" style="color:var(--danger);">✗ Reject</button>
+              </td>
+            </tr>`).join('')
+        : '<tr><td colspan="6" class="muted-note" style="padding:1.5rem;">Nothing pending review right now.</td></tr>';
+      document.querySelectorAll('.qa-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          try {
+            await apiRequest(`/api/responses/${btn.dataset.id}/qa-review`, { method: 'POST', body: { decision: btn.dataset.decision } });
+            showToast('Marked as ' + btn.dataset.decision, 'success');
+            location.reload();
+          } catch (e) { showToast('Could not save: ' + e.message, 'error'); }
+        });
+      });
+    } catch (e) {
+      document.getElementById('qc-tbody').innerHTML = `<tr><td colspan="6" class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</td></tr>`;
+    }
+  })();
+</script>
+</body>
+</html>

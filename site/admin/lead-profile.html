@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lead Profile — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <a href="/admin/leads.html" class="muted-note" style="font-size:.82rem;">← Back to Sales Pipeline</a>
+
+      <div id="lead-loading" class="muted-note" style="padding:2rem;">Loading lead…</div>
+
+      <div id="lead-body" style="display:none; margin-top:1rem;">
+        <div class="grid grid-2" style="gap:1.5rem; align-items:flex-start;">
+
+          <!-- LEFT: Lead Information -->
+          <div class="card">
+            <div class="card-title">Lead Information</div>
+            <table style="width:100%; font-size:.88rem;">
+              <tr><td class="muted-note" style="padding:.4rem 0; width:40%;">Full Name</td><td id="l-name">—</td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Email</td><td id="l-email">—</td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Organization</td><td id="l-org">—</td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Country</td><td id="l-country">—</td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Org Type</td><td id="l-orgtype">—</td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Project Size</td><td id="l-size">—</td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Expected Respondents</td><td id="l-respondents">—</td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Preferred Channels</td><td id="l-channels">—</td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Submitted</td><td id="l-date">—</td></tr>
+              <tr><td class="muted-note" style="padding:.4rem 0;">Source</td><td>Website</td></tr>
+            </table>
+            <div class="card-title" style="margin-top:1.2rem;">Use Case</div>
+            <p id="l-message" style="font-size:.88rem; line-height:1.6;">—</p>
+
+            <div class="card-title" style="margin-top:1.2rem;">Pipeline Stage</div>
+            <select id="l-stage" style="width:100%;">
+              <option value="new">New</option>
+              <option value="contacted">Contacted</option>
+              <option value="proposal_sent">Proposal Sent</option>
+              <option value="negotiating">Negotiating</option>
+              <option value="won">Won</option>
+              <option value="lost">Lost</option>
+            </select>
+
+            <div style="display:flex; gap:.6rem; margin-top:1.2rem;">
+              <a id="l-proposal-link" href="#" class="btn btn-ghost btn-sm" style="flex:1; justify-content:center;">📄 Generate Proposal</a>
+              <button id="l-convert-btn" class="btn btn-primary btn-sm" style="flex:1; justify-content:center;">🚀 Convert to Organization</button>
+            </div>
+          </div>
+
+          <!-- RIGHT: AI Analysis -->
+          <div class="card">
+            <div class="card-title" style="color:var(--accent);">AI Analysis</div>
+            <div id="ai-empty" style="text-align:center; padding:1.5rem 0;">
+              <p class="muted-note" style="margin-bottom:.8rem;">No AI qualification yet.</p>
+              <button class="btn btn-primary btn-sm" id="l-score-btn">✨ Run AI Analysis</button>
+            </div>
+            <div id="ai-result" style="display:none;">
+              <div class="grid grid-2" style="gap:1rem; margin-bottom:1rem;">
+                <div><div class="muted-note" style="font-size:.72rem;">Lead Score</div><div id="ai-score" style="font-size:1.6rem; font-weight:700; color:var(--accent);">—</div></div>
+                <div><div class="muted-note" style="font-size:.72rem;">Estimated Deal</div><div id="ai-deal" style="font-size:1.3rem; font-weight:700;">—</div></div>
+                <div><div class="muted-note" style="font-size:.72rem;">Priority</div><div id="ai-priority">—</div></div>
+                <div><div class="muted-note" style="font-size:.72rem;">Recommended Package</div><div id="ai-package">—</div></div>
+              </div>
+              <div class="muted-note" style="font-size:.72rem; margin-bottom:.3rem;">Reasoning</div>
+              <p id="ai-reasoning" style="font-size:.85rem; line-height:1.6;">—</p>
+              <button class="btn btn-ghost btn-sm" id="l-rescore-btn" style="margin-top:1rem;">↻ Re-run Analysis</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="convert-modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; align-items:center; justify-content:center; padding:5vw;">
+  <div class="card" style="max-width:480px; width:100%; position:relative;">
+    <button id="convert-modal-close" aria-label="Close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
+    <div class="card-title">Convert to Organization</div>
+    <p class="muted-note" style="margin-bottom:1rem;">This creates the organization, invites the admin, and optionally starts their first project — all in one step.</p>
+    <div class="field"><label>Organization Name</label><input id="cv-org-name"></div>
+    <div class="field"><label>Subscription Tier</label>
+      <select id="cv-tier"><option value="starter">Starter</option><option value="professional">Professional</option><option value="enterprise">Enterprise</option></select>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Admin Full Name</label><input id="cv-admin-name"></div>
+      <div class="field"><label>Admin Email</label><input id="cv-admin-email" type="email"></div>
+    </div>
+    <div style="border-top:1px solid var(--border); margin:1rem 0; padding-top:1rem;">
+      <div class="muted-note" style="margin-bottom:.6rem;">Optional — start their first project now:</div>
+      <div class="field"><label>Project Name</label><input id="cv-project-name" placeholder="e.g. Citizen Feedback Survey — Round 1"></div>
+      <div class="field"><label>Survey (question set)</label><select id="cv-survey"><option value="">Skip — I'll create a project later</option></select></div>
+    </div>
+    <div id="cv-error" style="display:none; color:var(--danger); font-size:.82rem; margin-bottom:.8rem;"></div>
+    <button class="btn btn-primary" id="cv-create-btn" style="width:100%; justify-content:center;">Create Organization →</button>
+  </div>
+</div>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  const storedUserCheck = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  if (storedUserCheck?.role !== 'super_admin') {
+    document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center; padding:2rem;"><div><h2>Super Admin access required</h2></div></div>';
+    throw new Error('Access denied — not a Super Admin');
+  }
+  renderShell({ role:'admin', active:'/admin/leads.html', eyebrow:'Sales Pipeline', title:'Lead Profile' });
+
+  const leadId = new URLSearchParams(window.location.search).get('lead_id');
+  const PRIORITY_BADGE = { high: 'badge-danger', medium: 'badge-warn', low: 'badge-neutral' };
+  let currentLead = null;
+
+  async function loadLead() {
+    if (!leadId) {
+      document.getElementById('lead-loading').textContent = 'No lead specified.';
+      return;
+    }
+    try {
+      const { lead } = await apiRequest(`/api/leads/${leadId}`);
+      currentLead = lead;
+      document.getElementById('l-name').textContent = lead.full_name;
+      document.getElementById('l-email').textContent = lead.work_email;
+      document.getElementById('l-org').textContent = lead.organization || '—';
+      document.getElementById('l-country').textContent = lead.country || '—';
+      document.getElementById('l-orgtype').textContent = lead.organization_type || '—';
+      document.getElementById('l-size').textContent = lead.project_size || '—';
+      document.getElementById('l-respondents').textContent = lead.expected_respondents || '—';
+      document.getElementById('l-channels').textContent = lead.preferred_channels || '—';
+      document.getElementById('l-date').textContent = new Date(lead.created_at + 'Z').toLocaleString();
+      document.getElementById('l-message').textContent = lead.message || 'No message provided.';
+      document.getElementById('l-stage').value = lead.stage;
+      document.getElementById('l-proposal-link').href = `/admin/proposal.html?lead_id=${lead.id}`;
+      document.getElementById('cv-org-name').value = lead.organization || lead.full_name;
+
+      if (lead.score != null) {
+        document.getElementById('ai-empty').style.display = 'none';
+        document.getElementById('ai-result').style.display = 'block';
+        document.getElementById('ai-score').textContent = lead.score + '%';
+        document.getElementById('ai-deal').textContent = lead.estimated_deal_usd ? 'USD ' + lead.estimated_deal_usd.toLocaleString() : '—';
+        document.getElementById('ai-priority').innerHTML = `<span class="badge ${PRIORITY_BADGE[lead.priority] || 'badge-neutral'}">${(lead.priority || 'medium').toUpperCase()}</span>`;
+        document.getElementById('ai-package').textContent = lead.recommended_package || '—';
+        document.getElementById('ai-reasoning').textContent = lead.ai_reasoning || '—';
+      }
+
+      document.getElementById('lead-loading').style.display = 'none';
+      document.getElementById('lead-body').style.display = 'block';
+    } catch (e) {
+      document.getElementById('lead-loading').textContent = 'Could not load lead: ' + e.message;
+    }
+  }
+  loadLead();
+
+  document.getElementById('l-stage').addEventListener('change', async (e) => {
+    try { await apiRequest(`/api/leads/${leadId}/stage`, { method: 'PUT', body: { stage: e.target.value } }); }
+    catch (err) { showToast('Could not update stage: ' + err.message, 'error'); }
+  });
+
+  async function runScoring(btnId) {
+    const btn = document.getElementById(btnId);
+    btn.disabled = true; btn.textContent = 'Analyzing…';
+    try {
+      const { analysis } = await apiRequest(`/api/leads/${leadId}/score`, { method: 'POST' });
+      document.getElementById('ai-empty').style.display = 'none';
+      document.getElementById('ai-result').style.display = 'block';
+      document.getElementById('ai-score').textContent = analysis.score + '%';
+      document.getElementById('ai-deal').textContent = analysis.estimated_deal_usd ? 'USD ' + analysis.estimated_deal_usd.toLocaleString() : '—';
+      document.getElementById('ai-priority').innerHTML = `<span class="badge ${PRIORITY_BADGE[analysis.priority] || 'badge-neutral'}">${(analysis.priority || 'medium').toUpperCase()}</span>`;
+      document.getElementById('ai-package').textContent = analysis.recommended_package || '—';
+      document.getElementById('ai-reasoning').textContent = analysis.reasoning || '—';
+    } catch (e) {
+      showToast('AI scoring failed: ' + e.message, 'error');
+    } finally {
+      btn.disabled = false; btn.textContent = btnId === 'l-score-btn' ? '✨ Run AI Analysis' : '↻ Re-run Analysis';
+    }
+  }
+  document.getElementById('l-score-btn').addEventListener('click', () => runScoring('l-score-btn'));
+  document.getElementById('l-rescore-btn').addEventListener('click', () => runScoring('l-rescore-btn'));
+
+  // ---------- Convert to Organization ----------
+  document.getElementById('l-convert-btn').addEventListener('click', async () => {
+    document.getElementById('convert-modal-backdrop').style.display = 'flex';
+    document.getElementById('cv-admin-name').value = currentLead?.full_name || '';
+    document.getElementById('cv-admin-email').value = currentLead?.work_email || '';
+    try {
+      const { surveys } = await apiRequest('/api/surveys');
+      document.getElementById('cv-survey').innerHTML = '<option value="">Skip — I will create a project later</option>' +
+        surveys.map(s => `<option value="${s.id}">${s.title}</option>`).join('');
+    } catch (e) { /* leave as skip-only */ }
+  });
+  document.getElementById('convert-modal-close').addEventListener('click', () => {
+    document.getElementById('convert-modal-backdrop').style.display = 'none';
+  });
+  document.getElementById('cv-create-btn').addEventListener('click', async () => {
+    const errBox = document.getElementById('cv-error');
+    errBox.style.display = 'none';
+    const orgName = document.getElementById('cv-org-name').value.trim();
+    const adminName = document.getElementById('cv-admin-name').value.trim();
+    const adminEmail = document.getElementById('cv-admin-email').value.trim();
+    if (!orgName || !adminName || !adminEmail) {
+      errBox.textContent = 'Organization Name, Admin Full Name, and Admin Email are all required.';
+      errBox.style.display = 'block';
+      return;
+    }
+    const btn = document.getElementById('cv-create-btn');
+    btn.disabled = true; btn.textContent = 'Creating…';
+    try {
+      const result = await apiRequest(`/api/leads/${leadId}/convert`, {
+        method: 'POST',
+        body: {
+          organization_name: orgName,
+          billing_tier: document.getElementById('cv-tier').value,
+          admin_full_name: adminName,
+          admin_email: adminEmail,
+          project_name: document.getElementById('cv-project-name').value.trim() || null,
+          survey_id: document.getElementById('cv-survey').value || null,
+        },
+      });
+      document.getElementById('convert-modal-backdrop').style.display = 'none';
+      showToast('Organization created! Login sent to ' + adminEmail, 'success');
+      setTimeout(() => { window.location.href = `/app/dashboard.html?org_id=${result.organization_id}`; }, 1200);
+    } catch (e) {
+      errBox.textContent = e.message;
+      errBox.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Create Organization →';
+    }
+  });
+</script>
+</body>
+</html>

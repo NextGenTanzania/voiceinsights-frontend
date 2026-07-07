@@ -16,7 +16,7 @@
     <div class="content">
       <div class="card" style="margin-bottom:1.5rem; border-color:var(--danger);">
         <div class="card-title" style="color:var(--danger);" data-i18n="fa.status_title">Fraud Engine — Current Status</div>
-        <p style="color:var(--text);" data-i18n="fa.status_desc">Two patterns are actively detected on every WhatsApp response: near-duplicate wording versus recent responses on the same campaign, and suspiciously fast turnaround (under 15 seconds since the previous response).</p>
+        <p style="color:var(--text);" data-i18n="fa.status_desc">Four patterns are actively detected on every response: near-duplicate wording versus recent responses on the same campaign, suspiciously fast turnaround, the same phone number submitting repeatedly, and GPS location far outside where the rest of the campaign was collected.</p>
       </div>
 
       <div class="table-wrap">
@@ -49,8 +49,15 @@
       }
       tbody.innerHTML = alerts.map(a => {
         const scoreColor = a.fraud_score >= 0.8 ? 'var(--danger)' : a.fraud_score >= 0.6 ? 'var(--warn)' : 'var(--text-dim)';
+        const CATEGORY_RULES = [
+          [/near-identical|substantial overlap/i, 'Duplicate Content'],
+          [/unusually fast/i, 'Speed Fraud'],
+          [/separate responses/i, 'Repeated Phone'],
+          [/GPS location/i, 'GPS Mismatch'],
+        ];
+        const categorize = (text) => (CATEGORY_RULES.find(([re]) => re.test(text)) || [null, 'Other'])[1];
         const reasonsHtml = (a.reasons && a.reasons.length)
-          ? a.reasons.map(r => `<div style="font-size:.78rem; margin-bottom:.2rem;">• ${r}</div>`).join('')
+          ? a.reasons.map(r => `<div style="font-size:.78rem; margin-bottom:.3rem;"><span class="badge badge-neutral" style="font-size:.6rem; margin-right:.3rem;">${categorize(r)}</span>${r}</div>`).join('')
           : '<span class="muted-note">' + t('fa.no_reasons', 'No reasons logged') + '</span>';
         return `<tr>
           <td>#${a.response_id.slice(0, 12)}</td>

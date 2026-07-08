@@ -6,6 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sample Report — VoiceInsights Africa</title>
 <link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/vrds-tokens.css">
+<link rel="stylesheet" href="/assets/css/vrds-components.css">
+<link rel="stylesheet" href="/assets/css/vrds-showcase.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -14,6 +17,25 @@
   @media print { .no-print { display: none !important; } body { background: #fff; } }
   .r-section { margin-bottom: 2rem; padding: 1.5rem; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); }
   .r-kpi { display: inline-block; text-align: center; padding: 1rem 1.5rem; margin: 0 .5rem .5rem 0; background: var(--bg); border-radius: 10px; min-width: 140px; }
+  .ios-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.9rem;}
+  .ios-card{padding:1rem;border:1px solid var(--border);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));}
+  .sdg-card{display:flex;align-items:center;gap:.7rem;border-radius:12px;padding:.75rem;background:var(--bg);}
+  .sdg-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:10px;color:#fff;font-weight:800;}
+  .evidence-chip{display:inline-block;margin:.2rem .25rem .2rem 0;padding:.25rem .5rem;border:1px solid var(--border);border-radius:999px;font-size:.75rem;color:var(--muted);}
+  .consulting-cover{background:radial-gradient(circle at top right,rgba(228,162,58,.22),transparent 35%),linear-gradient(135deg,#0f1614,#1f2a26);color:#fff;border-radius:20px;padding:2rem;border:1px solid rgba(228,162,58,.32);}
+  .sample-standard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem;margin-top:1rem;}
+  .sample-standard-card{border:1px solid var(--border);border-radius:14px;padding:1rem;background:var(--bg);}
+  .sample-standard-card b{display:block;color:var(--accent);margin-bottom:.25rem;}
+  .report-nav-rail{position:sticky;top:12px;align-self:start;border:1px solid var(--border);border-radius:14px;padding:1rem;background:var(--surface);}
+  @media (min-width:1100px){.viewer-shell{max-width:1180px!important;display:grid;grid-template-columns:230px 1fr;gap:1rem}.viewer-main{min-width:0}}
+
+  .phase20-hero{background:linear-gradient(135deg,#101815,#26312d);color:#fff;border:1px solid rgba(228,162,58,.35);border-radius:22px;padding:1.5rem;margin-bottom:1rem;}
+  .phase20-matrix{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.75rem;}
+  .phase20-panel{border:1px solid var(--border);border-radius:16px;background:var(--surface);padding:1rem;margin:1rem 0;}
+  .phase20-mini{border:1px solid var(--border);border-radius:14px;background:var(--bg);padding:.85rem;}
+  .assistant-action{display:block;width:100%;text-align:left;margin:.45rem 0;padding:.7rem;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);cursor:pointer;}
+  .assistant-output{white-space:pre-wrap;border-left:4px solid var(--accent);padding:.8rem;background:var(--bg);border-radius:10px;margin-top:.7rem;}
+  .infographic-page{border:1px solid rgba(212,175,55,.28);border-radius:18px;padding:1rem;background:linear-gradient(180deg,rgba(212,175,55,.08),transparent);margin:.8rem 0;}
 </style>
 </head>
 <body>
@@ -31,32 +53,36 @@
   </div>
 </nav>
 
-<div style="max-width:960px; margin:0 auto; padding:2rem 1.5rem;">
+<div class="viewer-shell" style="max-width:960px; margin:0 auto; padding:2rem 1.5rem;">
+  <aside class="report-nav-rail no-print"><b style="color:var(--accent);">Report Standard</b><p class="muted-note">International sample viewer with executive, donor, policy, infographic and board-ready outputs.</p><a href="#executive-snapshot" class="muted-note">Executive Snapshot</a><br><a href="#sample-standard" class="muted-note">Sample Standard</a><br><a href="#trust-layer" class="muted-note">Trust Layer</a><br><a href="#report-body" class="muted-note">Core Report</a></aside>
+  <main class="viewer-main">
 
   <div class="r-section no-print" style="background:#3a2a0a; border:1px solid var(--accent); text-align:center;">
-    <b>📋 Demonstration Report</b> — Generated for product demonstration purposes. This is built from fictional data by VoiceInsights Africa's real Report Engine.
+    <b>📋 Demonstration Report</b> — Fictional sample data for product evaluation. No real client or respondent data is shown.
   </div>
 
   <div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:.6rem;">
     <div class="muted-note" id="report-status-line">Loading…</div>
     <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-      <button class="btn btn-primary btn-sm" id="export-pdf-btn">🖨 Sample PDF</button>
-      <button class="btn btn-ghost btn-sm" id="export-pptx-btn">📊 Board PPT</button>
+      <button class="btn btn-primary btn-sm" id="export-pdf-btn">🖨 Print-ready report</button>
+      <button class="btn btn-ghost btn-sm" id="export-pptx-btn">📊 Presentation-ready board outline</button>
     </div>
   </div>
 
   <div class="no-print" style="margin:.6rem 0 1.5rem; padding:1rem; background:var(--surface); border-radius:10px;">
-    <div class="muted-note" style="font-size:.78rem; margin-bottom:.6rem; font-weight:600;">Multi-Format Reports (Phase 15) — every download renders from this same report, nothing is regenerated:</div>
+    <div class="muted-note" style="font-size:.78rem; margin-bottom:.6rem; font-weight:600;">Export Previews — each download uses this same report evidence package:</div>
     <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="executive_summary" data-ext="txt">Executive Summary</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="management_report" data-ext="txt">Management Report</button>
-      <button class="btn btn-ghost btn-sm" id="tech-report-btn">Full Technical Report</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="donor_brief" data-ext="txt">Donor Brief</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="policy_brief" data-ext="txt">Policy Brief</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="infographic" data-ext="txt">Infographic</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="statistical_annex" data-ext="json">Statistical Annex</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="dataset_appendix" data-ext="json">Dataset Appendix</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="ai_talking_points" data-ext="txt">AI Presentation Notes</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="executive_summary" data-ext="txt">Executive report preview</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="management_report" data-ext="txt">Management report preview</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="government_report" data-ext="txt">Government cabinet brief preview</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="one_page_executive_brief" data-ext="txt">One-page executive brief preview</button>
+      <button class="btn btn-ghost btn-sm" id="tech-report-btn">Print-ready technical report</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="donor_brief" data-ext="txt">Donor impact report preview</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="policy_brief" data-ext="txt">Policy brief preview</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="infographic" data-ext="txt">Infographic report preview</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="statistical_annex" data-ext="txt">Statistical annex preview</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="technical_annex" data-ext="txt">Technical annex preview</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="board_deck" data-ext="txt">Presentation-ready board talking points</button>
     </div>
   </div>
 
@@ -64,16 +90,24 @@
 
   <div id="decision-container"></div>
 
+  <div id="intelligence-os-container"></div>
+
+  <div id="vrds-showcase-container"></div>
+
+  <div id="phase20-container"></div>
+
   <div id="report-body"><p class="muted-note">Loading sample report…</p></div>
 
   <div class="r-section no-print" style="text-align:center;">
     <h3>Ready to see this for your own data?</h3>
     <a href="/contact.html" class="btn btn-primary" style="margin-top:.6rem;">Book a Demo</a>
   </div>
+</main>
 </div>
 
 <script src="/assets/js/infographic-components.js"></script>
 <script src="/assets/js/decision-intelligence-components.js"></script>
+<script src="/assets/js/vrds-components.js"></script>
 <script src="/assets/js/config.js"></script>
 <script>
   const reportId = new URLSearchParams(window.location.search).get('report_id');
@@ -88,10 +122,322 @@
       const dm = reportData.document_model;
       document.getElementById('report-status-line').textContent = `${dm.metadata.template_name} · ~${reportData.estimated_pages} pages · Demonstration data`;
       renderBody(dm);
+      loadIntelligenceOS();
+      loadTrustV19();
+      loadPhase20Experience();
+      loadVRDSShowcaseExperience();
       loadInfographic();
       if (new URLSearchParams(window.location.search).get('download') === 'pdf') setTimeout(() => window.print(), 800);
     } catch (e) {
-      document.getElementById('report-body').innerHTML = `<p class="muted-note" style="color:var(--danger);">Could not load sample report: ${e.message}</p>`;
+      document.getElementById('report-body').innerHTML = `<p class="muted-note" style="color:var(--danger);">This sample report is temporarily unavailable: ${e.message}</p>`;
+    }
+  }
+
+
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch]));
+  }
+
+  function renderList(items) {
+    return (items || []).length ? `<ul>${items.map(i => `<li>${escapeHtml(typeof i === 'string' ? i : (i.decision || i.recommendation || i.risk || i.label || JSON.stringify(i)))}</li>`).join('')}</ul>` : '<p class="muted-note">Insufficient verified evidence available for this section.</p>';
+  }
+
+
+
+  function renderValueForVRDS(obj) {
+    if (obj == null) return '';
+    if (typeof obj === 'string' || typeof obj === 'number') return escapeHtml(obj);
+    if (obj.action) return escapeHtml(obj.action);
+    if (obj.decision) return escapeHtml(obj.decision);
+    if (obj.risk) return escapeHtml(obj.risk);
+    if (obj.claim) return escapeHtml(obj.claim);
+    if (obj.recommendation) return escapeHtml(obj.recommendation);
+    if (obj.contribution_summary) return escapeHtml(obj.contribution_summary);
+    if (obj.label && obj.value) return `${escapeHtml(obj.label)}: ${escapeHtml(obj.value)}`;
+    if (obj.region || obj.responses) return `${escapeHtml(obj.region || obj.label || 'Region')}: ${escapeHtml(obj.responses || obj.n || '—')}`;
+    return escapeHtml(obj.title || obj.type || obj.label || 'Report component');
+  }
+
+  function evidenceClass(cls) {
+    const v = String(cls || '').toLowerCase();
+    if (v.includes('raw')) return 'vrds-evidence-raw';
+    if (v.includes('synthetic') || v.includes('demo')) return 'vrds-evidence-demo';
+    if (v.includes('limited') || v.includes('insufficient')) return 'vrds-evidence-limited';
+    return 'vrds-evidence-model';
+  }
+
+  async function loadVRDSShowcaseExperience() {
+    const target = document.getElementById('vrds-showcase-container');
+    if (!target) return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/vrds-showcase`);
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || `HTTP ${res.status}`);
+      const cover = d.premium_cover || {};
+      const brief = d.executive_brief || {};
+      const qa = d.quality_assessment || {};
+      const infographics = (d.publication_grade_infographic?.pages && d.publication_grade_infographic.pages.length) ? d.publication_grade_infographic.pages : (d.infographic_pages?.pages || []);
+      const excellence = d.international_report_excellence || {};
+      const evidence = d.evidence_traceability || [];
+      const methodology = d.methodology || {};
+      const decisions = d.decision_dashboard?.matrix || [];
+      const risks = d.risk_dashboard?.risks || [];
+      const recs = d.recommendation_priority || [];
+      const assistant = d.assistant_actions || [];
+      const formats = d.export_manifest || [];
+      target.innerHTML = `
+        <section class="vrds-showcase-hero" id="vrds-showcase">
+          <div class="vrds-showcase-label">Executive Intelligence View</div>
+          <h1 class="vrds-showcase-title">${escapeHtml(cover.report_title || 'Executive Intelligence Report')}</h1>
+          <p class="vrds-showcase-subtitle">${escapeHtml(cover.executive_storyline || 'Decision-ready intelligence prepared from the report evidence package.')}</p>
+          <div class="vrds-chip-row">
+            <span class="vrds-chip">${escapeHtml(cover.sector || 'Research Intelligence')}</span>
+            <span class="vrds-chip">${escapeHtml(cover.country || 'Demo country')}</span>
+            <span class="vrds-chip">${escapeHtml(cover.classification || 'Demonstration Report')}</span>
+            ${(cover.standards || []).map(s => `<span class="vrds-chip">${escapeHtml(s)}</span>`).join('')}
+          </div>
+          <div class="vrds-kpi-grid">
+            <div class="vrds-kpi-tile"><div class="vrds-kpi-label">Responses</div><div class="vrds-kpi-value">${escapeHtml(brief.executive_snapshot?.responses ?? '—')}</div><div class="vrds-kpi-note">Evidence base</div></div>
+            <div class="vrds-kpi-tile"><div class="vrds-kpi-label">Quality</div><div class="vrds-kpi-value">${escapeHtml(qa.quality_score ?? '—')}</div><div class="vrds-kpi-note">Report readiness score</div></div>
+            <div class="vrds-kpi-tile"><div class="vrds-kpi-label">Evidence</div><div class="vrds-kpi-value">${escapeHtml(qa.evidence_score ?? '—')}</div><div class="vrds-kpi-note">Traceability score</div></div>
+            <div class="vrds-kpi-tile"><div class="vrds-kpi-label">Confidence</div><div class="vrds-kpi-value">${escapeHtml(brief.confidence_score ?? '—')}%</div><div class="vrds-kpi-note">Decision confidence</div></div>
+          </div>
+        </section>
+
+        <section class="vrds-panel" id="sector-excellence">
+          <div class="vrds-panel-title"><div><h2>Sector-Specific Interpretation</h2><p>${escapeHtml(excellence.storyline || 'This report uses sector-specific terminology, methodology and decision language.')}</p></div><span class="vrds-chip">${escapeHtml(excellence.sector || cover.sector || 'Research Intelligence')}</span></div>
+          <div class="vrds-mini-grid">${(excellence.sector_kpis || []).slice(0,5).map(k => `<div class="vrds-mini-card"><b>${escapeHtml(k.label)}</b><p>${escapeHtml(k.interpretation)}</p><span class="vrds-evidence-type">${escapeHtml(k.evidence_basis)}</span></div>`).join('')}</div>
+        </section>
+
+        <section class="vrds-panel" id="vrds-executive-brief">
+          <div class="vrds-panel-title"><div><h2>One-Page Executive Brief</h2><p>${escapeHtml(brief.headline_insight || 'Insufficient verified evidence is available for this section.')}</p></div><span class="vrds-chip">Decision required</span></div>
+          <div class="vrds-mini-grid">
+            <div class="vrds-mini-card"><b>Five Key Findings</b>${renderList(brief.five_key_findings || [])}</div>
+            <div class="vrds-mini-card"><b>Critical Risks</b>${renderList((brief.three_critical_risks || []).map(r => r.risk || r))}</div>
+            <div class="vrds-mini-card"><b>Recommended Decisions</b>${renderList((brief.three_recommended_decisions || []).map(x => x.decision || x))}</div>
+            <div class="vrds-mini-card"><b>Expected Impact</b><p>${escapeHtml(brief.expected_impact || 'Expected impact requires follow-up measurement.')}</p></div>
+          </div>
+        </section>
+
+        <section class="vrds-panel" id="vrds-decision-dashboard">
+          <div class="vrds-panel-title"><div><h2>Decision Dashboard</h2><p>Prioritized actions translated into impact, effort, owner and timeline.</p></div></div>
+          <div class="vrds-mini-grid">${decisions.slice(0,6).map(x => `<div class="vrds-mini-card"><b>${escapeHtml(x.quadrant || x.priority || 'Decision')}</b><p>${escapeHtml(x.action || x.decision || 'Decision to confirm')}</p><span class="vrds-evidence-type">Impact: ${escapeHtml(x.impact || '—')}</span><span class="vrds-evidence-type">Effort: ${escapeHtml(x.effort || '—')}</span></div>`).join('')}</div>
+        </section>
+
+        <section class="vrds-panel" id="vrds-risk-dashboard">
+          <div class="vrds-panel-title"><div><h2>Risk Dashboard</h2><p>Risks are shown with mitigation logic and do not introduce new unsupported statistics.</p></div></div>
+          <div class="vrds-mini-grid">${risks.slice(0,6).map(x => `<div class="vrds-mini-card"><b>${escapeHtml(x.severity || x.priority || 'Risk')}</b><p>${escapeHtml(x.risk || 'Risk to validate')}</p><span class="vrds-evidence-type">Likelihood: ${escapeHtml(x.likelihood || '—')}</span><span class="vrds-evidence-type">Impact: ${escapeHtml(x.impact || '—')}</span></div>`).join('')}</div>
+        </section>
+
+        <section class="vrds-panel" id="vrds-infographics">
+          <div class="vrds-panel-title"><div><h2>Publication Infographic Pages</h2><p>Publication-style pages for executive, donor, government and board use.</p></div></div>
+          ${infographics.map(page => `<article class="vrds-infographic-page vrds-publication-page"><div class="vrds-infographic-copy"><div class="vrds-infographic-layout">${escapeHtml(page.layout || 'Publication page')}</div><h3>${escapeHtml(page.title || page.id)}</h3><p class="vrds-infographic-headline">${escapeHtml(page.headline || page.executive_headline || page.interpretation || 'Executive interpretation')}</p><p>${escapeHtml(page.decision_implication || 'Decision implication is shown where the source report supports it.')}</p><div class="vrds-evidence-path">Evidence label: ${escapeHtml(page.evidence_label || 'Report-model evidence')} · ${escapeHtml(page.confidence_label || 'Confidence reported where available')}</div></div><div class="vrds-main-visual"><div class="vrds-mini-grid">${(Array.isArray(page.supporting_insight_cards) ? page.supporting_insight_cards : Array.isArray(page.components) ? page.components : [page.components]).slice(0,4).map(c => `<div class="vrds-mini-card"><b>${escapeHtml(c.type || c.label || c.title || c.goalNumber || c.code || 'Evidence point')}</b><p>${renderValueForVRDS(c)}</p></div>`).join('')}</div></div></article>`).join('')}
+        </section>
+
+        <section class="vrds-panel" id="vrds-methodology">
+          <div class="vrds-panel-title"><div><h2>Methodology & Quality Assessment</h2><p>Research transparency required for procurement-grade review.</p></div><span class="vrds-chip">${escapeHtml(qa.gate_status || 'checked')}</span></div>
+          <div class="vrds-mini-grid">
+            <div class="vrds-mini-card"><b>Sample Size</b><p>${escapeHtml(methodology.sample_size ?? 'Reported where available')}</p></div>
+            <div class="vrds-mini-card"><b>Geography</b><p>${escapeHtml(methodology.geography?.regions_covered ?? '—')} regions</p></div>
+            <div class="vrds-mini-card"><b>Evidence Type</b><p>${escapeHtml(methodology.evidence_type || 'Reported where available')}</p></div>
+            <div class="vrds-mini-card"><b>Consent Coverage</b><p>${escapeHtml(methodology.consent_coverage || 'Reported where available')}</p></div>
+          </div>
+        </section>
+
+        <section class="vrds-panel" id="vrds-evidence-panel">
+          <div class="vrds-panel-title"><div><h2>Evidence Dashboard</h2><p>Every claim is labelled as raw-source, report-model or synthetic demo evidence.</p></div></div>
+          ${evidence.slice(0,10).map(ev => `<div class="vrds-mini-card" style="margin:.65rem 0;"><b>${escapeHtml(ev.claim || 'Evidence claim')}</b><div><span class="vrds-evidence-type ${evidenceClass(ev.evidence_classification || ev.evidence_label)}">${escapeHtml(ev.evidence_classification || ev.evidence_label || 'Report-model evidence')}</span><span class="vrds-evidence-type">Confidence ${escapeHtml(ev.confidence_score || '—')}%</span><span class="vrds-evidence-type">${ev.raw_available ? 'Auditable raw pointer available' : 'No raw-source claim'}</span></div><div class="vrds-evidence-path">${escapeHtml((ev.claim_to_source_path || []).map(p => p.label).join(' → '))}</div></div>`).join('')}
+        </section>
+
+        <section class="vrds-panel" id="vrds-recommendations">
+          <div class="vrds-panel-title"><div><h2>Recommendation Priority & Timeline</h2><p>Ranked recommendations with owner, timeline and expected impact.</p></div></div>
+          <div class="vrds-mini-grid">${recs.slice(0,6).map(r => `<div class="vrds-mini-card"><b>${escapeHtml(r.priority || r.tier || 'Priority')}</b><p>${escapeHtml(r.action || r.recommendation)}</p><span class="vrds-evidence-type">${escapeHtml(r.timeline || 'Timeline to confirm')}</span><span class="vrds-evidence-type">${escapeHtml(r.owner || 'Owner to assign')}</span></div>`).join('')}</div>
+        </section>
+
+        <section class="vrds-panel no-print" id="vrds-assistant">
+          <div class="vrds-panel-title"><div><h2>Decision Support Assistant</h2><p>Decision Support Assistant uses the verified report evidence package.</p></div></div>
+          <div class="vrds-assistant-actions">${assistant.map(a => `<button class="vrds-assistant-button" data-action="${escapeHtml(a.id)}">${escapeHtml(a.label)}</button>`).join('')}</div>
+          <div id="vrds-assistant-output" class="assistant-output">Choose an action to prepare a board, donor, minister or evidence-ready summary.</div>
+        </section>
+
+        <section class="vrds-panel no-print" id="vrds-export-toolbar">
+          <div class="vrds-panel-title"><div><h2>Export Previews</h2><p>Export previews are quality-gated and prepared from the same report evidence package.</p></div></div>
+          <div class="vrds-format-toolbar">${formats.map(f => `<button title="${escapeHtml(f.export_note || f.export || 'Export preview')}" onclick="downloadFormat('${escapeHtml(f.key)}','txt')">${escapeHtml(f.label)}</button>`).join('')}</div>
+        </section>
+      `;
+      target.querySelectorAll('.vrds-assistant-button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const a = assistant.find(x => x.id === btn.dataset.action);
+          const out = a?.output;
+          document.getElementById('vrds-assistant-output').textContent = Array.isArray(out)
+            ? out.map(x => typeof x === 'string' ? `• ${x}` : `• ${x.decision || x.claim || x.recommendation || (x.label || x.value || x.type || 'Report evidence item')}`).join('\n')
+            : String(out || 'Insufficient verified evidence available for this assistant action.');
+        });
+      });
+    } catch (e) {
+      target.innerHTML = `<section class="vrds-panel"><h2>Executive Intelligence View</h2><p class="muted-note">This report experience is temporarily unavailable. Please return to the sample library or request a demo.</p></section>`;
+      console.error('Report experience could not be loaded:', e.message);
+    }
+  }
+
+  async function loadPhase20Experience() {
+    const target = document.getElementById('phase20-container');
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/experience-v20`);
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || `HTTP ${res.status}`);
+      const brief = d.one_page_executive_brief || {};
+      const snap = brief.executive_snapshot || {};
+      const ig = d.publication_infographic || {};
+      const methodology = d.methodology_transparency || {};
+      const evidence = d.evidence_traceability || [];
+      const gate = d.report_quality_gate || {};
+      const assistant = d.report_assistant_actions || [];
+      const formats = d.procurement_grade_formats || {};
+
+      target.innerHTML = `
+        <section class="phase20-hero" id="phase20-experience">
+          <div style="text-transform:uppercase;letter-spacing:1.2px;color:var(--accent);font-weight:800;font-size:.78rem;">Report Experience</div>
+          <h2 style="color:#fff;margin:.35rem 0;">One-Page Executive Brief</h2>
+          <p style="color:#ddd;max-width:850px;">${escapeHtml(brief.headline_insight || 'Insufficient verified evidence available for this section.')}</p>
+          <div class="phase20-matrix" style="margin-top:1rem;">
+            <div class="phase20-mini"><div class="muted-note">Responses</div><h3>${escapeHtml(snap.responses ?? '—')}</h3></div>
+            <div class="phase20-mini"><div class="muted-note">Response Rate</div><h3>${escapeHtml(snap.response_rate_pct ?? '—')}%</h3></div>
+            <div class="phase20-mini"><div class="muted-note">Evidence Quality</div><h3>${escapeHtml(snap.evidence_quality_score ?? '—')}/100</h3></div>
+            <div class="phase20-mini"><div class="muted-note">Confidence</div><h3>${escapeHtml(brief.confidence_score ?? '—')}%</h3></div>
+          </div>
+        </section>
+
+        <section class="phase20-panel">
+          <h2>Executive Decisions Required</h2>
+          <div class="phase20-matrix">
+            ${(brief.three_recommended_decisions || []).map(d => `<div class="phase20-mini"><b>${escapeHtml(d.priority || 'Priority')}</b><p>${escapeHtml(d.decision)}</p><span class="evidence-chip">${escapeHtml(d.timeline || 'Timeline to confirm')}</span><span class="evidence-chip">${escapeHtml(d.owner || 'Owner to assign')}</span></div>`).join('') || '<p class="muted-note">Insufficient verified evidence available for this section.</p>'}
+          </div>
+        </section>
+
+        <section class="phase20-panel">
+          <h2>Procurement-Grade Infographic Pages</h2>
+          ${publicationPages.map(page => `<article class="infographic-page"><h3>${escapeHtml(page.title)}</h3><div class="muted-note">${escapeHtml(page.layout)}</div><div class="phase20-matrix" style="margin-top:.75rem;">${(Array.isArray(page.components) ? page.components : [page.components]).slice(0,6).map(c => `<div class="phase20-mini"><b>${escapeHtml(c.type || c.label || c.title || c.code || 'Component')}</b><p>${escapeHtml(c.value || c.risk || c.recommendation || c.contribution_summary || c.expected_impact || c.priority || '')}</p></div>`).join('')}</div></article>`).join('')}
+        </section>
+
+        <section class="phase20-panel">
+          <h2>Methodology Transparency</h2>
+          <div class="phase20-matrix">
+            <div class="phase20-mini"><b>Sample Size</b><p>${escapeHtml(methodology.sample_size ?? 'Reported where available')}</p></div>
+            <div class="phase20-mini"><b>Geography</b><p>${escapeHtml(methodology.geography?.regions_covered ?? '—')} regions</p></div>
+            <div class="phase20-mini"><b>Evidence Type</b><p>${escapeHtml(methodology.evidence_type || 'Reported where available')}</p></div>
+            <div class="phase20-mini"><b>Consent Coverage</b><p>${escapeHtml(methodology.consent_coverage || 'Reported where available')}</p></div>
+          </div>
+          <h3>Limitations</h3>${renderList(methodology.limitations || [])}
+        </section>
+
+        <section class="phase20-panel">
+          <h2>Evidence Panel</h2>
+          ${evidence.slice(0,8).map(ev => `<div class="phase20-mini" style="margin:.65rem 0;"><b>${escapeHtml(ev.evidence_classification || ev.evidence_label)}</b><p>${escapeHtml(ev.claim)}</p><span class="evidence-chip">Confidence ${escapeHtml(ev.confidence_score || '—')}%</span><span class="evidence-chip">${ev.raw_available ? 'Auditable raw pointer available' : 'No raw-source claim'}</span><div class="muted-note">${escapeHtml((ev.claim_to_source_path || []).map(p => p.label).join(' → '))}</div></div>`).join('')}
+        </section>
+
+        <section class="phase20-panel">
+          <h2>Quality Gate Status</h2>
+          <div class="phase20-matrix">
+            <div class="phase20-mini"><b>Status</b><p>${escapeHtml(gate.status || 'checked')}</p></div>
+            <div class="phase20-mini"><b>Overall Score</b><p>${escapeHtml(gate.overall_score ?? '—')}/100</p></div>
+            <div class="phase20-mini"><b>Export Rule</b><p>${gate.export_allowed === false ? 'Blocked until improved' : 'Allowed after quality checks'}</p></div>
+          </div>
+        </section>
+
+        <section class="phase20-panel no-print">
+          <h2>Report Assistant Actions</h2>
+          <p class="muted-note">Report assistant outputs are prepared from this report’s verified intelligence package.</p>
+          <div class="phase20-matrix">${assistant.map(a => `<button class="assistant-action" data-action="${escapeHtml(a.id)}">${escapeHtml(a.label)}</button>`).join('')}</div>
+          <div id="assistant-output" class="assistant-output">Select an action to generate a board, donor, minister or evidence-ready summary.</div>
+        </section>
+      `;
+      target.querySelectorAll('.assistant-action').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const action = assistant.find(a => a.id === btn.dataset.action);
+          const out = action?.output;
+          document.getElementById('assistant-output').textContent = Array.isArray(out)
+            ? out.map(x => typeof x === 'string' ? `• ${x}` : `• ${x.decision || x.claim || x.recommendation || (x.label || x.value || x.type || 'Report evidence item')}`).join('\n')
+            : String(out || 'Insufficient verified evidence available for this assistant action.');
+        });
+      });
+    } catch (e) {
+      target.innerHTML = `<div class="phase20-panel"><h2>Report Experience</h2><p class="muted-note">This report experience is temporarily unavailable. Please return to the sample library or request a demo.</p></div>`;
+      console.error('Report experience could not be loaded:', e.message);
+    }
+  }
+
+  async function loadTrustV19() {
+    try {
+      const d = await (await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/trust-v19`)).json();
+      const gate = d.report_quality_gate || {};
+      const verification = d.ai_verification || {};
+      const evidence = d.evidence_traceability || [];
+      const sdgs = d.sdg_visual_cards || [];
+      const ig = d.true_infographic || {};
+      const container = document.createElement('div');
+      container.innerHTML = `
+        <div class="r-section" id="trust-layer" style="border:1px solid var(--accent);box-shadow:0 10px 30px rgba(0,0,0,.08);">
+          <div class="muted-note" style="text-transform:uppercase;letter-spacing:1px;font-weight:800;color:var(--accent);">Evidence & Confidence Panel</div>
+          <h2 style="margin:.35rem 0 1rem;">Export Readiness + Evidence Verification</h2>
+          <div class="ios-grid">
+            <div class="ios-card"><div class="muted-note">Quality Gate</div><h3>${gate.status || '—'}</h3><p>${gate.label || ''} · ${gate.overall_score || '—'}/100</p></div>
+            <div class="ios-card"><div class="muted-note">AI Verification</div><h3>${verification.status || '—'}</h3><p>${verification.supported_claims || 0}/${verification.checked_claims || 0} claims supported</p></div>
+            <div class="ios-card"><div class="muted-note">Evidence Items</div><h3>${evidence.length}</h3><p>Claim → finding → chart → source traceability.</p></div>
+            <div class="ios-card"><div class="muted-note">Infographic Pages</div><h3>${ig.pages?.length || 0}</h3><p>KPI cards, risk, decision, SDG and regional intelligence.</p></div>
+          </div>
+        </div>
+        <div class="r-section">
+          <h2>True Infographic Blueprint</h2>
+          ${publicationPages.map(page => `<div style="margin:1rem 0;padding:1rem;border:1px solid var(--border);border-radius:16px;background:var(--surface);"><b>${page.title}</b><div class="muted-note">${page.layout}</div><div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.7rem;">${(page.components || []).slice(0,8).map(c => `<span class="evidence-chip">${c.type || c.label || c.code}</span>`).join('')}</div></div>`).join('')}
+        </div>
+        <div class="r-section">
+          <h2>SDG Visual Cards</h2>
+          <div class="ios-grid">${sdgs.map(s => `<div class="sdg-card" style="border-color:${s.color};"><div class="sdg-icon" style="background:${s.color}">${s.goal_number}</div><div><b>${s.code}</b><br><span class="muted-note">${s.title}</span><p style="font-size:.8rem;margin:.4rem 0 0;">${s.contribution_summary}</p></div></div>`).join('')}</div>
+        </div>
+        <div class="r-section">
+          <h2>Clickable Evidence Traceability</h2>
+          ${evidence.slice(0,8).map(ev => `<div id="claim-${ev.id}" style="margin:.8rem 0;padding:1rem;border-left:4px solid var(--accent);background:var(--surface);border-radius:10px;"><b>${ev.id}</b> ${ev.claim}<br><span class="evidence-chip">${ev.respondent_count} respondents</span><span class="evidence-chip">Confidence ${ev.confidence_score}%</span><span class="evidence-chip">${ev.audio_available ? 'Audio available' : 'No audio link'}</span><div class="muted-note" style="margin-top:.5rem;">${(ev.trace_path || []).map(p => p.label).join(' → ')}</div></div>`).join('')}
+        </div>`;
+      const target = document.getElementById('intelligence-os-container');
+      target.prepend(container);
+    } catch (e) {
+      console.error('Evidence panel could not be loaded:', e.message);
+    }
+  }
+
+  async function loadIntelligenceOS() {
+    try {
+      const d = await (await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/studio-v7`)).json();
+      const studio = d.report_studio || {};
+      const ios = d.intelligence_os_v7 || {};
+      const snap = studio.executive_snapshot || {};
+      const sdgs = ios.sdg_cards || [];
+      const formats = ios.report_formats || [];
+      const citations = ios.evidence_citations || [];
+      document.getElementById('intelligence-os-container').innerHTML = `
+        <div class="r-section" style="border-color:var(--accent);">
+          <div class="muted-note" style="text-transform:uppercase;letter-spacing:1px;font-weight:700;">Executive Intelligence Report</div>
+          <h2 style="margin:.35rem 0 1rem;">Executive Intelligence Snapshot</h2>
+          <div class="ios-grid">
+            <div class="ios-card"><div class="muted-note">Research Quality</div><h3>${snap.quality_score ?? '—'}/100</h3><p>${snap.quality_label || ''}</p></div>
+            <div class="ios-card"><div class="muted-note">Export Gate</div><h3>${snap.export_status || '—'}</h3><p>Sample size, demographics, fraud, limitations and citations checked before export.</p></div>
+            <div class="ios-card"><div class="muted-note">Top Decision</div><p>${snap.top_decision || 'Decision pending review.'}</p></div>
+            <div class="ios-card"><div class="muted-note">Report Products</div><h3>${formats.length}</h3><p>Executive, donor, policy, management, annex, infographic and board outputs.</p></div>
+          </div>
+        </div>
+        <div class="r-section">
+          <h2>SDG Contribution</h2>
+          <div class="ios-grid">${sdgs.map(s => `<div class="sdg-card"><div class="sdg-icon" style="background:${s.color}">${s.icon}</div><div><b>${s.code}</b><br><span class="muted-note">${s.goal}</span></div></div>`).join('')}</div>
+        </div>
+        <div class="r-section">
+          <h2>Evidence Traceability</h2>
+          <p class="muted-note">Every major claim should be traceable back to respondent count, region, question source, quote or confidence score.</p>
+          ${citations.slice(0,6).map(c => `<div style="margin:.8rem 0;padding:.8rem;border-left:3px solid var(--accent);background:var(--bg);"><b>${c.id}</b> ${c.claim}<br><span class="evidence-chip">${c.respondent_count} respondents</span><span class="evidence-chip">${c.region}</span><span class="evidence-chip">Confidence ${c.confidence_score}%</span></div>`).join('')}
+        </div>`;
+    } catch (e) {
+      console.error('Executive intelligence layer could not be loaded:', e.message);
     }
   }
 
@@ -139,21 +485,25 @@
   function renderBody(dm) {
     const brand = dm.branding;
     const narrative = dm.narrative || {};
+    const sv = dm.sample_showcase_v20 || {};
     document.getElementById('report-body').innerHTML = `
-      <div class="r-section" style="background:${brand.secondary_color}; color:#fff;">
-        <div style="font-size:.8rem; text-transform:uppercase; letter-spacing:1px; color:${brand.primary_color};">${brand.header_text || dm.metadata.organization_name}</div>
-        <h1 style="color:#fff; margin:.5rem 0;">${dm.metadata.template_name}</h1>
-        <p style="color:#ccc;">${dm.metadata.campaign_name || ''} · ${dm.metadata.standards.join(', ')}</p>
+      <div class="consulting-cover">
+        <div style="font-size:.75rem; text-transform:uppercase; letter-spacing:1.4px; color:${brand.primary_color};font-weight:800;">International Sample Report · VoiceInsights Africa</div>
+        <h1 style="color:#fff; margin:.6rem 0;font-size:2rem;">${sv.product_name || dm.metadata.template_name}</h1>
+        <p style="color:#ddd;max-width:760px;">${sv.flagship_use_case || dm.metadata.campaign_name || ''}</p>
+        <div style="display:flex;gap:.45rem;flex-wrap:wrap;margin-top:1rem;">${(sv.standards || dm.metadata.standards || []).map(x => `<span class="evidence-chip" style="color:#fff;border-color:rgba(255,255,255,.25);">${x}</span>`).join('')}</div>
       </div>
 
-      <div class="r-section">
+      <div class="r-section" id="executive-snapshot">
         <h2>At a Glance</h2>
         <div class="r-kpi"><div style="font-size:1.6rem; font-weight:700;">${dm.kpis.total_responses}</div><div class="muted-note">Total Responses</div></div>
         <div class="r-kpi"><div style="font-size:1.6rem; font-weight:700;">${dm.kpis.response_rate_pct ?? '—'}%</div><div class="muted-note">Response Rate</div></div>
         <div class="r-kpi"><div style="font-size:1.6rem; font-weight:700;">${dm.kpis.regions_covered}</div><div class="muted-note">Regions Covered</div></div>
       </div>
 
-      ${narrative.executive_summary ? `<div class="r-section"><h2>Executive Summary</h2><p>${narrative.executive_summary}</p></div>` : ''}
+      ${sv.product_name ? `<div class="r-section" id="sample-standard"><div class="muted-note" style="text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:800;">International sample standard</div><h2>${sv.product_name}</h2><p>${sv.executive_question || ''}</p><div class="sample-standard-grid"><div class="sample-standard-card"><b>Buyer</b>${sv.buyer || 'Enterprise client'}</div><div class="sample-standard-card"><b>Premium Score</b>${sv.premium_score || '—'}/100</div><div class="sample-standard-card"><b>Decision Outputs</b>${(sv.decision_outputs || []).slice(0,3).join(', ')}</div><div class="sample-standard-card"><b>Visual Package</b>${(sv.visual_package || []).slice(0,4).join(', ')}</div></div><h3>Report Sections</h3><div>${(sv.sample_sections || []).map(x => `<span class="evidence-chip">${x}</span>`).join('')}</div></div>` : ''}
+
+      ${narrative.executive_summary ? `<div class="r-section"><h2>Executive report preview</h2><p>${narrative.executive_summary}</p></div>` : ''}
       ${narrative.key_findings?.length ? `<div class="r-section"><h2>Key Findings</h2><ul>${narrative.key_findings.map(f => `<li>${f}</li>`).join('')}</ul></div>` : ''}
 
       <div class="r-section">
@@ -188,44 +538,151 @@
   // readable file. Formatting content into a rich PDF/DOCX layout is a
   // further enhancement; the substance (real data, real narrative, real
   // recommendations) is already 100% correct and download-ready here.
+  function humanizeKey(key) {
+    return String(key).replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  function appendReadable(lines, value, depth = 0) {
+    const indent = '  '.repeat(depth);
+    if (Array.isArray(value)) {
+      if (!value.length) { lines.push(`${indent}Insufficient verified evidence available for this section.`); return; }
+      value.forEach(item => {
+        if (item && typeof item === 'object') {
+          const headline = item.title || item.label || item.decision || item.recommendation || item.claim || item.risk || item.section || item.id || 'Item';
+          lines.push(`${indent}• ${headline}`);
+          Object.entries(item).forEach(([k, v]) => {
+            if (['title','label','decision','recommendation','claim','risk','section','id'].includes(k)) return;
+            if (v && typeof v === 'object') appendReadable(lines, v, depth + 1);
+            else if (v !== null && v !== undefined && String(v).trim()) lines.push(`${indent}  ${humanizeKey(k)}: ${v}`);
+          });
+        } else {
+          lines.push(`${indent}• ${item}`);
+        }
+      });
+      return;
+    }
+    if (value && typeof value === 'object') {
+      Object.entries(value).forEach(([k, v]) => {
+        if (v && typeof v === 'object') {
+          lines.push(`${indent}${humanizeKey(k)}:`);
+          appendReadable(lines, v, depth + 1);
+        } else if (v !== null && v !== undefined && String(v).trim()) {
+          lines.push(`${indent}${humanizeKey(k)}: ${v}`);
+        }
+      });
+      return;
+    }
+    lines.push(`${indent}${String(value ?? 'Insufficient verified evidence available for this section.')}`);
+  }
+
+  function exportDisplayName(format) {
+    const labels = {
+      executive_summary: 'Executive report preview',
+      management_report: 'Management report preview',
+      donor_brief: 'Donor impact report preview',
+      government_report: 'Government cabinet brief preview',
+      policy_brief: 'Policy brief preview',
+      board_deck: 'Presentation-ready board brief',
+      infographic: 'Infographic report preview',
+      statistical_annex: 'Statistical annex preview',
+      dataset_appendix: 'Technical annex preview',
+      technical_annex: 'Technical annex preview',
+      one_page_executive_brief: 'One-page executive brief preview',
+      print_ready_report: 'Print-ready report preview',
+      ai_talking_points: 'Presentation-ready board talking points'
+    };
+    return labels[format] || humanizeKey(format);
+  }
+
+  function sanitizePublicExportText(text) {
+    return String(text || '')
+      .replace(/Not enough data(?: has been collected yet)?/gi, 'Insufficient verified evidence available')
+      .replace(/Report Experience/gi, 'Report Experience')
+      .replace(/Phase 20(?: Procurement-Grade Experience)?/gi, 'Report Experience')
+      .replace(/Phase 19/gi, 'Evidence & Confidence Panel')
+      .replace(/Structured assistant actions/gi, 'Report assistant actions')
+      .replace(/generated by system/gi, 'prepared by the report engine')
+      .replace(/demo placeholder|placeholder/gi, 'sample evidence field')
+      .replace(/raw JSON/gi, 'structured data')
+      .replace(/\bundefined\b|\bnull\b|\bNaN\b/g, 'Not reported');
+  }
+
   function textFromFormat(format, data) {
-    const lines = [`${data.title || ''}`.toUpperCase(), '='.repeat(40), ''];
-    if (data.is_demo) lines.push('DEMONSTRATION REPORT — DEMO DATA ONLY', '');
-    for (const [key, value] of Object.entries(data)) {
-      if (['format', 'title', 'is_demo', 'branding'].includes(key)) continue;
-      const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const title = exportDisplayName(format);
+    const pack = data.v183_export_package || {};
+    const cover = pack.cover || data.export_preview?.cover || {};
+    const lines = [`${title}`.toUpperCase(), '='.repeat(Math.max(32, title.length)), ''];
+    lines.push('Export preview prepared from the public demonstration report evidence package.');
+    if (pack.honest_export_type) lines.push(`Export type: ${pack.honest_export_type}`);
+    if (data.is_demo) lines.push('DEMONSTRATION REPORT — FICTIONAL SAMPLE DATA ONLY');
+    lines.push('');
+    lines.push('Cover', '-----');
+    lines.push(`Report: ${cover.report_title || data.title || title}`);
+    if (cover.organization) lines.push(`Prepared for: ${cover.organization}`);
+    if (cover.campaign) lines.push(`Campaign: ${cover.campaign}`);
+    if (cover.classification) lines.push(`Classification: ${cover.classification}`);
+    lines.push('');
+    const preferred = ['v183_export_package','executive_summary','results','top_kpis','five_key_findings','key_findings','five_priority_recommendations','recommendations','risks','policy_options','value_for_money','methodology_transparency','evidence_traceability','report_quality_gate','ai_verification'];
+    const skip = new Set(['format','title','is_demo','branding','vrds_report_experience','report_experience','procurement_grade_format_v20','report_format_package','one_page_executive_brief_v20','executive_brief','methodology_transparency_v20','evidence_traceability_v20','export_preview','all_report_types','tokens']);
+    for (const key of preferred) {
+      if (!(key in data) || skip.has(key)) continue;
+      const label = humanizeKey(key);
       lines.push(label, '-'.repeat(label.length));
-      if (Array.isArray(value)) {
-        value.forEach(item => lines.push(typeof item === 'object' ? JSON.stringify(item) : `• ${item}`));
-      } else if (typeof value === 'object' && value !== null) {
-        lines.push(JSON.stringify(value, null, 2));
-      } else {
-        lines.push(String(value ?? ''));
-      }
+      appendReadable(lines, data[key]);
+      lines.push('');
+      skip.add(key);
+    }
+    for (const [key, value] of Object.entries(data)) {
+      if (skip.has(key)) continue;
+      const label = humanizeKey(key);
+      lines.push(label, '-'.repeat(label.length));
+      appendReadable(lines, value);
       lines.push('');
     }
-    return lines.join('\n');
+    lines.push('Methodology & Evidence Note', '---------------------------');
+    lines.push(data.export_preview?.export_note || 'Use the methodology and evidence sections to verify limitations before presentation.');
+    return sanitizePublicExportText(lines.join('
+'));
+  }
+
+  async function ensureV19ExportAllowed() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/trust-v19`);
+      const trust = await res.json();
+      const allowed = trust?.phase19?.export_allowed !== false && trust?.ai_verification?.export_allowed !== false;
+      if (!res.ok || !allowed) {
+        const msg = trust?.error || 'Export preview is unavailable because this report has not passed quality checks.';
+        showToast ? showToast(msg, 'error') : alert(msg);
+        return false;
+      }
+      return true;
+    } catch (e) {
+      showToast ? showToast('Could not verify report export readiness: ' + e.message, 'error') : alert(e.message);
+      return false;
+    }
   }
 
   async function downloadFormat(formatName, ext) {
+    if (!(await ensureV19ExportAllowed())) return;
     trackDownload();
     try {
       const data = await (await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/format/${formatName}`)).json();
-      const content = ext === 'json' ? JSON.stringify(data, null, 2) : textFromFormat(formatName, data);
-      const blob = new Blob([content], { type: ext === 'json' ? 'application/json' : 'text/plain' });
+      const content = textFromFormat(formatName, data);
+      const blob = new Blob([content], { type: 'text/plain' });
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob); a.download = `${formatName}-${reportId}.${ext}`;
+      a.href = URL.createObjectURL(blob); a.download = `${formatName}-export-preview-${reportId}.txt`; 
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    } catch (e) { showToast ? showToast('Could not generate this format: ' + e.message, 'error') : alert('Could not generate this format: ' + e.message); }
+    } catch (e) { showToast ? showToast('Could not prepare this export preview: ' + e.message, 'error') : alert('Could not prepare this export preview: ' + e.message); }
   }
 
   document.querySelectorAll('.format-download-btn').forEach(btn => {
     btn.addEventListener('click', () => downloadFormat(btn.dataset.format, btn.dataset.ext));
   });
 
-  document.getElementById('tech-report-btn').addEventListener('click', () => { trackDownload(); window.print(); });
+  document.getElementById('tech-report-btn').addEventListener('click', async () => { if (!(await ensureV19ExportAllowed())) return; trackDownload(); window.print(); });
 
   document.getElementById('export-pptx-btn').addEventListener('click', async () => {
+    if (!(await ensureV19ExportAllowed())) return;
     trackDownload();
     const dm = reportData.document_model;
     const narrative = dm.narrative || {};
@@ -265,7 +722,7 @@
     slide.addText(`${ig.cover.respondents} respondents · ${ig.cover.completion_rate_pct}% completion · ${ig.cover.response_rate_pct}% response rate`, { x: 0.5, y: 3.6, fontSize: 13, color: ACCENT });
     slide.addNotes('Cover slide, built from the Executive Infographic Engine\'s cover data — same numbers shown on the website dashboard.');
 
-    addContentSlide('Executive Summary', [narrative.executive_summary || 'Not enough data has been collected yet.'],
+    addContentSlide('Executive Summary', [narrative.executive_summary || 'Insufficient verified evidence available for this section.'],
       'Read the executive summary at a measured pace — this is the single most important slide for time-constrained stakeholders.');
 
     // 2. Executive KPI Dashboard (ig.kpi_page)
@@ -334,7 +791,7 @@
     }
 
     // 11. Executive Closing (ig.closing_page)
-    addContentSlide('Conclusion', [narrative.conclusions || 'Not enough data has been collected yet.'], 'Close the analytical content with the single most important takeaway.');
+    addContentSlide('Conclusion', [narrative.conclusions || 'Insufficient verified evidence available for this section.'], 'Close the analytical content with the single most important takeaway.');
     slide = pptx.addSlide();
     slide.background = { color: DARK };
     slide.addText('Thank You', { x: 0.5, y: 1.5, fontSize: 28, color: 'FFFFFF', bold: true });

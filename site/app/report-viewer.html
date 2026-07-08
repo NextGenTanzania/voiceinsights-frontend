@@ -6,6 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Report Viewer — VoiceInsights Africa</title>
 <link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/vrds-tokens.css">
+<link rel="stylesheet" href="/assets/css/vrds-components.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
@@ -90,6 +92,7 @@
 </div>
 <script src="/assets/js/infographic-components.js"></script>
 <script src="/assets/js/decision-intelligence-components.js"></script>
+<script src="/assets/js/vrds-components.js"></script>
 <script src="/assets/js/config.js"></script>
 <script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/app.js"></script>
@@ -228,14 +231,16 @@
     `;
   }
 
-  document.getElementById('export-pdf-btn').addEventListener('click', () => window.print());
+  document.getElementById('export-pdf-btn').addEventListener('click', async () => { if (!(await ensureV19ExportAllowed())) return; window.print(); });
 
-  document.getElementById('export-json-btn').addEventListener('click', () => {
+  document.getElementById('export-json-btn').addEventListener('click', async () => {
+    if (!(await ensureV19ExportAllowed())) return;
     const blob = new Blob([JSON.stringify(reportData.document_model, null, 2)], { type: 'application/json' });
     downloadBlob(blob, `report-${reportId}.json`);
   });
 
-  document.getElementById('export-csv-btn').addEventListener('click', () => {
+  document.getElementById('export-csv-btn').addEventListener('click', async () => {
+    if (!(await ensureV19ExportAllowed())) return;
     const dm = reportData.document_model;
     const rows = ['Section,Label,Value'];
     Object.entries(dm.annexes.statistical_tables).forEach(([section, data]) => {
@@ -245,7 +250,23 @@
     downloadBlob(blob, `report-${reportId}.csv`);
   });
 
-  document.getElementById('export-excel-btn').addEventListener('click', () => {
+  async function ensureV19ExportAllowed() {
+    try {
+      const trust = await apiRequest(`/api/reports/${reportId}/trust-v19`);
+      const allowed = trust?.phase19?.export_allowed !== false && trust?.ai_verification?.export_allowed !== false;
+      if (!allowed) {
+        showToast('Export blocked by the Phase 19 quality gate. Please review report trust before exporting.', 'error');
+        return false;
+      }
+      return true;
+    } catch (e) {
+      showToast('Could not verify report quality gate: ' + e.message, 'error');
+      return false;
+    }
+  }
+
+  document.getElementById('export-excel-btn').addEventListener('click', async () => {
+    if (!(await ensureV19ExportAllowed())) return;
     const dm = reportData.document_model;
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet([dm.kpis]), 'KPIs');
@@ -255,7 +276,8 @@
     XLSX.writeFile(wb, `report-${reportId}.xlsx`);
   });
 
-  document.getElementById('export-word-btn').addEventListener('click', () => {
+  document.getElementById('export-word-btn').addEventListener('click', async () => {
+    if (!(await ensureV19ExportAllowed())) return;
     // Word can open well-formed HTML served with the application/msword
     // mime type — a real, long-standing, working technique for text-based
     // Word export without a heavy client-side DOCX-building library.
@@ -266,7 +288,7 @@
       <body style="font-family:Calibri,sans-serif;">
         <h1>${dm.metadata.template_name}</h1>
         <p>${dm.metadata.organization_name} — ${dm.metadata.campaign_name || ''}</p>
-        <h2>Executive Summary</h2><p>${narrative.executive_summary || 'Not yet generated.'}</p>
+        <h2>Executive Summary</h2><p>${narrative.executive_summary || 'Insufficient verified evidence available for this section.'}</p>
         <h2>Key Findings</h2><ul>${(narrative.key_findings || []).map(f => `<li>${f}</li>`).join('')}</ul>
         <h2>Discussion</h2><p>${narrative.discussion || ''}</p>
         <h2>Conclusions</h2><p>${narrative.conclusions || ''}</p>
@@ -278,6 +300,7 @@
   });
 
   document.getElementById('export-pptx-btn').addEventListener('click', async () => {
+    if (!(await ensureV19ExportAllowed())) return;
     const dm = reportData.document_model;
     const narrative = dm.narrative || {};
     const pptx = new PptxGenJS();
@@ -313,7 +336,7 @@
     slide.addText(`${ig.cover.respondents} respondents · ${ig.cover.completion_rate_pct}% completion · ${ig.cover.response_rate_pct}% response rate`, { x: 0.5, y: 3.6, fontSize: 13, color: ACCENT });
     slide.addNotes('Cover slide, built from the Executive Infographic Engine\'s cover data.');
 
-    addContentSlide('Executive Summary', [narrative.executive_summary || 'Not enough data has been collected yet.'],
+    addContentSlide('Executive Summary', [narrative.executive_summary || 'Insufficient verified evidence available for this section.'],
       'Read the executive summary at a measured pace.');
 
     slide = pptx.addSlide();
@@ -371,7 +394,7 @@
       ], 'Reused directly from the existing Benchmark Engine (Task 9.4).');
     }
 
-    addContentSlide('Conclusion', [narrative.conclusions || 'Not enough data has been collected yet.'], 'Close with the single most important takeaway.');
+    addContentSlide('Conclusion', [narrative.conclusions || 'Insufficient verified evidence available for this section.'], 'Close with the single most important takeaway.');
     slide = pptx.addSlide();
     slide.background = { color: DARK };
     slide.addText('Thank You', { x: 0.5, y: 1.5, fontSize: 28, color: 'FFFFFF', bold: true });
@@ -414,6 +437,7 @@
   }
 
   async function downloadFormat(formatName, ext) {
+    if (!(await ensureV19ExportAllowed())) return;
     try {
       const data = await apiRequest(`/api/reports/${reportId}/format/${formatName}`);
       const content = ext === 'json' ? JSON.stringify(data, null, 2) : textFromFormat(data);
@@ -427,7 +451,7 @@
   document.querySelectorAll('.format-download-btn').forEach(btn => {
     btn.addEventListener('click', () => downloadFormat(btn.dataset.format, btn.dataset.ext));
   });
-  document.getElementById('tech-report-btn').addEventListener('click', () => window.print());
+  document.getElementById('tech-report-btn').addEventListener('click', async () => { if (!(await ensureV19ExportAllowed())) return; window.print(); });
 
   loadReport();
   loadStyles();

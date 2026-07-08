@@ -1,0 +1,121 @@
+/* VoiceInsights Report Design System (VRDS) v1.0 — Foundation Tokens
+   Scope: report surfaces only. This file is additive and does not redefine homepage/navigation branding. */
+:root{
+  /* Core report palette */
+  --vi-blue-950:#061225;
+  --vi-blue-900:#071A33;
+  --vi-blue-800:#0B2D57;
+  --vi-blue-700:#124C8C;
+  --vi-blue-600:#1B65B8;
+  --vi-teal-800:#00615F;
+  --vi-teal-700:#007C7A;
+  --vi-teal-600:#009C96;
+  --vi-gold-600:#B88922;
+  --vi-gold-500:#D9A441;
+  --vi-green-700:#17663A;
+  --vi-green-600:#1F8A4C;
+  --vi-amber-600:#B77900;
+  --vi-amber-500:#E5A100;
+  --vi-orange-600:#E67E22;
+  --vi-red-700:#9F2F24;
+  --vi-red-600:#C0392B;
+  --vi-purple-600:#7C3AED;
+  --vi-slate-950:#0B1220;
+  --vi-slate-900:#111827;
+  --vi-slate-800:#1F2937;
+  --vi-slate-700:#374151;
+  --vi-slate-600:#4B5563;
+  --vi-slate-500:#6B7280;
+  --vi-slate-300:#D1D5DB;
+  --vi-slate-200:#E5E7EB;
+  --vi-slate-100:#F3F6FA;
+  --vi-slate-50:#F8FAFC;
+  --vi-white:#FFFFFF;
+
+  /* Evidence / trust */
+  --evidence-raw:#1F8A4C;
+  --evidence-model:#124C8C;
+  --evidence-demo:#7C3AED;
+  --evidence-limited:#E5A100;
+  --evidence-none:#6B7280;
+
+  /* Confidence */
+  --confidence-excellent:#1F8A4C;
+  --confidence-strong:#009C96;
+  --confidence-moderate:#E5A100;
+  --confidence-low:#E67E22;
+  --confidence-insufficient:#C0392B;
+
+  /* Status */
+  --status-draft:#6B7280;
+  --status-review:#E5A100;
+  --status-approved:#1F8A4C;
+  --status-published:#124C8C;
+  --status-blocked:#C0392B;
+
+  /* Risk */
+  --risk-low:#1F8A4C;
+  --risk-medium:#E5A100;
+  --risk-high:#E67E22;
+  --risk-critical:#C0392B;
+
+  /* SDG-aligned visual colors */
+  --sdg-1:#E5243B; --sdg-2:#DDA63A; --sdg-3:#4C9F38; --sdg-4:#C5192D;
+  --sdg-5:#FF3A21; --sdg-6:#26BDE2; --sdg-7:#FCC30B; --sdg-8:#A21942;
+  --sdg-9:#FD6925; --sdg-10:#DD1367; --sdg-11:#FD9D24; --sdg-12:#BF8B2E;
+  --sdg-13:#3F7E44; --sdg-14:#0A97D9; --sdg-15:#56C02B; --sdg-16:#00689D; --sdg-17:#19486A;
+
+  /* Typography */
+  --vrds-font-sans: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+  --vrds-font-display: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+  --vrds-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --vrds-display-xl:56px; --vrds-display-l:48px; --vrds-display-m:40px;
+  --vrds-h1:34px; --vrds-h2:28px; --vrds-h3:24px; --vrds-h4:20px;
+  --vrds-body-lg:18px; --vrds-body:16px; --vrds-body-sm:14px; --vrds-caption:12px; --vrds-footnote:10px;
+  --vrds-lh-tight:1.08; --vrds-lh-heading:1.18; --vrds-lh-body:1.55; --vrds-lh-caption:1.35;
+  --vrds-tracking-label:.08em;
+
+  /* Spacing */
+  --space-4:4px; --space-8:8px; --space-12:12px; --space-16:16px; --space-20:20px;
+  --space-24:24px; --space-32:32px; --space-40:40px; --space-48:48px; --space-64:64px; --space-96:96px;
+
+  /* Shape/elevation */
+  --radius-sm:6px; --radius-md:10px; --radius-card:16px; --radius-panel:24px; --radius-page:28px;
+  --shadow-report-soft:0 10px 30px rgba(7,26,51,.10);
+  --shadow-report-elevated:0 18px 60px rgba(7,26,51,.18);
+  --shadow-report-none:none;
+
+  /* Grid */
+  --vrds-page-max:1440px;
+  --vrds-sidebar-width:280px;
+  --vrds-evidence-panel-width:360px;
+  --vrds-report-content-max:920px;
+  --vrds-grid-gap:24px;
+  --vrds-a4-margin:18mm;
+  --vrds-letter-margin:.72in;
+  --vrds-ppt-safe-zone:96px;
+
+  /* Breakpoints */
+  --bp-sm:640px; --bp-md:768px; --bp-lg:1024px; --bp-xl:1280px; --bp-2xl:1536px;
+}
+
+/* Report-only base primitives */
+.vrds-report-surface{font-family:var(--vrds-font-sans);color:var(--vi-slate-900);background:var(--vi-white);line-height:var(--vrds-lh-body);}
+.vrds-container{max-width:var(--vrds-page-max);margin-inline:auto;padding:var(--space-32);}
+.vrds-grid-12{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--vrds-grid-gap);}
+.vrds-stack-16>*+*{margin-top:var(--space-16)}.vrds-stack-24>*+*{margin-top:var(--space-24)}.vrds-stack-32>*+*{margin-top:var(--space-32)}
+.vrds-eyebrow{font-size:var(--vrds-caption);line-height:var(--vrds-lh-caption);font-weight:700;letter-spacing:var(--vrds-tracking-label);text-transform:uppercase;color:var(--vi-teal-700)}
+.vrds-title-xl{font-size:clamp(40px,5vw,var(--vrds-display-xl));line-height:var(--vrds-lh-tight);font-weight:700;letter-spacing:-.035em;color:var(--vi-slate-900)}
+.vrds-title-l{font-size:clamp(32px,4vw,var(--vrds-display-l));line-height:var(--vrds-lh-tight);font-weight:700;letter-spacing:-.03em;color:var(--vi-slate-900)}
+.vrds-h1{font-size:var(--vrds-h1);line-height:var(--vrds-lh-heading);font-weight:700;color:var(--vi-slate-900)}
+.vrds-h2{font-size:var(--vrds-h2);line-height:1.22;font-weight:650;color:var(--vi-slate-900)}
+.vrds-h3{font-size:var(--vrds-h3);line-height:1.28;font-weight:650;color:var(--vi-slate-900)}
+.vrds-body-lg{font-size:var(--vrds-body-lg);line-height:var(--vrds-lh-body);color:var(--vi-slate-700)}
+.vrds-body{font-size:var(--vrds-body);line-height:var(--vrds-lh-body);color:var(--vi-slate-700)}
+.vrds-caption{font-size:var(--vrds-caption);line-height:var(--vrds-lh-caption);color:var(--vi-slate-500)}
+.vrds-card{border:1px solid var(--vi-slate-200);border-radius:var(--radius-card);background:var(--vi-white);box-shadow:var(--shadow-report-soft);padding:var(--space-24)}
+.vrds-panel{border:1px solid var(--vi-slate-200);border-radius:var(--radius-panel);background:var(--vi-white);box-shadow:var(--shadow-report-soft);padding:var(--space-32)}
+.vrds-print-safe{box-shadow:var(--shadow-report-none);background:var(--vi-white)}
+
+@media (max-width: 900px){.vrds-container{padding:var(--space-16)}.vrds-grid-12{grid-template-columns:1fr}.vrds-card,.vrds-panel{padding:var(--space-16)}}
+@media print{.vrds-container{max-width:none;padding:0}.vrds-card,.vrds-panel{box-shadow:none;break-inside:avoid}.vrds-no-print{display:none!important}}

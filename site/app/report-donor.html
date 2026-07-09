@@ -451,7 +451,8 @@
   .r-eyebrow { color:#2E7D6B; text-transform:uppercase; font-size:11px; font-weight:bold; }
   canvas { display:none; }
 </style></head>
-<body>${contentHtml}</body></html>`;
+<body>${contentHtml}<script src="/assets/js/admin-functional-qa.js"></script>
+</body></html>`;
     const blob = new Blob(['\ufeff', wordHtml], { type: 'application/msword' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -702,5 +703,6 @@
     }
   })();
 </script>
+<script src="/assets/js/admin-functional-qa.js"></script>
 </body>
 </html>

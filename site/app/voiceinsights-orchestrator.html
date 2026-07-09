@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VoiceInsights Orchestrator™ — ACIOS</title>
+  <style>
+    :root{--blue:#0b3b74;--teal:#0f766e;--ink:#102033;--muted:#5b6b7f;--bg:#f4f7fb;--card:#fff;--line:#d9e4ef;--good:#0f9f6e;--warn:#b7791f}
+    body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    .wrap{max-width:1180px;margin:0 auto;padding:24px}.hero{background:linear-gradient(135deg,var(--blue),var(--teal));color:white;border-radius:28px;padding:34px;box-shadow:0 18px 45px rgba(16,32,51,.18)}
+    .hero h1{font-size:clamp(30px,5vw,54px);line-height:1.02;margin:10px 0}.hero p{font-size:18px;max-width:840px;opacity:.94}.badge{display:inline-flex;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);font-weight:700}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 8px 24px rgba(16,32,51,.06)}.card h2,.card h3{margin:0 0 10px}.muted{color:var(--muted)}.steps{display:grid;grid-template-columns:repeat(9,1fr);gap:8px}.step{background:#eef6ff;border:1px solid #cfe1f4;border-radius:14px;padding:12px;font-size:13px;font-weight:700;text-align:center}.channel{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:10px 0}.score{font-size:34px;font-weight:800;color:var(--teal)}.pill{display:inline-flex;margin:4px;padding:8px 10px;border-radius:999px;background:#eef6ff;border:1px solid #cfe1f4;font-weight:700;font-size:13px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}.btn{appearance:none;border:0;border-radius:14px;background:var(--blue);color:white;padding:12px 16px;font-weight:800;cursor:pointer}.btn.alt{background:var(--teal)}pre{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;padding:14px;border-radius:16px;overflow:auto}@media(max-width:850px){.grid{grid-template-columns:1fr}.steps{grid-template-columns:1fr 1fr}.wrap{padding:14px}.hero{padding:24px}.card{padding:16px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <span class="badge">v208 — Autonomous Campaign Intelligence Operating System</span>
+      <h1>VoiceInsights Orchestrator™</h1>
+      <p>Upload contacts, choose policy, launch campaign, and VoiceInsights Africa autonomously engages respondents across Phone Call, WhatsApp Voice, WhatsApp Chat, SMS, Web Link and Offline Enumerator App.</p>
+      <div class="actions"><button class="btn" onclick="loadOrchestrator()">Load Orchestrator</button><button class="btn alt" onclick="document.getElementById('simulator').scrollIntoView({behavior:'smooth'})">View Simulator</button></div>
+    </section>
+    <section class="card" style="margin-top:20px"><h2>Operating workflow</h2><div class="steps" id="workflow"></div></section>
+    <section class="grid"><div class="card"><h3>Readiness</h3><div class="score" id="score">Loading…</div><p class="muted" id="status">Connecting to orchestration API.</p></div><div class="card"><h3>Active policy</h3><div id="policy"></div></div><div class="card"><h3>Business promise</h3><p id="promise" class="muted"></p></div></section>
+    <section class="grid"><div class="card"><h3>AI Distribution Engine 2.0</h3><div id="channels"></div></div><div class="card" id="simulator"><h3>Campaign Intelligence Simulator</h3><div id="forecast"></div></div><div class="card"><h3>Smart Enumerator Dispatch</h3><div id="dispatch"></div></div></section>
+    <section class="grid"><div class="card"><h3>Integration Hub</h3><div id="integrations"></div></div><div class="card"><h3>VoiceInsights SDK</h3><div id="sdk"></div></div><div class="card"><h3>Learning Engine</h3><div id="learning"></div></div></section>
+    <section class="card"><h2>SDK example</h2><pre id="sdkExample">Loading SDK example…</pre></section>
+  </main>
+<script>
+const API='https://voiceinsights-api.kitentyatsnp.workers.dev';
+function escapeHtml(s){return String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+function row(a,b){return `<div class="channel"><b>${escapeHtml(a)}</b><span class="muted">${escapeHtml(b)}</span></div>`;}
+async function loadOrchestrator(){
+  try{
+    const r=await fetch(`${API}/api/voiceinsights-orchestrator-v208?policy=adaptive_intelligence&contacts=10000`);
+    if(!r.ok) throw new Error('Login may be required for the internal orchestrator API.');
+    const d=await r.json(); render(d);
+  }catch(e){
+    render({workflow:['Create Campaign','Upload Contacts','Choose Policy','Simulate','Launch','Autonomous Routing','Enumerator Fallback','AI Processing','Reports Ready'],business_promise:'Internal API requires login. This page is wired for v208 and will render live data after authentication.',policy_engine:{active_policy:'adaptive_intelligence'},readiness:{score:100,status:'UI_READY_API_LOGIN_REQUIRED'},ai_distribution_engine_2:{routing_sequence:[]},campaign_simulator:{forecast:{}},enumerator_dispatch_engine:{assignment_inputs:['GPS proximity','language','workload','availability','performance score']},integration_hub:{adapters:[]},sdk:{core_methods:[],example:'const client = new VoiceInsights({ apiKey });'},learning_engine:{learning_signals:[]}});
+  }
+}
+function render(d){
+  document.getElementById('workflow').innerHTML=(d.workflow||[]).map(x=>`<div class="step">${escapeHtml(x)}</div>`).join('');
+  document.getElementById('score').textContent=(d.readiness?.rating||d.readiness?.score||'Ready');
+  document.getElementById('status').textContent=d.readiness?.status||'';
+  document.getElementById('policy').innerHTML=row('Policy',d.policy_engine?.active_policy||'adaptive_intelligence')+(d.policy_engine?.policies||[]).slice(0,5).map(p=>`<span class="pill">${escapeHtml(p.label)}</span>`).join('');
+  document.getElementById('promise').textContent=d.business_promise||'';
+  document.getElementById('channels').innerHTML=(d.ai_distribution_engine_2?.routing_sequence||[]).map(c=>row(`${c.step}. ${c.label}`,`Score ${c.score}`)).join('') || '<p class="muted">Channels will load after login.</p>';
+  const f=d.campaign_simulator?.forecast||{}; document.getElementById('forecast').innerHTML=row('Expected completion',`${f.expected_completion_rate_pct||'—'}%`)+row('Duration',f.estimated_duration||'—')+row('Estimated cost',f.estimated_cost_usd?`$${f.estimated_cost_usd}`:'—')+row('Recommended policy',f.recommended_policy||'adaptive_intelligence');
+  document.getElementById('dispatch').innerHTML=(d.enumerator_dispatch_engine?.assignment_inputs||[]).map(x=>`<span class="pill">${escapeHtml(x)}</span>`).join('');
+  document.getElementById('integrations').innerHTML=(d.integration_hub?.adapters||[]).slice(0,6).map(a=>row(a.category,a.systems.join(', '))).join('') || '<p class="muted">DHIS2, Kobo, ODK, Twilio, Power BI and CRM adapters are defined in v208.</p>';
+  document.getElementById('sdk').innerHTML=(d.sdk?.core_methods||[]).map(m=>row(m.method,m.description)).join('') || '<p class="muted">SDK contract includes campaign creation, contact upload, simulation, launch and reports.</p>';
+  document.getElementById('learning').innerHTML=(d.learning_engine?.learning_signals||[]).map(x=>`<span class="pill">${escapeHtml(x)}</span>`).join('');
+  document.getElementById('sdkExample').textContent=d.sdk?.example||'';
+}
+loadOrchestrator();
+</script>
+</body>
+</html>

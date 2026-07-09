@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Operations Manager Workspace — VoiceInsights Cloud</title>
+  <style>
+    :root{--blue:#123B7A;--teal:#0F766E;--ink:#0f172a;--muted:#64748b;--bg:#f8fafc;--card:#fff;--line:#e2e8f0;--amber:#92400e;}
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    header{padding:28px 6vw;background:linear-gradient(135deg,#0f766e,#123B7A);color:#fff}header p{max-width:900px;color:#e0f2fe;line-height:1.6}
+    main{padding:28px 6vw;max-width:1400px;margin:auto}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+    .metric{font-size:32px;font-weight:800;color:var(--blue)}.label{color:var(--muted);font-size:14px}.section{margin-top:24px}.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.action{background:#eff6ff;color:#123B7A;border:1px solid #bfdbfe;border-radius:14px;padding:16px;font-weight:800;cursor:pointer}.danger{background:#fef3c7;color:#92400e;border-color:#fde68a}.pipeline{display:grid;gap:10px}.step{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;justify-content:space-between}.badge{background:#ecfeff;color:#155e75;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:800}.no{background:#fef2f2;color:#991b1b;border:1px solid #fecaca;border-radius:999px;padding:7px 10px;display:inline-block;margin:4px;font-size:13px;font-weight:800}
+    @media(max-width:900px){.grid,.two,.actions{grid-template-columns:1fr}.step{flex-direction:column;gap:8px}}
+  </style>
+</head>
+<body>
+<header>
+  <h1>Operations Manager Workspace</h1>
+  <p>Prepare client engagements, upload proposal/contract/invoice, submit for Founder approval, then invite organization users and monitor delivery. Operations Manager is Founder-appointed and cannot invite, replace or remove another Operations Manager.</p>
+</header>
+<main>
+  <section class="grid">
+    <div class="card"><div class="metric">7</div><div class="label">Demo Requests</div></div>
+    <div class="card"><div class="metric">3</div><div class="label">Proposals Drafted</div></div>
+    <div class="card"><div class="metric">2</div><div class="label">Awaiting Approval</div></div>
+    <div class="card"><div class="metric">5</div><div class="label">Campaigns Monitored</div></div>
+  </section>
+
+  <section class="two section">
+    <div class="card">
+      <h2>Quick Actions</h2>
+      <div class="actions">
+        <button class="action" onclick="alert('Create client record')">Create Client Record</button>
+        <button class="action" onclick="alert('Upload proposal')">Upload Proposal</button>
+        <button class="action" onclick="alert('Upload contract')">Upload Contract</button>
+        <button class="action" onclick="alert('Upload invoice')">Upload Invoice</button>
+        <button class="action danger" onclick="alert('Submitted to Founder for Executive Approval')">Submit for Approval</button>
+        <button class="action" onclick="alert('Invite organization users after approval')">Invite Organization Users</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Operations Limits</h2>
+      <p class="label">These actions are blocked by Executive Lock.</p>
+      <span class="no">Cannot approve organization</span><span class="no">Cannot delete organization</span><span class="no">Cannot change Cloud settings</span><span class="no">Cannot change AI settings</span><span class="no">Cannot suspend platform</span><span class="no">Cannot invite Operations Manager</span><span class="no">Cannot replace Operations Manager</span><span class="no">Cannot remove Operations Manager</span>
+    </div>
+  </section>
+
+  <section class="card section">
+    <h2>Client Activation Pipeline</h2>
+    <div class="pipeline">
+      <div class="step"><strong>Website Request Demo</strong><span class="badge">New</span></div>
+      <div class="step"><strong>Meeting & Discovery</strong><span class="badge">Sales</span></div>
+      <div class="step"><strong>Proposal</strong><span class="badge">Draft</span></div>
+      <div class="step"><strong>Contract</strong><span class="badge">Upload</span></div>
+      <div class="step"><strong>Invoice</strong><span class="badge">Finance</span></div>
+      <div class="step"><strong>Submit for Approval</strong><span class="badge">Founder</span></div>
+      <div class="step"><strong>VoiceInsights Cloud Activation</strong><span class="badge">Automatic</span></div>
+      <div class="step"><strong>Project Starts</strong><span class="badge">Delivery</span></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
 <!-- v202: report publication UI and mobile readability fix -->
 <title>VoiceInsights International Intelligence Report</title>
-<meta name="description" content="Open the VoiceInsights v200 International Intelligence Reporting Suite sample report experience.">
+<meta name="description" content="Open the VoiceInsights International Intelligence Reporting Suite sample report experience.">
 <link rel="stylesheet" href="/assets/css/style.css">
 <style>
   body{background:#0F1614;color:#F6F3EA;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;font-family:Inter,Segoe UI,Arial,sans-serif;}
@@ -18,13 +18,14 @@
   const params = new URLSearchParams(location.search);
   const reportId = params.get('report_id') || params.get('id') || DEFAULT_REPORT_ID;
   function openV200(){ location.href = `/sample-report-viewer.html?report_id=${encodeURIComponent(reportId)}#v200-suite`; }
+  if (params.get('no_redirect') !== '1') { setTimeout(openV200, 700); }
 </script>
 </head>
 <body>
   <main class="bridge">
-    <div class="eyebrow">VoiceInsights v200 International Intelligence Reporting Suite</div>
+    <div class="eyebrow">VoiceInsights International Intelligence Reporting Suite</div>
     <h1>Executive intelligence reports, not static samples.</h1>
-    <p>This legacy sample report page now opens the live v200 report viewer. The viewer reads the v200 API package, including executive publication, SDG visual framework, infographic atlas, board deck, donor report, government brief, research annex and mobile/tablet responsive publication views.</p>
+    <p>This page opens the live VoiceInsights intelligence report viewer. Reports are rendered as desktop publications, tablet board views and mobile infographic readers using the latest evidence package.</p>
     <div class="grid">
       <div class="card"><b>Executive</b>Decision-first publication pages.</div>
       <div class="card"><b>Infographics</b>KPI, risk, regional, SDG and impact atlas.</div>
@@ -32,7 +33,7 @@
       <div class="card"><b>Responsive</b>Desktop, tablet and mobile report experience.</div>
     </div>
     <div class="actions">
-      <a class="btn primary" href="javascript:openV200()">Open v200 Intelligence Report</a>
+      <a class="btn primary" href="javascript:openV200()">Open Intelligence Report</a>
       <a class="btn ghost" href="/sample-reports.html">View all sample reports</a>
     </div>
   </main>

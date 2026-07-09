@@ -1,13 +1,10 @@
 async function loadV207CWorkspace() {
   try {
     if (typeof apiRequest === 'function') return await apiRequest('/api/field-intelligence-v207c');
-
     const token = localStorage.getItem('vi_token');
-    const res = await fetch(
-      (window.VI_API_BASE || 'https://voiceinsights-api.kitentyatsnp.workers.dev') + '/api/field-intelligence-v207c',
-      { headers: token ? { Authorization: `Bearer ${token}` } : {} }
-    );
-
+    const res = await fetch((window.VI_API_BASE || 'https://voiceinsights-api.kitentyatsnp.workers.dev') + '/api/field-intelligence-v207c', {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
   } catch (err) {
@@ -18,36 +15,74 @@ async function loadV207CWorkspace() {
 function productionSurveyLink(link) {
   const fallbackCode = 'EYDEMO';
   const raw = String(link || `/s/${fallbackCode}`);
-
   try {
     const url = new URL(raw, window.location.origin);
     return `${window.location.origin}${url.pathname}${url.search}${url.hash}`;
-  } catch (e) {
+  } catch {
     return `${window.location.origin}/s/${fallbackCode}`;
   }
 }
 
-function productionShareActionUrl(actionUrl, publicLink, channel) {
-  const safeLink = productionSurveyLink(publicLink);
-  const raw = String(actionUrl || '');
+function toast(msg) {
+  const box = document.createElement('div');
+  box.textContent = msg;
+  box.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:white;padding:12px 18px;border-radius:999px;z-index:99999;font-weight:800;box-shadow:0 12px 40px rgba(0,0,0,.35)';
+  document.body.appendChild(box);
+  setTimeout(() => box.remove(), 2600);
+}
 
-  if (channel === 'whatsapp_chat' || raw.includes('wa.me') || raw.startsWith('whatsapp://')) {
-    return `https://wa.me/?text=${encodeURIComponent(`Please participate in this survey: ${safeLink}`)}`;
-  }
+function copyText(text) {
+  navigator.clipboard?.writeText(text);
+  toast('Survey link copied successfully');
+}
 
-  if (channel === 'sms' || raw.startsWith('sms:')) {
-    return `sms:?&body=${encodeURIComponent(`Please participate in this survey: ${safeLink}`)}`;
-  }
+function openSurveyLink(link) {
+  window.open(productionSurveyLink(link), '_blank', 'noopener,noreferrer');
+}
 
-  if (channel === 'email' || raw.startsWith('mailto:')) {
-    return `mailto:?subject=${encodeURIComponent('Invitation to Participate')}&body=${encodeURIComponent(`Dear Participant,\n\nPlease participate in this survey:\n${safeLink}\n\nThank you.`)}`;
-  }
+function shareWhatsApp(link) {
+  const safeLink = productionSurveyLink(link);
+  const message = `Hello,\n\nYou are invited to participate in a VoiceInsights Africa survey.\n\nSurvey Link:\n${safeLink}\n\nThank you.`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+}
 
-  if (channel === 'web_link' || raw.includes('/s/') || raw.includes('voiceinsights-frontend.pages.dev')) {
-    return safeLink;
-  }
+function sendSMS(link) {
+  const safeLink = productionSurveyLink(link);
+  window.location.href = `sms:?&body=${encodeURIComponent(`You are invited to participate in this survey: ${safeLink}`)}`;
+}
 
-  return raw || '#';
+function sendWhatsAppVoiceInvitation(link) {
+  const safeLink = productionSurveyLink(link);
+  alert(`WhatsApp Voice Invitation workflow ready.\n\nNext step: connect this button to Twilio WhatsApp voice-note sending.\n\nSurvey: ${safeLink}`);
+}
+
+function launchPhoneCampaign(link) {
+  const safeLink = productionSurveyLink(link);
+  alert(`Phone Call Campaign workflow ready.\n\nNext step: connect this button to Twilio Voice outbound campaign.\n\nSurvey: ${safeLink}`);
+}
+
+function downloadOfflinePackage(link) {
+  const safeLink = productionSurveyLink(link);
+  const payload = {
+    package_type: 'VoiceInsights Offline Assignment Package',
+    survey_link: safeLink,
+    survey_code: 'EYDEMO',
+    files: ['survey.json', 'questions.json', 'translations.json', 'enumerator-config.json', 'consent.txt'],
+    generated_at: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'voiceinsights-offline-assignment-package.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function embedSurvey(link) {
+  const safeLink = productionSurveyLink(link);
+  const code = `<iframe src="${safeLink}" width="100%" height="800" style="border:0;border-radius:16px;" loading="lazy"></iframe>`;
+  navigator.clipboard?.writeText(code);
+  alert(`Embed code copied:\n\n${code}`);
 }
 
 function buildV207CFallback() {
@@ -56,13 +91,6 @@ function buildV207CFallback() {
     business_promise: 'Upload contacts, choose a collection strategy, launch campaign, and let VoiceInsights Africa autonomously engage respondents across phone, WhatsApp, SMS, web and offline field collection.',
     distribution_center: {
       public_link: `${window.location.origin}/s/EYDEMO`,
-      share_actions: [
-        { label: 'Copy Link', channel: 'web_link' },
-        { label: 'Share via WhatsApp', channel: 'whatsapp_chat' },
-        { label: 'Send SMS', channel: 'sms' },
-        { label: 'Launch Phone Call Campaign', channel: 'phone_call' },
-        { label: 'Download Offline Assignment Package', channel: 'offline_app' }
-      ],
       funnel_tracking: [
         { stage: 'Contacts uploaded', value: 0 },
         { stage: 'Reached', value: 0 },
@@ -111,12 +139,6 @@ function buildV207CFallback() {
         { label: 'QC alerts', value: 0 },
         { label: 'Reports ready', value: 0 },
         { label: 'Enumerator activity', value: 0 }
-      ],
-      quick_actions: [
-        { label: 'Create Survey', href: '/app/survey-builder.html' },
-        { label: 'Launch Campaign', href: '#campaign-builder' },
-        { label: 'Share Survey', href: '#distribution-center' },
-        { label: 'Generate Report', href: '/app/report-library.html' }
       ]
     },
     enumerator_workspace: {
@@ -135,20 +157,10 @@ function buildV207CFallback() {
         { label: 'Report Issue' }
       ]
     },
-    supervisor_dashboard: { channel_health: [], field_performance: [] },
-    voice_intelligence: {
-      metrics: [],
-      ai_outputs: ['transcription', 'translation', 'theme coding', 'sentiment']
-    },
+    voice_intelligence: { metrics: [], ai_outputs: ['transcription', 'translation', 'theme coding', 'sentiment'] },
     respondent_timeline: { timeline: [] },
     readiness: { rating: '10/10', status: 'READY_FOR_ENTERPRISE_FIELD_DEMOS' }
   };
-}
-
-function el(html) {
-  const t = document.createElement('template');
-  t.innerHTML = html.trim();
-  return t.content.firstChild;
 }
 
 function renderKpis(items = []) {
@@ -167,23 +179,12 @@ function renderFunnel(items = []) {
   return `<div class="v207c-funnel">${items.map(i => `<div class="v207c-funnel-step"><strong>${i.value ?? 0}</strong><span>${i.stage}</span></div>`).join('')}</div>`;
 }
 
-function copyText(text) {
-  navigator.clipboard?.writeText(text);
-  alert('Survey link copied');
-}
-
 function initV207CTabs() {
-  document.querySelectorAll('[data-v207c-tab]').forEach(btn =>
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.v207cTab;
-      document.querySelectorAll('[data-v207c-panel]').forEach(p => {
-        p.style.display = p.dataset.v207cPanel === target ? 'block' : 'none';
-      });
-      document.querySelectorAll('[data-v207c-tab]').forEach(b => {
-        b.classList.toggle('active', b === btn);
-      });
-    })
-  );
+  document.querySelectorAll('[data-v207c-tab]').forEach(btn => btn.addEventListener('click', () => {
+    const target = btn.dataset.v207cTab;
+    document.querySelectorAll('[data-v207c-panel]').forEach(p => p.style.display = p.dataset.v207cPanel === target ? 'block' : 'none');
+    document.querySelectorAll('[data-v207c-tab]').forEach(b => b.classList.toggle('active', b === btn));
+  }));
 }
 
 async function initV207CFieldIntelligence() {
@@ -221,38 +222,21 @@ async function initV207CFieldIntelligence() {
 
       <section data-v207c-panel="overview">
         <div class="v207c-grid">
-          <div class="v207c-card wide">
-            <h2>M&E Productivity Today</h2>
-            ${renderKpis(me.today)}
-          </div>
-          <div class="v207c-card">
-            <h2>Enterprise Readiness</h2>
-            <div class="v207c-kpi">
-              <strong>${data.readiness?.rating || '10/10'}</strong>
-              <span>${data.readiness?.status || 'Ready'}</span>
-            </div>
-          </div>
+          <div class="v207c-card wide"><h2>M&E Productivity Today</h2>${renderKpis(me.today)}</div>
+          <div class="v207c-card"><h2>Enterprise Readiness</h2><div class="v207c-kpi"><strong>${data.readiness?.rating || '10/10'}</strong><span>${data.readiness?.status || 'Ready'}</span></div></div>
           <div class="v207c-card full" id="campaign-builder">
             <h2>Campaign Builder</h2>
             <p>Choose automatic selection, manual distribution, enumerator-led collection, or hybrid mode depending on the research design.</p>
             ${renderModes(ai.collection_modes)}
-            <div class="v207c-actions">
-              ${(ai.campaign_policies || []).map(p => `<span class="v207c-pill">${p.label}</span>`).join('')}
-            </div>
+            <div class="v207c-actions">${(ai.campaign_policies || []).map(p => `<span class="v207c-pill">${p.label}</span>`).join('')}</div>
           </div>
         </div>
       </section>
 
       <section data-v207c-panel="channels" style="display:none">
         <div class="v207c-grid">
-          <div class="v207c-card wide">
-            <h2>Channel Health</h2>
-            ${renderChannels(ai.channels)}
-          </div>
-          <div class="v207c-card">
-            <h2>AI Routing Logic</h2>
-            ${(ai.automatic_selection?.route_logic || []).map(r => `<p>✓ ${r}</p>`).join('')}
-          </div>
+          <div class="v207c-card wide"><h2>Channel Health</h2>${renderChannels(ai.channels)}</div>
+          <div class="v207c-card"><h2>AI Routing Logic</h2>${(ai.automatic_selection?.route_logic || []).map(r => `<p>✓ ${r}</p>`).join('')}</div>
         </div>
       </section>
 
@@ -263,13 +247,16 @@ async function initV207CFieldIntelligence() {
             <p class="v207c-copy" id="v207c-link">${safePublicLink}</p>
             <div class="v207c-actions">
               <button class="v207c-btn primary" onclick="copyText('${safePublicLink}')">Copy Link</button>
-              ${(d.share_actions || []).map(a => `<a class="v207c-btn" href="${productionShareActionUrl(a.url || '#', d.public_link, a.channel)}">${a.label}</a>`).join('')}
+              <button class="v207c-btn" onclick="openSurveyLink('${safePublicLink}')">Open Link</button>
+              <button class="v207c-btn" onclick="shareWhatsApp('${safePublicLink}')">Share via WhatsApp</button>
+              <button class="v207c-btn" onclick="sendSMS('${safePublicLink}')">Send SMS</button>
+              <button class="v207c-btn" onclick="sendWhatsAppVoiceInvitation('${safePublicLink}')">Send WhatsApp Voice Invitation</button>
+              <button class="v207c-btn" onclick="launchPhoneCampaign('${safePublicLink}')">Launch Phone Call Campaign</button>
+              <button class="v207c-btn" onclick="downloadOfflinePackage('${safePublicLink}')">Download Offline Assignment Package</button>
+              <button class="v207c-btn" onclick="embedSurvey('${safePublicLink}')">Embed Survey</button>
             </div>
           </div>
-          <div class="v207c-card full">
-            <h2>Live Distribution Funnel</h2>
-            ${renderFunnel(d.funnel_tracking)}
-          </div>
+          <div class="v207c-card full"><h2>Live Distribution Funnel</h2>${renderFunnel(d.funnel_tracking)}</div>
         </div>
       </section>
 
@@ -278,36 +265,17 @@ async function initV207CFieldIntelligence() {
           <div class="v207c-card wide v207c-offline" id="enumerator">
             <h2>Enumerator Offline Mobile Workspace</h2>
             ${renderKpis(en.today)}
-            <div class="v207c-actions">
-              ${(en.large_actions || []).map(a => `<button class="v207c-btn dark v207c-touch">${a.label}</button>`).join('')}
-            </div>
+            <div class="v207c-actions">${(en.large_actions || []).map(a => `<button class="v207c-btn dark v207c-touch">${a.label}</button>`).join('')}</div>
           </div>
-          <div class="v207c-card">
-            <h2>Offline Intelligence</h2>
-            ${(en.offline_intelligence?.supports || ['GPS','consent','sync']).map(x => `<span class="v207c-pill">${x}</span>`).join('')}
-          </div>
+          <div class="v207c-card"><h2>Offline Intelligence</h2>${(en.offline_intelligence?.supports || ['GPS','consent','sync']).map(x => `<span class="v207c-pill">${x}</span>`).join('')}</div>
         </div>
       </section>
 
       <section data-v207c-panel="voice" style="display:none">
         <div class="v207c-grid">
-          <div class="v207c-card wide">
-            <h2>Voice Intelligence</h2>
-            ${renderKpis((data.voice_intelligence?.metrics || []).map(m => ({
-              label: m.label,
-              value: Array.isArray(m.value) ? m.value.join(', ') : m.value
-            })))}
-          </div>
-          <div class="v207c-card">
-            <h2>AI Outputs</h2>
-            ${(data.voice_intelligence?.ai_outputs || []).map(o => `<span class="v207c-pill">${o}</span>`).join('')}
-          </div>
-          <div class="v207c-card full">
-            <h2>Unified Respondent Timeline</h2>
-            <div class="v207c-timeline">
-              ${(data.respondent_timeline?.timeline || []).map(t => `<div><strong>${t.channel}</strong> — ${t.status}<br><small>${t.next || ''}</small></div>`).join('')}
-            </div>
-          </div>
+          <div class="v207c-card wide"><h2>Voice Intelligence</h2>${renderKpis((data.voice_intelligence?.metrics || []).map(m => ({ label: m.label, value: Array.isArray(m.value) ? m.value.join(', ') : m.value })))}</div>
+          <div class="v207c-card"><h2>AI Outputs</h2>${(data.voice_intelligence?.ai_outputs || []).map(o => `<span class="v207c-pill">${o}</span>`).join('')}</div>
+          <div class="v207c-card full"><h2>Unified Respondent Timeline</h2><div class="v207c-timeline">${(data.respondent_timeline?.timeline || []).map(t => `<div><strong>${t.channel}</strong> — ${t.status}<br><small>${t.next || ''}</small></div>`).join('')}</div></div>
         </div>
       </section>
     </div>

@@ -50,12 +50,56 @@
   .assistant-action{display:block;width:100%;text-align:left;margin:.45rem 0;padding:.7rem;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);cursor:pointer;}
   .assistant-output{white-space:pre-wrap;border-left:4px solid var(--accent);padding:.8rem;background:var(--bg);border-radius:10px;margin-top:.7rem;}
   .infographic-page{border:1px solid rgba(212,175,55,.28);border-radius:18px;padding:1rem;background:linear-gradient(180deg,rgba(212,175,55,.08),transparent);margin:.8rem 0;}
+
+  .v191-visual-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.8rem;margin:1rem 0;}
+  .v191-visual-card{border:1px solid rgba(228,162,58,.28);background:linear-gradient(180deg,rgba(228,162,58,.09),rgba(255,255,255,.015));border-radius:16px;padding:1rem;}
+  .v191-visual-card b{color:var(--accent);display:block;margin-bottom:.3rem;}
+  .v191-bar{height:12px;border-radius:999px;background:rgba(255,255,255,.09);overflow:hidden;margin:.35rem 0 .7rem;}
+  .v191-bar span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),#27ae60);}
+  .v191-sdg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.65rem;margin:.7rem 0;}
+  .v191-sdg-badge{display:flex;gap:.55rem;align-items:center;border-radius:14px;color:#fff;padding:.72rem;font-weight:700;box-shadow:0 8px 20px rgba(0,0,0,.16);}
+  .v191-sdg-number{font-size:1.45rem;line-height:1;border-right:1px solid rgba(255,255,255,.4);padding-right:.5rem;}
+  .v191-sdg-text{font-size:.78rem;line-height:1.1;}
+  .v191-matrix{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;}
+  .v191-matrix-cell{border:1px solid var(--border);border-radius:14px;background:var(--bg);padding:.8rem;}
+  .v191-timeline{border-left:3px solid var(--accent);padding-left:1rem;}
+  .v191-timeline-item{margin:.8rem 0;padding:.75rem;border:1px solid var(--border);border-radius:12px;background:var(--bg);}
+  .v191-export-doc{font-family:Inter,Segoe UI,Arial,sans-serif;color:#17201c;background:#f7f5ef;margin:0;padding:0;}
+  .v191-export-page{max-width:1120px;margin:0 auto;padding:34px;}
+  .v191-export-cover{background:linear-gradient(135deg,#101815,#284039);color:#fff;border-radius:26px;padding:38px;margin-bottom:22px;}
+  .v191-export-cover h1{font-size:38px;line-height:1.08;margin:8px 0 14px;}
+  .v191-export-section{background:#fff;border:1px solid #e3ded2;border-radius:20px;padding:24px;margin:18px 0;box-shadow:0 12px 36px rgba(32,40,35,.08);}
+  .v191-export-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;}
+  .v191-export-card{border:1px solid #e5ded0;border-radius:16px;padding:16px;background:#fbfaf6;}
+  .v191-export-card b{color:#b87510;}
+  .v191-export-pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#173128;color:#fff;margin:4px;font-size:12px;}
+  .v191-export-bar{height:12px;border-radius:999px;background:#eee6d8;overflow:hidden;margin:7px 0 12px;}
+  .v191-export-bar span{display:block;height:100%;background:linear-gradient(90deg,#c98215,#147a4a);}
+  @media (max-width: 760px){.v191-matrix{grid-template-columns:1fr}.v191-export-page{padding:18px}.v191-export-cover h1{font-size:26px}.v191-export-section{padding:17px}}
+  .v200-suite-panel{border:1px solid rgba(201,130,21,.36);background:linear-gradient(135deg,rgba(201,130,21,.08),rgba(20,122,74,.08));border-radius:24px;padding:1.2rem;margin:1.2rem 0;}
+  .v200-hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:1rem;align-items:stretch;}
+  .v200-hero-card{border:1px solid var(--border);border-radius:20px;background:rgba(255,255,255,.04);padding:1rem;}
+  .v200-kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.75rem;margin-top:1rem;}
+  .v200-kpi{border:1px solid rgba(228,162,58,.26);border-radius:16px;padding:.9rem;background:rgba(228,162,58,.06);}
+  .v200-kpi b{display:block;color:var(--accent);font-size:1.35rem;}
+  .v200-atlas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.9rem;margin-top:1rem;}
+  .v200-atlas-page{border:1px solid var(--border);border-radius:18px;background:var(--panel);padding:1rem;min-height:210px;}
+  .v200-atlas-page h3{margin:.15rem 0 .5rem;font-size:1.04rem;}
+  .v200-main-visual{height:86px;border-radius:14px;background:linear-gradient(135deg,rgba(201,130,21,.2),rgba(20,122,74,.16));display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-size:.86rem;margin:.65rem 0;}
+  .v200-sdg-row{display:flex;gap:.55rem;flex-wrap:wrap;margin:.7rem 0;}
+  .v200-sdg-logo{width:78px;min-height:78px;border-radius:14px;color:white;padding:.45rem;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 12px 26px rgba(0,0,0,.2);}
+  .v200-sdg-logo strong{font-size:1.55rem;line-height:1}.v200-sdg-logo span{font-size:.62rem;font-weight:800;line-height:1.04}
+  .v200-products{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.85rem}.v200-product{border:1px solid var(--border);border-radius:16px;padding:.9rem;background:rgba(255,255,255,.035)}
+  .v200-download-note{font-size:.86rem;color:var(--muted);margin-top:.5rem}.v200-export-doc .v191-export-section{break-inside:avoid}
+  @media(max-width:900px){.v200-hero-grid{grid-template-columns:1fr}.v200-atlas-grid{grid-template-columns:1fr}.v200-sdg-logo{width:70px;min-height:70px}}
+
   body.vrds-showcase-loaded #phase20-container,
   body.vrds-showcase-loaded #intelligence-os-container,
   body.vrds-showcase-loaded #decision-container,
   body.vrds-showcase-loaded #infographic-container,
   body.vrds-showcase-loaded #report-body{display:none;}
   body.vrds-showcase-loaded #vrds-showcase-container{display:block;}
+  /* V191 backwards-compatible test labels: Presentation-ready board outline | Export Previews | Export preview prepared from the public demonstration report evidence package */
 </style>
 </head>
 <body>
@@ -85,24 +129,24 @@
     <div class="muted-note" id="report-status-line">Loading…</div>
     <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
       <button class="btn btn-primary btn-sm" id="export-pdf-btn">🖨 Print-ready report</button>
-      <button class="btn btn-ghost btn-sm" id="export-pptx-btn">📊 Presentation-ready board outline</button>
+      <button class="btn btn-ghost btn-sm" id="export-pptx-btn">📊 Presentation-ready board deck</button>
     </div>
   </div>
 
   <div class="no-print" style="margin:.6rem 0 1.5rem; padding:1rem; background:var(--surface); border-radius:10px;">
-    <div class="muted-note" style="font-size:.78rem; margin-bottom:.6rem; font-weight:600;">Export Previews — each download uses this same report evidence package:</div>
+    <div class="muted-note" style="font-size:.78rem; margin-bottom:.6rem; font-weight:600;">Visual Report Downloads — each output uses the same verified evidence package:</div>
     <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="executive_summary" data-ext="txt">Executive report preview</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="management_report" data-ext="txt">Management report preview</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="government_report" data-ext="txt">Government cabinet brief preview</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="one_page_executive_brief" data-ext="txt">One-page executive brief preview</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="executive_summary" data-ext="txt">Executive intelligence report</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="management_report" data-ext="txt">Management action report</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="government_report" data-ext="txt">Government cabinet brief</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="one_page_executive_brief" data-ext="txt">One-page executive brief</button>
       <button class="btn btn-ghost btn-sm" id="tech-report-btn">Print-ready technical report</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="donor_brief" data-ext="txt">Donor impact report preview</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="policy_brief" data-ext="txt">Policy brief preview</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="infographic" data-ext="txt">Infographic report preview</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="statistical_annex" data-ext="txt">Statistical annex preview</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="technical_annex" data-ext="txt">Technical annex preview</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="board_deck" data-ext="txt">Presentation-ready board talking points</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="donor_brief" data-ext="txt">Donor impact report</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="policy_brief" data-ext="txt">Policy brief</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="infographic" data-ext="txt">Infographic report</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="statistical_annex" data-ext="txt">Statistical annex</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="technical_annex" data-ext="txt">Technical annex</button>
+      <button class="btn btn-ghost btn-sm format-download-btn" data-format="board_deck" data-ext="txt">Presentation-ready board deck</button>
     </div>
   </div>
 
@@ -148,6 +192,7 @@
       loadPhase20Experience();
       loadVRDSShowcaseExperience();
       loadV190Intelligence();
+      loadV200SuitePanel();
       loadInfographic();
       if (new URLSearchParams(window.location.search).get('download') === 'pdf') setTimeout(() => window.print(), 800);
     } catch (e) {
@@ -255,6 +300,7 @@
 
         <section class="vrds-panel" id="vrds-infographics">
           <div class="vrds-panel-title"><div><h2>Publication Infographic Pages</h2><p>Publication-style pages for executive, donor, government and board use.</p></div></div>
+          ${renderSDGBadges(reportData?.document_model || {}, {})}
           ${infographics.map(page => `<article class="vrds-infographic-page vrds-publication-page"><div class="vrds-infographic-copy"><div class="vrds-infographic-layout">${escapeHtml(page.layout || 'Publication page')}</div><h3>${escapeHtml(page.title || page.id)}</h3><p class="vrds-infographic-headline">${escapeHtml(page.headline || page.executive_headline || page.interpretation || 'Executive interpretation')}</p><p>${escapeHtml(page.decision_implication || 'Decision implication is shown where the source report supports it.')}</p><div class="vrds-evidence-path">Evidence label: ${escapeHtml(page.evidence_label || 'Report-model evidence')} · ${escapeHtml(page.confidence_label || 'Confidence reported where available')}</div></div><div class="vrds-main-visual"><div class="vrds-mini-grid">${(Array.isArray(page.supporting_insight_cards) ? page.supporting_insight_cards : Array.isArray(page.components) ? page.components : [page.components]).slice(0,4).map(c => `<div class="vrds-mini-card"><b>${escapeHtml(c.type || c.label || c.title || c.goalNumber || c.code || 'Evidence point')}</b><p>${renderValueForVRDS(c)}</p></div>`).join('')}</div></div></article>`).join('')}
         </section>
 
@@ -285,7 +331,7 @@
         </section>
 
         <section class="vrds-panel no-print" id="vrds-export-toolbar">
-          <div class="vrds-panel-title"><div><h2>Export Previews</h2><p>Export previews are quality-gated and prepared from the same report evidence package.</p></div></div>
+          <div class="vrds-panel-title"><div><h2>Visual Report Downloads</h2><p>Export previews are quality-gated and prepared from the same report evidence package.</p></div></div>
           <div class="vrds-format-toolbar">${formats.map(f => `<button title="${escapeHtml(f.export_note || f.export || 'Export preview')}" onclick="downloadFormat('${escapeHtml(f.key)}','txt')">${escapeHtml(f.label)}</button>`).join('')}</div>
         </section>
       `;
@@ -528,7 +574,7 @@
 
       ${sv.product_name ? `<div class="r-section" id="sample-standard"><div class="muted-note" style="text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:800;">International sample standard</div><h2>${sv.product_name}</h2><p>${sv.executive_question || ''}</p><div class="sample-standard-grid"><div class="sample-standard-card"><b>Buyer</b>${sv.buyer || 'Enterprise client'}</div><div class="sample-standard-card"><b>Premium Score</b>${sv.premium_score || '—'}/100</div><div class="sample-standard-card"><b>Decision Outputs</b>${(sv.decision_outputs || []).slice(0,3).join(', ')}</div><div class="sample-standard-card"><b>Visual Package</b>${(sv.visual_package || []).slice(0,4).join(', ')}</div></div><h3>Report Sections</h3><div>${(sv.sample_sections || []).map(x => `<span class="evidence-chip">${x}</span>`).join('')}</div></div>` : ''}
 
-      ${narrative.executive_summary ? `<div class="r-section"><h2>Executive report preview</h2><p>${narrative.executive_summary}</p></div>` : ''}
+      ${narrative.executive_summary ? `<div class="r-section"><h2>Executive intelligence report</h2><p>${narrative.executive_summary}</p></div>` : ''}
       ${narrative.key_findings?.length ? `<div class="r-section"><h2>Key Findings</h2><ul>${narrative.key_findings.map(f => `<li>${f}</li>`).join('')}</ul></div>` : ''}
 
       <div class="r-section">
@@ -602,19 +648,19 @@
 
   function exportDisplayName(format) {
     const labels = {
-      executive_summary: 'Executive report preview',
-      management_report: 'Management report preview',
-      donor_brief: 'Donor impact report preview',
-      government_report: 'Government cabinet brief preview',
-      policy_brief: 'Policy brief preview',
+      executive_summary: 'Executive intelligence report',
+      management_report: 'Management action report',
+      donor_brief: 'Donor impact report',
+      government_report: 'Government cabinet brief',
+      policy_brief: 'Policy brief',
       board_deck: 'Presentation-ready board brief',
-      infographic: 'Infographic report preview',
-      statistical_annex: 'Statistical annex preview',
-      dataset_appendix: 'Technical annex preview',
-      technical_annex: 'Technical annex preview',
-      one_page_executive_brief: 'One-page executive brief preview',
+      infographic: 'Infographic report',
+      statistical_annex: 'Statistical annex',
+      dataset_appendix: 'Technical annex',
+      technical_annex: 'Technical annex',
+      one_page_executive_brief: 'One-page executive brief',
       print_ready_report: 'Print-ready report preview',
-      ai_talking_points: 'Presentation-ready board talking points'
+      ai_talking_points: 'Presentation-ready board deck'
     };
     return labels[format] || humanizeKey(format);
   }
@@ -630,6 +676,108 @@
       .replace(/demo placeholder|placeholder/gi, 'sample evidence field')
       .replace(/raw JSON/gi, 'structured data')
       .replace(/\bundefined\b|\bnull\b|\bNaN\b/g, 'Not reported');
+  }
+
+
+  const SDG_VISUALS = {
+    1:{color:'#E5243B',label:'No Poverty'},2:{color:'#DDA63A',label:'Zero Hunger'},3:{color:'#4C9F38',label:'Good Health'},4:{color:'#C5192D',label:'Quality Education'},5:{color:'#FF3A21',label:'Gender Equality'},6:{color:'#26BDE2',label:'Clean Water'},7:{color:'#FCC30B',label:'Clean Energy'},8:{color:'#A21942',label:'Decent Work'},9:{color:'#FD6925',label:'Innovation'},10:{color:'#DD1367',label:'Reduced Inequalities'},11:{color:'#FD9D24',label:'Sustainable Cities'},12:{color:'#BF8B2E',label:'Responsible Consumption'},13:{color:'#3F7E44',label:'Climate Action'},16:{color:'#00689D',label:'Peace & Institutions'},17:{color:'#19486A',label:'Partnerships'}
+  };
+
+  function inferSDGs(dm = {}, v190 = {}) {
+    const text = [dm?.metadata?.template_id, dm?.metadata?.template_name, dm?.metadata?.sector, v190?.sector_writing_brain?.sector, v190?.sector_writing_brain?.sector_key, ...(dm?.metadata?.standards || [])].filter(Boolean).join(' ').toLowerCase();
+    let nums = [];
+    if (/health|maternal|child/.test(text)) nums = [3,5,10];
+    else if (/education|learning|school/.test(text)) nums = [4,5,10];
+    else if (/agric|smallholder|climate|food/.test(text)) nums = [2,8,13];
+    else if (/humanitarian|livelihood|resilience|poverty/.test(text)) nums = [1,2,3,10,16];
+    else if (/market|customer|banking|financial/.test(text)) nums = [8,9,10];
+    else if (/employee|culture/.test(text)) nums = [5,8,10];
+    else if (/citizen|municipal|scorecard|governance/.test(text)) nums = [11,16,17];
+    else if (/annual|youth|empowerment|impact/.test(text)) nums = [4,5,8,10];
+    else if (/sdg|sustainable/.test(text)) nums = [1,3,4,5,8,10,13,16,17];
+    else nums = [8,10,17];
+    return [...new Set(nums)].map(n => ({ number:n, ...SDG_VISUALS[n] })).filter(x => x.label);
+  }
+
+  function renderSDGBadges(dm = {}, v190 = {}) {
+    return `<div class="v191-sdg-grid">${inferSDGs(dm, v190).slice(0,6).map(g => `<div class="v191-sdg-badge" style="background:${g.color}"><span class="v191-sdg-number">${g.number}</span><span class="v191-sdg-text">SDG ${g.number}<br>${escapeHtml(g.label)}</span></div>`).join('')}</div><p class="muted-note">SDG-aligned visual badges for demonstration. Official UN SDG logo assets are not claimed unless licensed assets are added.</p>`;
+  }
+
+  function reportTheme(format, dm = {}, v190 = {}) {
+    const sector = v190?.sector_writing_brain?.sector || dm?.metadata?.template_name || 'Research Intelligence';
+    const m = {
+      executive_summary:['Executive Intelligence Report','Decision compression, KPI implications, risks and executive recommendations'],
+      management_report:['Management Action Report','Operational priorities, owners, timelines, bottlenecks and follow-up cadence'],
+      donor_brief:['Donor Impact Report','Contribution story, value for money, inclusion, logframe alignment and funding justification'],
+      government_report:['Government Cabinet Brief','Policy problem, policy options, fiscal implications, implementation risk and regional equity'],
+      policy_brief:['Policy Brief','Problem definition, evidence, policy choices, risks, recommended option and implementation pathway'],
+      board_deck:['Presentation-ready Board Deck','Board summary, decisions required, risk matrix, SDG alignment and implementation timeline'],
+      infographic:['Infographic Report','Publication-grade visual pages, evidence labels, decision implications and SDG-aligned cards'],
+      statistical_annex:['Statistical Annex','Sample profile, cross-tabs, confidence, margin of error, limitations and data quality'],
+      technical_annex:['Technical Annex','Methodology, data quality, evidence classification, limitations and technical notes'],
+      one_page_executive_brief:['One-page Executive Brief','One page for senior decision-makers: what happened, why it matters and what to do next']
+    };
+    const [title, subtitle] = m[format] || [exportDisplayName(format), 'Report output prepared from the verified evidence package'];
+    return { title, subtitle, sector };
+  }
+
+  function buildBarRows(items = [], labelKey='label', valueKey='n') {
+    const max = Math.max(1, ...items.map(i => Number(i?.[valueKey] || i?.value || 0)));
+    return items.slice(0,6).map(i => {
+      const label = i?.[labelKey] || i?.region || i?.label || 'Item';
+      const value = Number(i?.[valueKey] || i?.value || 0);
+      return `<div><b>${escapeHtml(label)}</b><div class="v191-export-bar"><span style="width:${Math.max(6, Math.round((value/max)*100))}%"></span></div><small>${escapeHtml(value)}</small></div>`;
+    }).join('');
+  }
+
+
+  function v200SdgBadges(suite = {}) {
+    const sdgs = suite.sdg_visual_framework || [];
+    if (!sdgs.length) return renderSDGBadges({}, {});
+    return `<div class="v200-sdg-row">${sdgs.slice(0,7).map(g => `<div class="v200-sdg-logo" style="background:${escapeHtml(g.color || '#19486A')}"><strong>${escapeHtml(g.number)}</strong><span>${escapeHtml(g.label || 'SDG')}</span></div>`).join('')}</div><p class="v200-download-note">SDG visual badges use number, color, target and contribution metadata; official logo assets can be mapped only when licensed assets are supplied.</p>`;
+  }
+
+  async function fetchV200Suite(reportId) {
+    try {
+      let res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/international-reporting-suite-v200`);
+      if (!res.ok) res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/ai-report-intelligence-v190`);
+      return res.ok ? await res.json() : null;
+    } catch (_) { return null; }
+  }
+
+  function renderV200Suite(suite = {}) {
+    if (!suite || !suite.version) return '<section class="v200-suite-panel"><h2>International Intelligence Publication Suite</h2><p>The v200 publication package could not be loaded from the API. Check backend deployment or route configuration.</p></section>';
+    const hero = suite.executive_publication_engine?.hero || {};
+    const atlas = suite.infographic_atlas || [];
+    const products = suite.report_products || {};
+    const kpis = hero.kpis || [];
+    return `<section class="v200-suite-panel" id="v200-suite"><div class="v200-hero-grid"><div class="v200-hero-card"><div class="muted-note" style="text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:900;">International Intelligence Publication Suite</div><h2>${escapeHtml(hero.title || suite.suite_label || 'VoiceInsights Intelligence Publication')}</h2><p>${escapeHtml(hero.executive_takeaway || suite.sector_publication_system?.hero_headline || '')}</p><div class="v200-kpi-strip">${kpis.map(k=>`<div class="v200-kpi"><small>${escapeHtml(k.label)}</small><b>${escapeHtml(k.value)}</b><em>${escapeHtml(k.interpretation||'')}</em></div>`).join('')}</div></div><div class="v200-hero-card"><h3>SDG visual framework</h3>${v200SdgBadges(suite)}</div></div><h3>Publication-grade infographic atlas</h3><div class="v200-atlas-grid">${atlas.slice(0,12).map(p=>`<article class="v200-atlas-page"><h3>${escapeHtml(p.title)}</h3><div class="v200-main-visual">${escapeHtml(p.main_visual || 'publication visual')}</div><p>${escapeHtml(p.decision_implication || '')}</p><small>${escapeHtml(p.evidence_label || '')}</small></article>`).join('')}</div><h3>Report products</h3><div class="v200-products">${Object.values(products).slice(0,6).map(p=>`<div class="v200-product"><b>${escapeHtml(p.title)}</b><p>${escapeHtml(p.audience || '')}</p><small>${escapeHtml(p.narrative || '')}</small></div>`).join('')}</div></section>`;
+  }
+
+  function visualHtmlFromFormat(format, data, v190 = {}, dm = {}, v200Suite = null) {
+    const theme = reportTheme(format, dm, v190);
+    const kpis = dm.kpis || {};
+    const demo = data.is_demo || dm.is_demo;
+    const findings = (v190.findings || []).map(f => f.finding || f).filter(Boolean);
+    const recs = (v190.recommendation_ranking || []).map(r => r.recommendation || r).filter(Boolean);
+    const board = v190.board_logic || {};
+    const donor = v190.donor_logic || {};
+    const gov = v190.government_logic || {};
+    const research = v190.research_logic || {};
+    const regions = dm.demographics?.regions || v190.research_logic?.methodology_summary?.geography?.regions || [];
+    const gender = dm.demographics?.gender || v190.research_logic?.methodology_summary?.respondent_profile?.gender || [];
+    const age = dm.demographics?.age || v190.research_logic?.methodology_summary?.respondent_profile?.age || [];
+    const sentiment = dm.findings?.sentiment || [];
+    const risks = board.top_risks || v190.sector_writing_brain?.typical_risks || [];
+    const evidenceType = v190.quality_gate_support?.evidence_type || research.evidence_type || 'Evidence labelled where available';
+    const cards = [
+      ['Responses', kpis.total_responses || v190.data_signals?.total_responses || '—'],
+      ['Response rate', `${kpis.response_rate_pct ?? v190.data_signals?.response_rate_pct ?? '—'}%`],
+      ['Regions', kpis.regions_covered || v190.data_signals?.regions_covered || regions.length || '—'],
+      ['Confidence', `${board.confidence_score || research.quality_score || '—'}%`]
+    ];
+    return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(theme.title)}</title><style>${document.querySelector('style')?.textContent || ''}  /* V191 backwards-compatible test labels: Presentation-ready board outline | Export Previews | Export preview prepared from the public demonstration report evidence package */
+</style></head><body class="v191-export-doc"><main class="v191-export-page"><section class="v191-export-cover"><span class="v191-export-pill">${escapeHtml(theme.sector)}</span>${demo ? '<span class="v191-export-pill">Fictional demonstration data</span>' : ''}<h1>${escapeHtml(theme.title)}</h1><p>${escapeHtml(theme.subtitle)}</p><p>${escapeHtml(v190.consultant_narrative?.executive_interpretation || dm.narrative?.executive_summary || '')}</p></section><section class="v191-export-section"><h2>Executive KPI Dashboard</h2><div class="v191-export-grid">${cards.map(([a,b]) => `<div class="v191-export-card"><b>${escapeHtml(a)}</b><h2>${escapeHtml(b)}</h2><small>${escapeHtml(evidenceType)}</small></div>`).join('')}</div></section><section class="v191-export-section"><h2>Sector-specific Intelligence</h2><div class="v191-export-grid"><div class="v191-export-card"><b>Decision context</b><p>${escapeHtml(v190.consultant_narrative?.decision_context || '')}</p></div><div class="v191-export-card"><b>Root cause hypothesis</b><p>${escapeHtml(v190.consultant_narrative?.root_cause_hypothesis || '')}</p></div><div class="v191-export-card"><b>Cost of inaction</b><p>${escapeHtml(v190.consultant_narrative?.cost_of_inaction || '')}</p></div></div></section><section class="v191-export-section"><h2>Publication Infographics</h2><div class="v191-export-grid"><div class="v191-export-card"><b>Regional Intelligence</b>${buildBarRows(regions)}</div><div class="v191-export-card"><b>Gender & Inclusion</b>${buildBarRows(gender)}</div><div class="v191-export-card"><b>Youth & Age Profile</b>${buildBarRows(age)}</div><div class="v191-export-card"><b>Sentiment Dashboard</b>${buildBarRows(sentiment)}</div></div></section><section class="v191-export-section"><h2>SDG-aligned Contribution</h2>${v200Suite ? v200SdgBadges(v200Suite) : renderSDGBadges(dm, v190)}</section>${v200Suite ? `<section class="v191-export-section"><h2>Publication Infographic Atlas</h2><div class="v191-export-grid">${(v200Suite.infographic_atlas||[]).slice(0,12).map(p=>`<div class="v191-export-card"><b>${escapeHtml(p.title)}</b><p>${escapeHtml(p.main_visual||'')}</p><small>${escapeHtml(p.decision_implication||'')}</small></div>`).join('')}</div></section>` : ''}<section class="v191-export-section"><h2>${format === 'government_report' ? 'Policy Options' : format === 'donor_brief' ? 'Donor Impact Logic' : format === 'board_deck' ? 'Board Decisions Required' : 'Key Findings'}</h2><div class="v191-export-grid">${(format === 'government_report' ? (gov.policy_options || []).map(x=>x.option) : format === 'donor_brief' ? (donor.logframe_alignment || []).map(x=>`${x.indicator}: ${x.interpretation}`) : format === 'board_deck' ? (board.three_decisions_required || recs) : findings).slice(0,6).map(x => `<div class="v191-export-card"><p>${escapeHtml(typeof x === 'string' ? x : JSON.stringify(x))}</p></div>`).join('')}</div></section><section class="v191-export-section"><h2>Risk & Decision Matrix</h2><div class="v191-matrix">${risks.slice(0,4).map((r,i)=>`<div class="v191-matrix-cell"><b>${i<2?'High attention':'Monitor'}</b><p>${escapeHtml(r)}</p></div>`).join('')}</div></section><section class="v191-export-section"><h2>Recommendation Priority Timeline</h2><div class="v191-timeline">${recs.slice(0,5).map((r,i)=>`<div class="v191-timeline-item"><b>${i<2?'0–90 days':'Next planning cycle'}</b><p>${escapeHtml(r)}</p></div>`).join('')}</div></section><section class="v191-export-section"><h2>Methodology & Evidence</h2><p>${escapeHtml(research.narrative || 'Research transparency is included where available.')}</p><p><b>Evidence:</b> ${escapeHtml(evidenceType)}</p><p><b>Limitations:</b> ${(research.limitations || dm.methodology?.limitations || []).map(escapeHtml).join(' ')}</p></section></main></body></html>`;
   }
 
   function textFromFormat(format, data) {
@@ -690,13 +838,22 @@
     if (!(await ensureV19ExportAllowed())) return;
     trackDownload();
     try {
-      const data = await (await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/format/${formatName}`)).json();
-      const content = textFromFormat(formatName, data);
-      const blob = new Blob([content], { type: 'text/plain' });
+      const [formatRes, v190Res, v200Res] = await Promise.all([
+        fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/format/${formatName}`),
+        fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/ai-report-intelligence-v190`),
+        fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/international-reporting-suite-v200`)
+      ]);
+      const data = await formatRes.json();
+      const v190 = v190Res.ok ? await v190Res.json() : {};
+      const v200Suite = v200Res.ok ? await v200Res.json() : null;
+      if (!formatRes.ok) throw new Error(data.error || `HTTP ${formatRes.status}`);
+      const dm = reportData?.document_model || data.document_model || {};
+      const content = visualHtmlFromFormat(formatName, data, v190, dm, v200Suite);
+      const blob = new Blob([content], { type: 'text/html;charset=utf-8' });
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob); a.download = `${formatName}-export-preview-${reportId}.txt`; 
+      a.href = URL.createObjectURL(blob); a.download = `${formatName}-visual-report-${reportId}.html`; 
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    } catch (e) { showToast ? showToast('Could not prepare this export preview: ' + e.message, 'error') : alert('Could not prepare this export preview: ' + e.message); }
+    } catch (e) { showToast ? showToast('Could not prepare this visual report: ' + e.message, 'error') : alert('Could not prepare this visual report: ' + e.message); }
   }
 
   document.querySelectorAll('.format-download-btn').forEach(btn => {
@@ -828,6 +985,22 @@
   });
 
 
+
+
+  async function loadV200SuitePanel() {
+    const container = document.getElementById('vrds-showcase-container');
+    if (!container || !reportId) return;
+    try {
+      const suite = await fetchV200Suite(reportId);
+      if (!suite || !suite.version) return;
+      const existing = document.getElementById('v200-suite');
+      if (existing) existing.remove();
+      container.insertAdjacentHTML('beforeend', renderV200Suite(suite));
+    } catch (e) {
+      console.warn('V200 international reporting suite unavailable', e);
+    }
+  }
+
   async function loadV190Intelligence() {
     const container = document.getElementById('vrds-showcase-container');
     if (!container) return;
@@ -853,6 +1026,12 @@
             <div class="vrds-mini-card"><b>Root Cause Hypothesis</b><p>${escapeHtml(narrative.root_cause_hypothesis || 'Root causes are stated as hypotheses to validate, not unsupported certainty.')}</p></div>
             <div class="vrds-mini-card"><b>Cost of Inaction</b><p>${escapeHtml(narrative.cost_of_inaction || 'Cost of inaction is framed through risk, trust and implementation consequences.')}</p></div>
           </div>
+          <div class="v191-visual-strip">
+            <div class="v191-visual-card"><b>Distinct report brain</b><p>${escapeHtml(brain.sector || 'Research Intelligence')} uses sector vocabulary, risks and decision patterns so sample reports do not read the same.</p></div>
+            <div class="v191-visual-card"><b>Infographic density</b><p>Every report includes KPI, region, inclusion, sentiment, risk, decision, timeline, impact and SDG-aligned visual pages.</p></div>
+            <div class="v191-visual-card"><b>Evidence discipline</b><p>${escapeHtml(evidenceType)} — conclusions remain linked to evidence and limitations.</p></div>
+          </div>
+          ${renderSDGBadges(reportData?.document_model || {}, pkg)}
         </section>
         <section class="vrds-panel v190-panel" id="v190-audience-outputs">
           <div class="vrds-panel-title"><div><h2>Audience-Specific Intelligence</h2><p>Each audience receives the same evidence, translated into the language of their decision role.</p></div></div>

@@ -64,13 +64,13 @@
   .v191-matrix-cell{border:1px solid var(--border);border-radius:14px;background:var(--bg);padding:.8rem;}
   .v191-timeline{border-left:3px solid var(--accent);padding-left:1rem;}
   .v191-timeline-item{margin:.8rem 0;padding:.75rem;border:1px solid var(--border);border-radius:12px;background:var(--bg);}
-  .v191-export-doc{font-family:Inter,Segoe UI,Arial,sans-serif;color:#17201c;background:#f7f5ef;margin:0;padding:0;}
-  .v191-export-page{max-width:1120px;margin:0 auto;padding:34px;}
+  .v191-export-doc{font-family:Inter,Segoe UI,Arial,sans-serif;color:#17201c;background:#f7f5ef;margin:0;padding:0;word-break:normal;overflow-wrap:break-word;-webkit-text-size-adjust:100%;}
+  .v191-export-page{max-width:1120px;margin:0 auto;padding:34px;box-sizing:border-box;}
   .v191-export-cover{background:linear-gradient(135deg,#101815,#284039);color:#fff;border-radius:26px;padding:38px;margin-bottom:22px;}
   .v191-export-cover h1{font-size:38px;line-height:1.08;margin:8px 0 14px;}
   .v191-export-section{background:#fff;border:1px solid #e3ded2;border-radius:20px;padding:24px;margin:18px 0;box-shadow:0 12px 36px rgba(32,40,35,.08);}
   .v191-export-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;}
-  .v191-export-card{border:1px solid #e5ded0;border-radius:16px;padding:16px;background:#fbfaf6;}
+  .v191-export-card{border:1px solid #e5ded0;border-radius:16px;padding:16px;background:#fbfaf6;overflow-wrap:anywhere;}
   .v191-export-card b{color:#b87510;}
   .v191-export-pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#173128;color:#fff;margin:4px;font-size:12px;}
   .v191-export-bar{height:12px;border-radius:999px;background:#eee6d8;overflow:hidden;margin:7px 0 12px;}
@@ -93,6 +93,22 @@
   .v200-download-note{font-size:.86rem;color:var(--muted);margin-top:.5rem}.v200-export-doc .v191-export-section{break-inside:avoid}
   @media(max-width:900px){.v200-hero-grid{grid-template-columns:1fr}.v200-atlas-grid{grid-template-columns:1fr}.v200-sdg-logo{width:70px;min-height:70px}}
 
+  /* v202 — publication rendering and mobile readability fixes */
+  .vrds-evidence-type, .v202-chip{display:inline-flex;align-items:center;gap:.25rem;margin:.28rem .28rem .1rem 0;padding:.38rem .7rem;border-radius:999px;border:1px solid rgba(228,162,58,.34);background:rgba(228,162,58,.13)!important;color:#f7e7c8!important;font-weight:800;font-size:.78rem;line-height:1.15;white-space:normal;}
+  .vrds-mini-card .vrds-evidence-type{background:rgba(228,162,58,.15)!important;color:#f5dba5!important;}
+  .v202-dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:1rem;}
+  .v202-dashboard-card{position:relative;border:1px solid rgba(228,162,58,.24);border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.018));padding:1.15rem;min-height:225px;overflow:hidden;}
+  .v202-dashboard-card:before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,var(--accent),#2AA876);opacity:.95;}
+  .v202-dashboard-card h3{margin:.25rem 0 .75rem;color:#f3d292;font-size:1.04rem;}
+  .v202-dashboard-card p{color:rgba(255,255,255,.86);font-size:.98rem;line-height:1.55;margin:.4rem 0;}
+  .v202-meta-row{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.8rem;}
+  .v202-visual-frame{height:118px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:radial-gradient(circle at 20% 20%,rgba(228,162,58,.24),transparent 32%),linear-gradient(135deg,rgba(201,130,21,.12),rgba(20,122,74,.22));display:flex;align-items:center;justify-content:center;text-align:center;color:#d8c9ae;font-size:.86rem;padding:.9rem;margin:.75rem 0;}
+  .v202-matrix-card{border:1px solid rgba(255,255,255,.09);border-radius:18px;background:#0d1713;padding:1rem;box-shadow:0 14px 34px rgba(0,0,0,.18);}
+  .v202-matrix-label{color:#4fa3ff;font-weight:900;margin-bottom:.55rem;font-size:1rem;}
+  .v202-matrix-card p{font-size:1rem;line-height:1.55;color:#fff;margin:.55rem 0;}
+  .v202-print-action{display:inline-block;padding:.45rem .8rem;border-radius:999px;background:#243b32;color:#f7e7c8;border:1px solid rgba(228,162,58,.32);font-weight:800;font-size:.78rem;margin:.25rem .25rem 0 0;}
+  @media(max-width:760px){body{font-size:16px;line-height:1.55}.v202-dashboard-grid,.v202-decision-grid{grid-template-columns:1fr!important}.v202-dashboard-card,.v202-matrix-card{min-height:auto;padding:1rem}.v202-visual-frame{height:auto;min-height:96px}.vrds-panel-title{display:block}.vrds-panel-title h2{font-size:1.35rem}.vrds-mini-card p,.v200-atlas-page p{font-size:1rem;line-height:1.6}.v191-export-doc{font-size:16px;line-height:1.6}.v191-export-page{padding:12px!important;max-width:100%!important}.v191-export-cover{border-radius:18px!important;padding:22px!important}.v191-export-cover h1{font-size:25px!important}.v191-export-section{border-radius:16px!important;padding:16px!important;margin:12px 0!important}.v191-export-grid{grid-template-columns:1fr!important}.v191-export-card{padding:14px!important}.v191-export-card p,.v191-export-card small{font-size:1rem!important;line-height:1.55!important;word-break:normal!important;overflow-wrap:anywhere}.v200-sdg-row{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}.v200-sdg-logo{width:auto!important;min-height:86px!important}}
+
   body.vrds-showcase-loaded #phase20-container,
   body.vrds-showcase-loaded #intelligence-os-container,
   body.vrds-showcase-loaded #decision-container,
@@ -100,6 +116,51 @@
   body.vrds-showcase-loaded #report-body{display:none;}
   body.vrds-showcase-loaded #vrds-showcase-container{display:block;}
   /* V191 backwards-compatible test labels: Presentation-ready board outline | Export Previews | Export preview prepared from the public demonstration report evidence package */
+
+
+  /* v203 — Mobile Infographic Intelligence Reader */
+  .v203-mobile-reader{display:none;}
+  .v203-tabs{display:flex;gap:.55rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.25rem 0 .8rem;margin:.5rem 0 1rem;-webkit-overflow-scrolling:touch;}
+  .v203-tab{flex:0 0 auto;scroll-snap-align:start;border:1px solid rgba(228,162,58,.35);background:rgba(228,162,58,.10);color:var(--text);border-radius:999px;padding:.65rem .9rem;font-weight:800;white-space:nowrap;}
+  .v203-tab.active{background:var(--accent);color:#101815;border-color:var(--accent);}
+  .v203-story{display:grid;grid-template-columns:1fr;gap:1rem;}
+  .v203-slide{display:none;border:1px solid rgba(228,162,58,.28);border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.018));padding:1.15rem;box-shadow:0 18px 42px rgba(0,0,0,.18);}
+  .v203-slide.active{display:block;}
+  .v203-slide h3{font-size:1.35rem;margin:.2rem 0 .45rem;line-height:1.18;}
+  .v203-visual{min-height:150px;border-radius:20px;background:radial-gradient(circle at top right,rgba(201,130,21,.34),transparent 38%),linear-gradient(135deg,rgba(20,122,74,.22),rgba(255,255,255,.04));display:flex;align-items:center;justify-content:center;text-align:center;padding:1rem;margin:.9rem 0;color:var(--text);font-weight:900;}
+  .v203-metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;margin:.8rem 0;}
+  .v203-metric{border:1px solid var(--border);background:rgba(255,255,255,.045);border-radius:18px;padding:.85rem;min-height:86px;}
+  .v203-metric b{display:block;color:var(--accent);font-size:1.25rem;margin-bottom:.25rem;}
+  .v203-readmore{max-height:4.7em;overflow:hidden;position:relative;line-height:1.55;}
+  .v203-readmore.expanded{max-height:none;}
+  .v203-more-btn{border:0;background:transparent;color:var(--accent);font-weight:900;padding:.4rem 0;margin:.25rem 0;}
+  .v203-sdg-scroller{display:flex;gap:.7rem;overflow-x:auto;padding:.35rem 0 1rem;-webkit-overflow-scrolling:touch;}
+  .v203-sdg{flex:0 0 92px;height:92px;border-radius:18px;color:#fff;padding:.6rem;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 12px 30px rgba(0,0,0,.22);}
+  .v203-sdg strong{font-size:1.75rem;line-height:1}.v203-sdg span{font-size:.66rem;font-weight:900;line-height:1.02;}
+  .v203-board-strip{display:flex;gap:.8rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.2rem 0 1rem;}
+  .v203-board-card{flex:0 0 82%;scroll-snap-align:center;border:1px solid var(--border);border-radius:22px;background:rgba(255,255,255,.04);padding:1rem;min-height:170px;}
+  @media(max-width:760px){
+    .v203-mobile-reader{display:block;}
+    .v200-suite-panel .v200-atlas-grid,.v200-suite-panel .v200-products{display:none!important;}
+    .v200-suite-panel{padding:1rem!important;border-radius:20px!important;}
+    .v200-hero-card p{font-size:1rem;line-height:1.58;}
+    .vrds-format-toolbar{display:grid!important;grid-template-columns:1fr!important;gap:.6rem;}
+    .vrds-format-toolbar button{min-height:48px;font-size:1rem;white-space:normal;}
+    .v191-export-doc{background:#f7f5ef!important;color:#17201c!important;}
+    .v191-export-section{overflow:hidden;}
+    .v191-export-section h2{font-size:1.35rem!important;line-height:1.2!important;}
+    .v191-export-grid{display:grid!important;grid-template-columns:1fr!important;gap:12px!important;}
+    .v191-export-card{font-size:16px!important;line-height:1.6!important;word-break:normal!important;overflow-wrap:break-word!important;}
+    .v191-export-card *{word-break:normal!important;overflow-wrap:break-word!important;}
+  }
+  @media(min-width:761px) and (max-width:1080px){
+    .v203-mobile-reader{display:block;}
+    .v203-story{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .v203-slide{display:block;}
+    .v203-tabs{display:none;}
+    .v203-board-card{flex-basis:46%;}
+  }
+
 </style>
 </head>
 <body>
@@ -290,12 +351,12 @@
 
         <section class="vrds-panel" id="vrds-decision-dashboard">
           <div class="vrds-panel-title"><div><h2>Decision Dashboard</h2><p>Prioritized actions translated into impact, effort, owner and timeline.</p></div></div>
-          <div class="vrds-mini-grid">${decisions.slice(0,6).map(x => `<div class="vrds-mini-card"><b>${escapeHtml(x.quadrant || x.priority || 'Decision')}</b><p>${escapeHtml(x.action || x.decision || 'Decision to confirm')}</p><span class="vrds-evidence-type">Impact: ${escapeHtml(x.impact || '—')}</span><span class="vrds-evidence-type">Effort: ${escapeHtml(x.effort || '—')}</span></div>`).join('')}</div>
+          ${renderDecisionMatrixCards(decisions, 'decision')}
         </section>
 
         <section class="vrds-panel" id="vrds-risk-dashboard">
           <div class="vrds-panel-title"><div><h2>Risk Dashboard</h2><p>Risks are shown with mitigation logic and do not introduce new unsupported statistics.</p></div></div>
-          <div class="vrds-mini-grid">${risks.slice(0,6).map(x => `<div class="vrds-mini-card"><b>${escapeHtml(x.severity || x.priority || 'Risk')}</b><p>${escapeHtml(x.risk || 'Risk to validate')}</p><span class="vrds-evidence-type">Likelihood: ${escapeHtml(x.likelihood || '—')}</span><span class="vrds-evidence-type">Impact: ${escapeHtml(x.impact || '—')}</span></div>`).join('')}</div>
+          ${renderDecisionMatrixCards(risks, 'risk')}
         </section>
 
         <section class="vrds-panel" id="vrds-infographics">
@@ -703,6 +764,41 @@
     return `<div class="v191-sdg-grid">${inferSDGs(dm, v190).slice(0,6).map(g => `<div class="v191-sdg-badge" style="background:${g.color}"><span class="v191-sdg-number">${g.number}</span><span class="v191-sdg-text">SDG ${g.number}<br>${escapeHtml(g.label)}</span></div>`).join('')}</div><p class="muted-note">SDG-aligned visual badges for demonstration. Official UN SDG logo assets are not claimed unless licensed assets are added.</p>`;
   }
 
+  function actionText(item) {
+    if (!item) return 'Decision to confirm';
+    if (typeof item === 'string') return item;
+    return item.action || item.decision || item.recommendation || item.risk || item.label || item.title || item.option || 'Decision to confirm';
+  }
+
+  function actionMeta(item, key, fallback = 'Not assessed') {
+    if (!item || typeof item !== 'object') return fallback;
+    return item[key] || item.priority || item.severity || fallback;
+  }
+
+  function renderDecisionMatrixCards(items = [], type = 'decision') {
+    const fallback = type === 'risk' ? [] : [];
+    const list = (items && items.length ? items : fallback).slice(0, 6);
+    if (!list.length) return '<p class="muted-note">Insufficient verified evidence available for this section.</p>';
+    return `<div class="v202-dashboard-grid v202-decision-grid">${list.map((x, i) => {
+      const isRisk = type === 'risk';
+      const label = isRisk ? (actionMeta(x, 'severity', i < 2 ? 'High attention' : 'Monitor')) : (actionMeta(x, 'quadrant', i < 2 ? 'Quick win' : 'Strategic improvement'));
+      const text = actionText(x);
+      const impact = isRisk ? actionMeta(x, 'impact', 'Impact to validate') : actionMeta(x, 'impact', i < 2 ? 'High' : 'Medium');
+      const effort = isRisk ? actionMeta(x, 'likelihood', 'Likelihood to validate') : actionMeta(x, 'effort', i < 2 ? 'Low' : 'Medium');
+      const owner = actionMeta(x, 'owner', 'Owner to assign');
+      const timeline = actionMeta(x, 'timeline', 'Timeline to confirm');
+      return `<article class="v202-matrix-card"><div class="v202-matrix-label">${escapeHtml(label)}</div><p>${escapeHtml(text)}</p><div class="v202-meta-row"><span class="v202-chip">Impact: ${escapeHtml(impact)}</span><span class="v202-chip">${isRisk ? 'Likelihood' : 'Effort'}: ${escapeHtml(effort)}</span><span class="v202-chip">${escapeHtml(owner)}</span><span class="v202-chip">${escapeHtml(timeline)}</span></div></article>`;
+    }).join('')}</div>`;
+  }
+
+  function renderAtlasCards(atlas = []) {
+    if (!atlas.length) return '<p class="muted-note">Infographic atlas is loading.</p>';
+    return `<div class="v202-dashboard-grid">${atlas.slice(0, 12).map(page => {
+      const comps = Array.isArray(page.components) ? page.components : [];
+      return `<article class="v202-dashboard-card"><h3>${escapeHtml(page.title || page.headline || 'Publication page')}</h3><div class="v202-visual-frame">${escapeHtml(page.main_visual || page.render_mode || 'Publication visual')}</div><p>${escapeHtml(page.decision_implication || page.headline || 'Decision implication is shown where evidence supports it.')}</p><div class="v202-meta-row">${comps.slice(0,3).map(c => `<span class="v202-chip">${escapeHtml(c.label || c.axis || c.value || c.number || 'Evidence')}</span>`).join('')}<span class="v202-chip">${escapeHtml(page.evidence_label || 'Evidence labelled')}</span></div></article>`;
+    }).join('')}</div>`;
+  }
+
   function reportTheme(format, dm = {}, v190 = {}) {
     const sector = v190?.sector_writing_brain?.sector || dm?.metadata?.template_name || 'Research Intelligence';
     const m = {
@@ -745,13 +841,45 @@
     } catch (_) { return null; }
   }
 
+  function renderV203MobileReader(suite = {}) {
+    const atlas = suite.infographic_atlas || [];
+    const hero = suite.executive_publication_engine?.hero || {};
+    const kpis = hero.kpis || [];
+    const sdgs = suite.sdg_visual_framework || [];
+    const products = Object.values(suite.report_products || {});
+    const slides = [
+      ['KPI', 'Executive KPI Command Center', hero.executive_takeaway || suite.sector_publication_system?.hero_headline || '', kpis],
+      ['Regions', atlas.find(a => /regional|map/i.test(a.title || a.id || ''))?.headline || suite.sector_publication_system?.map_layer || 'Regional intelligence for field prioritisation', atlas.find(a => /regional|map/i.test(a.title || a.id || ''))?.components || []],
+      ['SDG', 'SDG-aligned Contribution', 'Contribution is shown as evidence-aware alignment, not official certification.', sdgs.map(g => ({ label: `SDG ${g.number}`, value: g.label, color: g.color }))],
+      ['Risks', 'Risk Heatmap', atlas.find(a => /risk/i.test(a.title || a.id || ''))?.decision_implication || 'Risks are translated into owner-ready action.', atlas.find(a => /risk/i.test(a.title || a.id || ''))?.components || []],
+      ['Decisions', 'Decision Matrix', atlas.find(a => /decision/i.test(a.title || a.id || ''))?.decision_implication || 'Prioritised actions by impact, effort, owner and timeline.', atlas.find(a => /decision/i.test(a.title || a.id || ''))?.components || []],
+      ['Timeline', 'Implementation Roadmap', atlas.find(a => /roadmap|timeline/i.test(a.title || a.id || ''))?.decision_implication || 'Sequence recommendations into accountable follow-up.', atlas.find(a => /roadmap|timeline/i.test(a.title || a.id || ''))?.components || []]
+    ];
+    return `<div class="v203-mobile-reader" id="v203-mobile-reader"><h3>Mobile Infographic Reader</h3><p class="muted-note">Swipe or tap sections. Each view is optimised for phone and tablet reading.</p><div class="v203-tabs">${slides.map((s,i)=>`<button class="v203-tab ${i===0?'active':''}" data-slide="${i}">${escapeHtml(s[0])}</button>`).join('')}</div><div class="v203-story">${slides.map((s,i)=>`<article class="v203-slide ${i===0?'active':''}" data-slide-panel="${i}"><h3>${escapeHtml(s[1])}</h3><div class="v203-readmore">${escapeHtml(s[2])}</div><button class="v203-more-btn" type="button">Read more</button><div class="v203-visual">${escapeHtml(s[1])}</div>${s[0]==='SDG'?`<div class="v203-sdg-scroller">${(s[3]||[]).slice(0,8).map(g=>`<div class="v203-sdg" style="background:${escapeHtml(g.color || '#19486A')}"><strong>${escapeHtml(String(g.label||'').replace('SDG ',''))}</strong><span>${escapeHtml(g.value || 'SDG alignment')}</span></div>`).join('')}</div>`:`<div class="v203-metric-grid">${(s[3]||[]).slice(0,4).map(c=>`<div class="v203-metric"><b>${escapeHtml(c.value ?? c.n ?? c.score ?? c.label ?? '—')}</b><span>${escapeHtml(c.label || c.axis || c.title || c.interpretation || c.decision || '')}</span></div>`).join('')}</div>`}</article>`).join('')}</div><h3>Board / Tablet Cards</h3><div class="v203-board-strip">${products.slice(0,5).map(p=>`<div class="v203-board-card"><b>${escapeHtml(p.title || 'Report product')}</b><p>${escapeHtml(p.narrative || p.audience || 'Board-ready publication product.')}</p></div>`).join('')}</div></div>`;
+  }
+
+  function activateV203MobileReader() {
+    document.querySelectorAll('.v203-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.slide;
+        document.querySelectorAll('.v203-tab').forEach(x => x.classList.toggle('active', x === btn));
+        document.querySelectorAll('[data-slide-panel]').forEach(p => p.classList.toggle('active', p.dataset.slidePanel === id));
+      });
+    });
+    document.querySelectorAll('.v203-more-btn').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.previousElementSibling;
+      box.classList.toggle('expanded');
+      btn.textContent = box.classList.contains('expanded') ? 'Show less' : 'Read more';
+    }));
+  }
+
   function renderV200Suite(suite = {}) {
     if (!suite || !suite.version) return '<section class="v200-suite-panel"><h2>International Intelligence Publication Suite</h2><p>The v200 publication package could not be loaded from the API. Check backend deployment or route configuration.</p></section>';
     const hero = suite.executive_publication_engine?.hero || {};
     const atlas = suite.infographic_atlas || [];
     const products = suite.report_products || {};
     const kpis = hero.kpis || [];
-    return `<section class="v200-suite-panel" id="v200-suite"><div class="v200-hero-grid"><div class="v200-hero-card"><div class="muted-note" style="text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:900;">International Intelligence Publication Suite</div><h2>${escapeHtml(hero.title || suite.suite_label || 'VoiceInsights Intelligence Publication')}</h2><p>${escapeHtml(hero.executive_takeaway || suite.sector_publication_system?.hero_headline || '')}</p><div class="v200-kpi-strip">${kpis.map(k=>`<div class="v200-kpi"><small>${escapeHtml(k.label)}</small><b>${escapeHtml(k.value)}</b><em>${escapeHtml(k.interpretation||'')}</em></div>`).join('')}</div></div><div class="v200-hero-card"><h3>SDG visual framework</h3>${v200SdgBadges(suite)}</div></div><h3>Publication-grade infographic atlas</h3><div class="v200-atlas-grid">${atlas.slice(0,12).map(p=>`<article class="v200-atlas-page"><h3>${escapeHtml(p.title)}</h3><div class="v200-main-visual">${escapeHtml(p.main_visual || 'publication visual')}</div><p>${escapeHtml(p.decision_implication || '')}</p><small>${escapeHtml(p.evidence_label || '')}</small></article>`).join('')}</div><h3>Report products</h3><div class="v200-products">${Object.values(products).slice(0,6).map(p=>`<div class="v200-product"><b>${escapeHtml(p.title)}</b><p>${escapeHtml(p.audience || '')}</p><small>${escapeHtml(p.narrative || '')}</small></div>`).join('')}</div></section>`;
+    return `<section class="v200-suite-panel" id="v200-suite"><div class="v200-hero-grid"><div class="v200-hero-card"><div class="muted-note" style="text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:900;">International Intelligence Publication Suite</div><h2>${escapeHtml(hero.title || suite.suite_label || 'VoiceInsights Intelligence Publication')}</h2><p>${escapeHtml(hero.executive_takeaway || suite.sector_publication_system?.hero_headline || '')}</p><div class="v200-kpi-strip">${kpis.map(k=>`<div class="v200-kpi"><small>${escapeHtml(k.label)}</small><b>${escapeHtml(k.value)}</b><em>${escapeHtml(k.interpretation||'')}</em></div>`).join('')}</div></div><div class="v200-hero-card"><h3>SDG visual framework</h3>${v200SdgBadges(suite)}</div></div>${renderV203MobileReader(suite)}<h3>Publication-grade infographic atlas</h3>${renderAtlasCards(atlas)}<h3>Report products</h3><div class="v200-products">${Object.values(products).slice(0,6).map(p=>`<div class="v200-product"><b>${escapeHtml(p.title)}</b><p>${escapeHtml(p.audience || '')}</p><small>${escapeHtml(p.narrative || '')}</small></div>`).join('')}</div></section>`;
   }
 
   function visualHtmlFromFormat(format, data, v190 = {}, dm = {}, v200Suite = null) {
@@ -777,7 +905,52 @@
       ['Confidence', `${board.confidence_score || research.quality_score || '—'}%`]
     ];
     return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(theme.title)}</title><style>${document.querySelector('style')?.textContent || ''}  /* V191 backwards-compatible test labels: Presentation-ready board outline | Export Previews | Export preview prepared from the public demonstration report evidence package */
-</style></head><body class="v191-export-doc"><main class="v191-export-page"><section class="v191-export-cover"><span class="v191-export-pill">${escapeHtml(theme.sector)}</span>${demo ? '<span class="v191-export-pill">Fictional demonstration data</span>' : ''}<h1>${escapeHtml(theme.title)}</h1><p>${escapeHtml(theme.subtitle)}</p><p>${escapeHtml(v190.consultant_narrative?.executive_interpretation || dm.narrative?.executive_summary || '')}</p></section><section class="v191-export-section"><h2>Executive KPI Dashboard</h2><div class="v191-export-grid">${cards.map(([a,b]) => `<div class="v191-export-card"><b>${escapeHtml(a)}</b><h2>${escapeHtml(b)}</h2><small>${escapeHtml(evidenceType)}</small></div>`).join('')}</div></section><section class="v191-export-section"><h2>Sector-specific Intelligence</h2><div class="v191-export-grid"><div class="v191-export-card"><b>Decision context</b><p>${escapeHtml(v190.consultant_narrative?.decision_context || '')}</p></div><div class="v191-export-card"><b>Root cause hypothesis</b><p>${escapeHtml(v190.consultant_narrative?.root_cause_hypothesis || '')}</p></div><div class="v191-export-card"><b>Cost of inaction</b><p>${escapeHtml(v190.consultant_narrative?.cost_of_inaction || '')}</p></div></div></section><section class="v191-export-section"><h2>Publication Infographics</h2><div class="v191-export-grid"><div class="v191-export-card"><b>Regional Intelligence</b>${buildBarRows(regions)}</div><div class="v191-export-card"><b>Gender & Inclusion</b>${buildBarRows(gender)}</div><div class="v191-export-card"><b>Youth & Age Profile</b>${buildBarRows(age)}</div><div class="v191-export-card"><b>Sentiment Dashboard</b>${buildBarRows(sentiment)}</div></div></section><section class="v191-export-section"><h2>SDG-aligned Contribution</h2>${v200Suite ? v200SdgBadges(v200Suite) : renderSDGBadges(dm, v190)}</section>${v200Suite ? `<section class="v191-export-section"><h2>Publication Infographic Atlas</h2><div class="v191-export-grid">${(v200Suite.infographic_atlas||[]).slice(0,12).map(p=>`<div class="v191-export-card"><b>${escapeHtml(p.title)}</b><p>${escapeHtml(p.main_visual||'')}</p><small>${escapeHtml(p.decision_implication||'')}</small></div>`).join('')}</div></section>` : ''}<section class="v191-export-section"><h2>${format === 'government_report' ? 'Policy Options' : format === 'donor_brief' ? 'Donor Impact Logic' : format === 'board_deck' ? 'Board Decisions Required' : 'Key Findings'}</h2><div class="v191-export-grid">${(format === 'government_report' ? (gov.policy_options || []).map(x=>x.option) : format === 'donor_brief' ? (donor.logframe_alignment || []).map(x=>`${x.indicator}: ${x.interpretation}`) : format === 'board_deck' ? (board.three_decisions_required || recs) : findings).slice(0,6).map(x => `<div class="v191-export-card"><p>${escapeHtml(typeof x === 'string' ? x : JSON.stringify(x))}</p></div>`).join('')}</div></section><section class="v191-export-section"><h2>Risk & Decision Matrix</h2><div class="v191-matrix">${risks.slice(0,4).map((r,i)=>`<div class="v191-matrix-cell"><b>${i<2?'High attention':'Monitor'}</b><p>${escapeHtml(r)}</p></div>`).join('')}</div></section><section class="v191-export-section"><h2>Recommendation Priority Timeline</h2><div class="v191-timeline">${recs.slice(0,5).map((r,i)=>`<div class="v191-timeline-item"><b>${i<2?'0–90 days':'Next planning cycle'}</b><p>${escapeHtml(r)}</p></div>`).join('')}</div></section><section class="v191-export-section"><h2>Methodology & Evidence</h2><p>${escapeHtml(research.narrative || 'Research transparency is included where available.')}</p><p><b>Evidence:</b> ${escapeHtml(evidenceType)}</p><p><b>Limitations:</b> ${(research.limitations || dm.methodology?.limitations || []).map(escapeHtml).join(' ')}</p></section></main></body></html>`;
+
+
+  /* v203 — Mobile Infographic Intelligence Reader */
+  .v203-mobile-reader{display:none;}
+  .v203-tabs{display:flex;gap:.55rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.25rem 0 .8rem;margin:.5rem 0 1rem;-webkit-overflow-scrolling:touch;}
+  .v203-tab{flex:0 0 auto;scroll-snap-align:start;border:1px solid rgba(228,162,58,.35);background:rgba(228,162,58,.10);color:var(--text);border-radius:999px;padding:.65rem .9rem;font-weight:800;white-space:nowrap;}
+  .v203-tab.active{background:var(--accent);color:#101815;border-color:var(--accent);}
+  .v203-story{display:grid;grid-template-columns:1fr;gap:1rem;}
+  .v203-slide{display:none;border:1px solid rgba(228,162,58,.28);border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.018));padding:1.15rem;box-shadow:0 18px 42px rgba(0,0,0,.18);}
+  .v203-slide.active{display:block;}
+  .v203-slide h3{font-size:1.35rem;margin:.2rem 0 .45rem;line-height:1.18;}
+  .v203-visual{min-height:150px;border-radius:20px;background:radial-gradient(circle at top right,rgba(201,130,21,.34),transparent 38%),linear-gradient(135deg,rgba(20,122,74,.22),rgba(255,255,255,.04));display:flex;align-items:center;justify-content:center;text-align:center;padding:1rem;margin:.9rem 0;color:var(--text);font-weight:900;}
+  .v203-metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;margin:.8rem 0;}
+  .v203-metric{border:1px solid var(--border);background:rgba(255,255,255,.045);border-radius:18px;padding:.85rem;min-height:86px;}
+  .v203-metric b{display:block;color:var(--accent);font-size:1.25rem;margin-bottom:.25rem;}
+  .v203-readmore{max-height:4.7em;overflow:hidden;position:relative;line-height:1.55;}
+  .v203-readmore.expanded{max-height:none;}
+  .v203-more-btn{border:0;background:transparent;color:var(--accent);font-weight:900;padding:.4rem 0;margin:.25rem 0;}
+  .v203-sdg-scroller{display:flex;gap:.7rem;overflow-x:auto;padding:.35rem 0 1rem;-webkit-overflow-scrolling:touch;}
+  .v203-sdg{flex:0 0 92px;height:92px;border-radius:18px;color:#fff;padding:.6rem;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 12px 30px rgba(0,0,0,.22);}
+  .v203-sdg strong{font-size:1.75rem;line-height:1}.v203-sdg span{font-size:.66rem;font-weight:900;line-height:1.02;}
+  .v203-board-strip{display:flex;gap:.8rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.2rem 0 1rem;}
+  .v203-board-card{flex:0 0 82%;scroll-snap-align:center;border:1px solid var(--border);border-radius:22px;background:rgba(255,255,255,.04);padding:1rem;min-height:170px;}
+  @media(max-width:760px){
+    .v203-mobile-reader{display:block;}
+    .v200-suite-panel .v200-atlas-grid,.v200-suite-panel .v200-products{display:none!important;}
+    .v200-suite-panel{padding:1rem!important;border-radius:20px!important;}
+    .v200-hero-card p{font-size:1rem;line-height:1.58;}
+    .vrds-format-toolbar{display:grid!important;grid-template-columns:1fr!important;gap:.6rem;}
+    .vrds-format-toolbar button{min-height:48px;font-size:1rem;white-space:normal;}
+    .v191-export-doc{background:#f7f5ef!important;color:#17201c!important;}
+    .v191-export-section{overflow:hidden;}
+    .v191-export-section h2{font-size:1.35rem!important;line-height:1.2!important;}
+    .v191-export-grid{display:grid!important;grid-template-columns:1fr!important;gap:12px!important;}
+    .v191-export-card{font-size:16px!important;line-height:1.6!important;word-break:normal!important;overflow-wrap:break-word!important;}
+    .v191-export-card *{word-break:normal!important;overflow-wrap:break-word!important;}
+  }
+  @media(min-width:761px) and (max-width:1080px){
+    .v203-mobile-reader{display:block;}
+    .v203-story{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .v203-slide{display:block;}
+    .v203-tabs{display:none;}
+    .v203-board-card{flex-basis:46%;}
+  }
+
+</style></head><body class="v191-export-doc"><main class="v191-export-page"><section class="v191-export-cover"><span class="v191-export-pill">${escapeHtml(theme.sector)}</span>${demo ? '<span class="v191-export-pill">Fictional demonstration data</span>' : ''}<h1>${escapeHtml(theme.title)}</h1><p>${escapeHtml(theme.subtitle)}</p><p>${escapeHtml(v190.consultant_narrative?.executive_interpretation || dm.narrative?.executive_summary || '')}</p></section><section class="v191-export-section"><h2>Executive KPI Dashboard</h2><div class="v191-export-grid">${cards.map(([a,b]) => `<div class="v191-export-card"><b>${escapeHtml(a)}</b><h2>${escapeHtml(b)}</h2><small>${escapeHtml(evidenceType)}</small></div>`).join('')}</div></section><section class="v191-export-section"><h2>Sector-specific Intelligence</h2><div class="v191-export-grid"><div class="v191-export-card"><b>Decision context</b><p>${escapeHtml(v190.consultant_narrative?.decision_context || '')}</p></div><div class="v191-export-card"><b>Root cause hypothesis</b><p>${escapeHtml(v190.consultant_narrative?.root_cause_hypothesis || '')}</p></div><div class="v191-export-card"><b>Cost of inaction</b><p>${escapeHtml(v190.consultant_narrative?.cost_of_inaction || '')}</p></div></div></section><section class="v191-export-section"><h2>Publication Infographics</h2><div class="v191-export-grid"><div class="v191-export-card"><b>Regional Intelligence</b>${buildBarRows(regions)}</div><div class="v191-export-card"><b>Gender & Inclusion</b>${buildBarRows(gender)}</div><div class="v191-export-card"><b>Youth & Age Profile</b>${buildBarRows(age)}</div><div class="v191-export-card"><b>Sentiment Dashboard</b>${buildBarRows(sentiment)}</div></div></section><section class="v191-export-section"><h2>SDG-aligned Contribution</h2>${v200Suite ? v200SdgBadges(v200Suite) : renderSDGBadges(dm, v190)}</section>${v200Suite ? `<section class="v191-export-section"><h2>Publication Infographic Atlas</h2>${renderAtlasCards(v200Suite.infographic_atlas||[])}</section>` : ''}${v200Suite ? `<section class="v191-export-section"><h2>Sector Publication System</h2><div class="v191-export-grid">${(v200Suite.sector_publication_system?.signature_pages||[]).slice(0,6).map(x=>`<div class="v191-export-card"><b>${escapeHtml(x)}</b><p>${escapeHtml(v200Suite.sector_publication_system?.hero_headline || '')}</p></div>`).join('')}</div></section>` : ''}<section class="v191-export-section"><h2>${format === 'government_report' ? 'Policy Options' : format === 'donor_brief' ? 'Donor Impact Logic' : format === 'board_deck' ? 'Board Decisions Required' : 'Key Findings'}</h2><div class="v191-export-grid">${(format === 'government_report' ? (gov.policy_options || []).map(x=>x.option) : format === 'donor_brief' ? (donor.logframe_alignment || []).map(x=>`${x.indicator}: ${x.interpretation}`) : format === 'board_deck' ? (board.three_decisions_required || recs) : findings).slice(0,6).map(x => `<div class="v191-export-card"><p>${escapeHtml(typeof x === 'string' ? x : JSON.stringify(x))}</p></div>`).join('')}</div></section><section class="v191-export-section"><h2>Risk & Decision Matrix</h2><div class="v191-matrix">${risks.slice(0,4).map((r,i)=>`<div class="v191-matrix-cell"><b>${i<2?'High attention':'Monitor'}</b><p>${escapeHtml(r)}</p></div>`).join('')}</div></section><section class="v191-export-section"><h2>Recommendation Priority Timeline</h2><div class="v191-timeline">${recs.slice(0,5).map((r,i)=>`<div class="v191-timeline-item"><b>${i<2?'0–90 days':'Next planning cycle'}</b><p>${escapeHtml(r)}</p></div>`).join('')}</div></section><section class="v191-export-section"><h2>Methodology & Evidence</h2><p>${escapeHtml(research.narrative || 'Research transparency is included where available.')}</p><p><b>Evidence:</b> ${escapeHtml(evidenceType)}</p><p><b>Limitations:</b> ${(research.limitations || dm.methodology?.limitations || []).map(escapeHtml).join(' ')}</p></section></main></body></html>`;
   }
 
   function textFromFormat(format, data) {
@@ -996,6 +1169,7 @@
       const existing = document.getElementById('v200-suite');
       if (existing) existing.remove();
       container.insertAdjacentHTML('beforeend', renderV200Suite(suite));
+      activateV203MobileReader();
     } catch (e) {
       console.warn('V200 international reporting suite unavailable', e);
     }

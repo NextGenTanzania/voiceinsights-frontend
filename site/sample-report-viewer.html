@@ -28,6 +28,20 @@
   .sample-standard-card b{display:block;color:var(--accent);margin-bottom:.25rem;}
   .report-nav-rail{position:sticky;top:12px;align-self:start;border:1px solid var(--border);border-radius:14px;padding:1rem;background:var(--surface);}
   @media (min-width:1100px){.viewer-shell{max-width:1180px!important;display:grid;grid-template-columns:230px 1fr;gap:1rem}.viewer-main{min-width:0}}
+  @media (max-width: 900px){
+    body{overflow-x:hidden;}
+    .viewer-shell{display:block!important;max-width:100%!important;padding:1rem!important;margin:0!important;}
+    .report-nav-rail{position:relative;top:auto;margin-bottom:1rem;}
+    .viewer-main{width:100%;min-width:0;}
+    .r-section,.phase20-panel,.vrds-panel,.vrds-showcase-hero{padding:1rem!important;border-radius:14px;}
+    .r-kpi{display:block;width:100%;margin:.5rem 0;}
+    .btn,.format-download-btn{width:100%;justify-content:center;text-align:center;}
+    .vrds-kpi-grid,.vrds-mini-grid,.ios-grid,.phase20-matrix,.sample-standard-grid{grid-template-columns:1fr!important;}
+    .consulting-cover h1,.vrds-showcase-title{font-size:1.45rem!important;}
+    .pub-nav-row1{padding:.75rem 1rem;}
+    .pub-nav-row1-right{gap:.5rem;}
+  }
+  @media (min-width: 901px) and (max-width: 1180px){.viewer-shell{grid-template-columns:200px 1fr!important;padding:1.25rem!important}.vrds-mini-grid,.ios-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}}
 
   .phase20-hero{background:linear-gradient(135deg,#101815,#26312d);color:#fff;border:1px solid rgba(228,162,58,.35);border-radius:22px;padding:1.5rem;margin-bottom:1rem;}
   .phase20-matrix{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.75rem;}
@@ -36,6 +50,12 @@
   .assistant-action{display:block;width:100%;text-align:left;margin:.45rem 0;padding:.7rem;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);cursor:pointer;}
   .assistant-output{white-space:pre-wrap;border-left:4px solid var(--accent);padding:.8rem;background:var(--bg);border-radius:10px;margin-top:.7rem;}
   .infographic-page{border:1px solid rgba(212,175,55,.28);border-radius:18px;padding:1rem;background:linear-gradient(180deg,rgba(212,175,55,.08),transparent);margin:.8rem 0;}
+  body.vrds-showcase-loaded #phase20-container,
+  body.vrds-showcase-loaded #intelligence-os-container,
+  body.vrds-showcase-loaded #decision-container,
+  body.vrds-showcase-loaded #infographic-container,
+  body.vrds-showcase-loaded #report-body{display:none;}
+  body.vrds-showcase-loaded #vrds-showcase-container{display:block;}
 </style>
 </head>
 <body>
@@ -110,7 +130,8 @@
 <script src="/assets/js/vrds-components.js"></script>
 <script src="/assets/js/config.js"></script>
 <script>
-  const reportId = new URLSearchParams(window.location.search).get('report_id');
+  const params = new URLSearchParams(window.location.search);
+  const reportId = params.get('report_id') || params.get('id') || params.get('report');
   let reportData = null;
 
   async function loadReport() {
@@ -126,6 +147,7 @@
       loadTrustV19();
       loadPhase20Experience();
       loadVRDSShowcaseExperience();
+      loadV190Intelligence();
       loadInfographic();
       if (new URLSearchParams(window.location.search).get('download') === 'pdf') setTimeout(() => window.print(), 800);
     } catch (e) {
@@ -186,6 +208,7 @@
       const recs = d.recommendation_priority || [];
       const assistant = d.assistant_actions || [];
       const formats = d.export_manifest || [];
+      document.body.classList.add('vrds-showcase-loaded');
       target.innerHTML = `
         <section class="vrds-showcase-hero" id="vrds-showcase">
           <div class="vrds-showcase-label">Executive Intelligence View</div>
@@ -290,6 +313,7 @@
       const brief = d.one_page_executive_brief || {};
       const snap = brief.executive_snapshot || {};
       const ig = d.publication_infographic || {};
+      const publicationPages = ig.pages || ig.publication_pages || [];
       const methodology = d.methodology_transparency || {};
       const evidence = d.evidence_traceability || [];
       const gate = d.report_quality_gate || {};
@@ -376,6 +400,7 @@
       const evidence = d.evidence_traceability || [];
       const sdgs = d.sdg_visual_cards || [];
       const ig = d.true_infographic || {};
+      const publicationPages = ig.pages || ig.publication_pages || [];
       const container = document.createElement('div');
       container.innerHTML = `
         <div class="r-section" id="trust-layer" style="border:1px solid var(--accent);box-shadow:0 10px 30px rgba(0,0,0,.08);">
@@ -641,8 +666,7 @@
     }
     lines.push('Methodology & Evidence Note', '---------------------------');
     lines.push(data.export_preview?.export_note || 'Use the methodology and evidence sections to verify limitations before presentation.');
-    return sanitizePublicExportText(lines.join('
-'));
+    return sanitizePublicExportText(lines.join('\n'));
   }
 
   async function ensureV19ExportAllowed() {
@@ -802,6 +826,55 @@
 
     pptx.writeFile({ fileName: `board-presentation-${reportId}.pptx` });
   });
+
+
+  async function loadV190Intelligence() {
+    const container = document.getElementById('vrds-showcase-container');
+    if (!container) return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/ai-report-intelligence-v190`);
+      const pkg = await res.json();
+      if (!res.ok) throw new Error(pkg.error || `HTTP ${res.status}`);
+      const brain = pkg.sector_writing_brain || {};
+      const narrative = pkg.consultant_narrative || {};
+      const donor = pkg.donor_logic || {};
+      const gov = pkg.government_logic || {};
+      const board = pkg.board_logic || {};
+      const research = pkg.research_logic || {};
+      const recs = pkg.recommendation_ranking || [];
+      const findings = pkg.findings || [];
+      const evidenceType = pkg.quality_gate_support?.evidence_type || (brain.sector ? 'Report-model evidence' : 'Evidence labelled where available');
+      const html = `
+        <section class="vrds-panel v190-panel" id="v190-intelligence">
+          <div class="vrds-panel-title"><div><h2>AI Report Intelligence Engine</h2><p>${escapeHtml(narrative.executive_interpretation || 'Executive intelligence is prepared from the verified report evidence package.')}</p></div><span class="vrds-chip">${escapeHtml(brain.sector || 'Research Intelligence')}</span></div>
+          <div class="vrds-mini-grid">
+            <div class="vrds-mini-card"><b>Sector Writing Brain</b><p>${escapeHtml((brain.required_lexicon || []).slice(0, 10).join(', '))}</p><span class="vrds-evidence-type">${escapeHtml(evidenceType)}</span></div>
+            <div class="vrds-mini-card"><b>Decision Context</b><p>${escapeHtml(narrative.decision_context || 'The report translates evidence into decisions, risks and implementation priorities.')}</p></div>
+            <div class="vrds-mini-card"><b>Root Cause Hypothesis</b><p>${escapeHtml(narrative.root_cause_hypothesis || 'Root causes are stated as hypotheses to validate, not unsupported certainty.')}</p></div>
+            <div class="vrds-mini-card"><b>Cost of Inaction</b><p>${escapeHtml(narrative.cost_of_inaction || 'Cost of inaction is framed through risk, trust and implementation consequences.')}</p></div>
+          </div>
+        </section>
+        <section class="vrds-panel v190-panel" id="v190-audience-outputs">
+          <div class="vrds-panel-title"><div><h2>Audience-Specific Intelligence</h2><p>Each audience receives the same evidence, translated into the language of their decision role.</p></div></div>
+          <div class="vrds-mini-grid">
+            <div class="vrds-mini-card"><b>Donor Interpretation</b><p>${escapeHtml(donor.narrative || '')}</p><span class="vrds-evidence-type">Value for money</span><p>${escapeHtml(donor.value_for_money || '')}</p></div>
+            <div class="vrds-mini-card"><b>Government Brief</b><p>${escapeHtml(gov.policy_problem || gov.narrative || '')}</p><span class="vrds-evidence-type">Decision required</span><p>${escapeHtml(gov.decision_required || '')}</p></div>
+            <div class="vrds-mini-card"><b>Board Brief</b><p>${escapeHtml(board.narrative || '')}</p><span class="vrds-evidence-type">Confidence ${escapeHtml(board.confidence_score || '—')}%</span>${renderList(board.three_decisions_required || [])}</div>
+            <div class="vrds-mini-card"><b>Research & M&E</b><p>${escapeHtml(research.narrative || '')}</p><span class="vrds-evidence-type">${escapeHtml(research.evidence_type || evidenceType)}</span></div>
+          </div>
+        </section>
+        <section class="vrds-panel v190-panel" id="v190-findings-recommendations">
+          <div class="vrds-panel-title"><div><h2>Consultant Findings & Ranked Recommendations</h2><p>Recommendations are ranked by decision relevance, timeline and evidence class.</p></div></div>
+          <div class="vrds-mini-grid">
+            ${findings.slice(0,3).map(f => `<div class="vrds-mini-card"><b>${escapeHtml(f.finding)}</b><p>${escapeHtml(f.why_it_matters)}</p><span class="vrds-evidence-type">${escapeHtml(f.evidence_basis)} · Confidence ${escapeHtml(f.confidence)}%</span></div>`).join('')}
+            ${recs.slice(0,3).map(r => `<div class="vrds-mini-card"><b>#${escapeHtml(r.rank)} ${escapeHtml(r.priority)}</b><p>${escapeHtml(r.recommendation)}</p><span class="vrds-evidence-type">${escapeHtml(r.owner)} · ${escapeHtml(r.timeline)}</span></div>`).join('')}
+          </div>
+        </section>`;
+      container.insertAdjacentHTML('beforeend', html);
+    } catch (e) {
+      console.warn('V190 intelligence package unavailable', e);
+    }
+  }
 
   loadReport();
   lucide.createIcons();

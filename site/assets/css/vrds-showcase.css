@@ -47,3 +47,15 @@
 @media(min-width:980px){.card-actions{grid-template-columns:1fr 1fr;}}
 @media(max-width:680px){.vrds-infographic-page{grid-template-columns:1fr;padding:1rem}.vrds-infographic-copy{border-right:0;border-bottom:1px solid rgba(17,24,39,.08);padding:0 0 .8rem}.vrds-main-visual{min-height:180px}.card-actions{grid-template-columns:1fr}.format-download-btn{white-space:normal}}
 @media print{.vrds-infographic-page{border-left:4px solid #555;background:#fff}.vrds-main-visual{border:1px solid #ddd}.vrds-mini-card{box-shadow:none}}
+
+/* v190 — International AI Report Intelligence Engine */
+.v190-panel{border:1px solid rgba(228,162,58,.28);background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.025));}
+.v190-panel .vrds-mini-card{min-height:140px;}
+@media (max-width: 900px){
+  .v190-panel{padding:1rem!important;}
+  .v190-panel .vrds-panel-title{display:block!important;}
+  .v190-panel .vrds-mini-grid{grid-template-columns:1fr!important;}
+}
+@media (min-width: 901px) and (max-width: 1180px){
+  .v190-panel .vrds-mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+}

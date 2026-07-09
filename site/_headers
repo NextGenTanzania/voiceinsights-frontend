@@ -1,2 +1,11 @@
 /sw.js
   Service-Worker-Allowed: /
+
+/sample-reports.html
+  Cache-Control: no-cache, no-store, must-revalidate
+/sample-report-viewer.html
+  Cache-Control: no-cache, no-store, must-revalidate
+/assets/css/vrds-showcase.css
+  Cache-Control: no-cache, no-store, must-revalidate
+/assets/js/config.js
+  Cache-Control: no-cache

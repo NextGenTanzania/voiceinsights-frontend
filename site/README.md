@@ -43,7 +43,7 @@ Lengo la toleo hili: kuona "picha" nzima na kuwa na kitu cha ku-demo.
    - **Build output directory**: `/` (root)
 
 4. Bonyeza **Save and Deploy**. Cloudflare itakupa URL ya aina
-   `https://voiceinsights-frontend.pages.dev` ndani ya dakika chache.
+   `https://voiceinsightsafrica.com` ndani ya dakika chache.
 
 5. (Hiari) Unganisha domain yako mwenyewe kwenye tab ya **Custom domains**.
 

@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SDK Docs — VoiceInsights Africa</title><link rel="stylesheet" href="/assets/css/api-platform-v2106.css"></head><body class="api-page"><nav class="api-nav"><a href="/developers/index.html"><b>VoiceInsights SDK Docs</b></a><div class="api-nav-links"><a href="/developers/index.html">Portal</a><a href="/developers/openapi.html">OpenAPI</a><a href="/developers/playground.html">Playground</a></div></nav><main class="api-shell"><section class="api-hero"><div class="api-kicker">VoiceInsights SDK</div><h1>Integrate autonomous research intelligence.</h1><p>Use the JavaScript SDK contract or call the REST API directly. Keep API keys on the server and grant only the scopes your integration needs.</p></section><section class="api-card" style="margin-top:24px"><h2>Install</h2><pre class="api-code">npm install @voiceinsights/sdk</pre><h2>Quick start</h2><pre class="api-code">import { VoiceInsights } from '@voiceinsights/sdk';
+
+const vi = new VoiceInsights({
+  apiKey: process.env.VOICEINSIGHTS_API_KEY
+});
+
+const health = await vi.health.check();
+const campaign = await vi.campaigns.launch({
+  surveyId: 'survey_123',
+  channels: ['web', 'sms'],
+  strategy: 'hybrid'
+});</pre></section><section class="api-grid"><article class="api-card"><h3>Campaigns</h3><p>Create, launch, track and stop autonomous multi-channel campaigns.</p></article><article class="api-card"><h3>Reports</h3><p>Generate, inspect and export enterprise intelligence reports.</p></article><article class="api-card"><h3>Knowledge</h3><p>Search previous reports, evidence, recommendations and lessons learned.</p></article><article class="api-card"><h3>Webhooks</h3><p>Receive campaign, response, AI processing and export lifecycle events.</p></article><article class="api-card"><h3>Rate limits</h3><p>Standard 60/min, Professional 300/min and Enterprise 1,200/min policies.</p></article><article class="api-card"><h3>Security</h3><p>Scoped credentials, tenant isolation, audit events and key revocation.</p></article></section></main></body></html>

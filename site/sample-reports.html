@@ -140,33 +140,7 @@
       document.getElementById('reports-grid').innerHTML = `<p class="muted-note" style="color:var(--danger);">Could not load report library: ${e.message}</p>`;
     }
   }
-  
-function publicationScoreText(report) {
-  const vc = report?.vrds_showcase_card || {};
-  const pc = report?.sample_library_card_v20 || {};
-  const p = report?.preview || {};
 
-  const rawScore =
-    vc.quality_score ??
-    pc.quality_score ??
-    p.premium_score ??
-    p.quality_score ??
-    report?.quality_score ??
-    9.9;
-
-  let score = Number(rawScore);
-
-  if (!Number.isFinite(score)) score = 9.9;
-
-  // Kama score iko mfumo wa 98/100, ibadilishe kuwa 9.8/10
-  if (score > 10) score = score / 10;
-
-  // Ensure minimum public excellence display
-  score = Math.max(9.8, Math.min(score, 10));
-
-  return `Publication Excellence ${score.toFixed(1)}/10`;
-}
-  
   function render() {
     const search = document.getElementById('filter-search').value.toLowerCase();
     const sector = document.getElementById('filter-sector').value;

@@ -295,6 +295,7 @@
         <h2>Demographics</h2><p>${dm.demographics.gender.map(g => `${g.label}: ${g.n}`).join(', ')}</p>
         <p style="font-size:9pt; color:#666;">${dm.branding.disclaimer_text || ''}</p>
       <script src="/assets/js/admin-functional-qa.js"></script>
+<script src="/assets/js/production-routing-v2102.js"></script>
 </body></html>`;
     const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
     downloadBlob(blob, `report-${reportId}.doc`);
@@ -510,5 +511,6 @@
   });
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
+<script src="/assets/js/production-routing-v2102.js"></script>
 </body>
 </html>

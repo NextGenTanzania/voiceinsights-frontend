@@ -55,8 +55,8 @@
       </form>
 
       <div style="margin-top:1rem; text-align:center;" id="demo-creds-note">
-        <a href="#" id="demo-creds-toggle" class="muted-note" style="text-decoration:underline; cursor:pointer;">Want to see a demo login?</a>
-        <div class="muted-note" id="demo-creds-detail" style="display:none; margin-top:.6rem;">M&amp;E Officer demo (restricted view): <b style="color:var(--text-muted)">meofficer@nextgentanzania.com</b> / <b style="color:var(--text-muted)">MEOfficer2026!</b></div>
+        <button type="button" id="demo-creds-toggle" class="muted-note" style="text-decoration:underline;cursor:pointer;background:none;border:0;padding:0;">Want to see a demo login?</button>
+        <div class="muted-note" id="demo-creds-detail" style="display:none; margin-top:.6rem;">Interactive M&amp;E demo: <b style="color:var(--text-muted)">M&amp;E.demo@voiceinsightsafrica.com</b> / PIN: <b style="color:var(--text-muted)">DemoLogin2026</b><br><span style="font-size:.72rem">Synthetic data only. All demo buttons work as previews, but no production data can be changed.</span></div>
       </div>
 
       <div style="margin-top:1.2rem; display:flex; justify-content:space-between; font-size:.82rem;">
@@ -106,6 +106,14 @@
     btn.textContent = 'Logging in…';
     btn.disabled = true;
     try {
+      const enteredEmail = document.getElementById('email').value.trim().toLowerCase();
+      const enteredPassword = document.getElementById('password').value;
+      if (enteredEmail === 'm&e.demo@voiceinsightsafrica.com' && enteredPassword === 'DemoLogin2026') {
+        localStorage.removeItem('vi_token'); localStorage.removeItem('vi_user');
+        sessionStorage.setItem('vi_demo_mode','me');
+        window.location.href='/demo/me-dashboard.html';
+        return;
+      }
       const data = await apiRequest('/api/auth/login', {
         method: 'POST',
         auth: false,

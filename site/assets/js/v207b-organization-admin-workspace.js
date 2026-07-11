@@ -25,7 +25,7 @@
           <div class="v207b-eyebrow">Client readiness</div>
           <h2>${esc(readiness.rating || org.publication_rating || '9.9/10')}</h2>
           <p>Organization-scoped workspace with programme management, team controls, branding, AI insights and publication center.</p>
-          <div class="v207b-rating">${esc(readiness.status || 'READY_FOR_CLIENT_DEMOS')}</div>
+          <div class="v207b-rating">${esc(readiness.status || 'UNABLE_TO_VERIFY')}</div>
         </div>
       </section>
       <section class="v207b-kpi-grid">${(home.kpis||[]).map(kpiCard).join('')}</section>
@@ -55,7 +55,7 @@
       if(!res.ok) throw new Error(`HTTP ${res.status}`);
       render(await res.json());
     }catch(err){
-      render({ workspace: { organization:{ name:'Organization Workspace', publication_rating:'9.9/10' }, organization_home:{ headline:'Demo preview: organization-scoped workspace for projects, surveys, reports, teams and branding.', kpis:[{label:'Projects',value:'—',interpretation:'Connect with an organization session'},{label:'Reports',value:'9.9/10',interpretation:'Publication excellence target'}], quick_actions:[{label:'Projects',href:'/app/projects.html'},{label:'Reports',href:'/app/report-library.html'},{label:'Team',href:'/app/roles.html'},{label:'Branding',href:'/app/settings.html#branding'}] }, program_management:{ projects:[], workflows:['Project planning','Survey design','AI analysis','Publication approval'] }, publication_center:{ label:'Publication Excellence', rating:'9.9/10', report_products:['Executive Publication','Board Publication','Donor Publication','Government Brief','Research Report','Infographic Publication'] }, team_management:{activity_signals:[], quick_actions:[{label:'Invite team',href:'/app/roles.html'}]}, branding_center:{controls:['Logo','Colors','Report cover','Email templates']}, ai_insights:{scope:'organization_only',cards:[{label:'AI readiness',value:'Ready'}]}, client_success_center:{resources:[{label:'Organization Guide'}],procurement_pack:['Security overview','Compliance pack']} }, client_readiness:{rating:'9.9/10',status:'READY_FOR_CLIENT_DEMOS'} });
+      render({workspace:{organization:{name:'Organization Workspace'},organization_home:{headline:'Live organization data is temporarily unavailable.',kpis:[{label:'Status',value:'Unavailable',interpretation:'Reconnect or contact support'}],quick_actions:[]},program_management:{projects:[],workflows:[]},publication_center:{label:'Publication quality',rating:'Not yet measured',report_products:[]},team_management:{activity_signals:[],quick_actions:[]},branding_center:{controls:[]},ai_insights:{scope:'organization_only',cards:[{label:'AI readiness',value:'Not yet measured'}]},client_success_center:{resources:[],procurement_pack:[]}},client_readiness:{rating:'Not yet measured',status:'UNABLE_TO_VERIFY'}});
     }
   }
   window.initV207BOrganizationAdminWorkspace = initV207BOrganizationAdminWorkspace;

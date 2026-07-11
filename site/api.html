@@ -33,7 +33,7 @@
     <a href="/platform.html" data-i18n="topnav.platform" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
     <a href="/solutions.html" data-i18n="topnav.solutions" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
     <a href="/industries.html" data-i18n="topnav.industries" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
-    <a href="/sample-reports.html" data-i18n="topnav.case_studies" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Sample Reports</a>
+    <a href="/sample-reports.html" data-i18n="topnav.case_studies" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Report Library</a>
     <a href="/index.html#pricing" data-i18n="topnav.pricing" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Pricing</a>
     <a href="/safeguarding.html" data-i18n="topnav.compliance" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
     <a href="/about.html" data-i18n="topnav.about" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">About</a>
@@ -78,28 +78,7 @@
   <p style="max-width:60ch; margin-top:1.5rem; font-size:.85rem; color:var(--text-dim);" data-i18n="api.works.note">Excel, Google Sheets, and CSV-based Power BI imports work today. Direct integrations with Salesforce and Kobo are on our roadmap — <a href="/contact.html" style="color:var(--accent-2);">tell us</a> if your organization needs one prioritized.</p>
 </section>
 
-<section class="pub-section">
-  <span class="eyebrow" style="color:var(--accent-2);">For developers</span>
-  <h2 style="max-width:34ch;">Push data in with a single API call.</h2>
-  <p style="max-width:60ch; color:var(--text-dim); margin-bottom:1.5rem;">Get your organization's API key from Settings, then send each response as JSON. It enters the exact same AI sentiment, fraud-detection, and reporting pipeline as a WhatsApp or SMS response — the only difference is the channel tag on the record.</p>
-  <div class="feature-card" style="font-family:var(--font-mono); font-size:.8rem; overflow-x:auto; white-space:pre; padding:1.5rem;">POST https://voiceinsights-api.kitentyatsnp.workers.dev/api/external/responses
-Authorization: Bearer YOUR_API_KEY
-Content-Type: application/json
-
-{
-  "campaign_id": "camp_abc123",
-  "respondent": {
-    "phone_number": "+255700000000",
-    "full_name": "Optional",
-    "region": "Optional"
-  },
-  "answers": [
-    { "order_index": 0, "text": "Very satisfied with the service" },
-    { "order_index": 1, "text": "The clinic was clean and well-staffed" }
-  ]
-}</div>
-  <p style="max-width:60ch; font-size:.8rem; color:var(--text-dim); margin-top:1rem;">Answers can be matched either by <code>order_index</code> (the order your project's questions were created in) or by an explicit <code>question_id</code>. Rate limit: 60 submissions per minute per API key.</p>
-</section>
+<section class="pub-section"><span class="eyebrow" style="color:var(--accent-2);">Secure API &amp; Integrations</span><h2 style="max-width:36ch;">Enterprise data exchange without exposing credentials or production endpoints.</h2><p style="max-width:68ch;color:var(--text-dim)">API access is provisioned per organization through the authenticated Developer Portal. Keys are scoped, revocable, rate-limited and audited. Public pages do not display live credentials, respondent identifiers or copy-ready production payloads.</p><div class="grid grid-3" style="margin-top:2rem"><div class="feature-card"><h3>Authenticated Developer Portal</h3><p>Generate scoped API keys, review usage, rotate credentials and test requests inside your organization workspace.</p></div><div class="feature-card"><h3>Governed Data Contracts</h3><p>Validate schemas, required fields, versions, consent, classification and ownership before data enters the intelligence pipeline.</p></div><div class="feature-card"><h3>Audited Ingestion</h3><p>Every accepted request receives a correlation ID and passes tenant isolation, validation, quality and audit controls.</p></div></div><div class="feature-card" style="margin-top:1.5rem;background:linear-gradient(135deg,#052e2b,#0f766e);color:white"><div style="font-family:var(--font-mono);font-size:.78rem;opacity:.85">POST /api/external/responses</div><h3 style="color:white;margin-top:.6rem">Access available after organization approval</h3><p style="color:#d1fae5">Sign in to the Developer Portal to view your organization-specific base URL, OpenAPI schema, API key, data contract and safe examples.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><a href="/login.html" class="btn btn-primary">Sign in to Developer Portal</a><a href="/developers/index.html" class="btn btn-ghost" style="color:white">View Developer Overview</a><a href="/contact.html" class="btn btn-ghost" style="color:white">Request Integration Access</a></div></div><p style="max-width:68ch;font-size:.8rem;color:var(--text-dim);margin-top:1rem">Security note: API keys must never be embedded in browser JavaScript, public repositories or screenshots. Use a server-to-server integration and rotate any credential that may have been exposed.</p></section>
 
 <section class="pub-section" style="text-align:center;">
   <h2 data-i18n="api.cta.h2">Have a specific integration need?</h2>

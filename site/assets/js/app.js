@@ -329,6 +329,7 @@ const ALL_NAV_ITEMS = [
   { href: '/app/respondents.html', label: 'Respondents', icon: 'users' },
   { href: '/app/interviews.html', label: 'Interviews', icon: 'headphones' },
   { href: '/app/analytics.html', label: 'Analytics', icon: 'bar-chart-3' },
+  { href: '/app/data-trust-intelligence-fabric.html', label: 'Data Trust Fabric', icon: 'network' },
   { href: '/app/reports.html', label: 'Reports', icon: 'file-text' },
   { href: '/app/compliance.html', label: 'Compliance', icon: 'shield-check' },
   { href: '/app/billing.html', label: 'Billing', icon: 'credit-card' },

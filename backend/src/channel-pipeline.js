@@ -8,6 +8,13 @@ import { isOverRateLimit, recordFailedAttempt, isRateLimited, logAudit } from '.
 
 export async function getOrCreateSession(env, { sessionKey, channel, campaignId, language, consentGiven }) {
   campaignId = campaignId || env.DEFAULT_CAMPAIGN_ID || 'camp_default';
+  const campaign = await env.DB.prepare('SELECT * FROM campaigns WHERE id = ?').bind(campaignId).first();
+  if (!campaign) throw new Error('Campaign not found: ' + campaignId);
+  if (campaign.status !== 'active') {
+    const err = new Error('Campaign is not active');
+    err.code = 'CAMPAIGN_INACTIVE';
+    throw err;
+  }
 
   // First, look for ANY in-progress session for this session_key+channel, regardless
   // of campaign_id. This matters for outbound SMS/WhatsApp/calls: the reply webhook
@@ -31,9 +38,6 @@ export async function getOrCreateSession(env, { sessionKey, channel, campaignId,
       throw err;
     }
   }
-
-  const campaign = await env.DB.prepare('SELECT * FROM campaigns WHERE id = ?').bind(campaignId).first();
-  if (!campaign) throw new Error('Campaign not found: ' + campaignId);
 
   const respondentId = newId('resp');
   await env.DB.prepare(
@@ -632,11 +636,9 @@ export async function handleWebSubmit(request, env) {
   const gpsLat = form.get('gps_lat') ? parseFloat(form.get('gps_lat')) : null;
   const gpsLng = form.get('gps_lng') ? parseFloat(form.get('gps_lng')) : null;
   const gpsAccuracy = form.get('gps_accuracy') ? parseFloat(form.get('gps_accuracy')) : null;
-  // Consent defaults to true only when the caller doesn't send the field at
-  // all (older cached enumerator app versions, or the outbound-initiated
-  // flow) — respondent.html and the updated Enumerator App always send an
-  // explicit value once the person has actually been asked.
-  const consentGiven = form.has('consent') ? form.get('consent') === '1' : true;
+  // Public web collection fails closed. A missing consent field is not consent.
+  const consentGiven = form.get('consent') === '1';
+  if (!consentGiven) return error('Explicit informed consent is required before an answer can be collected.', 403);
   if (!audioFile || typeof audioFile === 'string') return error('audio file is required');
 
   let session;

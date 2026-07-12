@@ -7,7 +7,9 @@ test('all sixteen samples expose full platinum institutional publication depth',
  assert.equal(FLAGSHIP_SAMPLE_REPORTS.length,16);
  for(const s of FLAGSHIP_SAMPLE_REPORTS){
   const m=buildFlagshipSampleReport(s.key), r=m.report;
-  assert.match(r.publication_page_equivalent,/88|96|120|128/);
+  assert.equal(r.publication_page_equivalent,'34 generated publication pages');
+  assert.equal(r.full_publication.sample_size,r.statistical_intelligence.sample_size);
+  assert.equal(r.full_publication.regional.reduce((sum,row)=>sum+row.responses,0),r.statistical_intelligence.sample_size);
   assert.ok(r.publication_architecture.length>=5);
   assert.ok(r.research_methodology_assurance.protocol);
   assert.ok(r.analytical_depth.inferential_statistics);

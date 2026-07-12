@@ -36,7 +36,7 @@ async function loadOrchestrator(){
     if(!r.ok) throw new Error('Login may be required for the internal orchestrator API.');
     const d=await r.json(); render(d);
   }catch(e){
-    render({workflow:['Create Campaign','Upload Contacts','Choose Policy','Simulate','Launch','Autonomous Routing','Enumerator Fallback','AI Processing','Reports Ready'],business_promise:'Internal API requires login. This page is wired for v208 and will render live data after authentication.',policy_engine:{active_policy:'adaptive_intelligence'},readiness:{score:100,status:'UI_READY_API_LOGIN_REQUIRED'},ai_distribution_engine_2:{routing_sequence:[]},campaign_simulator:{forecast:{}},enumerator_dispatch_engine:{assignment_inputs:['GPS proximity','language','workload','availability','performance score']},integration_hub:{adapters:[]},sdk:{core_methods:[],example:'const client = new VoiceInsights({ apiKey });'},learning_engine:{learning_signals:[]}});
+    render({workflow:['Create Campaign','Upload Contacts','Choose Policy','Simulate','Launch','Autonomous Routing','Enumerator Fallback','AI Processing','Reports Ready'],business_promise:'Internal API requires login. Operational readiness and live capacity have not been verified in this view.',policy_engine:{active_policy:'adaptive_intelligence'},readiness:{score:'Not verified',status:'BLOCKED_LIVE_EVIDENCE_REQUIRED'},ai_distribution_engine_2:{routing_sequence:[]},campaign_simulator:{forecast:{}},enumerator_dispatch_engine:{assignment_inputs:['GPS proximity','language','workload','availability','performance score']},integration_hub:{adapters:[]},sdk:{core_methods:[],example:'const client = new VoiceInsights({ apiKey });'},learning_engine:{learning_signals:[]}});
   }
 }
 function render(d){

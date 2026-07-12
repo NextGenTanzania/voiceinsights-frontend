@@ -1,12 +1,50 @@
 {
   "summary": {
-    "files": 142,
-    "ui_issues": 21,
-    "security_issues": 392,
-    "wcag_issues": 115,
+    "files": 143,
+    "ui_issues": 20,
+    "security_issues": 394,
+    "wcag_issues": 116,
     "strict_csp_ready": false
   },
   "reports": [
+    {
+      "file": "404.html",
+      "ui": {
+        "path": "404.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "404.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "404.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
     {
       "file": "about.html",
       "ui": {
@@ -5131,18 +5169,17 @@
       "file": "flagship-sample-report.html",
       "ui": {
         "path": "flagship-sample-report.html",
-        "passed": false,
-        "issues": [
-          {
-            "code": "MISSING_FRAGMENT_TARGET",
-            "value": "#${ch.id}"
-          }
-        ]
+        "passed": true,
+        "issues": []
       },
       "security": {
         "path": "flagship-sample-report.html",
         "strict_csp_ready": false,
         "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
           {
             "code": "INLINE_SCRIPT"
           },
@@ -5884,10 +5921,10 @@
         "automated_passed": false,
         "issues": [
           {
-            "code": "MAIN_LANDMARK_MISSING"
+            "code": "SKIP_LINK_MISSING"
           },
           {
-            "code": "SKIP_LINK_MISSING"
+            "code": "HEADING_LEVEL_SKIP"
           }
         ],
         "manual_checks": [

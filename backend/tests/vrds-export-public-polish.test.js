@@ -22,12 +22,10 @@ test('public viewer uses honest export labels for preview and print flows', () =
   assert.doesNotMatch(viewerSource, />Board PPT</);
 });
 
-test('public sample library download actions are labelled as previews, not production-grade exports', () => {
-  assert.match(librarySource, /Download Donor Impact Preview/);
-  assert.match(librarySource, /Download Policy Brief Preview/);
-  assert.match(librarySource, /Download Infographic Preview/);
-  assert.match(librarySource, /Download Board Outline Preview/);
-  assert.match(librarySource, /Export Preview/);
+test('public flagship library labels native governed exports by format', () => {
+  for (const action of ["['pdf','PDF']","['docx','DOCX']","['pptx','PPTX']","['xlsx','XLSX']"]) assert.ok(librarySource.includes(action));
+  assert.match(librarySource, /Open Full Report/);
+  assert.doesNotMatch(librarySource, /Download Board Outline Preview/);
 });
 
 test('public fallback wording is professional and avoids internal showcase labels', () => {

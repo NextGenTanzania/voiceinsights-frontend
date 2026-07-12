@@ -45,8 +45,8 @@ test('mobile and tablet report viewer use the modern VRDS showcase instead of le
 });
 
 test('public demo pages are marked no-cache so newly deployed report UI is not stuck on old cached versions', () => {
-  const headers = page('headers');
+  const headers = page('_headers');
   assert.match(headers, /\/sample-reports\.html[\s\S]*Cache-Control: no-cache, no-store, must-revalidate/);
-  assert.match(headers, /\/sample-report-viewer\.html[\s\S]*Cache-Control: no-cache, no-store, must-revalidate/);
+  assert.match(headers, /\/flagship-sample-report\.html[\s\S]*Cache-Control: no-cache, no-store, must-revalidate/);
   assert.match(page('sw.js'), /voiceinsights-enumerator/);
 });

@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Grounded, practical, value-chain-literate. Agriculture writing should speak in terms of production, input access, and market linkage -- avoid abstract 'rural development' language in favor of specific agronomic and economic terms farmers themselves would recognize.",
+
+  "section_rules": {
+    "executive_summary": "Must distinguish production-stage findings (yield, inputs) from market-stage findings (pricing, aggregation) explicitly -- a common analytical error in agriculture reporting is treating the whole value chain as one undifferentiated 'farmer satisfaction' measure.",
+    "discussion": "Explicitly discuss whether a production-side gain (e.g. yield improvement) is translating into an income-side gain -- this distinction is the most common and most important analytical thread in agriculture M&E and must never be assumed without evidence.",
+    "methodology": "State the agricultural season/cycle the survey covers, since agriculture findings are highly season-dependent and non-comparable across different points in a growing cycle without this context.",
+    "limitations": "Note whether yield/income figures are farmer-reported estimates or independently verified (e.g. against sales records) -- self-reported yield estimates carry meaningfully more uncertainty than verified figures.",
+    "recommendations": "Separate input-access recommendations (fertilizer, seed) from market-linkage recommendations (pricing, aggregation, cooperatives) -- these require different partners and interventions.",
+    "policy_implications": "Escalate to policy level only for findings with cross-district consistency (e.g. a market pricing structure issue affecting multiple districts), not single-cooperative or single-market anomalies.",
+    "lessons_learned": "Reflect on whether open-ended feedback revealed a value-chain gap (e.g. yield success not converting to income) that a yield-only survey design would have missed entirely.",
+    "conclusion": "Avoid declaring an agricultural intervention an unqualified success based on yield alone -- always note whether the income/market dimension was also assessed and what it showed.",
+    "annexes": "Include the specific crop(s) and season referenced, since agricultural findings are not comparable across different crops or seasons without this context.",
+    "evidence_style": "Ground every yield or income claim in the specific topic mention count and, where available, a specific respondent quote attributing the change to a specific input or intervention."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["response rate", "yield perception (improved/same/worse)", "input access affordability", "market price fairness perception", "cooperative/aggregation participation"],
+    "common_risks": ["self-reported yield estimates without independent verification", "seasonal confounding when comparing rounds from different points in the growing cycle", "assuming yield improvement automatically implies income improvement"],
+    "typical_recommendations": ["bulk/cooperative input purchasing models", "market aggregation or off-take agreements to improve farm-gate pricing", "farm-gate price tracking as a standing indicator alongside yield"],
+    "typical_policy_implications": ["agricultural input subsidy design", "market infrastructure and cooperative development policy"],
+    "typical_donor_expectations": "Agriculture donors (FAO/IFAD-aligned) increasingly expect income-level evidence, not yield-level evidence alone, given a widely recognized gap between production gains and farmer income gains across the sector."
+  },
+
+  "recommendation_categories": ["Immediate", "30-day", "90-day", "Operational", "Strategic", "Sustainability"],
+
+  "forbidden_behaviors": [
+    "Never claim a yield finding demonstrates an income improvement without a specific income/market-price data point supporting that claim.",
+    "Never cite a specific FAO or IFAD guidance document without independent verification that it exists and applies.",
+    "Never compare yield findings across different crops or seasons as if directly equivalent."
+  ]
+}

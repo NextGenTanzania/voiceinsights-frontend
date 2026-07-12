@@ -20,9 +20,10 @@
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content" id="report-content">
 
@@ -30,27 +31,27 @@
         <div class="muted-note" id="report-status-line">Loading…</div>
         <div style="display:flex; gap:.5rem; flex-wrap:wrap; align-items:center;">
           <select id="style-select" style="font-size:.8rem;"><option value="">Default Style</option></select>
-          <button class="btn btn-primary btn-sm" id="export-pdf-btn">🖨 PDF</button>
-          <button class="btn btn-ghost btn-sm" id="export-pptx-btn">📊 PowerPoint</button>
-          <button class="btn btn-ghost btn-sm" id="export-word-btn">📄 Word</button>
-          <button class="btn btn-ghost btn-sm" id="export-excel-btn">📈 Excel</button>
-          <button class="btn btn-ghost btn-sm" id="export-csv-btn">CSV</button>
-          <button class="btn btn-ghost btn-sm" id="export-json-btn">JSON</button>
+          <button type="button" class="btn btn-primary btn-sm" id="export-pdf-btn">🖨 PDF</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="export-pptx-btn">📊 PowerPoint</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="export-word-btn">📄 Word</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="export-excel-btn">📈 Excel</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="export-csv-btn">CSV</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="export-json-btn">JSON</button>
         </div>
       </div>
 
       <div class="no-print" style="margin:.6rem 0 1.5rem; padding:1rem; background:var(--surface); border-radius:10px;">
         <div class="muted-note" style="font-size:.78rem; margin-bottom:.6rem; font-weight:600;">Multi-Format Reports (Phase 15) — every download renders from this same report, nothing is regenerated:</div>
         <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-          <button class="btn btn-ghost btn-sm format-download-btn" data-format="executive_summary" data-ext="txt">Executive Summary</button>
-          <button class="btn btn-ghost btn-sm format-download-btn" data-format="management_report" data-ext="txt">Management Report</button>
-          <button class="btn btn-ghost btn-sm" id="tech-report-btn">Full Technical Report</button>
-          <button class="btn btn-ghost btn-sm format-download-btn" data-format="donor_brief" data-ext="txt">Donor Brief</button>
-          <button class="btn btn-ghost btn-sm format-download-btn" data-format="policy_brief" data-ext="txt">Policy Brief</button>
-          <button class="btn btn-ghost btn-sm format-download-btn" data-format="infographic" data-ext="txt">Infographic</button>
-          <button class="btn btn-ghost btn-sm format-download-btn" data-format="statistical_annex" data-ext="json">Statistical Annex</button>
-          <button class="btn btn-ghost btn-sm format-download-btn" data-format="dataset_appendix" data-ext="json">Dataset Appendix</button>
-          <button class="btn btn-ghost btn-sm format-download-btn" data-format="ai_talking_points" data-ext="txt">AI Presentation Notes</button>
+          <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="executive_summary" data-ext="txt">Executive Summary</button>
+          <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="management_report" data-ext="txt">Management Report</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="tech-report-btn">Full Technical Report</button>
+          <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="donor_brief" data-ext="txt">Donor Brief</button>
+          <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="policy_brief" data-ext="txt">Policy Brief</button>
+          <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="infographic" data-ext="txt">Infographic</button>
+          <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="statistical_annex" data-ext="json">Statistical Annex</button>
+          <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="dataset_appendix" data-ext="json">Dataset Appendix</button>
+          <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="ai_talking_points" data-ext="txt">AI Presentation Notes</button>
         </div>
       </div>
 
@@ -64,10 +65,10 @@
         <h2>Drill Down</h2>
         <p class="muted-note" style="font-size:.8rem;">Filter this report's findings by region or demographic without regenerating the whole report.</p>
         <div style="display:flex; gap:.6rem; flex-wrap:wrap; align-items:flex-end;">
-          <div class="field"><label>Region</label><input id="filter-region" placeholder="e.g. Dodoma"></div>
-          <div class="field"><label>Gender</label><input id="filter-gender" placeholder="e.g. Female"></div>
-          <button class="btn btn-primary btn-sm" id="drilldown-apply-btn">Apply Filter</button>
-          <button class="btn btn-ghost btn-sm" id="drilldown-clear-btn">Clear</button>
+          <div class="field"><label>Region</label><input aria-label="e.g. Dodoma" id="filter-region" placeholder="e.g. Dodoma"></div>
+          <div class="field"><label>Gender</label><input aria-label="e.g. Female" id="filter-gender" placeholder="e.g. Female"></div>
+          <button type="button" class="btn btn-primary btn-sm" id="drilldown-apply-btn">Apply Filter</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="drilldown-clear-btn">Clear</button>
         </div>
         <div id="drilldown-result" style="margin-top:1rem;"></div>
       </div>
@@ -77,14 +78,14 @@
         <p class="muted-note" style="font-size:.8rem;">Ask a question about this report specifically — the AI answers only from this report's own data.</p>
         <div id="assistant-log" style="margin:1rem 0; max-height:300px; overflow-y:auto;"></div>
         <div style="display:flex; gap:.5rem;">
-          <input id="assistant-input" placeholder="e.g. What are the biggest risks?" style="flex:1;">
-          <button class="btn btn-primary btn-sm" id="assistant-ask-btn">Ask</button>
+          <input aria-label="e.g. What are the biggest risks?" id="assistant-input" placeholder="e.g. What are the biggest risks?" style="flex:1;">
+          <button type="button" class="btn btn-primary btn-sm" id="assistant-ask-btn">Ask</button>
         </div>
         <div style="display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.6rem;">
-          <button class="btn btn-ghost btn-sm suggested-q" style="font-size:.72rem;">Summarize this report</button>
-          <button class="btn btn-ghost btn-sm suggested-q" style="font-size:.72rem;">What are the biggest risks?</button>
-          <button class="btn btn-ghost btn-sm suggested-q" style="font-size:.72rem;">What are the gender gaps?</button>
-          <button class="btn btn-ghost btn-sm suggested-q" style="font-size:.72rem;">Compare regions</button>
+          <button type="button" class="btn btn-ghost btn-sm suggested-q" style="font-size:.72rem;">Summarize this report</button>
+          <button type="button" class="btn btn-ghost btn-sm suggested-q" style="font-size:.72rem;">What are the biggest risks?</button>
+          <button type="button" class="btn btn-ghost btn-sm suggested-q" style="font-size:.72rem;">What are the gender gaps?</button>
+          <button type="button" class="btn btn-ghost btn-sm suggested-q" style="font-size:.72rem;">Compare regions</button>
         </div>
       </div>
 
@@ -253,7 +254,7 @@
 
   async function ensureV19ExportAllowed() {
     try {
-      const trust = await apiRequest(`/api/reports/${reportId}/trust-v19`);
+      const trust = await apiRequest(`/api/reports/${reportId}/trust`);
       const allowed = trust?.phase19?.export_allowed !== false && trust?.ai_verification?.export_allowed !== false;
       if (!allowed) {
         showToast('Export blocked by the Phase 19 quality gate. Please review report trust before exporting.', 'error');
@@ -296,7 +297,7 @@
         <h2>Demographics</h2><p>${dm.demographics.gender.map(g => `${g.label}: ${g.n}`).join(', ')}</p>
         <p style="font-size:9pt; color:#666;">${dm.branding.disclaimer_text || ''}</p>
       <script src="/assets/js/admin-functional-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body></html>`;
     const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
     downloadBlob(blob, `report-${reportId}.doc`);
@@ -512,6 +513,6 @@
   });
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

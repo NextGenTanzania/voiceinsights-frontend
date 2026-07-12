@@ -1,0 +1,22 @@
+VoiceInsights Africa Enterprise Release 3
+
+ADDED
+backend/src/ai-assurance-pipeline.js
+backend/src/ai-assurance-api.js
+backend/src/report-intelligence.js
+backend/src/visual-intelligence.js
+backend/src/ai-governance.js
+backend/migrations/033_ai_assurance.sql
+backend/tests/ai-assurance.test.js
+ai-assurance-implementation.md
+docs/archive/ai-assurance-file-manifest.txt
+
+CHANGED
+backend/src/index.js
+backend/package.json
+backend/package-lock.json
+
+VERIFICATION
+Release 3 focused tests: 12 passed, 0 failed
+Full regression suite: 508 passed, 0 failed, 0 skipped
+Cloudflare Worker dry-run: passed

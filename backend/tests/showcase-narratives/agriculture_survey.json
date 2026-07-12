@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This Smallholder Productivity & Climate Resilience Survey reached 1,000 farming households across six districts in Uganda — Lira, Mbale, Kampala, Masaka, Gulu, and Mbarara — with full completion, assessing agricultural productivity, market access, and climate shock exposure consistent with FAO/IFAD practice and SDG 2 (Zero Hunger) and SDG 13 (Climate Action).\n\nSentiment is net positive (55.6%). Extension services is by a clear margin the most-cited theme (7 mentions, nearly double the next), followed by mobile money and post-harvest loss (4 each), market prices and improved seeds (3 each), and irrigation and climate shocks (2 each) — indicating farmers see advisory support as the single highest-leverage gap, ahead of even direct input access.\n\nRegional coverage is broad and reasonably balanced (Lira 176 to Mbarara 150), providing a credible basis for both national reporting and district-level agricultural planning.",
+
+  "key_findings": [
+    "Extension services is the dominant concern (7 mentions, nearly double any other theme) — farmers are signaling that advisory support, not just physical inputs, is their top unmet need.",
+    "Mobile money adoption (4 mentions) shows genuine uptake for market transactions, a positive digital-inclusion signal relevant to broader financial inclusion goals.",
+    "Post-harvest loss (4 mentions) is tied with mobile money as a leading concern — meaning value is being lost after a successful harvest, not only at the production stage.",
+    "Market prices and improved seeds (3 mentions each) remain present concerns but are secondary to extension services and post-harvest loss this round.",
+    "Climate shocks (2 mentions) and irrigation (2 mentions) are linked concerns — farmers exposed to unpredictable rainfall specifically cite the lack of irrigation as the reason they cannot buffer against it.",
+    "District coverage across six areas, from urban-peri-urban Kampala to more rural Gulu and Lira, supports confidence that findings reflect diverse farming contexts rather than one agro-ecological zone."
+  ],
+
+  "discussion": "Extension services emerging as the clear leading concern — ahead of input access, pricing, or even climate shocks — is a significant finding for SDG 2 programming: it suggests farmers already have some access to improved seeds and are more constrained by not knowing how to use available inputs, techniques, and climate-adaptive practices optimally. Post-harvest loss compounds this: even where production is adequate, value is being lost between harvest and sale, meaning input-focused interventions alone will not fully translate into household income gains. The climate-shocks-and-irrigation pairing is a specific, addressable finding — farmers are not simply reporting weather variability in the abstract, but connecting it directly to a lack of buffering infrastructure.",
+
+  "conclusions": "This survey identifies extension service access as the single highest-leverage gap for this farming population, ahead of physical input access — a finding that should reshape how agricultural support programming is prioritized. Post-harvest loss represents a second, distinct value-chain gap requiring its own intervention track, separate from production-side support.",
+
+  "recommendations": {
+    "immediate": [
+      "Map current extension officer coverage against the districts with the strongest extension-services concern, to determine whether this is a staffing shortage or a scheduling/reach problem.",
+      "Document mobile money adoption's role in market transactions as a positive digital-inclusion finding worth highlighting to funders focused on financial inclusion."
+    ],
+    "medium_term": [
+      "Pilot low-cost post-harvest storage solutions (e.g. hermetic bags, community storage facilities) in the districts most affected by post-harvest loss, measuring impact before wider rollout.",
+      "Introduce a mobile-based extension advisory channel (SMS or voice) to extend advisory reach beyond what in-person extension officer visits alone can achieve, given the existing mobile money adoption signal."
+    ],
+    "long_term": [
+      "Establish extension service reach and post-harvest loss as two separately tracked standing indicators, given they represent distinct value-chain stages (advisory vs. storage) requiring different interventions.",
+      "Incorporate irrigation infrastructure planning into climate resilience programming specifically for the districts where farmers directly linked climate shocks to the absence of irrigation."
+    ]
+  },
+
+  "risks": [
+    "If extension services remain under-resourced, other input-focused investments (seeds, fertilizer) may continue to under-deliver on yield potential, since farmers report advisory support as the binding constraint.",
+    "Continued post-harvest loss, if unaddressed, will keep limiting farmer income even if both production and extension-service gaps are resolved."
+  ],
+
+  "opportunities": [
+    "The existing mobile money adoption signal provides a ready channel for a low-cost, mobile-based extension advisory service, rather than requiring investment in an entirely new delivery mechanism.",
+    "Because extension services is such a clearly dominant concern, a targeted, well-resourced advisory intervention has unusually strong potential to move the needle on overall farmer sentiment and productivity."
+  ],
+
+  "lessons_learned": "Farmers volunteering advisory-support gaps ahead of input-access complaints, in their own words, demonstrates the value of open-ended feedback over a fixed checklist that might have defaulted to asking primarily about seeds, fertilizer, and pricing. Future agricultural surveys in this series should continue probing broadly enough to let advisory and post-harvest value-chain concerns surface on their own terms."
+}

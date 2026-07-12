@@ -10,12 +10,14 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+<h1 class="visually-hidden">Reports — VoiceInsights Africa</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
-      <div class="section-head"><div></div><button class="btn btn-primary btn-sm" id="export-btn">⬇ Export All Responses (CSV)</button></div>
+      <div class="section-head"><div></div><button type="button" class="btn btn-primary btn-sm" id="export-btn">⬇ Export All Responses (CSV)</button></div>
 
       <div class="grid grid-4" style="margin-bottom:1.5rem;">
         <div class="feature-card"><span class="num">CSV / Excel</span><h3 style="font-size:1rem;">Raw Data Export</h3><p style="font-size:.85rem;">Every response, transcript, sentiment, and fraud score — opens directly in Excel or Google Sheets. Real data, generated live.</p></div>
@@ -79,6 +81,6 @@
   });
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

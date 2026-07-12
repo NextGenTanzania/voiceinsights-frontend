@@ -10,9 +10,11 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+<h1 class="visually-hidden">Report Library — VoiceInsights Africa</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
 
@@ -45,8 +47,8 @@
             <select id="sched-frequency"><option value="weekly">Weekly</option><option value="monthly">Monthly</option><option value="quarterly">Quarterly</option></select>
           </div>
         </div>
-        <div class="field"><label>Recipient Emails (comma-separated)</label><input id="sched-emails" placeholder="alice@org.com, bob@org.com"></div>
-        <button class="btn btn-primary btn-sm" id="sched-create-btn">+ Add Schedule</button>
+        <div class="field"><label>Recipient Emails (comma-separated)</label><input aria-label="alice@org.com, bob@org.com" id="sched-emails" placeholder="alice@org.com, bob@org.com"></div>
+        <button type="button" class="btn btn-primary btn-sm" id="sched-create-btn">+ Add Schedule</button>
       </div>
 
     </div>
@@ -79,8 +81,8 @@
           <td class="muted-note">${r.generated_by_name || 'System'}</td>
           <td class="muted-note">${new Date(r.updated_at + 'Z').toLocaleDateString()}</td>
           <td>
-            ${nextStatus && canAdvance ? `<button class="btn btn-ghost btn-sm advance-btn" data-id="${r.id}" data-next="${nextStatus}" style="font-size:.72rem;">${NEXT_LABEL[r.status]}</button>` : ''}
-            ${(myRole === 'org_admin' || myRole === 'super_admin') ? `<button class="btn btn-ghost btn-sm duplicate-btn" data-id="${r.id}" style="font-size:.72rem;">New Version</button>` : ''}
+            ${nextStatus && canAdvance ? `<button type="button" class="btn btn-ghost btn-sm advance-btn" data-id="${r.id}" data-next="${nextStatus}" style="font-size:.72rem;">${NEXT_LABEL[r.status]}</button>` : ''}
+            ${(myRole === 'org_admin' || myRole === 'super_admin') ? `<button type="button" class="btn btn-ghost btn-sm duplicate-btn" data-id="${r.id}" style="font-size:.72rem;">New Version</button>` : ''}
           </td>
         </tr>`;
       }).join('') : '<tr><td colspan="7" class="muted-note" style="padding:1.5rem;">No reports yet — generate one from a project.</td></tr>';
@@ -127,7 +129,7 @@
       document.getElementById('schedules-list').innerHTML = schedules.length
         ? schedules.map(s => `<div class="card" style="margin-bottom:.6rem; display:flex; justify-content:space-between; align-items:center;">
             <div><b>${s.template_name}</b> — ${s.frequency} <div class="muted-note" style="font-size:.78rem;">${s.recipient_emails} · next: ${new Date(s.next_run_at + 'Z').toLocaleDateString()}</div></div>
-            <button class="btn btn-ghost btn-sm sched-delete-btn" data-id="${s.id}">Remove</button>
+            <button type="button" class="btn btn-ghost btn-sm sched-delete-btn" data-id="${s.id}">Remove</button>
           </div>`).join('')
         : '<p class="muted-note">No scheduled reports yet.</p>';
       document.querySelectorAll('.sched-delete-btn').forEach(btn => {
@@ -157,6 +159,6 @@
   loadSchedules();
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

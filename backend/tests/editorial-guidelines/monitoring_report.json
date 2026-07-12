@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Terse and operational -- Monitoring Report writing must resist the urge to expand into full narrative analysis. This is a flag-and-escalate document, not a comprehensive assessment. Brevity is a quality signal for this report type, not a shortfall.",
+
+  "section_rules": {
+    "executive_summary": "Should be 3-4 sentences maximum, stating only the single clearest escalation-worthy finding -- a lengthy executive summary is itself a signal the report has drifted from its operational purpose.",
+    "discussion": "Should focus on WHY a finding warrants escalation now (e.g. concentration ratio, consistency across locations) rather than extended interpretive analysis appropriate to a full assessment report.",
+    "methodology": "State briefly that this is a routine/lightweight monitoring touchpoint, not a full assessment, to calibrate reader expectations for depth.",
+    "limitations": "One sentence is typically sufficient -- e.g. noting smaller sample size relative to full assessment rounds.",
+    "recommendations": "Should be minimal and specific -- typically 2-4 items maximum, each a direct escalation or specific verification action, not a comprehensive action plan (that belongs in a full assessment report).",
+    "policy_implications": "Rarely included in a routine monitoring report -- reserve for full assessment or annual reporting.",
+    "lessons_learned": "One or two sentences on the monitoring process itself, if relevant -- not an extended reflection.",
+    "conclusion": "State the single flagged item and its escalation status -- no need for a broader synthesis paragraph.",
+    "annexes": "Minimal -- typically just the raw topic/sentiment counts, since this report type does not warrant a full annex suite.",
+    "evidence_style": "State the specific mention count and its relative dominance (e.g. 'more than double the next theme') as the primary evidence -- avoid extended verbatim quote analysis appropriate to a fuller report."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["dominant theme concentration ratio", "sentiment distribution", "location/site consistency of the flagged finding"],
+    "common_risks": ["expanding a routine monitoring report into unnecessary narrative depth, diluting its operational escalation purpose", "failing to escalate a finding clearly because it was folded into general positive sentiment framing"],
+    "typical_recommendations": ["direct escalation to implementation management with a specific ask (e.g. completion timeline)", "verification of whether a finding is a single common issue or varies by location"],
+    "typical_policy_implications": [],
+    "typical_donor_expectations": "Donors expect routine monitoring reports to be concise and action-oriented specifically -- a bloated monitoring report is itself perceived as a process inefficiency."
+  },
+
+  "recommendation_categories": ["Immediate", "Operational", "Monitoring"],
+
+  "forbidden_behaviors": [
+    "Never expand a routine monitoring report into full-assessment-length narrative analysis -- brevity is a correctness requirement for this report type, not a stylistic choice.",
+    "Never omit a clear escalation recommendation when a finding shows strong concentration (e.g. more than double the next theme).",
+    "Never include policy implications or a full recommendation tiering (30-day/90-day/annual) in a routine monitoring report -- this belongs in fuller assessment reports."
+  ]
+}

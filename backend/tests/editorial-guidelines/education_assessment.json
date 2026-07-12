@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Warm but evidence-driven -- education writing tends toward sentimentality (invoking children's futures); this must be counterbalanced with precise, specific findings. Every claim about learning or attendance must be traceable to a specific respondent-reported data point, never to a general appeal about the importance of education.",
+
+  "section_rules": {
+    "executive_summary": "Must lead with the single clearest household-level finding (materials, infrastructure, or attendance), not a general statement about the value of education. Distinguish inputs (textbooks, materials) from outcomes (attendance, learning) explicitly -- these require different evidence and different attribution confidence.",
+    "discussion": "Must explicitly address any cross-sectoral finding (e.g. WASH-attendance linkages) as its own analytical thread, since these are easy for education-only teams to under-prioritize if blended into a general infrastructure discussion.",
+    "methodology": "State clearly whether respondents were parents/guardians reporting on behalf of children, or students themselves -- this materially affects how findings should be interpreted (parental perception vs. direct student experience).",
+    "limitations": "Must note that attendance and learning outcomes reported here are PERCEPTUAL (parent/guardian report), not administrative attendance register or test score data, unless such data was explicitly cross-referenced.",
+    "recommendations": "Materials/infrastructure recommendations (facility-level, fast) must be kept separate from staffing/class-size recommendations (institutional, slower) -- these have different owners and timelines in most education systems.",
+    "policy_implications": "Only escalate to policy level when a finding is structural (e.g. a persistent class-size or teacher-deployment pattern), not when it is a single-school infrastructure gap solvable at facility level.",
+    "lessons_learned": "Should highlight cases where open-ended feedback surfaced a genuinely cross-sectoral finding (e.g. water access affecting attendance) that a narrowly-scoped, education-only instrument would have missed.",
+    "conclusion": "Avoid claiming 'learning outcomes improved' from a satisfaction/perception survey alone -- language should be scoped to what was actually measured (household perception of materials, attendance, and school conditions).",
+    "annexes": "Include the exact framing used to ask about attendance/materials, since parents may interpret 'attendance' differently (e.g. enrolled vs. actually present) without precise question wording.",
+    "evidence_style": "Anchor every materials/infrastructure claim to the specific topic mention count. Use parent verbatim quotes to illustrate the human dimension, but never as a substitute for the topic-frequency evidence."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["response rate", "materials/textbook availability (perceived)", "infrastructure adequacy (perceived)", "attendance barriers (perceived)", "class size concern frequency", "overall school sentiment"],
+    "common_risks": ["parent-reported attendance may not match administrative registers", "cross-sectoral findings (WASH, health) may be under-actioned if routed only to education-sector teams", "materials distribution success may mask persistent staffing/infrastructure gaps"],
+    "typical_recommendations": ["joint education-WASH planning for water-linked attendance barriers", "class-size mitigation pilots (peer learning, teaching assistants)", "documentation of materials-distribution success for continued funding cases"],
+    "typical_policy_implications": ["teacher deployment and school infrastructure planning", "cross-ministerial (education + water/sanitation) coordination"],
+    "typical_donor_expectations": "Education donors increasingly expect evidence of learning environment conditions (not just enrollment numbers), and value cross-sectoral findings that demonstrate holistic understanding of barriers to schooling."
+  },
+
+  "recommendation_categories": ["Immediate", "30-day", "90-day", "Operational", "Policy", "Capacity Building", "Institutional Strengthening"],
+
+  "forbidden_behaviors": [
+    "Never claim a test score or learning outcome improvement from a household perception survey -- these measure perception of inputs and conditions, not learning outcomes directly.",
+    "Never conflate 'enrolled' and 'attending' without the report's methodology explicitly clarifying which was asked about.",
+    "Never cite a specific UNESCO or education-ministry standard without independent verification that it exists and applies to this context."
+  ]
+}

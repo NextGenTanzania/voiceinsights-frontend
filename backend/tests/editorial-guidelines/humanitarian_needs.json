@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Urgent but disciplined -- humanitarian writing must convey severity without sensationalism, and must hold itself to Sphere/CHS accountability language rather than general advocacy language. Every finding should read as evidence for an operational decision, not a fundraising appeal.",
+
+  "section_rules": {
+    "executive_summary": "Must explicitly distinguish between interventions that met their standard (report as verified success) and interventions that partially or did not meet their standard (report as a specific, named accountability gap) -- never blend these into a single 'response was well-received' narrative.",
+    "discussion": "Must analyze WHY a gap occurred where evidence supports it (e.g. a specific supply chain delay), not just that it occurred -- CHS accountability requires explaining response failures, not only documenting them.",
+    "methodology": "State the rapid-assessment context explicitly (this is not a comprehensive needs assessment; note sample size and time constraints appropriate to the emergency phase).",
+    "limitations": "Must note if the assessment was conducted during active response (higher urgency, potentially lower methodological rigor) vs. post-response evaluation, since this affects appropriate confidence levels.",
+    "recommendations": "Every recommendation involving an unmet standard must include a specific, dated resolution commitment structure, not a general 'continue to monitor' statement -- CHS-aligned reporting requires accountability specificity.",
+    "policy_implications": "Rare in rapid needs assessments -- most findings are operational/response-level; only escalate to policy if a finding indicates a systemic response-system gap beyond this single response.",
+    "lessons_learned": "Should explicitly note methodological lessons for the NEXT rapid assessment (e.g. what worked about the data collection channel choice in this specific emergency context).",
+    "conclusion": "Must state plainly which Sphere/CHS standards were met, which were partially met, and which were not met -- avoid a single blended positive conclusion when specific gaps were identified.",
+    "annexes": "Include the specific humanitarian response phase (acute emergency, stabilization, early recovery) since Sphere standards and appropriate findings interpretation differ by phase.",
+    "evidence_style": "Every claim about standard achievement or shortfall must cite Sphere/CHS by the SPECIFIC standard or commitment number, never a blanket compliance claim."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["response rate", "water/shelter/food assistance adequacy (perceived)", "assistance timeliness (perceived)", "assistance quantity sufficiency", "overall response sentiment"],
+    "common_risks": ["conflating a genuinely severe finding with a lower-severity operational complaint", "reporting only positive findings due to time pressure in an active response", "insufficient disaggregation by vulnerability group (e.g. elderly, disabled, female-headed households) in a rapid assessment"],
+    "typical_recommendations": ["formal incident documentation against the specific Sphere standard not met", "supply chain review at the specific delivery stage where delay occurred", "specific, dated resolution commitments rather than general monitoring continuation"],
+    "typical_policy_implications": ["response-system-level supply chain or pre-positioning policy", "seasonal-readiness planning institutionalization"],
+    "typical_donor_expectations": "Humanitarian donors and CHS-committed agencies specifically expect TRANSPARENT reporting of shortfalls, not only successes -- a rapid needs assessment that reports only positive findings will be read as less credible, not more successful."
+  },
+
+  "recommendation_categories": ["Immediate", "30-day", "Operational", "Risk Mitigation", "Monitoring", "Governance"],
+
+  "forbidden_behaviors": [
+    "Never claim Sphere or CHS 'compliance' as a blanket statement -- always name the specific standard/commitment and whether it was met, partially met, or not met.",
+    "Never soften a documented shortfall (e.g. late shelter delivery) into ambiguous language to preserve an overall positive narrative -- CHS accountability requires transparent shortfall reporting.",
+    "Never present rapid-assessment findings with the same confidence level as a comprehensive, longer-fielded needs assessment."
+  ]
+}

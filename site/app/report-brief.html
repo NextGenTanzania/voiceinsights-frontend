@@ -32,9 +32,10 @@
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
 
@@ -42,7 +43,7 @@
         <div class="muted-note" id="report-status">Generating your brief…</div>
         <div style="display:flex; gap:.6rem;">
           <a href="/app/report.html" class="btn btn-ghost btn-sm">← Full Report</a>
-          <button class="btn btn-primary btn-sm" id="print-btn">🖨 Download as PDF</button>
+          <button type="button" class="btn btn-primary btn-sm" id="print-btn">🖨 Download as PDF</button>
         </div>
       </div>
 
@@ -179,6 +180,6 @@
   })();
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

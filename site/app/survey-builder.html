@@ -10,9 +10,11 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+<h1 class="visually-hidden">Survey Builder — VoiceInsights Africa</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
       <div class="grid" style="grid-template-columns: 1fr 340px; align-items:start; gap:1.5rem;">
@@ -20,7 +22,7 @@
         <div>
           <div class="card" style="margin-bottom:1.25rem;">
             <div class="field-row">
-              <div class="field"><label>Survey Name</label><input id="f-title" placeholder="e.g. Access to Finance in Agriculture — Tanzania"></div>
+              <div class="field"><label>Survey Name</label><input aria-label="e.g. Access to Finance in Agriculture — Tanzania" id="f-title" placeholder="e.g. Access to Finance in Agriculture — Tanzania"></div>
               <div class="field"><label>Module Type</label>
                 <select id="f-module"><option>Impact Monitoring</option><option>Survey Automation</option><option>Beneficiary Feedback</option><option>Call-Based Research</option><option>Grievance</option></select>
               </div>
@@ -28,7 +30,7 @@
             <div class="field"><label>Description</label><textarea id="f-desc" rows="2" placeholder="What is this survey trying to find out?"></textarea></div>
           </div>
 
-          <div class="section-head"><h2 style="font-size:1.05rem;">Questions</h2><button class="btn btn-primary btn-sm" id="add-q-btn">+ Add Question</button></div>
+          <div class="section-head"><h2 style="font-size:1.05rem;">Questions</h2><button type="button" class="btn btn-primary btn-sm" id="add-q-btn">+ Add Question</button></div>
 
           <div id="questions-list">
           </div>
@@ -44,7 +46,7 @@
           <div class="card" style="margin-bottom:1rem;">
             <div class="card-title">Next Steps</div>
             <a href="/app/campaigns.html" class="btn btn-ghost btn-sm" style="width:100%; justify-content:center; margin-bottom:.5rem;">Link to a Campaign</a>
-            <button class="btn btn-primary" id="save-btn" style="width:100%; justify-content:center;">Save Survey</button>
+            <button type="button" class="btn btn-primary" id="save-btn" style="width:100%; justify-content:center;">Save Survey</button>
           </div>
         </div>
 
@@ -76,9 +78,9 @@
           <option value="open_voice">Voice (Open Voice)</option>
           <option value="full_name">Respondent's Full Name</option>
         </select>
-        <button class="btn btn-ghost btn-sm remove-q">Remove</button>
+        <button type="button" class="btn btn-ghost btn-sm remove-q">Remove</button>
       </div>
-      <input class="q-text" placeholder="Type your question..." value="${text ? text.replace(/"/g, '&quot;') : ''}">
+      <input aria-label="Type your question..." class="q-text" placeholder="Type your question..." value="${text ? text.replace(/"/g, '&quot;') : ''}">
       <div class="muted-note q-name-note" style="margin-top:.4rem; display:none;">This answer is saved as the respondent's name (shown across Respondents, Interviews, and Reports) — it skips sentiment/fraud analysis.</div>`;
     document.getElementById('questions-list').appendChild(row);
     const typeSelect = row.querySelector('.q-type');
@@ -170,6 +172,6 @@
   });
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

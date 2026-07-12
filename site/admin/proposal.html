@@ -25,14 +25,15 @@
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
       <div class="toolbar" style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
         <div class="muted-note" id="prop-status">Loading lead…</div>
-        <button class="btn btn-primary btn-sm" onclick="window.print()">🖨 Download as PDF</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">🖨 Download as PDF</button>
       </div>
 
       <div class="prop-page" id="prop-page" style="display:none;">
@@ -55,7 +56,7 @@
         <textarea id="prop-need" rows="3" style="width:100%; border:1px solid #ddd; border-radius:6px; padding:.6rem; font-family:inherit;"></textarea>
 
         <h3 style="font-size:1rem; border-bottom:1px solid #ddd; padding-bottom:.4rem; margin-top:1.5rem;">2. Proposed Solution</h3>
-        <p>VoiceInsights Africa will deploy its AI-powered voice research platform to collect, transcribe, analyze, and report on data via <span id="prop-channels">your preferred channels</span>, covering an estimated <input id="prop-n" type="number" value="100" style="width:70px; border:1px solid #ddd; border-radius:4px; padding:.1rem .3rem;"> respondents.</p>
+        <p>VoiceInsights Africa will deploy its AI-powered voice research platform to collect, transcribe, analyze, and report on data via <span id="prop-channels">your preferred channels</span>, covering an estimated <input aria-label="prop n" id="prop-n" type="number" value="100" style="width:70px; border:1px solid #ddd; border-radius:4px; padding:.1rem .3rem;"> respondents.</p>
 
         <h3 style="font-size:1rem; border-bottom:1px solid #ddd; padding-bottom:.4rem; margin-top:1.5rem;">3. Deliverables</h3>
         <ul style="font-size:.9rem; line-height:1.7;">
@@ -123,6 +124,6 @@
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
 <script src="/assets/js/admin-button-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

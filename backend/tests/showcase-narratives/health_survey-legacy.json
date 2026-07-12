@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This report presents findings from a National Health Access Survey conducted across six regions of Tanzania — Dar es Salaam, Arusha, Dodoma, Mbeya, Mwanza, and Iringa — reaching 420 respondents with a 100 percent completion rate. The survey was designed to assess perceived quality of, and access to, primary health services following recent investments in facility infrastructure and medicine supply chains.\n\nOverall sentiment is net positive: 54 percent of respondents expressed positive sentiment toward their most recent health facility interaction, compared to 16 percent negative and 30 percent neutral. This is a meaningfully favourable baseline, but it masks two specific concerns that recur across nearly every region surveyed: physical distance to the nearest functioning facility, particularly for elderly respondents, and extended waiting times once at the facility, with multiple respondents independently citing waits in excess of three hours.\n\nEncouragingly, medicine availability — historically one of the most cited failure points in health system assessments across East Africa — emerged as an area of genuine, respondent-confirmed improvement. Several respondents explicitly contrasted their most recent visit favourably against the prior year, suggesting recent supply chain interventions are beginning to be felt at the point of care.\n\nDemographically, the sample achieved reasonable balance (57% male, 43% female) and spans all adult age brackets, with the youngest cohort (18–25) slightly over-represented. Geographic coverage across six regions, with Dar es Salaam and Arusha contributing the largest response volumes, provides a credible basis for regional comparison, though rural district-level disaggregation would strengthen future rounds.\n\nData quality indicators are strong: an average fraud-detection score of 0.07 (on a 0–1 scale) and zero flagged responses indicate a clean dataset suitable for programmatic decision-making. Recommendations below are organized by implementation horizon and are directly traceable to the findings that follow.",
+
+  "key_findings": [
+    "Net-positive sentiment (54% positive vs. 16% negative) indicates the health system is broadly meeting expectations, but the margin is not wide enough to be complacent about — nearly 1 in 6 respondents left a recent visit with a negative impression.",
+    "Facility access distance is the single most-cited concern (9 topic mentions, the highest of any theme), and is specifically linked to elderly respondents in verbatim feedback — this is a geographic equity issue, not a general satisfaction issue.",
+    "Wait times exceeding three hours were independently reported by multiple respondents across different regions and channels (SMS, WhatsApp, and app), suggesting this is a systemic scheduling/staffing pattern rather than an isolated facility problem.",
+    "Medicine availability shows a genuine, respondent-confirmed year-on-year improvement — this is the strongest positive signal in the dataset and should be protected and communicated as a policy win.",
+    "Regional response volumes (Dar es Salaam 84, Arusha 75, Dodoma 71, Mbeya 70, Mwanza 61, Iringa 59) are reasonably balanced, meaning findings are not being driven disproportionately by any single region.",
+    "Data quality is high (0.07 average fraud score, zero flagged responses), meaning these findings can be acted on with confidence rather than requiring a follow-up verification round."
+  ],
+
+  "discussion": "The coexistence of a positive overall sentiment score with two sharply-defined, recurring complaints (distance and wait times) is a pattern familiar from health system assessments across the region: aggregate satisfaction can mask specific, fixable operational failures. The fact that both complaints appear consistently across multiple independent respondents and multiple channels — rather than clustering in a single region or demographic — suggests these are structural rather than facility-specific issues, and are therefore more amenable to a system-wide operational fix than to a facility-by-facility intervention.\n\nThe medicine availability finding deserves particular attention from a change-management perspective: respondents are not simply reporting satisfaction, they are actively noting improvement relative to a remembered baseline ('not the case last year'). This kind of before/after framing from respondents themselves is a stronger evidentiary signal than a static satisfaction score, and indicates that whatever supply chain intervention was made is both real and perceptible at the point of care — a genuinely rare and valuable outcome to be able to report to funders.",
+
+  "conclusions": "This survey round establishes a credible, high-quality baseline showing a health system that is improving in a specific, verifiable way (medicine availability) while carrying two persistent structural constraints (geographic access and wait times) that have not yet been resolved by the same interventions. Neither constraint appears to be deteriorating, but neither shows evidence of improvement either — both should be treated as the priority focus for the next implementation cycle, with medicine availability gains protected and communicated rather than assumed to be permanent.",
+
+  "recommendations": {
+    "immediate": [
+      "Share the medicine-availability improvement finding with facility staff and regional health management teams as positive reinforcement — this is a rare, concrete win worth communicating before the next survey round to sustain momentum.",
+      "Commission a rapid, low-cost time-and-motion review at the 2-3 facilities most frequently associated with wait-time complaints (cross-reference with regional response data) to distinguish a staffing shortage from a scheduling/triage process issue before committing to either fix."
+    ],
+    "medium_term": [
+      "Pilot a mobile or satellite outreach clinic model in the region with the lowest response volume relative to population (candidate: Iringa, Mwanza) specifically targeting elderly residents who cited distance as a barrier.",
+      "Introduce an appointment or queue-management system at the highest-wait-time facilities, informed by the time-and-motion review above, rather than defaulting to a first-come-first-served model."
+    ],
+    "long_term": [
+      "Incorporate facility-level distance mapping into future facility placement and expansion planning, using this survey's regional distribution as a baseline for measuring equity of access improvements over time.",
+      "Establish medicine availability as a standing quarterly indicator (not just a survey finding) so the improvement identified here can be tracked continuously rather than rediscovered in the next annual survey."
+    ]
+  },
+
+  "risks": [
+    "If wait-time and distance complaints are not addressed before the next survey round, the current net-positive sentiment could erode — both issues were raised unprompted and independently, indicating they are already salient to respondents rather than latent concerns.",
+    "The medicine availability improvement, while genuine, was measured at a single point in time; without a supply chain monitoring mechanism, a stock-out recurrence could reverse this gain before the next formal survey detects it."
+  ],
+
+  "opportunities": [
+    "The medicine availability finding is a ready-made, evidence-backed success story for donor and public communication — few health system surveys can point to a specific, respondent-confirmed year-on-year improvement this clearly.",
+    "Because both structural complaints (distance, wait times) are consistent across regions rather than isolated, a single well-designed intervention (e.g., a triage/scheduling protocol) could plausibly improve outcomes system-wide rather than requiring 6 separate regional interventions."
+  ],
+
+  "lessons_learned": "This round demonstrates the value of allowing respondents to describe experiences in their own words rather than relying solely on closed-ended satisfaction scales: the specific, actionable findings here (three-hour waits, distance barriers for the elderly, before/after medicine availability comparisons) emerged from open-ended verbatim responses, not from a numeric rating alone. Future survey rounds should preserve and, where possible, expand this open-response channel, since it is what converted a generic 'satisfaction score' into a set of concrete, fixable operational findings."
+}

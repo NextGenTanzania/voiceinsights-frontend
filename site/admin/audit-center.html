@@ -10,15 +10,17 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+<h1 class="visually-hidden">Audit Center — Admin Console</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
 
       <div class="section-head">
         <p class="muted-note" style="margin:0;">Every admin action across every organization on the platform, plus the Secret Vault's own encrypt/decrypt/rotate trail.</p>
-        <button class="btn btn-ghost btn-sm" id="export-btn">⬇ Export CSV</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="export-btn">⬇ Export CSV</button>
       </div>
 
       <div class="card" style="margin:1rem 0;">
@@ -38,7 +40,7 @@
           </div>
           <div class="field" style="flex:2; min-width:200px;">
             <label>Search (name, email, resource)</label>
-            <input id="search-input" placeholder="Type to filter…">
+            <input aria-label="Type to filter…" id="search-input" placeholder="Type to filter…">
           </div>
         </div>
       </div>
@@ -137,6 +139,6 @@
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
 <script src="/assets/js/admin-button-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

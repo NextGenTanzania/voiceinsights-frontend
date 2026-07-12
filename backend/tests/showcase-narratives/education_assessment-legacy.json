@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This Primary Education Outcomes Assessment surveyed 380 parents and guardians across five counties in Kenya — Eldoret, Nakuru, Nairobi, Mombasa, and Kisumu — achieving full completion on every response collected. The assessment was commissioned to understand household-level perceptions of recent investments in learning materials and school infrastructure, and to surface barriers to consistent attendance that standard enrolment statistics do not capture.\n\nSentiment is strongly positive overall (56% positive, 27% neutral, 17% negative), anchored by one clear, tangible achievement: widespread, respondent-confirmed distribution of textbooks, with several parents specifically noting this is the first time their children have received textbooks. This is the kind of concrete, visible input that correlates strongly with parental confidence in a school system, and should be treated as a policy success worth protecting and replicating.\n\nHowever, the assessment also surfaces two structural concerns that recur independently across counties: classroom sizes that parents describe as too large for individual teacher attention, and inadequate water infrastructure that is directly and repeatedly linked — in parents' own words — to reduced attendance during the dry season. This second finding is particularly significant because it connects a WASH-adjacent infrastructure gap directly to an education outcome (attendance), a linkage that is easy to overlook when water and education programming are managed by separate teams.\n\nThe sample skews slightly female (54%) and spans all adult age brackets reporting on behalf of school-age children, with reasonably even distribution across the five counties (Eldoret and Nakuru contributing the largest shares). Data quality is strong, with a 0.07 average fraud score and zero flagged responses, supporting confident use of these findings for planning purposes.",
+
+  "key_findings": [
+    "Textbook distribution is a genuine, parent-confirmed success — multiple respondents independently and spontaneously noted this was the first time their children received textbooks, indicating the intervention reached households that previously had none.",
+    "Infrastructure is the most-cited concern overall (7 topic mentions), driven primarily by water access rather than classroom facilities themselves — this is a cross-sectoral finding, not a pure education-system failure.",
+    "Water access is explicitly and repeatedly linked to dry-season attendance drops in parents' own words — this is a measurable, actionable connection between WASH infrastructure and education outcomes that standard attendance registers would not reveal.",
+    "Class size concerns (5 mentions under 'attendance'-adjacent themes) point to a teacher-to-student ratio issue that textbook provision alone does not address — the two interventions are complementary, not substitutes.",
+    "Sentiment is positive in 4 of 5 counties surveyed, with no single county driving the negative 17% — meaning classroom-size and water concerns are broadly distributed rather than isolated to one underperforming area.",
+    "The sample's near-even gender split among reporting parents/guardians (54% female, 46% male) suggests the survey is capturing a genuinely representative household perspective rather than one parent demographic's views."
+  ],
+
+  "discussion": "The juxtaposition of a strong, concrete win (textbooks) against two persistent structural gaps (water infrastructure and class size) illustrates a common pattern in education system strengthening: input-based interventions (materials) are often easier to deliver and more immediately visible to households than infrastructure or staffing interventions, which take longer to plan and fund. Parents are able to distinguish between these categories clearly in their own feedback — praising the textbook rollout specifically while separately and consistently flagging water and class size as unresolved.\n\nThe water-attendance linkage deserves particular emphasis for programme design: because it was volunteered independently by multiple respondents rather than prompted by a survey question about WASH specifically, it represents a strong, unprompted signal that dry-season water scarcity is functioning as a real barrier to schooling, not merely an inconvenience. This suggests attendance-improvement interventions should not be designed purely as education-sector interventions.",
+
+  "conclusions": "This assessment confirms that recent learning-materials investment is working and is recognized by households, while identifying water infrastructure and classroom capacity as the two constraints most likely to limit further gains in both attendance and perceived education quality. Because both constraints were raised consistently across counties rather than concentrated in one location, a coordinated, cross-sectoral response (education plus WASH) is likely to be more effective than a purely education-sector fix.",
+
+  "recommendations": {
+    "immediate": [
+      "Document and communicate the textbook distribution success with specific household testimony (with consent) to support continued funding for materials-based interventions in future budget cycles.",
+      "Cross-reference dry-season attendance registers against the counties where water access was most frequently cited, to quantify the scale of the attendance-water linkage before designing an intervention."
+    ],
+    "medium_term": [
+      "Initiate a joint education-WASH planning session to assess low-cost water access improvements (e.g., rainwater harvesting, borehole rehabilitation) at the schools most affected by dry-season attendance drops.",
+      "Pilot a class-size mitigation approach (e.g., peer-assisted learning groups, additional teaching assistants) at the 2-3 schools with the most frequent large-class-size complaints, and measure impact before scaling."
+    ],
+    "long_term": [
+      "Establish attendance-by-season as a standing monitoring indicator disaggregated by water access status at the school level, so the water-attendance relationship identified here can be tracked and validated over multiple years.",
+      "Incorporate parent-reported class-size concerns into future teacher deployment and school infrastructure planning cycles, using this survey's county distribution as a baseline."
+    ]
+  },
+
+  "risks": [
+    "If dry-season water access is not addressed before the next school year, attendance gains from other interventions (including textbook provision) may be undermined by a barrier that sits outside the education sector's direct control.",
+    "Without a cross-sectoral (education + WASH) response, this finding risks being deprioritized as 'someone else's problem', since neither sector alone owns the full fix."
+  ],
+
+  "opportunities": [
+    "The textbook distribution success is a ready-made, evidence-backed case study for continued or expanded materials funding — the parent testimony collected here is more compelling than enrolment statistics alone.",
+    "The water-attendance linkage, once quantified against attendance registers, could become a strong joint funding case for combined education-WASH programming, appealing to donors seeking cross-sectoral impact."
+  ],
+
+  "lessons_learned": "Allowing parents to describe school experiences in open-ended terms surfaced a cross-sectoral finding (water access affecting attendance) that a standard, education-only survey instrument would likely have missed entirely. Future assessments in this sector should continue to leave room for unprompted, open-ended feedback specifically because the most actionable findings here came from respondents connecting dots across sectors that program teams often manage separately."
+}

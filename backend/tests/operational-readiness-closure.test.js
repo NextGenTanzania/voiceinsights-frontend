@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {metric,healthMetric,buildOfflinePackage,compareConflict,validateProvisioningInput} from '../src/operational-readiness-closure.js';
+test('missing metrics never become flattering demo values',()=>{assert.equal(metric(null,{measured:false}).display,'Not yet measured');assert.equal(metric(undefined).status,'not_measured')});
+test('provider health is not operational until configured and observed',()=>{assert.equal(healthMetric({configured:false}).status,'not_configured');assert.equal(healthMetric({configured:true}).status,'not_measured')});
+test('offline package includes survey questions and manifest',()=>{const x=buildOfflinePackage({assignment:{id:'a',offline_package_version:2},survey:{id:'s'},questions:[{id:'q1',options_json:'[]'}]});assert.equal(x.ok,true);assert.equal(x.payload.questions.length,1);assert.equal(x.payload.manifest.assignment_id,'a')});
+test('conflict comparison identifies differing fields',()=>{assert.deepEqual(compareConflict({a:1,b:2},{a:1,b:3}).map(x=>x.field),['b'])});
+test('provisioning validation requires workflow identifiers',()=>{assert.equal(validateProvisioningInput({}).ok,false)});

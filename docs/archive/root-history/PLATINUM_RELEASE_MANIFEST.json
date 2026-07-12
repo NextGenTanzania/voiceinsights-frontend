@@ -1,0 +1,11 @@
+{
+  "release": "VoiceInsights World-Class Platinum Report Engine™ v1.0",
+  "type": "additive enhancement",
+  "database_migration_required": false,
+  "sample_reports": 16,
+  "publication_profiles": 7,
+  "languages": ["English", "Kiswahili", "French", "Portuguese"],
+  "core_books": ["Executive Intelligence Book", "Decision Book", "Evidence Book", "Statistical Book"],
+  "quality_gate": "Publication Quality Gate 2.0",
+  "public_integrity": "Synthetic demonstration data only"
+}

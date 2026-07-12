@@ -1,0 +1,24 @@
+VOICEINSIGHTS AFRICA — ENTERPRISE RELEASE 2FILE MANIFEST
+
+ADDED
+backend/src/cloudflare-queue-platform.js
+backend/src/environment-validation.js
+backend/src/operations-api.js
+backend/migrations/032_cloud_operations.sql
+backend/tests/cloud-operations.test.js
+docs/archive/cloud-operations-implementation.md
+docs/archive/cloud-operations-file-manifest.txt
+
+CHANGED
+backend/src/index.js
+backend/wrangler.toml
+backend/package.json
+
+VERIFICATION
+- Full backend regression suite: 496 passed, 0 failed, 0 skipped
+- Wrangler deployment dry-run: passed
+- Real bindings detected: OPERATIONS_QUEUE, OPERATIONS_DLQ, DB, AUDIO_BUCKET
+
+HONEST RELEASE VERDICT
+RELEASE 2 PARTIALLY COMPLETE — BLOCKERS REMAIN
+Reason: infrastructure foundation is deployable; critical provider-specific consumer adapters and live staging acceptance remain required.

@@ -14,13 +14,14 @@
   </style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <header><div class="wrap">
   <div class="eyebrow">v210 Platform Generation Release</div>
   <h1>VoiceInsights Cloud™</h1>
   <p class="lead">Africa's Autonomous Intelligence Infrastructure — one cloud layer powering admin, organizations, enumerators, phone, WhatsApp, SMS, web surveys, AI, reports, SDK, APIs, integrations, knowledge, benchmarks, monitoring, security and analytics.</p>
   <div class="pill">Admin Platform</div><div class="pill">Organization Platform</div><div class="pill">Enumerator App</div><div class="pill">AI + Reports</div><div class="pill">SDK + Public API</div>
 </div></header>
-<main><div class="wrap">
+<main id="main-content"><div class="wrap">
   <div id="status" class="loading">Loading VoiceInsights Cloud architecture…</div>
   <div id="app" class="grid" style="display:none"></div>
 </div></main>
@@ -31,7 +32,7 @@ function esc(v){return String(v??'').replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&l
 function chips(items){return `<div class="chips">${(items||[]).slice(0,8).map(x=>`<span class="chip">${esc(x)}</span>`).join('')}</div>`}
 function card(title, body, span='span-4', cls=''){return `<section class="card ${span} ${cls}"><h3>${esc(title)}</h3>${body}</section>`}
 async function load(){
-  const res = await fetch(`${API}/api/voiceinsights-cloud-v210`, {headers: token ? {Authorization:`Bearer ${token}`} : {}});
+  const res = await fetch(`${API}/api/voiceinsights-cloud`, {headers: token ? {Authorization:`Bearer ${token}`} : {}});
   if(!res.ok) throw new Error(`Cloud endpoint returned ${res.status}`);
   return res.json();
 }
@@ -50,5 +51,5 @@ load().then(data=>{
   `;
 }).catch(err=>{document.getElementById('status').innerHTML=`Could not load VoiceInsights Cloud. ${esc(err.message)}`});
 </script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body></html>

@@ -1,0 +1,304 @@
+=== Education Assessment Report (report_127f8a03b1fa432eba6de652a1045b9f) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== Agriculture Survey Report (report_a1da64c08538437fb7c4c94e66dc769b) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== Livelihood Assessment Report (report_d0fbef6159b34ca99de25166a2b944df) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== Humanitarian Needs Assessment (report_3ef144e6dd0a4652bfbb7c41070021ce) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== Baseline Study Report (report_77ff2f748d914da9b15f29ac3253be0d) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== Endline Evaluation (report_7ebb7f53ca934a49a46b8d44820cb480) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== Market Research Report (report_450748790bd846259a3a39c895b02068) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== Customer Satisfaction Report (report_9bec8542cfce4b8584d42fcdbbdfdf7f) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== Employee Engagement Report (report_3e25b01e68ac44c3a8ffd8289d2c4289) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== Citizen Feedback Report (report_655f49e1d1d24d228e95a666df839079) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== Community Scorecard Report (report_86556ea797fa45028c392b4856c4fba9) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== Monitoring Report (report_d4559081f83346d0ad59e4795eac34c5) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== Quarterly Performance Report (report_0c56c469fac44aee8169bb2e49c15eab) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== Annual Impact Report (report_f1f4043060864c3893f3a97c6eeb5137) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== SDG Progress Report (report_2281065ea5194bac926dce69a7a7dcc7) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+
+=== Health Survey Report (report_f48bbcc6fe624d47ae1d991a703b1f20) ===
+public_viewer: 200
+internal_viewer: 200
+format_executive_summary: 200
+format_management_report: 200
+format_donor_brief: 200
+format_policy_brief: 200
+format_infographic: 200
+format_statistical_annex: 200
+format_dataset_appendix: 200
+format_ai_talking_points: 200
+infographic_data: 200
+quality_score: 200
+benchmark: 200
+tiered_recommendations: 403
+roadmap: 403
+citations: 403
+report_assistant: 502
+

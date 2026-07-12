@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This Endline Evaluation covers the same Maternal & Child Health Program districts assessed at baseline — Kasungu, Mzuzu, Mangochi, Blantyre, Zomba, and Lilongwe — surveying 1,000 respondents with full completion, enabling direct, baseline-referenced comparison under the programme's Results Framework.\n\nComparing endline to baseline, health knowledge has risen to the leading theme (7 mentions, up from a tied-second position of 4 at baseline), while facility delivery — the baseline's leading theme (5 mentions) — remains prominent at endline (6 mentions) but is no longer the sole top concern. Child immunization is unchanged at 4 mentions across both rounds, while community health worker engagement declined slightly (3, down from 4) and antenatal care and nutrition remain narrow at endline (2 and 1 respectively).\n\nOverall sentiment shifted modestly from 57.6% positive at baseline to 55.3% at endline (negative sentiment rose slightly from 11.6% to 13.0%) — a small movement within the range expected for a programme that already started from a favourable baseline, and one that should be read alongside the clear thematic gains above rather than as a standalone negative signal.",
+
+  "key_findings": [
+    "Health knowledge rose from a tied-second baseline theme (4 mentions) to the leading endline theme (7 mentions) — strong, quantified evidence the programme's health education component is working and increasingly salient to respondents.",
+    "Facility delivery remained prominent (6 mentions at endline vs. 5 at baseline) — a stable, not declining, priority, suggesting continued but not yet fully resolved demand for facility-based delivery support.",
+    "Child immunization held steady at 4 mentions across both rounds — a stable indicator neither improving nor worsening, worth continued monitoring rather than either celebration or alarm.",
+    "Community health worker engagement declined slightly (3 mentions at endline vs. 4 at baseline) — this specific, measured decline should be investigated rather than assumed to reflect improvement through resolution.",
+    "Antenatal care and nutrition remain narrow themes at endline (2 and 1 mentions respectively), consistent with their baseline pattern — these have not become more prominent over the programme period.",
+    "The six-district sample composition and size (1,000 at both baseline and endline) supports methodologically sound before/after comparison."
+  ],
+
+  "discussion": "Health knowledge's rise from a secondary to the leading theme is the clearest, most quantifiable success signal in this endline: it indicates the programme's health education activities are not only being delivered but are increasingly top-of-mind for respondents, a meaningful shift from baseline. Facility delivery's continued prominence, without decline, suggests this remains an unresolved structural barrier (likely distance, cost, or capacity) that health education alone does not fully address — a different kind of intervention (facility access or incentive-based) may be needed alongside continued education efforts. The slight decline in community health worker mentions warrants direct investigation: it could reflect either a genuine service gap emerging, or simply that other themes (particularly health knowledge) have become comparatively more salient, displacing rather than replacing this theme's importance.",
+
+  "conclusions": "This endline provides credible, baseline-referenced evidence of a meaningful gain in health knowledge, while facility delivery — the programme's original top baseline priority — remains a stable, unresolved concern requiring continued or intensified attention in the next phase. The community health worker finding requires focused follow-up to distinguish decline from simple relative de-prioritization against a rising health-knowledge theme.",
+
+  "recommendations": {
+    "immediate": [
+      "Investigate the community health worker mention decline specifically — conduct focused follow-up to determine whether this reflects an emerging service gap or is simply relative to health knowledge's rise.",
+      "Communicate the health knowledge improvement to donors and programme leadership as this phase's primary, quantified result."
+    ],
+    "medium_term": [
+      "Design the next programme phase to specifically target facility delivery barriers (access, cost, capacity), since this remains a stable, unresolved concern despite the overall programme's positive trajectory.",
+      "Maintain and potentially strengthen community health worker engagement activities, informed by the follow-up investigation above."
+    ],
+    "long_term": [
+      "Retain this endline's baseline-referenced comparison methodology as the template for the next programme phase's own baseline-to-endline cycle.",
+      "Establish facility delivery as the explicit primary target of the next Theory of Change phase, given its persistence as the leading structural concern across both rounds."
+    ]
+  },
+
+  "risks": [
+    "If the community health worker decline reflects a genuine emerging service gap rather than relative de-prioritization, and it is not investigated, it could compound into a larger issue by the next reporting cycle.",
+    "If facility delivery remains unaddressed into a next programme phase without a specific new intervention, the programme risks a second consecutive cycle without resolving its original top-priority baseline concern."
+  ],
+
+  "opportunities": [
+    "The quantified health knowledge improvement is a strong, specific, donor-ready result — a clear before/after claim rather than a general satisfaction improvement.",
+    "Because facility delivery's persistence is now confirmed across two rounds, the next phase can design a specifically-targeted intervention with high confidence it is addressing the programme's actual binding constraint."
+  ],
+
+  "lessons_learned": "Maintaining identical question wording and sample size between baseline and endline is what allows this report to make the specific, quantified claims above (health knowledge's rise, facility delivery's persistence) rather than vaguer before/after impressions — this methodological discipline, flagged as a risk to protect at baseline, proved essential here and should continue into the next programme phase's own evaluation cycle."
+}

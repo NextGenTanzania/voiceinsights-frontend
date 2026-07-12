@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This report establishes the baseline for the Maternal Health Program across three districts in Malawi — Lilongwe, Blantyre, and Mzuzu — surveying 400 respondents with full completion. As a baseline, its primary purpose is not to evaluate change but to establish a rigorous, well-documented reference point against which the midline and endline rounds of this programme will be measured under the Results Framework agreed with implementing partners.\n\nAt this reference point, sentiment toward maternal health services is net positive (57.5% positive, 25% neutral, 17.5% negative). Affordability is by a clear margin the most-cited concern (8 topic mentions, more than access and service quality combined), establishing cost as the primary barrier this programme's Theory of Change should be designed to address, and the primary indicator against which future affordability-focused interventions should be measured.\n\nNotably, several respondents volunteered a sense of recent improvement in service delivery and staff responsiveness relative to their own recollection of the recent past. While this baseline round cannot and does not attribute this perceived trend to any specific intervention (none has yet been evaluated under this programme's Results Framework), it is valuable BASELINE CONTEXT: it indicates respondents are already primed to notice and report on change in this service area, which is a favourable condition for detecting genuine programme impact at midline and endline.\n\nThe sample achieved close to even gender balance (50.75% male, 49.25% female) across all three districts, with Lilongwe contributing the largest response share. Data quality is strong and consistent with this survey series. All figures in this report should be treated as the Time Zero reference values for this programme's logframe indicators.",
+
+  "key_findings": [
+    "Affordability is the dominant concern at baseline (8 mentions, more than access and service quality combined) — this should be the primary indicator the programme's Theory of Change targets, and the primary metric tracked at midline and endline.",
+    "Sentiment at Time Zero is net positive (57.5%), which sets a meaningfully high bar: the programme's midline and endline evaluations will need to demonstrate improvement against an already-favourable starting point, not a low baseline that is easy to improve upon.",
+    "Respondents volunteered perceptions of recent positive change in service delivery and staff responsiveness — this is valuable baseline context (respondents are attentive to and willing to report on change) but must not be misread as evidence of THIS programme's impact, since no intervention has yet been evaluated under this Results Framework.",
+    "Geographic coverage across three districts (Lilongwe 147, Blantyre 136, Mzuzu 117) provides an adequate basis for district-level baseline comparison at midline and endline.",
+    "Gender balance in the baseline sample (50.75%/49.25%) is close to even, providing a solid foundation for gender-disaggregated tracking of maternal health indicators across future rounds.",
+    "Data quality at baseline is high and consistent with this survey series, meaning these Time Zero values can be trusted as a reliable reference point rather than requiring re-baselining."
+  ],
+
+  "discussion": "A baseline's analytical purpose differs fundamentally from a midline or endline: its role is to establish a trustworthy Time Zero reference, not to draw conclusions about programme effectiveness. Read in that light, this baseline's most important finding is not the positive sentiment score itself, but the clear identification of affordability as the dominant barrier — this should directly inform the programme's logframe design, ensuring the intervention theory of change explicitly targets cost barriers rather than only access or service-quality dimensions.\n\nThe respondent-volunteered sense of recent improvement, while interesting, should be treated with appropriate baseline-stage caution: it reflects respondents' perception of a period BEFORE this programme's own interventions have been implemented and evaluated, and therefore cannot be attributed to this programme. It is documented here specifically so that midline and endline evaluators can distinguish pre-existing trend from programme-attributable change — a common and important baseline-stage discipline in RBM-aligned evaluation design.",
+
+  "conclusions": "This baseline establishes a rigorous Time Zero reference for the Maternal Health Program, with affordability clearly identified as the priority barrier the programme's Theory of Change and Results Framework should target. Sentiment at baseline is favourable, setting a meaningful bar for midline and endline to exceed. These findings should be locked in as the programme's official baseline values and used as the comparison point for all subsequent evaluation rounds.",
+
+  "recommendations": {
+    "immediate": [
+      "Formally adopt this round's affordability, access, and sentiment figures as the programme's official Time Zero Results Framework values, to be referenced in all future midline/endline reporting.",
+      "Ensure the programme's Theory of Change explicitly names affordability as a targeted barrier, given its clear dominance over access and service-quality concerns at baseline."
+    ],
+    "medium_term": [
+      "Design the midline data collection instrument to specifically re-test the same affordability, access, and service-quality questions asked here, ensuring like-for-like comparison rather than introducing new question wording that would compromise trend analysis.",
+      "Establish district-level baseline sub-values (Lilongwe, Blantyre, Mzuzu) as separate tracked indicators, since the programme's Results Framework may require district-disaggregated evidence of impact."
+    ],
+    "long_term": [
+      "Maintain this baseline as the fixed reference point for the full life of the programme, resisting any temptation to 're-baseline' at midline unless a major, documented programme redesign occurs.",
+      "Use this baseline's gender balance and district distribution as the sampling target for midline and endline, to ensure comparability of the underlying sample composition across rounds."
+    ]
+  },
+
+  "risks": [
+    "If the midline round does not use identical question wording and methodology, comparability with this baseline will be compromised, undermining the Results Framework's ability to attribute change to the programme.",
+    "Because respondents already report a sense of recent improvement independent of this programme, midline evaluators must take care to distinguish genuinely programme-attributable change from a continuation of this pre-existing trend — a methodological risk that should be flagged now, at baseline, rather than discovered at midline."
+  ],
+
+  "opportunities": [
+    "The clear, dominant identification of affordability as the primary barrier gives this programme an unusually sharp, evidence-based Theory of Change focus from the outset, rather than needing to address access, quality, and cost with equal priority.",
+    "The favourable baseline sentiment, while raising the bar for demonstrating improvement, also indicates a receptive population that is likely to engage constructively with future survey rounds, supporting strong response rates at midline and endline."
+  ],
+
+  "lessons_learned": "This baseline round confirms the value of explicitly documenting respondents' PRE-programme perceptions of trend and change, even though this cannot be attributed to the programme itself — doing so at baseline, rather than only at endline, gives future evaluators a documented basis for distinguishing programme impact from a pre-existing trajectory. Future baseline studies in this series should continue this practice of capturing and explicitly caveating any perceived trend at Time Zero."
+}

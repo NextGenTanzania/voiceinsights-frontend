@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This report establishes the Time Zero baseline for the Maternal & Child Health Program across six districts in Malawi — Kasungu, Mzuzu, Mangochi, Blantyre, Zomba, and Lilongwe — surveying 1,000 respondents with full completion, consistent with WHO/UNICEF maternal and child health practice and SDG 3.\n\nAt this reference point, sentiment is strongly positive (57.6%), among the most favourable baseline readings in this series. Facility delivery is the most-cited theme (5 mentions), establishing it as the primary Theory of Change target for this programme, ahead of health knowledge and barriers to care (4 each) and child immunization and community health worker engagement (4 each). Nutrition and antenatal care are present but narrower this round (1 mention each) — this should not be read as low importance, but as the natural baseline distribution before the programme's own interventions have been evaluated.\n\nGeographic coverage across six districts, with Kasungu and Mzuzu contributing the largest shares, provides an adequate district-level baseline reference for the midline and endline rounds to follow.",
+
+  "key_findings": [
+    "Facility delivery is the leading baseline theme (5 mentions) — this should be the programme's primary tracked outcome indicator, measured identically at midline and endline.",
+    "Health knowledge, barriers to care, child immunization, and community health worker engagement form a tightly-clustered second tier (4 mentions each) — meaning this programme has several near-equally-weighted baseline priorities, not one dominant issue alone.",
+    "Nutrition and antenatal care each register only 1 mention at baseline — this establishes their Time Zero reference values, but should not be interpreted as these being unimportant; they are simply less dominant than facility delivery at this starting point.",
+    "Sentiment at Time Zero (57.6% positive) is favourable, setting a meaningful bar the midline and endline rounds will need to improve upon, not a low baseline that is easy to exceed.",
+    "Six-district coverage (Kasungu 177 to Lilongwe 155) provides an adequate, reasonably balanced baseline sample for future district-level comparison.",
+    "This baseline's data quality supports formal adoption as the programme's official Results Framework Time Zero reference."
+  ],
+
+  "discussion": "A baseline's role is to establish a rigorous, non-evaluative reference point — this round's clustering of four themes (health knowledge, barriers to care, immunization, community health workers) at a near-equal frequency, just behind facility delivery, gives the programme's Theory of Change several closely-weighted starting priorities rather than one clearly dominant target. This is useful baseline information: it means the programme design should plan for a multi-pronged approach across these four areas, rather than assuming one will resolve the others. Facility delivery's clear lead position makes it the natural primary tracked outcome, but the tightly-clustered second tier deserves equal design attention.",
+
+  "conclusions": "This baseline establishes facility delivery as the primary tracked outcome for the Maternal & Child Health Program, with health knowledge, barriers to care, immunization, and community health worker engagement as a closely-weighted secondary tier requiring a multi-pronged, not single-focus, Theory of Change. These Time Zero values should be formally adopted as the Results Framework reference for all future evaluation rounds.",
+
+  "recommendations": {
+    "immediate": [
+      "Formally adopt this round's theme frequencies and sentiment distribution as the programme's official Time Zero Results Framework values.",
+      "Ensure the programme's Theory of Change explicitly addresses all four closely-clustered secondary themes (health knowledge, barriers to care, immunization, community health workers), not only facility delivery."
+    ],
+    "medium_term": [
+      "Design the midline instrument to ask identical questions across all six themes measured here, to preserve like-for-like comparability.",
+      "Establish district-level baseline sub-values for all six districts, since the programme's Results Framework may require district-disaggregated evidence of impact."
+    ],
+    "long_term": [
+      "Maintain this baseline as the fixed reference point for the programme's full duration, resisting re-baselining unless a major, documented programme redesign occurs.",
+      "Use this baseline's district distribution and sentiment level as the sampling and comparison target for midline and endline."
+    ]
+  },
+
+  "risks": [
+    "If midline uses different question wording or a different sample composition, comparability with this baseline will be compromised.",
+    "Because four themes are closely clustered rather than one dominant, a Theory of Change that only targets facility delivery risks missing three nearly-equally-important baseline priorities."
+  ],
+
+  "opportunities": [
+    "The closely-clustered secondary themes give this programme a well-evidenced basis for a genuinely multi-pronged, rather than single-issue, intervention design from the outset.",
+    "The favourable baseline sentiment indicates a receptive population likely to engage constructively with future survey rounds."
+  ],
+
+  "lessons_learned": "This baseline's finding that four themes cluster closely together, just behind the leading facility-delivery theme, demonstrates the value of examining the full theme distribution rather than only the single top-ranked concern when designing a programme's Theory of Change — future baseline studies in this series should continue reporting the full thematic spread, not just the leading theme."
+}

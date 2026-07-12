@@ -27,7 +27,15 @@ function requireLogin() {
   return true;
 }
 
-function logout() {
+async function logout() {
+  // V213: revoke the session server-side first so the token can't be reused,
+  // then clear local state. Navigation proceeds even if the call fails
+  // (offline / already-expired) — the token is cleared locally regardless.
+  try {
+    if (localStorage.getItem('vi_token')) {
+      await apiRequest('/api/auth/logout', { method: 'POST' });
+    }
+  } catch (_) { /* proceed to clear + redirect regardless */ }
   localStorage.removeItem('vi_token');
   localStorage.removeItem('vi_user');
   window.location.href = '/login.html';

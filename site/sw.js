@@ -3,7 +3,7 @@
 // with zero network afterwards. Must be served from the site root so its
 // scope covers the whole app.
 
-const CACHE_NAME = 'voiceinsights-enumerator-v3';
+const CACHE_NAME = 'voiceinsights-enumerator';
 const SHELL_FILES = [
   '/enumerator.html',
   '/manifest.json',

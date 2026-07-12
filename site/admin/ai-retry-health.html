@@ -11,9 +11,11 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
+<h1 class="visually-hidden">AI Retry Health — Admin Console</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
 
@@ -26,8 +28,8 @@
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:.8rem;">
         <div class="muted-note" id="arh-generated-at">Loading…</div>
         <div style="display:flex; gap:.6rem;">
-          <button class="btn btn-ghost btn-sm" id="arh-refresh-btn">↻ Refresh</button>
-          <button class="btn btn-ghost btn-sm" id="arh-export-btn">⬇ Export Health Report</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="arh-refresh-btn">↻ Refresh</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="arh-export-btn">⬇ Export Health Report</button>
         </div>
       </div>
 
@@ -159,6 +161,6 @@
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
 <script src="/assets/js/admin-button-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

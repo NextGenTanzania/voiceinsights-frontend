@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Civic and accountability-focused -- neutral toward specific political actors, but direct about institutional performance. Written for government and governance-accountability programme audiences who need specific, actionable civic feedback, not political commentary.",
+
+  "section_rules": {
+    "executive_summary": "Must separate process/responsiveness findings (e.g. complaint handling) from transparency/accountability findings (e.g. budget disclosure) explicitly -- these are different governance dimensions with different institutional owners.",
+    "discussion": "Should explain why citizens distinguishing between improving responsiveness and stagnant transparency is analytically significant -- this demonstrates citizens engaging in specific, credible civic feedback rather than blanket government approval/disapproval.",
+    "methodology": "State the administrative level surveyed (municipal, ward, regional) since governance findings are not comparable across different administrative levels without this context.",
+    "limitations": "Note that citizen-reported institutional responsiveness is perceptual and has not been independently verified against administrative complaint-resolution records, if such verification was not performed.",
+    "recommendations": "Separate responsiveness-improvement recommendations (often achievable through process/training changes) from transparency recommendations (often requiring a specific publication/disclosure commitment).",
+    "policy_implications": "Frame specifically around governance/transparency policy (e.g. budget disclosure requirements), grounded in the specific finding, not generic 'improve governance' language.",
+    "lessons_learned": "Reflect on whether citizens' ability to distinguish specific governance dimensions (rather than giving one blended trust score) demonstrates the value of open-ended civic feedback formats.",
+    "conclusion": "State clearly which governance dimension improved and which remains a gap -- avoid a single blended 'citizen trust improved' conclusion that would obscure the specific transparency finding.",
+    "annexes": "Include the specific municipal/ward boundaries surveyed, since governance accountability findings are specific to administrative jurisdiction.",
+    "evidence_style": "Cite specific, attributable citizen statements for both the responsiveness improvement and the transparency gap, giving equal evidentiary weight to both rather than emphasizing the positive finding over the gap."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["response rate", "complaint responsiveness sentiment", "budget/financial transparency perception", "institutional trust sentiment", "regional/ward governance comparison"],
+    "common_risks": ["citizen-reported responsiveness not independently verified against administrative records", "treating responsiveness improvement as evidence transparency has also improved when the data shows otherwise", "generalizing municipal-level findings to a national governance conclusion without basis"],
+    "typical_recommendations": ["specific, dated public budget publication commitment", "documentation of complaints-desk/responsiveness models as replicable templates", "separate, standing tracking of responsiveness and transparency as distinct indicators"],
+    "typical_policy_implications": ["municipal budget transparency and disclosure policy", "ward-level complaint-handling institutionalization"],
+    "typical_donor_expectations": "Governance-accountability donors expect citizen feedback to be reported with dimension-specific precision (not a blended trust score) and expect unresolved transparency gaps to be named explicitly, consistent with CHS-aligned accountability reporting."
+  },
+
+  "recommendation_categories": ["Immediate", "30-day", "90-day", "Policy", "Governance", "Institutional Strengthening"],
+
+  "forbidden_behaviors": [
+    "Never blend distinct governance dimensions (responsiveness, transparency) into a single trust-in-government score when the data shows them diverging.",
+    "Never make a partisan or politically-attributive statement about which specific officials or parties are responsible for a finding.",
+    "Never claim independent verification of citizen-reported responsiveness against administrative records unless that verification was actually performed."
+  ]
+}

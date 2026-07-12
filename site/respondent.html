@@ -9,6 +9,7 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.5rem;">
+<h1 class="visually-hidden">Survey — VoiceInsights Africa</h1>
   <div style="width:100%; max-width:420px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
       <div style="display:flex; align-items:center; gap:.6rem;">
@@ -16,8 +17,8 @@
         <span class="muted-note" id="header-label">No account needed</span>
       </div>
       <div class="lang-toggle">
-        <button data-lang="en" class="active">EN</button>
-        <button data-lang="sw">SW</button>
+        <button type="button" data-lang="en" class="active">EN</button>
+        <button type="button" data-lang="sw">SW</button>
       </div>
     </div>
 
@@ -25,8 +26,8 @@
       <h2 style="font-size:1.2rem; margin-bottom:1rem;" id="consent-title">Before we begin</h2>
       <p style="font-size:.9rem; line-height:1.6;" id="consent-text">We'd like to ask you a few questions for research purposes. Your answers are recorded and analyzed to help improve programs and services. Participation is voluntary — you can stop at any time, and your answers will only be used for this research.</p>
       <div style="display:flex; gap:.7rem; margin-top:1.3rem; flex-wrap:wrap;">
-        <button class="btn btn-primary" id="consent-yes-btn" style="flex:1; justify-content:center;">Yes, I agree to take part</button>
-        <button class="btn btn-ghost" id="consent-no-btn" style="flex:1; justify-content:center;">No, thank you</button>
+        <button type="button" class="btn btn-primary" id="consent-yes-btn" style="flex:1; justify-content:center;">Yes, I agree to take part</button>
+        <button type="button" class="btn btn-ghost" id="consent-no-btn" style="flex:1; justify-content:center;">No, thank you</button>
       </div>
     </div>
 
@@ -38,7 +39,7 @@
       <p id="instruction-text" style="font-size:.85rem;"></p>
 
       <div style="display:flex; flex-direction:column; align-items:center; gap:1rem; margin: 2rem 0;">
-        <button id="rec-btn" style="width:76px; height:76px; border-radius:50%; background:var(--accent); border:none; color:var(--accent-ink); cursor:pointer; display:flex; align-items:center; justify-content:center;" disabled>
+        <button type="button" id="rec-btn" style="width:76px; height:76px; border-radius:50%; background:var(--accent); border:none; color:var(--accent-ink); cursor:pointer; display:flex; align-items:center; justify-content:center;" disabled>
           <i data-lucide="mic" style="width:28px; height:28px;"></i>
         </button>
         <div id="rec-wave" style="min-height:28px;"></div>
@@ -46,7 +47,7 @@
         <audio id="playback" controls style="display:none; width:100%; margin-top:.5rem;"></audio>
       </div>
 
-      <button class="btn btn-primary" id="submit-btn" style="width:100%; justify-content:center;" disabled>Submit Answer</button>
+      <button type="button" class="btn btn-primary" id="submit-btn" style="width:100%; justify-content:center;" disabled>Submit Answer</button>
     </div>
 
     <p style="text-align:center; margin-top:1.5rem; font-size:.75rem; color:var(--text-dim);" id="footer-note">Your answers are stored securely and used for research purposes only.</p>
@@ -288,6 +289,6 @@
     }
   });
 </script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

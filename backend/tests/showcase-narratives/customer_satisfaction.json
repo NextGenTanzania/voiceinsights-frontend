@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This Banking & Mobile Financial Services Satisfaction Survey reached 1,000 customers across six counties in Kenya — Kisumu, Mombasa, Nairobi, Eldoret, Kisii, and Nakuru — with full completion, providing a board-level view of customer experience across both traditional branch banking and mobile financial services.\n\nSentiment is favourable (55.1%). Speed of service and complaints handling are jointly the most-cited themes (4 mentions each), followed by trust, branch experience, and fees (3 each), with customer support and recommendation intent close behind. This spread — no single theme dominating overwhelmingly — indicates customer experience concerns are distributed across the service journey rather than concentrated in one specific failure point.\n\nCounty coverage is broad and reasonably balanced (Kisumu 177 to Nakuru 141), supporting confident use of these findings in quarterly Board-level customer experience reporting.",
+
+  "key_findings": [
+    "Speed of service and complaints handling are tied as the leading concerns (4 mentions each) — customers want both faster transactions and faster resolution when something goes wrong, a dual priority for operations.",
+    "Trust, branch experience, and fees form a closely-clustered second tier (3 mentions each) — no single one of these dominates, meaning a Board response addressing only fees, for example, would leave two equally-weighted concerns unaddressed.",
+    "Customer support and recommendation intent (mentioned but slightly narrower) suggest advocacy-readiness is present but not yet a leading driver of overall sentiment.",
+    "The near-even spread across five to six distinct themes indicates customer experience issues are distributed across the full service journey (speed, complaints, trust, branch, fees) rather than concentrated in one broken touchpoint.",
+    "County-level coverage across both urban (Nairobi, Mombasa) and secondary markets (Kisii, Eldoret) supports using this data for national, not single-market, customer experience strategy.",
+    "Recommendation intent appearing organically in feedback, even at a narrower frequency, signals an opportunity to formalize NPS tracking going forward."
+  ],
+
+  "discussion": "The absence of one dominant complaint — with five distinct themes appearing at closely comparable frequency — means this Board cannot address customer satisfaction with a single, narrow fix. Speed of service and complaints handling being jointly highest suggests the customer journey's two most friction-prone moments are transaction execution and problem resolution, both operational (not purely digital-product) concerns. The closely-clustered second tier (trust, branch experience, fees) further reinforces that customer experience here is a multi-dimensional challenge requiring coordinated attention across operations, branch management, and pricing strategy simultaneously, rather than a single-department fix.",
+
+  "conclusions": "This survey confirms customer experience concerns are genuinely distributed across the service journey — speed and complaints handling as joint leading priorities, with trust, branch experience, and fees closely following. The Board should treat this as evidence for a coordinated, cross-functional customer experience initiative rather than delegating to a single department to fix one dimension in isolation.",
+
+  "recommendations": {
+    "immediate": [
+      "Present the tied speed-of-service and complaints-handling finding to the Board as a joint operational priority, avoiding a single-issue framing.",
+      "Introduce a formal Net Promoter Score question in the next survey round to convert the organically-emerging recommendation-intent signal into a trackable metric."
+    ],
+    "medium_term": [
+      "Conduct a service-journey mapping exercise covering all five identified themes together (speed, complaints, trust, branch, fees), rather than addressing them as separate, uncoordinated initiatives.",
+      "Benchmark complaints-handling turnaround time specifically, given its tie with speed of service as the leading concern."
+    ],
+    "long_term": [
+      "Establish all five themes (speed, complaints, trust, branch experience, fees) as separately tracked quarterly customer experience indicators, given their closely-clustered, multi-dimensional nature.",
+      "Build a coordinated cross-functional customer experience governance structure, since no single department owns all five identified concern areas."
+    ]
+  },
+
+  "risks": [
+    "If the Board addresses only one of the closely-tied concerns (e.g., fees alone), the other equally-weighted concerns (speed, complaints handling, trust, branch experience) may continue to depress overall satisfaction.",
+    "Without coordinated cross-functional ownership, distributed customer experience issues risk each being treated as someone else's responsibility."
+  ],
+
+  "opportunities": [
+    "The organically-emerging recommendation-intent signal, even at a narrower frequency, indicates latent customer advocacy that a formal NPS programme could convert into measurable, trackable growth.",
+    "Because concerns are distributed rather than concentrated in one failure point, a coordinated, moderate investment across several fronts could plausibly move overall sentiment meaningfully, rather than requiring one large single investment."
+  ],
+
+  "lessons_learned": "Presenting five distinct, closely-clustered themes rather than forcing a single top-priority ranking gives the Board a more accurate, if less simple, basis for resource allocation than a survey design that would have asked customers to rank a single top concern. Future customer satisfaction surveys in this series should continue to let genuinely distributed concerns surface as such."
+}

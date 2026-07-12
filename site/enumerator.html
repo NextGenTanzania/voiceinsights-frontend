@@ -17,6 +17,7 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body style="min-height:100vh; padding:1.25rem;">
+<h1 class="visually-hidden">Enumerator App — VoiceInsights Africa</h1>
   <div style="max-width:480px; margin:0 auto;">
 
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem;">
@@ -35,14 +36,14 @@
         <div class="muted-note" id="campaign-note" style="margin-top:.3rem;"></div>
       </div>
 
-      <button class="btn btn-primary" id="new-household-btn" style="width:100%; justify-content:center; margin-bottom:1rem;" disabled>
+      <button type="button" class="btn btn-primary" id="new-household-btn" style="width:100%; justify-content:center; margin-bottom:1rem;" disabled>
         + Start New Household
       </button>
 
       <div class="section-head"><h2 style="font-size:1rem;">Pending Sync (<span id="pending-count">0</span>)</h2></div>
       <div id="pending-list" style="margin-bottom:1rem;"></div>
 
-      <button class="btn btn-ghost" id="sync-btn" style="width:100%; justify-content:center;" disabled>
+      <button type="button" class="btn btn-ghost" id="sync-btn" style="width:100%; justify-content:center;" disabled>
         ⬆ Sync Now
       </button>
       <div id="sync-log" class="muted-note" style="margin-top:.75rem; white-space:pre-line;"></div>
@@ -57,17 +58,17 @@
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.6rem;">
           <span class="muted-note" id="rec-progress-label">Question 1 of 1</span>
-          <button class="btn btn-ghost btn-sm" id="cancel-household-btn">Cancel</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="cancel-household-btn">Cancel</button>
         </div>
         <div class="progress" style="margin-bottom:1.2rem;"><span id="rec-progress-bar" style="width:0%"></span></div>
 
         <label>Household Label (optional)</label>
-        <input id="household-label" placeholder="e.g. Mama Amina, Kaya #14" style="margin-bottom:1.2rem;">
+        <input aria-label="e.g. Mama Amina, Kaya #14" id="household-label" placeholder="e.g. Mama Amina, Kaya #14" style="margin-bottom:1.2rem;">
 
         <h2 id="rec-question-text" style="font-size:1.2rem; line-height:1.35;">Loading question…</h2>
 
         <div style="display:flex; flex-direction:column; align-items:center; gap:1rem; margin: 1.8rem 0;">
-          <button id="rec-btn" style="width:76px; height:76px; border-radius:50%; background:var(--accent); border:none; color:var(--accent-ink); cursor:pointer; display:flex; align-items:center; justify-content:center;">
+          <button type="button" id="rec-btn" style="width:76px; height:76px; border-radius:50%; background:var(--accent); border:none; color:var(--accent-ink); cursor:pointer; display:flex; align-items:center; justify-content:center;">
             <i data-lucide="mic" style="width:28px; height:28px;"></i>
           </button>
           <div id="rec-wave" style="min-height:28px;"></div>
@@ -83,7 +84,7 @@
           <img id="photo-preview" alt="Photo preview" style="display:none; max-width:120px; max-height:120px; border-radius:8px; margin-top:.5rem;">
         </div>
 
-        <button class="btn btn-primary" id="save-answer-btn" style="width:100%; justify-content:center;" disabled>Save & Next</button>
+        <button type="button" class="btn btn-primary" id="save-answer-btn" style="width:100%; justify-content:center;" disabled>Save & Next</button>
       </div>
     </div>
 
@@ -185,7 +186,7 @@
           if (versionChanged && pendingCount > 0) {
             questions = cached.questions; // keep using the old cached set for now — safe, still valid for pending syncs
             campaignNameEl.textContent = cached.campaignName;
-            campaignNoteEl.innerHTML = `⚠️ Project updated on the server, but you have <b>${pendingCount} pending interview(s)</b> using the old questions. <button class="btn btn-ghost btn-sm" id="force-update-btn" style="padding:.2em .6em; font-size:.75rem;">Sync first, then tap here to update</button>`;
+            campaignNoteEl.innerHTML = `⚠️ Project updated on the server, but you have <b>${pendingCount} pending interview(s)</b> using the old questions. <button type="button" class="btn btn-ghost btn-sm" id="force-update-btn" style="padding:.2em .6em; font-size:.75rem;">Sync first, then tap here to update</button>`;
             newHouseholdBtn.disabled = false;
             const forceBtn = document.getElementById('force-update-btn');
             if (forceBtn) forceBtn.addEventListener('click', async () => {
@@ -451,6 +452,6 @@
     updateNetBadge();
   });
 </script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

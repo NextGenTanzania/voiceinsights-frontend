@@ -1,6 +1,7 @@
 name = "voiceinsights-api"
 main = "src/index.js"
 compatibility_date = "2026-06-01"
+compatibility_flags = ["nodejs_compat"]
 
 # ---- D1 Database ----
 [[d1_databases]]
@@ -13,17 +14,46 @@ database_id = "f317a162-ccd8-44ab-8e83-cc931f6b65cb"
 binding = "AUDIO_BUCKET"
 bucket_name = "voiceinsights-audio"
 
+# ---- Cron Trigger: advances any in-progress Secret Vault key rotation by
+# one small batch every 5 minutes. This is what lets rotation scale to
+# thousands of secrets without a single request ever running too long. ----
+[triggers]
+crons = ["*/5 * * * *"]
+
 # ---- Non-secret variables ----
 [vars]
-DEFAULT_ORG_ID = "org_demo"
-DEFAULT_CAMPAIGN_ID = "camp_default"
-DEFAULT_QUESTION_ID = "q_default"
-SITE_URL = "https://voiceinsights-frontend.pages.dev"
+ENVIRONMENT = "production"
+APP_VERSION = "1.0.0"
+DEFAULT_ORG_ID = ""
+DEFAULT_CAMPAIGN_ID = ""
+DEFAULT_QUESTION_ID = ""
+SITE_URL = "https://voiceinsightsafrica.com"
+# ---- V212 Security Hardening (see src/security-layer.js) ----
+# Comma-separated exact origins allowed to call the API from a browser.
+# SITE_URL (+ its www. variant) is always allowed automatically.
+ALLOWED_ORIGINS = ""
+# Set to "true" in production to disable the localhost / *.pages.dev /
+# *.workers.dev convenience defaults and allow ONLY the origins above.
+STRICT_CORS = "true"
+ALLOW_LEGACY_SESSIONS = "false"
+# Optional ISO timestamp used only during a controlled legacy-token migration.
+LEGACY_SESSION_CUTOFF = ""
 STRIPE_PRICE_STARTER = ""
 STRIPE_PRICE_PROFESSIONAL = ""
 STRIPE_PRICE_ENTERPRISE = ""
 NOTIFY_FROM_EMAIL = "VoiceInsights Africa <onboarding@resend.dev>"
 NOTIFY_TO_EMAIL = "info@voiceinsightsafrica.com"
+# V213: exact public base URL Twilio signs against, if the Worker sits behind
+# an extra proxy/custom domain where forwarded headers aren't reliable. Leave
+# blank to auto-reconstruct from X-Forwarded-Proto/Host. e.g.
+# TWILIO_PUBLIC_BASE_URL = "https://voiceinsights-api.kitentyatsnp.workers.dev"
+TWILIO_PUBLIC_BASE_URL = "https://api.voiceinsightsafrica.com"
+# AI Retry Processor (Sprint 1.2, Task 1.2.2) — all optional, sensible
+# defaults apply in code if these are absent, so this section can be
+# omitted entirely without breaking anything.
+AI_RETRY_MAX_ATTEMPTS = "5"
+AI_RETRY_BASE_BACKOFF_MINUTES = "2"
+AI_RETRY_MAX_BACKOFF_MINUTES = "60"
 
 # ---- Secrets (do NOT put real values here — set via `wrangler secret put`) ----
 # JWT_SECRET          -> wrangler secret put JWT_SECRET
@@ -36,3 +66,116 @@ NOTIFY_TO_EMAIL = "info@voiceinsightsafrica.com"
 # STRIPE_SECRET_KEY      -> wrangler secret put STRIPE_SECRET_KEY
 # STRIPE_WEBHOOK_SECRET  -> wrangler secret put STRIPE_WEBHOOK_SECRET
 # RESEND_API_KEY         -> wrangler secret put RESEND_API_KEY
+
+# ============================================================
+# ENTERPRISE RELEASE 2— REAL CLOUDFLARE QUEUES
+# ============================================================
+[[queues.producers]]
+binding = "OPERATIONS_QUEUE"
+queue = "voiceinsights-operations"
+
+[[queues.producers]]
+binding = "OPERATIONS_DLQ"
+queue = "voiceinsights-operations-dlq"
+
+[[queues.consumers]]
+queue = "voiceinsights-operations"
+max_batch_size = 10
+max_batch_timeout = 5
+max_retries = 5
+dead_letter_queue = "voiceinsights-operations-dlq"
+
+# Production workload queues. D1 remains the durable job/audit registry; these
+# bindings are the transport. Each queue uses the shared hardened batch consumer
+# and a real dead-letter queue.
+[[queues.producers]]
+binding = "AI_QUEUE"
+queue = "voiceinsights-ai"
+[[queues.producers]]
+binding = "TRANSCRIPTION_QUEUE"
+queue = "voiceinsights-transcription"
+[[queues.producers]]
+binding = "TRANSLATION_QUEUE"
+queue = "voiceinsights-translation"
+[[queues.producers]]
+binding = "WHATSAPP_QUEUE"
+queue = "voiceinsights-whatsapp"
+[[queues.producers]]
+binding = "SMS_QUEUE"
+queue = "voiceinsights-sms"
+[[queues.producers]]
+binding = "VOICE_QUEUE"
+queue = "voiceinsights-voice"
+[[queues.producers]]
+binding = "REPORT_QUEUE"
+queue = "voiceinsights-reports"
+[[queues.producers]]
+binding = "EXPORT_QUEUE"
+queue = "voiceinsights-exports"
+[[queues.producers]]
+binding = "NOTIFICATION_QUEUE"
+queue = "voiceinsights-notifications"
+[[queues.producers]]
+binding = "OFFLINE_SYNC_QUEUE"
+queue = "voiceinsights-offline-sync"
+
+[[queues.consumers]]
+queue = "voiceinsights-ai"
+max_batch_size = 10
+max_batch_timeout = 5
+max_retries = 5
+dead_letter_queue = "voiceinsights-operations-dlq"
+[[queues.consumers]]
+queue = "voiceinsights-transcription"
+max_batch_size = 5
+max_batch_timeout = 5
+max_retries = 5
+dead_letter_queue = "voiceinsights-operations-dlq"
+[[queues.consumers]]
+queue = "voiceinsights-translation"
+max_batch_size = 10
+max_batch_timeout = 5
+max_retries = 5
+dead_letter_queue = "voiceinsights-operations-dlq"
+[[queues.consumers]]
+queue = "voiceinsights-whatsapp"
+max_batch_size = 20
+max_batch_timeout = 3
+max_retries = 5
+dead_letter_queue = "voiceinsights-operations-dlq"
+[[queues.consumers]]
+queue = "voiceinsights-sms"
+max_batch_size = 20
+max_batch_timeout = 3
+max_retries = 5
+dead_letter_queue = "voiceinsights-operations-dlq"
+[[queues.consumers]]
+queue = "voiceinsights-voice"
+max_batch_size = 10
+max_batch_timeout = 3
+max_retries = 5
+dead_letter_queue = "voiceinsights-operations-dlq"
+[[queues.consumers]]
+queue = "voiceinsights-reports"
+max_batch_size = 5
+max_batch_timeout = 5
+max_retries = 5
+dead_letter_queue = "voiceinsights-operations-dlq"
+[[queues.consumers]]
+queue = "voiceinsights-exports"
+max_batch_size = 5
+max_batch_timeout = 5
+max_retries = 5
+dead_letter_queue = "voiceinsights-operations-dlq"
+[[queues.consumers]]
+queue = "voiceinsights-notifications"
+max_batch_size = 20
+max_batch_timeout = 3
+max_retries = 5
+dead_letter_queue = "voiceinsights-operations-dlq"
+[[queues.consumers]]
+queue = "voiceinsights-offline-sync"
+max_batch_size = 20
+max_batch_timeout = 5
+max_retries = 5
+dead_letter_queue = "voiceinsights-operations-dlq"

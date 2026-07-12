@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This Primary Education Quality Assessment surveyed 1,000 parents and guardians across six counties in Kenya — Nairobi, Eldoret, Mombasa, Kisumu, Nakuru, and Garissa — with full completion, evaluating classroom conditions and learning quality against UNESCO/UNICEF standards and SDG 4 (Quality Education).\n\nSentiment is positive overall (54.7%), with classroom overcrowding and digital learning access tied as the leading concerns (5 mentions each) — an important pairing, since overcrowded classrooms and absent digital tools compound each other's negative effect on individual attention. Attendance (4 mentions) and parental engagement / teacher availability (3 each) round out the leading themes, while girls' participation and school feeding remain present but secondary concerns.\n\nGeographic coverage spans all six counties with reasonable balance (Nairobi 190 to Garissa 129), and demographic representation across age brackets supports confident county-level comparison, including Garissa, a region where education access data is often thinner than in urban centers.",
+
+  "key_findings": [
+    "Classroom overcrowding and digital learning access are statistically tied as the leading concerns — these compound each other, since large classes make individual digital-tool access even harder to provide.",
+    "Attendance concerns (4 mentions) appear alongside, but analytically distinct from, girls' participation (2 mentions) — attendance is a broader issue than the gender-specific participation gap, and both require separate tracking.",
+    "Parental engagement and teacher availability are tied as secondary concerns (3 mentions each) — parents want both more visibility into their children's progress and more consistent teaching staff.",
+    "School feeding, while only 2 mentions, was specifically credited with keeping children in class through the afternoon where it operates — a concrete, attributable finding worth protecting.",
+    "Garissa's inclusion with a meaningful response share (129) extends this assessment's coverage into a historically under-surveyed region relative to Kenya's more urban counties.",
+    "Gender balance and full county coverage support this assessment's use as a credible basis for both national SDG 4 reporting and county-level education planning."
+  ],
+
+  "discussion": "The pairing of classroom overcrowding with limited digital learning access is the most actionable structural finding here: a school that is both overcrowded and under-resourced digitally faces a compounded quality gap that neither a staffing fix alone nor a technology donation alone would fully resolve. Attendance and girls' participation, while related, should be tracked as distinct indicators — treating them as one metric would obscure whether a specific gender-targeted intervention is needed on top of general attendance improvement. The school feeding finding is a rare case of a single, low-cost intervention with a clearly attributed behavioral outcome (attendance), and is worth explicit protection and possible expansion.",
+
+  "conclusions": "This assessment identifies a compound classroom-conditions gap (overcrowding plus limited digital access) as the top priority, with attendance and parental engagement as important secondary areas, and confirms school feeding as a proven, low-cost attendance intervention. Girls' participation, while secondary in this round, should remain a separately tracked SDG 4/5-relevant indicator rather than being folded into general attendance figures.",
+
+  "recommendations": {
+    "immediate": [
+      "Map classroom-to-pupil ratios against digital-resource availability at the school level to confirm whether overcrowding and digital-access gaps are concentrated in the same schools (compounding) or distributed separately.",
+      "Document the school feeding program's attendance impact with specific data, to support a funding case for expansion to schools currently without it."
+    ],
+    "medium_term": [
+      "Pilot a low-cost shared-device or rotation model for digital learning access in the most overcrowded schools, rather than requiring one-device-per-pupil investment.",
+      "Introduce a simple, regular parent-communication mechanism (e.g. SMS-based progress updates) to address the parental engagement gap without requiring additional in-person meetings."
+    ],
+    "long_term": [
+      "Track girls' participation as a distinct SDG 4/5 indicator, separate from general attendance, given evidence it is a specific, secondary concern rather than a symptom of the broader attendance issue.",
+      "Use this assessment's county coverage, including Garissa, as the baseline sampling framework for future rounds to maintain comparability in historically under-surveyed regions."
+    ]
+  },
+
+  "risks": [
+    "If classroom overcrowding and digital-access gaps are addressed as separate initiatives without confirming whether they compound at the same schools, resources may be misallocated relative to where the combined effect is worst.",
+    "Without continued funding, the school feeding program's demonstrated attendance benefit could be lost in schools where it currently operates."
+  ],
+
+  "opportunities": [
+    "The school feeding program's clear, low-cost attendance impact is a strong, specific case for continued or expanded donor and government funding.",
+    "A shared-device digital learning model in overcrowded schools could address two leading concerns (overcrowding's effect on attention, and limited digital access) with a single, moderately-costed intervention."
+  ],
+
+  "lessons_learned": "Extending this round's coverage into Garissa, alongside more frequently-surveyed urban counties, demonstrated that meaningful education-access data can be collected in less commonly reached regions using the same methodology — future assessments should continue prioritizing this kind of geographic inclusion rather than defaulting to urban-only samples."
+}

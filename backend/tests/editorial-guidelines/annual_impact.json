@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Comprehensive, synthesizing, and donor-facing -- the most complete narrative register in this report family. Annual Impact writing must weave together the full year's evidence (quarterly trends, routine monitoring, the annual round itself) into a single, well-substantiated synthesis, not simply report the annual round's data in isolation.",
+
+  "section_rules": {
+    "executive_summary": "Must synthesize across the full reporting year, not just the annual round's own data -- explicitly note where this year's quarterly and monitoring touchpoints corroborate or complicate the annual finding.",
+    "discussion": "Should explicitly distinguish durable, year-long trends (confirmed by consistency across multiple touchpoints during the year) from single-point annual-round findings -- this distinction is the core analytical value an annual synthesis adds beyond a single survey round.",
+    "methodology": "Note this is the year's largest/most comprehensive sample and describe how it relates to (validates, extends) the year's other monitoring touchpoints.",
+    "limitations": "State clearly which findings are confirmed by multiple touchpoints during the year versus which are annual-round-only observations not yet cross-validated.",
+    "recommendations": "Should explicitly build on the full year's evidence -- e.g. 'given this finding's persistence across Q2, Q3, and this annual round' -- rather than reading as if based on a single round.",
+    "policy_implications": "This is the report type where policy implications carry the most evidentiary weight, given the full-year evidence base -- policy recommendations here should be the most confidently stated in the entire report family.",
+    "lessons_learned": "Reflect on the value of consistent methodology and question wording across quarterly and annual touchpoints, since this consistency is what enables the annual synthesis's strongest claims.",
+    "conclusion": "Must state both the year's central achievement (with full-year evidentiary support) and the year's clearest unresolved item (with its persistence across the year explicitly noted).",
+    "annexes": "Include a full-year data summary showing how quarterly/monitoring touchpoints and the annual round align, since this cross-referencing is the annual report's distinguishing evidentiary feature.",
+    "evidence_style": "Whenever possible, cite corroborating evidence from more than one touchpoint during the year (e.g. 'also observed in Q3 monitoring') to give annual claims their full evidentiary weight -- this is what distinguishes an annual synthesis from a single large survey round."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["full-year theme ranking with cross-touchpoint corroboration", "year-on-year sentiment trend", "persistence/resolution status of items flagged during the year", "national/regional coverage comprehensiveness"],
+    "common_risks": ["treating the annual round as a standalone data point rather than synthesizing the full year's evidence", "double-counting the same underlying issue as if it were multiple independent findings across different reports", "overclaiming policy-level conclusions not actually supported by full-year consistency"],
+    "typical_recommendations": ["close out any item confirmed persistent across the full year with a specific resolution plan before the next annual cycle", "formalize next year's Theory of Change around the year's clearest, most evidenced priority", "maintain quarterly-to-annual methodological consistency as a standing practice"],
+    "typical_policy_implications": ["the strongest, most evidence-backed policy recommendations in the report family, given the full-year evidence base"],
+    "typical_donor_expectations": "Donors reviewing annual impact reports expect the SYNTHESIS value specifically -- a report that simply presents the annual round's numbers without cross-referencing the year's other data sources under-delivers relative to what an annual report should provide."
+  },
+
+  "recommendation_categories": ["Strategic", "Policy", "Annual", "Institutional Strengthening", "Sustainability", "Governance"],
+
+  "forbidden_behaviors": [
+    "Never present the annual round in isolation without attempting to cross-reference it against the year's quarterly/monitoring data where available.",
+    "Never claim a finding is a 'durable annual trend' without evidence of consistency across multiple touchpoints during the year.",
+    "Never carry an unresolved item into the next annual report without explicitly noting its multi-cycle persistence and the accountability implication of that persistence."
+  ]
+}

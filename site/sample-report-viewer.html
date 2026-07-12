@@ -180,13 +180,14 @@
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <nav class="pub-nav no-print">
   <div class="pub-nav-row1">
     <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
       <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
       <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
     </a>
-    <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
     <div class="pub-nav-collapse pub-nav-row1-right">
       <a href="/sample-reports.html" class="btn btn-ghost btn-sm">← Report Library</a>
       <a href="/contact.html" class="btn btn-primary btn-sm">Book Demo</a>
@@ -196,7 +197,7 @@
 
 <div class="viewer-shell" style="max-width:960px; margin:0 auto; padding:2rem 1.5rem;">
   <aside class="report-nav-rail no-print"><b style="color:var(--accent);">Report Standard</b><p class="muted-note">International sample viewer with executive, donor, policy, infographic and board-ready outputs.</p><a href="#executive-snapshot" class="muted-note">Executive Snapshot</a><br><a href="#sample-standard" class="muted-note">Sample Standard</a><br><a href="#trust-layer" class="muted-note">Trust Layer</a><br><a href="#report-body" class="muted-note">Core Report</a></aside>
-  <main class="viewer-main">
+  <main id="main-content" class="viewer-main">
 
   <div class="r-section no-print" style="background:#3a2a0a; border:1px solid var(--accent); text-align:center;">
     <b>📋 Demonstration Report</b> — Fictional sample data for product evaluation. No real client or respondent data is shown.
@@ -205,25 +206,25 @@
   <div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:.6rem;">
     <div class="muted-note" id="report-status-line">Loading…</div>
     <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-      <button class="btn btn-primary btn-sm" id="export-pdf-btn">🖨 Print-ready report</button>
-      <button class="btn btn-ghost btn-sm" id="export-pptx-btn">📊 Open presentation-ready board deck</button>
+      <button type="button" class="btn btn-primary btn-sm" id="export-pdf-btn">🖨 Print-ready report</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="export-pptx-btn">📊 Open presentation-ready board deck</button>
     </div>
   </div>
 
   <div class="no-print" style="margin:.6rem 0 1.5rem; padding:1rem; background:var(--surface); border-radius:10px;">
     <div class="muted-note" style="font-size:.78rem; margin-bottom:.6rem; font-weight:600;">Visual Report Downloads — each output uses the same verified evidence package:</div>
     <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="executive_summary" data-ext="txt">Open executive intelligence report</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="management_report" data-ext="txt">Open management action report</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="government_report" data-ext="txt">Open government cabinet brief</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="one_page_executive_brief" data-ext="txt">Open one-page executive brief</button>
-      <button class="btn btn-ghost btn-sm" id="tech-report-btn">Print-ready technical report</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="donor_brief" data-ext="txt">Open donor impact report</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="policy_brief" data-ext="txt">Open policy brief</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="infographic" data-ext="txt">Open infographic report</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="statistical_annex" data-ext="txt">Open statistical annex</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="technical_annex" data-ext="txt">Open technical annex</button>
-      <button class="btn btn-ghost btn-sm format-download-btn" data-format="board_deck" data-ext="txt">Open presentation-ready board deck</button>
+      <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="executive_summary" data-ext="txt">Open executive intelligence report</button>
+      <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="management_report" data-ext="txt">Open management action report</button>
+      <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="government_report" data-ext="txt">Open government cabinet brief</button>
+      <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="one_page_executive_brief" data-ext="txt">Open one-page executive brief</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="tech-report-btn">Print-ready technical report</button>
+      <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="donor_brief" data-ext="txt">Open donor impact report</button>
+      <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="policy_brief" data-ext="txt">Open policy brief</button>
+      <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="infographic" data-ext="txt">Open infographic report</button>
+      <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="statistical_annex" data-ext="txt">Open statistical annex</button>
+      <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="technical_annex" data-ext="txt">Open technical annex</button>
+      <button type="button" class="btn btn-ghost btn-sm format-download-btn" data-format="board_deck" data-ext="txt">Open presentation-ready board deck</button>
     </div>
   </div>
 
@@ -403,13 +404,13 @@
 
         <section class="vrds-panel no-print" id="vrds-assistant">
           <div class="vrds-panel-title"><div><h2>Decision Support Assistant</h2><p>Decision Support Assistant uses the verified report evidence package.</p></div></div>
-          <div class="vrds-assistant-actions">${assistant.map(a => `<button class="vrds-assistant-button" data-action="${escapeHtml(a.id)}">${escapeHtml(a.label)}</button>`).join('')}</div>
+          <div class="vrds-assistant-actions">${assistant.map(a => `<button type="button" class="vrds-assistant-button" data-action="${escapeHtml(a.id)}">${escapeHtml(a.label)}</button>`).join('')}</div>
           <div id="vrds-assistant-output" class="assistant-output">Choose an action to prepare a board, donor, minister or evidence-ready summary.</div>
         </section>
 
         <section class="vrds-panel no-print" id="vrds-export-toolbar">
           <div class="vrds-panel-title"><div><h2>Visual Report Downloads</h2><p>Export previews are quality-gated and prepared from the same report evidence package.</p></div></div>
-          <div class="vrds-format-toolbar">${formats.map(f => `<button title="${escapeHtml(f.export_note || f.export || 'Export preview')}" onclick="downloadFormat('${escapeHtml(f.key)}','txt')">${escapeHtml(f.label)}</button>`).join('')}</div>
+          <div class="vrds-format-toolbar">${formats.map(f => `<button type="button" title="${escapeHtml(f.export_note || f.export || 'Export preview')}" onclick="downloadFormat('${escapeHtml(f.key)}','txt')">${escapeHtml(f.label)}</button>`).join('')}</div>
         </section>
       `;
       target.querySelectorAll('.vrds-assistant-button').forEach(btn => {
@@ -430,7 +431,7 @@
   async function loadPhase20Experience() {
     const target = document.getElementById('phase20-container');
     try {
-      const res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/experience-v20`);
+      const res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/experience`);
       const d = await res.json();
       if (!res.ok) throw new Error(d.error || `HTTP ${res.status}`);
       const brief = d.one_page_executive_brief || {};
@@ -496,7 +497,7 @@
         <section class="phase20-panel no-print">
           <h2>Report Assistant Actions</h2>
           <p class="muted-note">Report assistant outputs are prepared from this report’s verified intelligence package.</p>
-          <div class="phase20-matrix">${assistant.map(a => `<button class="assistant-action" data-action="${escapeHtml(a.id)}">${escapeHtml(a.label)}</button>`).join('')}</div>
+          <div class="phase20-matrix">${assistant.map(a => `<button type="button" class="assistant-action" data-action="${escapeHtml(a.id)}">${escapeHtml(a.label)}</button>`).join('')}</div>
           <div id="assistant-output" class="assistant-output">Select an action to generate a board, donor, minister or evidence-ready summary.</div>
         </section>
       `;
@@ -517,7 +518,7 @@
 
   async function loadTrustV19() {
     try {
-      const d = await (await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/trust-v19`)).json();
+      const d = await (await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/trust`)).json();
       const gate = d.report_quality_gate || {};
       const verification = d.ai_verification || {};
       const evidence = d.evidence_traceability || [];
@@ -557,7 +558,7 @@
 
   async function loadIntelligenceOS() {
     try {
-      const d = await (await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/studio-v7`)).json();
+      const d = await (await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/studio`)).json();
       const studio = d.report_studio || {};
       const ios = d.intelligence_os_v7 || {};
       const snap = studio.executive_snapshot || {};
@@ -851,8 +852,8 @@
 
   async function fetchV200Suite(reportId) {
     try {
-      let res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/international-reporting-suite-v200`);
-      if (!res.ok) res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/ai-report-intelligence-v190`);
+      let res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/international-reporting-suite`);
+      if (!res.ok) res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/ai-report-intelligence`);
       return res.ok ? await res.json() : null;
     } catch (_) { return null; }
   }
@@ -871,7 +872,7 @@
       ['Decisions', 'Decision Matrix', atlas.find(a => /decision/i.test(a.title || a.id || ''))?.decision_implication || 'Prioritised actions by impact, effort, owner and timeline.', atlas.find(a => /decision/i.test(a.title || a.id || ''))?.components || []],
       ['Timeline', 'Implementation Roadmap', atlas.find(a => /roadmap|timeline/i.test(a.title || a.id || ''))?.decision_implication || 'Sequence recommendations into accountable follow-up.', atlas.find(a => /roadmap|timeline/i.test(a.title || a.id || ''))?.components || []]
     ];
-    return `<div class="v203-mobile-reader" id="v203-mobile-reader"><h3>Mobile Infographic Reader</h3><p class="muted-note">Swipe or tap sections. Each view is optimised for phone and tablet reading.</p><div class="v203-tabs">${slides.map((s,i)=>`<button class="v203-tab ${i===0?'active':''}" data-slide="${i}">${escapeHtml(s[0])}</button>`).join('')}</div><div class="v203-story">${slides.map((s,i)=>`<article class="v203-slide ${i===0?'active':''}" data-slide-panel="${i}"><h3>${escapeHtml(s[1])}</h3><div class="v203-readmore">${escapeHtml(s[2])}</div><button class="v203-more-btn" type="button">Read more</button><div class="v203-visual">${escapeHtml(s[1])}</div>${s[0]==='SDG'?`<div class="v203-sdg-scroller">${(s[3]||[]).slice(0,8).map(g=>`<div class="v203-sdg" style="background:${escapeHtml(g.color || '#19486A')}"><strong>${escapeHtml(String(g.label||'').replace('SDG ',''))}</strong><span>${escapeHtml(g.value || 'SDG alignment')}</span></div>`).join('')}</div>`:`<div class="v203-metric-grid">${(s[3]||[]).slice(0,4).map(c=>`<div class="v203-metric"><b>${escapeHtml(c.value ?? c.n ?? c.score ?? c.label ?? '—')}</b><span>${escapeHtml(c.label || c.axis || c.title || c.interpretation || c.decision || '')}</span></div>`).join('')}</div>`}</article>`).join('')}</div><h3>Board / Tablet Cards</h3><div class="v203-board-strip">${products.slice(0,5).map(p=>`<div class="v203-board-card"><b>${escapeHtml(p.title || 'Report product')}</b><p>${escapeHtml(p.narrative || p.audience || 'Board-ready publication product.')}</p></div>`).join('')}</div></div>`;
+    return `<div class="v203-mobile-reader" id="v203-mobile-reader"><h3>Mobile Infographic Reader</h3><p class="muted-note">Swipe or tap sections. Each view is optimised for phone and tablet reading.</p><div class="v203-tabs">${slides.map((s,i)=>`<button type="button" class="v203-tab ${i===0?'active':''}" data-slide="${i}">${escapeHtml(s[0])}</button>`).join('')}</div><div class="v203-story">${slides.map((s,i)=>`<article class="v203-slide ${i===0?'active':''}" data-slide-panel="${i}"><h3>${escapeHtml(s[1])}</h3><div class="v203-readmore">${escapeHtml(s[2])}</div><button class="v203-more-btn" type="button">Read more</button><div class="v203-visual">${escapeHtml(s[1])}</div>${s[0]==='SDG'?`<div class="v203-sdg-scroller">${(s[3]||[]).slice(0,8).map(g=>`<div class="v203-sdg" style="background:${escapeHtml(g.color || '#19486A')}"><strong>${escapeHtml(String(g.label||'').replace('SDG ',''))}</strong><span>${escapeHtml(g.value || 'SDG alignment')}</span></div>`).join('')}</div>`:`<div class="v203-metric-grid">${(s[3]||[]).slice(0,4).map(c=>`<div class="v203-metric"><b>${escapeHtml(c.value ?? c.n ?? c.score ?? c.label ?? '—')}</b><span>${escapeHtml(c.label || c.axis || c.title || c.interpretation || c.decision || '')}</span></div>`).join('')}</div>`}</article>`).join('')}</div><h3>Board / Tablet Cards</h3><div class="v203-board-strip">${products.slice(0,5).map(p=>`<div class="v203-board-card"><b>${escapeHtml(p.title || 'Report product')}</b><p>${escapeHtml(p.narrative || p.audience || 'Board-ready publication product.')}</p></div>`).join('')}</div></div>`;
   }
 
   function activateV203MobileReader() {
@@ -1050,17 +1051,17 @@
 
   async function ensureV19ExportAllowed() {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/trust-v19`);
+      const res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/trust`);
       const trust = await res.json();
       const allowed = trust?.phase19?.export_allowed !== false && trust?.ai_verification?.export_allowed !== false;
       if (!res.ok || !allowed) {
         const msg = trust?.error || 'Export preview is unavailable because this report has not passed quality checks.';
-        showToast ? showToast(msg, 'error') : alert(msg);
+        showToast ? showToast(msg, 'error') : console.error(msg);
         return false;
       }
       return true;
     } catch (e) {
-      showToast ? showToast('Could not verify report export readiness: ' + e.message, 'error') : alert(e.message);
+      showToast ? showToast('Could not verify report export readiness: ' + e.message, 'error') : console.error(e.message);
       return false;
     }
   }
@@ -1071,8 +1072,8 @@
     try {
       const [formatRes, v190Res, v200Res] = await Promise.all([
         fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/format/${formatName}`),
-        fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/ai-report-intelligence-v190`),
-        fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/international-reporting-suite-v200`)
+        fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/ai-report-intelligence`),
+        fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/international-reporting-suite`)
       ]);
       const data = await formatRes.json();
       const v190 = v190Res.ok ? await v190Res.json() : {};
@@ -1092,7 +1093,7 @@
         a.href = url; a.download = `${formatName}-visual-report-${reportId}.html`;
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
       }
-    } catch (e) { showToast ? showToast('Could not prepare this visual report: ' + e.message, 'error') : alert('Could not prepare this visual report: ' + e.message); }
+    } catch (e) { showToast ? showToast('Could not prepare this visual report: ' + e.message, 'error') : console.error('Could not prepare this visual report: ' + e.message); }
   }
 
   document.querySelectorAll('.format-download-btn').forEach(btn => {
@@ -1118,7 +1119,7 @@
     try {
       ig = await (await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/infographic-data`)).json();
     } catch (e) {
-      showToast ? showToast('Could not load infographic data for PowerPoint: ' + e.message, 'error') : alert(e.message);
+      showToast ? showToast('Could not load infographic data for PowerPoint: ' + e.message, 'error') : console.error(e.message);
       return;
     }
 
@@ -1245,7 +1246,7 @@
     const container = document.getElementById('vrds-showcase-container');
     if (!container) return;
     try {
-      const res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/ai-report-intelligence-v190`);
+      const res = await fetch(`${API_BASE_URL}/api/public/demo-reports/${reportId}/ai-report-intelligence`);
       const pkg = await res.json();
       if (!res.ok) throw new Error(pkg.error || `HTTP ${res.status}`);
       const brain = pkg.sector_writing_brain || {};

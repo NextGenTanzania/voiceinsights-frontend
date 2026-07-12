@@ -10,9 +10,11 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+<h1 class="visually-hidden">Surveys — VoiceInsights Africa</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
       <div class="section-head">
@@ -58,7 +60,7 @@
         <td>${(s.language || 'en').toUpperCase()}</td>
         <td class="muted-note">${new Date(s.created_at + 'Z').toLocaleDateString()}</td>
         <td><span class="badge ${STATUS_BADGE[s.status] || 'badge-neutral'}">${s.status}</span></td>
-        <td style="display:flex; gap:.4rem;"><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html?id=${s.id}">Open</a><button class="btn btn-ghost btn-sm duplicate-btn" data-id="${s.id}" data-title="${s.title.replace(/"/g, '&quot;')}">Duplicate</button></td>
+        <td style="display:flex; gap:.4rem;"><a class="btn btn-ghost btn-sm" href="/app/survey-builder.html?id=${s.id}">Open</a><button type="button" class="btn btn-ghost btn-sm duplicate-btn" data-id="${s.id}" data-title="${s.title.replace(/"/g, '&quot;')}">Duplicate</button></td>
       </tr>`).join('');
   }
 
@@ -117,6 +119,6 @@
   });
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

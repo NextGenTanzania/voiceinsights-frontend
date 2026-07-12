@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Board-facing trend tracker -- distinct from Monitoring Report's tactical brevity, Quarterly Performance must situate this quarter within a trajectory (prior quarters, annual trend) for a Board audience tracking programme performance over time.",
+
+  "section_rules": {
+    "executive_summary": "Must explicitly reference the quarter-over-quarter trajectory (e.g. 'continuing a positive trend' or 'a reversal from Q2') -- a quarterly report that reads as a standalone snapshot without trend context has not fulfilled its purpose.",
+    "discussion": "Should cross-reference other recent programme data sources (e.g. routine monitoring touchpoints from the same quarter) to strengthen or caveat confidence in this quarter's findings.",
+    "methodology": "Note the sample size relative to a full annual assessment, since quarterly check-ins are typically lighter-touch and this should be weighted accordingly by the Board.",
+    "limitations": "State explicitly if this quarter's sample size or methodology differs from prior quarters in a way that could affect trend comparability.",
+    "recommendations": "Frame recommendations around whether a persistent finding (present in multiple consecutive quarters) requires escalation to a standing Board risk item, distinct from a single-quarter observation.",
+    "policy_implications": "Rare -- reserve for annual reporting unless a finding has persisted across multiple quarters, indicating a structural rather than transient issue.",
+    "lessons_learned": "Reflect on the value of cross-referencing this quarter's data against other recent programme data sources for confidence calibration.",
+    "conclusion": "State the trend direction clearly and name any item requiring a specific Q+1 resolution update.",
+    "annexes": "Include a simple quarter-over-quarter comparison table for the tracked indicators, since trend visibility is this report type's core value.",
+    "evidence_style": "Always present findings with their trend context (e.g. 'consistent with Q2', 'a new concern not present in Q2') rather than as an isolated point-in-time statistic."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["quarter-over-quarter theme ranking change", "sentiment trend across quarters", "persistence of flagged items across consecutive quarters"],
+    "common_risks": ["presenting a quarterly snapshot without trend context, understating or overstating a genuine trajectory", "inconsistent sample size or methodology across quarters undermining trend comparability", "failing to escalate a finding that has persisted across multiple consecutive quarters"],
+    "typical_recommendations": ["request a specific resolution update for any item persisting across multiple quarters", "escalate a persistent finding to a standing Board risk item with a named owner", "standardize quarterly sample size and question wording for stronger trend comparability"],
+    "typical_policy_implications": ["only when a finding has persisted long enough to indicate a structural, not transient, issue"],
+    "typical_donor_expectations": "Boards and donors reviewing quarterly reports expect explicit trend framing -- a quarterly report that could just as easily be read as a standalone annual report has not delivered the trend-tracking value this report type exists to provide."
+  },
+
+  "recommendation_categories": ["Immediate", "Monitoring", "Governance", "Risk Mitigation"],
+
+  "forbidden_behaviors": [
+    "Never present quarterly findings without explicit reference to the trend trajectory (improving, declining, stable) relative to prior quarters.",
+    "Never treat a persistent multi-quarter finding as a fresh observation without acknowledging its recurrence.",
+    "Never claim trend comparability across quarters if sample size or methodology changed without flagging this explicitly."
+  ]
+}

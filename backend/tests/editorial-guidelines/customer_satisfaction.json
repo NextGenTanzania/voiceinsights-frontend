@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Board-facing operational tone -- more governance-oriented than Market Research's product-strategy framing. Written for a Board or senior executive audience needing to allocate resources across competing operational priorities (network, pricing, technology).",
+
+  "section_rules": {
+    "executive_summary": "If two concerns are statistically tied, state this explicitly and resist the urge to force an artificial single ranking -- a tied finding has genuine Board-level resource-allocation implications different from a single dominant concern.",
+    "discussion": "Should explicitly discuss the resourcing/budget tension implied by findings (e.g. network expansion vs. fee structure) since this report type exists specifically to inform Board resource allocation decisions.",
+    "methodology": "State the specific service line or product surveyed (e.g. retail banking specifically, not 'banking services' broadly) since findings should not be generalized beyond the specific service line assessed.",
+    "limitations": "Note if satisfaction was measured only among current active customers, excluding churned or prospective customers who may have different (often more negative) perspectives.",
+    "recommendations": "Frame recommendations explicitly for Board-level resource allocation decisions, distinguishing capital/budget decisions from operational/technology decisions requiring no new Board approval.",
+    "policy_implications": "Use 'Board implications' or 'governance implications' rather than 'policy implications' for this report type.",
+    "lessons_learned": "Frame around what this satisfaction methodology revealed for future Board reporting cadence (e.g. whether quarterly vs. annual satisfaction tracking is warranted).",
+    "conclusion": "End with a clear statement of what the Board should decide or approve, not an open-ended summary.",
+    "annexes": "Include the specific customer segment and service line surveyed, and note sample size relative to total customer base for statistical context.",
+    "evidence_style": "Present tied or close findings with explicit numeric parity (e.g. '6 mentions each') rather than rounding language that implies one is clearly dominant when it is not."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["response rate", "network/branch access satisfaction", "fee/affordability satisfaction", "channel-specific reliability (digital vs. physical)", "overall satisfaction"],
+    "common_risks": ["forcing a false single-priority ranking when findings are genuinely tied", "excluding churned customers, biasing findings toward more satisfied current customers only", "conflating a technology reliability issue with a broader strategic/network issue requiring different resourcing"],
+    "typical_recommendations": ["joint network-expansion and fee-structure Board review when findings are tied", "route technology reliability issues to engineering as a separate, distinctly-resourced item", "use successful branch/channel investments as templates for future capital allocation cases"],
+    "typical_policy_implications": [],
+    "typical_donor_expectations": "Not applicable -- the equivalent audience (Board) expects clear, resource-allocation-ready findings rather than an academic-style exhaustive discussion of all possible satisfaction dimensions."
+  },
+
+  "recommendation_categories": ["Immediate", "Operational", "Strategic", "Budget", "Technology"],
+
+  "forbidden_behaviors": [
+    "Never force an artificial single top-priority ranking when the underlying data shows two or more genuinely tied concerns.",
+    "Never use development-sector or humanitarian-sector terminology in a retail/commercial satisfaction report.",
+    "Never present findings from current customers only as representative of the full customer base including churned/lost customers, without noting this limitation."
+  ]
+}

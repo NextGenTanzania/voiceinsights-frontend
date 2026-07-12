@@ -49,9 +49,10 @@
 <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
 
@@ -69,10 +70,10 @@
             <option value="pt">🇵🇹 Português</option>
             <option value="sw">🇹🇿 Kiswahili</option>
           </select>
-          <button class="btn btn-ghost btn-sm" id="word-download-btn">📄 Download Word</button>
-          <button class="btn btn-primary btn-sm" id="print-btn">🖨 Download as PDF</button>
-          <button class="btn btn-ghost btn-sm" id="pptx-btn">📊 Download as PowerPoint</button>
-          <button class="btn btn-ghost btn-sm" id="email-report-btn">✉️ Email Report</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="word-download-btn">📄 Download Word</button>
+          <button type="button" class="btn btn-primary btn-sm" id="print-btn">🖨 Download as PDF</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="pptx-btn">📊 Download as PowerPoint</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="email-report-btn">✉️ Email Report</button>
         </div>
       </div>
 
@@ -149,15 +150,15 @@
             </table>
           </div>
           <div class="no-print" style="margin-top:.8rem; display:flex; gap:.6rem; align-items:center; flex-wrap:wrap;">
-            <button class="btn btn-primary btn-sm" id="dhis2-push-btn">📤 Push to DHIS2</button>
+            <button type="button" class="btn btn-primary btn-sm" id="dhis2-push-btn">📤 Push to DHIS2</button>
             <span id="dhis2-push-status" class="muted-note"></span>
           </div>
           <div id="dhis2-history" style="margin-top:.8rem; font-size:.78rem;"></div>
           <div class="scorecard-add-row no-print" style="display:flex; gap:.5rem; margin-top:1rem; flex-wrap:wrap;">
-            <input id="new-ind-name" placeholder="Indicator name (e.g. Food Security)" style="flex:2; min-width:180px;">
-            <input id="new-ind-baseline" placeholder="Baseline (e.g. 41%)" style="flex:1; min-width:100px;">
-            <input id="new-ind-current" placeholder="Current (e.g. 67%)" style="flex:1; min-width:100px;">
-            <button class="btn btn-ghost btn-sm" id="add-ind-btn">+ Add Indicator</button>
+            <input aria-label="Indicator name (e.g. Food Security)" id="new-ind-name" placeholder="Indicator name (e.g. Food Security)" style="flex:2; min-width:180px;">
+            <input aria-label="Baseline (e.g. 41%)" id="new-ind-baseline" placeholder="Baseline (e.g. 41%)" style="flex:1; min-width:100px;">
+            <input aria-label="Current (e.g. 67%)" id="new-ind-current" placeholder="Current (e.g. 67%)" style="flex:1; min-width:100px;">
+            <button type="button" class="btn btn-ghost btn-sm" id="add-ind-btn">+ Add Indicator</button>
           </div>
         </div>
 
@@ -453,7 +454,7 @@
   canvas { display:none; }
 </style></head>
 <body>${contentHtml}<script src="/assets/js/admin-functional-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body></html>`;
     const blob = new Blob(['\ufeff', wordHtml], { type: 'application/msword' });
     const link = document.createElement('a');
@@ -503,8 +504,8 @@
           <td>${i.baseline_value || '—'}</td>
           <td>${i.current_value || '—'}</td>
           <td>${computeChange(i.baseline_value, i.current_value)}</td>
-          <td class="no-print"><input class="dhis2-map-input" data-id="${i.id}" value="${i.dhis2_data_element_id || ''}" placeholder="e.g. fbfJHSPpUQD" style="font-size:.78rem; padding:.3rem .4rem;"></td>
-          <td class="no-print"><button class="btn btn-ghost btn-sm del-ind-btn" data-id="${i.id}">Remove</button></td>
+          <td class="no-print"><input aria-label="e.g. fbfJHSPpUQD" class="dhis2-map-input" data-id="${i.id}" value="${i.dhis2_data_element_id || ''}" placeholder="e.g. fbfJHSPpUQD" style="font-size:.78rem; padding:.3rem .4rem;"></td>
+          <td class="no-print"><button type="button" class="btn btn-ghost btn-sm del-ind-btn" data-id="${i.id}">Remove</button></td>
         </tr>`).join('');
       document.querySelectorAll('.dhis2-map-input').forEach(input => {
         input.addEventListener('blur', async () => {
@@ -706,6 +707,6 @@
   })();
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

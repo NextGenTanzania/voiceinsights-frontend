@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This Mobile Banking Market Study surveyed 250 customers across three regions of Rwanda — Huye, Kigali, and Musanze — with full response completion, assessing customer experience following a recent branch expansion and mobile application rollout.\n\nOverall sentiment is favourable (57.6% positive, 28% neutral, 14.4% negative), with two distinct product signals worth separating for strategic decision-making. First, the new branch expansion is directly and repeatedly credited with improving customer service experience — a physical-channel investment that is paying off in measurable customer sentiment. Second, the mobile application is described by users as fundamentally convenient, but with a specific and recurring reliability complaint: transaction failures. This is a critical distinction for product strategy — customers are not rejecting the mobile channel, they are flagging a fixable technical reliability issue within a channel they otherwise value.\n\nA recommendation-intent signal also emerged directly in respondent feedback, with customers explicitly discussing willingness to recommend the service to others in their community — a qualitative proxy for Net Promoter sentiment that skews positive but is not universal, indicating room to convert more satisfied customers into active advocates.\n\nThe sample achieved close to even gender balance (50.8% male, 49.2% female) across all three regions, with Huye contributing the largest response share. Data quality is consistent and strong, supporting confident use of these findings for product and channel investment decisions.",
+
+  "key_findings": [
+    "The branch expansion investment shows a clear, direct return in customer sentiment — multiple customers specifically credit the new branch with improved service, a concrete signal that physical-channel investment is working as intended.",
+    "Mobile app transaction failures are the single most specific, recurring technical complaint — customers describe the app as convenient in principle, meaning the underlying product-market fit is sound and the issue is a reliability/engineering fix, not a redesign.",
+    "Word-of-mouth recommendation intent appears directly in customer feedback and is net positive but not unanimous — this is a specific, actionable proxy metric that should be tracked formally (e.g., via a structured NPS question) in future rounds.",
+    "'Service quality' is the most-cited theme overall (6 mentions), ahead of affordability (5) and access (4) — for a financial services product, this ordering suggests customers are currently more sensitive to experience quality than to pricing, an important input for competitive positioning.",
+    "Sentiment is favourable across all three regions surveyed, with no single region driving the result — suggesting the branch and mobile investments are landing consistently rather than succeeding in one market and failing in another.",
+    "Gender balance in the customer sample (50.8%/49.2%) is close to even, supporting confidence that product feedback reflects the full customer base rather than one demographic segment."
+  ],
+
+  "discussion": "The clearest strategic signal in this study is the need to treat the branch and mobile channels as separate investment decisions with separate performance stories: the branch expansion is delivering a measurable service-quality win, while the mobile app has strong underlying product-market fit undermined by a specific, nameable reliability gap (transaction failures). Conflating these two channels into a single 'digital transformation' narrative would obscure the fact that one channel needs continued investment and the other needs a focused engineering fix.\n\nThe emergence of explicit recommendation-intent language in open-ended feedback — without having been directly asked an NPS-style question — is a useful signal that customer advocacy is an organically salient topic for this customer base, and formalizing its measurement (a direct 'how likely are you to recommend' question) in the next survey round would convert this qualitative signal into a trackable KPI.",
+
+  "conclusions": "This study confirms the branch expansion is generating genuine customer-perceived value and should continue to receive investment, while identifying mobile app transaction reliability as the single highest-leverage technical fix available — customers already like the app conceptually, so a reliability fix is likely to convert existing goodwill into stronger engagement rather than requiring a customer-perception rebuild. Recommendation intent, while currently only visible qualitatively, should be measured directly going forward.",
+
+  "recommendations": {
+    "immediate": [
+      "Escalate mobile app transaction failure reports to the engineering/product team as a top-priority reliability fix, given how specifically and consistently customers raised it relative to other, vaguer complaints.",
+      "Add a direct, structured Net Promoter Score question to the next customer survey round to convert the qualitative recommendation-intent signal observed here into a trackable, comparable KPI."
+    ],
+    "medium_term": [
+      "Conduct a technical root-cause investigation into mobile transaction failures (e.g., network dependency, peak-load capacity, specific transaction types) to scope the engineering effort accurately before committing a fix timeline to customers.",
+      "Evaluate whether the branch expansion's service-quality success factors (staffing model, training, physical layout) can be documented as a replicable playbook for future branch openings."
+    ],
+    "long_term": [
+      "Establish channel-specific (branch vs. mobile) customer satisfaction tracking as a standing quarterly indicator, rather than a single blended satisfaction score, to preserve the strategic clarity this study's channel-separated analysis provides.",
+      "Build a formal customer advocacy/referral program once mobile reliability is resolved, capitalizing on the positive recommendation-intent signal identified in this round while the underlying product experience is at its strongest."
+    ]
+  },
+
+  "risks": [
+    "If mobile transaction failures are not addressed promptly, continued exposure to the same reliability issue could erode the currently-positive underlying product sentiment, converting a fixable technical issue into a harder-to-reverse brand perception problem.",
+    "Because recommendation intent is currently only measured qualitatively, the business lacks a trackable baseline — if this is not formalized soon, it will be difficult to demonstrate improvement (or detect decline) in customer advocacy over time."
+  ],
+
+  "opportunities": [
+    "The branch expansion's clear, quantifiable customer sentiment win is a strong internal business case for continued or accelerated branch investment in additional markets.",
+    "Because customers already express both product convenience appreciation and organic recommendation intent for the mobile app, a reliability fix could unlock disproportionate value — converting existing latent advocacy into active referral growth rather than needing to build customer goodwill from scratch."
+  ],
+
+  "lessons_learned": "Allowing customers to describe their experience in their own words — rather than only rating satisfaction on a fixed scale — surfaced two distinct, channel-specific findings (branch success, mobile reliability gap) and an unprompted recommendation-intent signal that a purely quantitative survey instrument would likely have blended into a single, less actionable satisfaction score. Future market research rounds should preserve this open-response format and additionally formalize the NPS-style question this round's feedback organically pointed toward."
+}

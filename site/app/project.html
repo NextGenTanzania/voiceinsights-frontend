@@ -12,9 +12,10 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
       <a href="/app/campaigns.html" class="muted-note" style="font-size:.82rem;">← Back to Projects</a>
@@ -70,8 +71,8 @@
               <tr><td class="muted-note" style="padding:.4rem 0;">Created</td><td id="ov-created">—</td></tr>
             </table>
           </div>
-          <button class="btn btn-ghost btn-sm" id="clone-project-btn" style="margin-top:1rem;">📋 Clone as New Round (Midline/Endline)</button>
-          <button class="btn btn-ghost btn-sm" id="remind-btn" style="margin-top:1rem;">🔔 Remind Incomplete Respondents</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="clone-project-btn" style="margin-top:1rem;">📋 Clone as New Round (Midline/Endline)</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="remind-btn" style="margin-top:1rem;">🔔 Remind Incomplete Respondents</button>
         </div>
 
         <!-- TEAM -->
@@ -87,7 +88,7 @@
             <div class="card-title">Post an Announcement to This Team</div>
             <p class="muted-note" style="margin-bottom:.8rem;">Enumerators assigned to this project will see this in their "Messages" tab.</p>
             <textarea id="announce-text" rows="3" placeholder="e.g. Please prioritize Mwanza region this week."></textarea>
-            <button class="btn btn-primary btn-sm" id="announce-send-btn" style="margin-top:.6rem;">Send Announcement</button>
+            <button type="button" class="btn btn-primary btn-sm" id="announce-send-btn" style="margin-top:.6rem;">Send Announcement</button>
           </div>
 
           <div class="card" style="margin-top:1.5rem;">
@@ -95,11 +96,11 @@
             <p class="muted-note" style="margin-bottom:.8rem;">Visible to enumerators in their "Training" tab.</p>
             <div id="training-list" style="margin-bottom:1rem;"></div>
             <div class="field-row">
-              <div class="field"><label>Title</label><input id="train-title" placeholder="e.g. Survey Introduction Script"></div>
-              <div class="field"><label>Link (optional)</label><input id="train-url" placeholder="https://..."></div>
+              <div class="field"><label>Title</label><input aria-label="e.g. Survey Introduction Script" id="train-title" placeholder="e.g. Survey Introduction Script"></div>
+              <div class="field"><label>Link (optional)</label><input aria-label="https://..." id="train-url" placeholder="https://..."></div>
             </div>
             <textarea id="train-notes" rows="2" placeholder="Optional notes"></textarea>
-            <button class="btn btn-primary btn-sm" id="train-add-btn" style="margin-top:.6rem;">+ Add Material</button>
+            <button type="button" class="btn btn-primary btn-sm" id="train-add-btn" style="margin-top:.6rem;">+ Add Material</button>
           </div>
         </div>
 
@@ -108,8 +109,8 @@
           <div class="card" style="margin-bottom:1.5rem;">
             <div class="card-title">Bulk Import (CSV)</div>
             <p class="muted-note" style="margin-bottom:.8rem;">For data already collected on paper or another tool. CSV columns: <code>phone_number, full_name, region, q1, q2, q3...</code> (q1/q2/q3 map to this project's questions in order).</p>
-            <input type="file" id="csv-import-file" accept=".csv" style="margin-bottom:.6rem;">
-            <button class="btn btn-primary btn-sm" id="csv-import-btn">Import</button>
+            <input aria-label="csv import file" type="file" id="csv-import-file" accept=".csv" style="margin-bottom:.6rem;">
+            <button type="button" class="btn btn-primary btn-sm" id="csv-import-btn">Import</button>
             <span id="csv-import-status" class="muted-note" style="margin-left:.6rem;"></span>
           </div>
           <div class="table-wrap">
@@ -142,7 +143,7 @@
           <div class="card" style="margin-bottom:1rem;">
             <div class="card-title" style="font-size:.85rem;">Upload a File</div>
             <div class="field-row">
-              <div class="field"><label>Document name</label><input id="doc-upload-name" placeholder="e.g. Signed Contract"></div>
+              <div class="field"><label>Document name</label><input aria-label="e.g. Signed Contract" id="doc-upload-name" placeholder="e.g. Signed Contract"></div>
               <div class="field"><label>Category</label>
                 <select id="doc-upload-category">
                   <option value="contract">Contract</option>
@@ -157,16 +158,16 @@
                 </select>
               </div>
             </div>
-            <input type="file" id="doc-upload-file" style="margin:.6rem 0;">
-            <button class="btn btn-primary btn-sm" id="doc-upload-btn">⬆ Upload File</button>
+            <input aria-label="doc upload file" type="file" id="doc-upload-file" style="margin:.6rem 0;">
+            <button type="button" class="btn btn-primary btn-sm" id="doc-upload-btn">⬆ Upload File</button>
             <span id="doc-upload-status" class="muted-note" style="margin-left:.6rem;"></span>
           </div>
 
           <div class="card">
             <div class="card-title" style="font-size:.85rem;">Or Paste a Link</div>
             <div class="field-row">
-              <div class="field"><label>Document name</label><input id="doc-name" placeholder="e.g. Signed Contract"></div>
-              <div class="field"><label>Link</label><input id="doc-url" placeholder="https://..."></div>
+              <div class="field"><label>Document name</label><input aria-label="e.g. Signed Contract" id="doc-name" placeholder="e.g. Signed Contract"></div>
+              <div class="field"><label>Link</label><input aria-label="https://..." id="doc-url" placeholder="https://..."></div>
               <div class="field"><label>Category</label>
                 <select id="doc-category">
                   <option value="contract">Contract</option>
@@ -181,7 +182,7 @@
                 </select>
               </div>
             </div>
-            <button class="btn btn-ghost btn-sm" id="doc-add-btn">+ Add Document Link</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="doc-add-btn">+ Add Document Link</button>
           </div>
         </div>
       </div>
@@ -306,7 +307,7 @@
             <div style="font-weight:600; font-size:.9rem;">${s.label}</div>
             <div class="muted-note" style="font-size:.72rem;">${s.auto ? 'Detected automatically from real activity' : 'Marked manually'}</div>
           </div>
-          ${!s.auto ? `<button class="btn btn-ghost btn-sm lifecycle-toggle-btn" data-stage="${s.key}" data-done="${s.done}" style="font-size:.72rem;">${s.done ? 'Mark Undone' : 'Mark Done'}</button>` : ''}
+          ${!s.auto ? `<button type="button" class="btn btn-ghost btn-sm lifecycle-toggle-btn" data-stage="${s.key}" data-done="${s.done}" style="font-size:.72rem;">${s.done ? 'Mark Undone' : 'Mark Done'}</button>` : ''}
         </div>`).join('');
       document.querySelectorAll('.lifecycle-toggle-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
@@ -332,7 +333,7 @@
               <div style="width:44px; height:44px; border-radius:50%; background:var(--accent); color:var(--accent-ink); display:flex; align-items:center; justify-content:center; font-weight:700; margin:0 auto .6rem;">${u.full_name.split(' ').map(n => n[0]).slice(0,2).join('')}</div>
               <div style="font-weight:600; font-size:.9rem;">${u.full_name}</div>
               <div class="muted-note" style="font-size:.76rem;">${u.email}</div>
-              <button class="btn btn-ghost btn-sm remove-team-btn" data-id="${u.id}" style="margin-top:.6rem; font-size:.72rem; color:var(--danger);">Remove</button>
+              <button type="button" class="btn btn-ghost btn-sm remove-team-btn" data-id="${u.id}" style="margin-top:.6rem; font-size:.72rem; color:var(--danger);">Remove</button>
             </div>`).join('')
         : '<p class="muted-note">No enumerators assigned yet.</p>';
       document.getElementById('team-add-select').innerHTML = '<option value="">+ Add enumerator…</option>' +
@@ -446,7 +447,7 @@
             const href = isUploaded
               ? `${API_BASE_URL}/api/documents/${encodeURIComponent(d.url.slice(3))}?token=${encodeURIComponent(localStorage.getItem('vi_token'))}`
               : d.url;
-            return `<div style="display:flex; justify-content:space-between; align-items:center; padding:.5rem 0; border-bottom:1px solid var(--border);"><a href="${href}" target="_blank" rel="noopener">${isUploaded ? '📎 ' : '🔗 '}${d.name}</a><button class="btn btn-ghost btn-sm remove-doc-btn" data-id="${d.id}" style="font-size:.7rem;">Remove</button></div>`;
+            return `<div style="display:flex; justify-content:space-between; align-items:center; padding:.5rem 0; border-bottom:1px solid var(--border);"><a href="${href}" target="_blank" rel="noopener">${isUploaded ? '📎 ' : '🔗 '}${d.name}</a><button type="button" class="btn btn-ghost btn-sm remove-doc-btn" data-id="${d.id}" style="font-size:.7rem;">Remove</button></div>`;
           }).join('')}
         </div>`).join('');
       document.querySelectorAll('.remove-doc-btn').forEach(btn => {
@@ -498,6 +499,6 @@
   });
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

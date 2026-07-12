@@ -12,12 +12,13 @@
   </style>
 </head>
 <body>
-  <main class="wrap">
+<a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" class="wrap">
     <section class="hero">
       <span class="badge">v208 — Autonomous Campaign Intelligence Operating System</span>
       <h1>VoiceInsights Orchestrator™</h1>
       <p>Upload contacts, choose policy, launch campaign, and VoiceInsights Africa autonomously engages respondents across Phone Call, WhatsApp Voice, WhatsApp Chat, SMS, Web Link and Offline Enumerator App.</p>
-      <div class="actions"><button class="btn" onclick="loadOrchestrator()">Load Orchestrator</button><button class="btn alt" onclick="document.getElementById('simulator').scrollIntoView({behavior:'smooth'})">View Simulator</button></div>
+      <div class="actions"><button type="button" class="btn" onclick="loadOrchestrator()">Load Orchestrator</button><button type="button" class="btn alt" onclick="document.getElementById('simulator').scrollIntoView({behavior:'smooth'})">View Simulator</button></div>
     </section>
     <section class="card" style="margin-top:20px"><h2>Operating workflow</h2><div class="steps" id="workflow"></div></section>
     <section class="grid"><div class="card"><h3>Readiness</h3><div class="score" id="score">Loading…</div><p class="muted" id="status">Connecting to orchestration API.</p></div><div class="card"><h3>Active policy</h3><div id="policy"></div></div><div class="card"><h3>Business promise</h3><p id="promise" class="muted"></p></div></section>
@@ -31,7 +32,7 @@ function escapeHtml(s){return String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','
 function row(a,b){return `<div class="channel"><b>${escapeHtml(a)}</b><span class="muted">${escapeHtml(b)}</span></div>`;}
 async function loadOrchestrator(){
   try{
-    const r=await fetch(`${API}/api/voiceinsights-orchestrator-v208?policy=adaptive_intelligence&contacts=10000`);
+    const r=await fetch(`${API}/api/voiceinsights-orchestrator?policy=adaptive_intelligence&contacts=10000`);
     if(!r.ok) throw new Error('Login may be required for the internal orchestrator API.');
     const d=await r.json(); render(d);
   }catch(e){
@@ -54,6 +55,6 @@ function render(d){
 }
 loadOrchestrator();
 </script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

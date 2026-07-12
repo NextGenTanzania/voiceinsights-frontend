@@ -25,16 +25,17 @@
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
       <div class="toolbar" style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
         <div class="muted-note" id="inv-status">Loading…</div>
         <div style="display:flex; gap:.6rem;">
-          <button class="btn btn-ghost btn-sm edit-only" id="add-line-btn">+ Add Line Item</button>
-          <button class="btn btn-primary btn-sm" onclick="window.print()">🖨 Download as PDF</button>
+          <button type="button" class="btn btn-ghost btn-sm edit-only" id="add-line-btn">+ Add Line Item</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">🖨 Download as PDF</button>
         </div>
       </div>
 
@@ -61,7 +62,7 @@
 
         <div class="edit-only" style="margin-top:1rem;">
           <label class="muted-note" style="font-size:.8rem;">Due Date</label>
-          <input type="date" id="inv-due-date">
+          <input aria-label="inv due date" type="date" id="inv-due-date">
         </div>
         <p style="font-size:.85rem; margin-top:1.5rem;">Payment due within 30 days via bank transfer. Contact <a href="mailto:partnerships@voiceinsightsafrica.com">partnerships@voiceinsightsafrica.com</a> for banking details.</p>
 
@@ -130,6 +131,6 @@
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
 <script src="/assets/js/admin-button-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

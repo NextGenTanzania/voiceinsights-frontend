@@ -1,0 +1,27 @@
+# ============================================================
+# V212 Security Hardening — baseline security headers, site-wide.
+# CSP note: pages use inline scripts throughout, so 'unsafe-inline'
+# stays for now; the important win is that script-src blocks any
+# INJECTED third-party script host except the two CDNs actually used
+# (unpkg.com for lucide/leaflet, cdn.jsdelivr.net for chart.js/pptxgenjs/
+# xlsx/qrcodejs). connect/img/media stay broad so the app keeps working
+# against any API deployment. Tighten further after moving inline JS out.
+# ============================================================
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(self), geolocation=(self), payment=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https:; font-src 'self' data: https:; frame-ancestors 'self'; base-uri 'self'; form-action 'self'
+
+/sw.js
+  Service-Worker-Allowed: /
+
+/sample-reports.html
+  Cache-Control: no-cache, no-store, must-revalidate
+/sample-report-viewer.html
+  Cache-Control: no-cache, no-store, must-revalidate
+/assets/css/vrds-showcase.css
+  Cache-Control: no-cache, no-store, must-revalidate
+/assets/js/config.js
+  Cache-Control: no-cache

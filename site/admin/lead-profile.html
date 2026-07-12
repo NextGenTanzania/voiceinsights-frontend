@@ -10,9 +10,11 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+<h1 class="visually-hidden">Lead Profile — Admin Console</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
       <a href="/admin/leads.html" class="muted-note" style="font-size:.82rem;">← Back to Sales Pipeline</a>
@@ -52,7 +54,7 @@
 
             <div style="display:flex; gap:.6rem; margin-top:1.2rem;">
               <a id="l-proposal-link" href="/admin/proposal.html" class="btn btn-ghost btn-sm" style="flex:1; justify-content:center;">📄 Generate Proposal</a>
-              <button id="l-convert-btn" class="btn btn-primary btn-sm" style="flex:1; justify-content:center;">🚀 Convert to Organization</button>
+              <button type="button" id="l-convert-btn" class="btn btn-primary btn-sm" style="flex:1; justify-content:center;">🚀 Convert to Organization</button>
             </div>
           </div>
 
@@ -61,7 +63,7 @@
             <div class="card-title" style="color:var(--accent);">AI Analysis</div>
             <div id="ai-empty" style="text-align:center; padding:1.5rem 0;">
               <p class="muted-note" style="margin-bottom:.8rem;">No AI qualification yet.</p>
-              <button class="btn btn-primary btn-sm" id="l-score-btn">✨ Run AI Analysis</button>
+              <button type="button" class="btn btn-primary btn-sm" id="l-score-btn">✨ Run AI Analysis</button>
             </div>
             <div id="ai-result" style="display:none;">
               <div class="grid grid-2" style="gap:1rem; margin-bottom:1rem;">
@@ -72,7 +74,7 @@
               </div>
               <div class="muted-note" style="font-size:.72rem; margin-bottom:.3rem;">Reasoning</div>
               <p id="ai-reasoning" style="font-size:.85rem; line-height:1.6;">—</p>
-              <button class="btn btn-ghost btn-sm" id="l-rescore-btn" style="margin-top:1rem;">↻ Re-run Analysis</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="l-rescore-btn" style="margin-top:1rem;">↻ Re-run Analysis</button>
             </div>
           </div>
         </div>
@@ -83,24 +85,24 @@
 
 <div id="convert-modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; align-items:center; justify-content:center; padding:5vw;">
   <div class="card" style="max-width:480px; width:100%; position:relative;">
-    <button id="convert-modal-close" aria-label="Close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
+    <button type="button" id="convert-modal-close" aria-label="Close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
     <div class="card-title">Convert to Organization</div>
     <p class="muted-note" style="margin-bottom:1rem;">This creates the organization, invites the admin, and optionally starts their first project — all in one step.</p>
-    <div class="field"><label>Organization Name</label><input id="cv-org-name"></div>
+    <div class="field"><label>Organization Name</label><input aria-label="cv org name" id="cv-org-name"></div>
     <div class="field"><label>Subscription Tier</label>
       <select id="cv-tier"><option value="starter">Starter</option><option value="professional">Professional</option><option value="enterprise">Enterprise</option></select>
     </div>
     <div class="field-row">
-      <div class="field"><label>Admin Full Name</label><input id="cv-admin-name"></div>
-      <div class="field"><label>Admin Email</label><input id="cv-admin-email" type="email"></div>
+      <div class="field"><label>Admin Full Name</label><input aria-label="cv admin name" id="cv-admin-name"></div>
+      <div class="field"><label>Admin Email</label><input aria-label="cv admin email" id="cv-admin-email" type="email"></div>
     </div>
     <div style="border-top:1px solid var(--border); margin:1rem 0; padding-top:1rem;">
       <div class="muted-note" style="margin-bottom:.6rem;">Optional — start their first project now:</div>
-      <div class="field"><label>Project Name</label><input id="cv-project-name" placeholder="e.g. Citizen Feedback Survey — Round 1"></div>
+      <div class="field"><label>Project Name</label><input aria-label="e.g. Citizen Feedback Survey — Round 1" id="cv-project-name" placeholder="e.g. Citizen Feedback Survey — Round 1"></div>
       <div class="field"><label>Survey (question set)</label><select id="cv-survey"><option value="">Skip — I'll create a project later</option></select></div>
     </div>
     <div id="cv-error" style="display:none; color:var(--danger); font-size:.82rem; margin-bottom:.8rem;"></div>
-    <button class="btn btn-primary" id="cv-create-btn" style="width:100%; justify-content:center;">Create Organization →</button>
+    <button type="button" class="btn btn-primary" id="cv-create-btn" style="width:100%; justify-content:center;">Create Organization →</button>
   </div>
 </div>
 
@@ -237,6 +239,6 @@
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
 <script src="/assets/js/admin-button-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This Local SDG Progress Tracking report synthesizes 1,000 citizen contacts across six regions of Tanzania — Mbeya, Morogoro, Dodoma, Mwanza, Dar es Salaam, and Arusha — with full completion, providing evidence for national and sub-national reporting against multiple SDG indicators consistent with UNDP practice and Tanzania's national development plan.\n\nSentiment is favourable (55.8%). Service delivery trend and transparency are jointly the leading themes (4 mentions each), followed by gender representation, water access, and education access (3 each), with health access (2) and climate shocks (1) present as narrower but real concerns. This spread across SDG 1, 3, 4, 5, 6, 8, 11, 13, and 16-relevant themes reflects a genuinely multi-goal citizen experience, appropriate for a locally-grounded SDG progress synthesis.",
+
+  "key_findings": [
+    "Service delivery trend and transparency are tied as the leading themes (4 mentions each) — citizens are tracking both whether services are improving over time (relevant to multiple SDGs) and whether local government is transparent about resource use (SDG 16).",
+    "Gender representation (3 mentions) shows meaningful citizen attention to SDG 5-relevant local decision-making inclusion.",
+    "Water access and education access are tied as a secondary tier (3 mentions each) — SDG 6 and SDG 4 progress are both visible, present concerns at comparable levels of citizen salience.",
+    "Health access (2 mentions) and climate shocks (1 mention) are narrower this round but remain relevant to SDG 3 and SDG 13 tracking respectively, and should not be deprioritized due to lower current frequency.",
+    "The genuinely multi-goal spread of themes (spanning institutional transparency, gender, water, education, health, and climate) reflects the kind of holistic citizen experience data that complements single-indicator administrative SDG reporting.",
+    "Regional coverage across all six areas, led by Mbeya and Morogoro, supports using this data in both local and national voluntary SDG review reporting."
+  ],
+
+  "discussion": "The tie between service delivery trend and transparency as the leading themes is a meaningful pairing for SDG 16-aligned governance reporting specifically: citizens are not only asking whether services are improving, but whether local government is transparent about the resource allocation driving that improvement or its absence. This citizen-level evidence complements official administrative SDG indicator reporting by capturing ground-truth perception across a genuinely broad set of goals (institutional, gender, water, education, health, climate) simultaneously, rather than requiring separate single-goal surveys for each SDG target.",
+
+  "conclusions": "This SDG progress synthesis provides citizen-level, ground-truth evidence spanning multiple SDG-relevant dimensions, with service delivery trend and government transparency as the jointly leading themes. This data should be incorporated into national and sub-national SDG voluntary review reporting as a complement to, not substitute for, official administrative indicator data.",
+
+  "recommendations": {
+    "immediate": [
+      "Incorporate this round's service-delivery-trend and transparency findings into the next national SDG voluntary review cycle, explicitly citing them as citizen-level complementary evidence.",
+      "Cross-reference the water and education access findings against administrative SDG 6 and SDG 4 indicator data to strengthen the overall evidence base."
+    ],
+    "medium_term": [
+      "Establish gender representation, water access, and education access as explicitly tracked sub-indicators in future rounds of this citizen feedback exercise.",
+      "Develop a specific local government transparency initiative (e.g. public budget summaries) directly responsive to the transparency theme's prominence this round."
+    ],
+    "long_term": [
+      "Institutionalize this citizen feedback exercise as a recurring, standing input to national and local SDG progress tracking across all six regions.",
+      "Use this round's multi-goal thematic spread as the template for future rounds, preserving the ability to track citizen experience across institutional, gender, water, education, health, and climate dimensions jointly."
+    ]
+  },
+
+  "risks": [
+    "If transparency concerns are not addressed, citizen confidence in reported service-delivery improvements may remain limited regardless of actual administrative progress.",
+    "Treating any single theme (e.g. service delivery trend) in isolation from the others risks missing the genuinely multi-goal nature of citizen SDG-relevant experience this round demonstrates."
+  ],
+
+  "opportunities": [
+    "The tied service-delivery-trend and transparency findings offer a clear, evidence-based basis for a combined governance-improvement and communication initiative addressing both simultaneously.",
+    "Because this exercise already provides regionally-disaggregated, multi-goal data, it is well-positioned to support both national and sub-national SDG reporting requirements with minimal additional data collection investment."
+  ],
+
+  "lessons_learned": "This round confirms the value of a genuinely multi-goal citizen feedback instrument over a series of single-SDG-focused surveys — capturing institutional transparency, gender, water, education, health, and climate themes together revealed how closely citizens' service-delivery-trend perceptions are tied to their transparency perceptions, a relationship a narrower, single-goal survey would likely have missed. Future national SDG progress tracking should continue this integrated, multi-goal approach."
+}

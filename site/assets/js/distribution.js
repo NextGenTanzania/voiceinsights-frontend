@@ -1,0 +1,14 @@
+(function(){
+  const surveyCode=()=>document.body.dataset.surveyCode||'EYDEMO';
+  const link=()=>window.viProductionUrl(`/s/${encodeURIComponent(surveyCode())}`);
+  const event=(action,channel,metadata={})=>window.viApi('/api/production-finalization/distribution/event',{method:'POST',body:JSON.stringify({action,channel,survey_id:surveyCode(),metadata})}).catch(()=>{});
+  window.v2102CopyLink=async()=>{await navigator.clipboard.writeText(link());event('copy_link','web');viToast('Survey link copied');};
+  window.v2102OpenLink=()=>{event('open_link','web');window.open(link(),'_blank','noopener');};
+  window.v2102ShareWhatsApp=()=>{event('share','whatsapp');window.open(`https://wa.me/?text=${encodeURIComponent('Please participate in this VoiceInsights Africa survey: '+link())}`,'_blank','noopener');};
+  window.v2102SendSms=async()=>{const to=prompt('Recipient phone number (international format):');if(!to)return;try{await viApi('/api/production-finalization/distribution/send-sms',{method:'POST',body:JSON.stringify({to,survey_code:surveyCode()})});viToast('SMS queued successfully')}catch(e){viToast(e.message,'error')}};
+  window.v2102SendWhatsApp=async(voice=false)=>{const to=prompt('Recipient WhatsApp number (international format):');if(!to)return;const payload={to,survey_code:surveyCode()};if(voice){const media=prompt('Public HTTPS URL of the voice invitation audio:');if(!media)return;payload.media_url=media;payload.message='Voice invitation from VoiceInsights Africa';}try{await viApi('/api/production-finalization/distribution/send-whatsapp',{method:'POST',body:JSON.stringify(payload)});viToast(voice?'WhatsApp voice invitation queued':'WhatsApp message queued')}catch(e){viToast(e.message,'error')}};
+  window.v2102LaunchCall=async()=>{const to=prompt('Recipient phone number (international format):');if(!to)return;try{await viApi('/api/production-finalization/distribution/launch-call',{method:'POST',body:JSON.stringify({to,survey_code:surveyCode()})});viToast('Phone call queued successfully')}catch(e){viToast(e.message,'error')}};
+  window.v2102OfflinePackage=()=>{const payload={version:'v210.2',survey_code:surveyCode(),survey_link:link(),generated_at:new Date().toISOString(),sync_endpoint:'/api/offline/sync'};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`voiceinsights-${surveyCode()}-offline-package.json`;a.click();URL.revokeObjectURL(a.href);event('download_offline_package','offline')};
+  window.v2102Embed=async()=>{const code=`<iframe src="${link()}" width="100%" height="800" loading="lazy" style="border:0"></iframe>`;await navigator.clipboard.writeText(code);event('copy_embed','embed');viToast('Embed code copied')};
+  window.v2102Qr=()=>{event('generate_qr','qr');window.open(`https://api.qrserver.com/v1/create-qr-code/?size=512x512&data=${encodeURIComponent(link())}`,'_blank','noopener')};
+})();

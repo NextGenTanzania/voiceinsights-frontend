@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Economically literate and specific -- livelihood writing must distinguish between different income sources (microfinance, employment, trade) rather than treating 'livelihoods' as one undifferentiated economic wellbeing score.",
+
+  "section_rules": {
+    "executive_summary": "Must name the SPECIFIC economic mechanism behind any positive finding (e.g. 'microfinance-enabled business expansion', not 'improved livelihoods') -- specificity of economic attribution is the core analytical value of this report type.",
+    "discussion": "Explicitly separate household-level findings (e.g. microfinance impact on a specific business) from community-level findings (e.g. broader local employment trends) -- these operate at different scales and require different evidentiary standards.",
+    "methodology": "State whether findings are based on household self-report of income/business activity or independently verified (e.g. loan repayment records) -- this materially affects confidence in economic claims.",
+    "limitations": "Note that any value-chain leakage finding (e.g. transport costs) was identified qualitatively and should be quantified before being used as the sole basis for a costed intervention.",
+    "recommendations": "Distinguish interventions addressing production/income generation (e.g. microfinance) from interventions addressing value-chain leakage (e.g. transport cost) -- these are different economic levers.",
+    "policy_implications": "Escalate to policy level only when a finding (e.g. transport cost burden) is consistent across multiple regions, not isolated to a single community's specific circumstances.",
+    "lessons_learned": "Note any finding that emerged outside the survey's original design scope (e.g. an employment trend not directly related to the microfinance programme being evaluated) as evidence of the value of open-ended feedback.",
+    "conclusion": "Avoid a single 'livelihoods improved/did not improve' verdict -- report on each distinct economic mechanism identified (microfinance, employment, market access) separately.",
+    "annexes": "Include the specific economic activity/sector context (e.g. small trade, agriculture-adjacent) since livelihood findings are not comparable across fundamentally different local economic contexts.",
+    "evidence_style": "Anchor every economic claim to a specific, attributable respondent statement where possible (e.g. 'a loan helped me expand my business') rather than an inferred economic wellbeing score."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["response rate", "microfinance/credit access impact", "local employment trend perception", "value-chain cost burden (e.g. transport)", "overall economic sentiment"],
+    "common_risks": ["self-reported business/income data without independent verification", "conflating household-level and community-level economic findings", "assuming a positive finding in one economic mechanism offsets an unaddressed cost burden in another"],
+    "typical_recommendations": ["group/cooperative transport or logistics cost-sharing models", "extending microfinance products to cover value-chain costs, not only initial capital", "establishing youth/local employment as a standing tracked indicator"],
+    "typical_policy_implications": ["rural economic development and market access planning", "microfinance product design policy"],
+    "typical_donor_expectations": "Livelihoods donors expect clear economic attribution (which mechanism drove which outcome) rather than a blended wellbeing score, and increasingly expect evidence of whether production/access gains translate into net household income gains."
+  },
+
+  "recommendation_categories": ["Immediate", "30-day", "90-day", "Operational", "Strategic", "Sustainability", "Monitoring"],
+
+  "forbidden_behaviors": [
+    "Never claim an overall 'livelihoods improved' finding without naming the specific economic mechanism(s) evidenced.",
+    "Never assume a positive microfinance finding offsets an unaddressed value-chain cost finding without evidence both were assessed together.",
+    "Never present a community-level observation (e.g. youth employment trend) with the same confidence as a directly-attributed household-level finding (e.g. loan-enabled business expansion)."
+  ]
+}

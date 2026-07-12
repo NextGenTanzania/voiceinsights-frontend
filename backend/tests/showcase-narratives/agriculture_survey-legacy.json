@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This Smallholder Farmer Survey reached 320 farming households across four districts in Uganda — Gulu, Kampala, Mbarara, and Jinja — with full response completion. The survey assessed the on-farm impact of a recent improved-seed-variety distribution programme and gathered farmer perspectives on input access and market conditions during the most recent growing season.\n\nOverall sentiment is positive (56% positive, 27% neutral, 17% negative), driven substantially by farmer-confirmed yield improvements attributed to the new seed variety — a direct, causally-specific finding rather than a general expression of satisfaction. This is a strong signal that the seed programme is delivering on its core agronomic objective and is recognized by farmers as the reason for improved output, not merely coincident with a good season.\n\nHowever, two constraints recur consistently across all four districts and temper the positive yield story: affordable fertilizer access, described by respondents as their single biggest ongoing challenge, and fair market pricing, with multiple farmers independently reporting that price levels at the point of sale do not reflect the value of an improved harvest. Together these findings describe a programme succeeding at the production stage while farmers continue to face constraints at both the input and output ends of the value chain — meaning yield gains are not yet being fully converted into improved farmer income.\n\nThe sample achieved close-to-even gender balance (51% male, 49% female) and reasonably even distribution across all four districts (Gulu contributing the largest share). Data quality is strong, consistent with other rounds in this survey series, supporting confident use for programme decision-making.",
+
+  "key_findings": [
+    "Yield is the most-discussed topic (7 mentions) and is explicitly and repeatedly attributed by farmers to the new seed variety — this is a specific, causal finding, not a generic seasonal satisfaction comment.",
+    "Fertilizer affordability is described as farmers' single biggest challenge, appearing with the same frequency as market price concerns (4 mentions each) — meaning the input side of the value chain remains a binding constraint even where yields have improved.",
+    "Market price fairness is raised independently and repeatedly across multiple districts, indicating farmers are not converting yield gains into proportionate income gains — a value-chain gap between the farm gate and the point of sale.",
+    "Sentiment is positive in aggregate, but the 17% negative share is concentrated in price- and input-related comments specifically, rather than distributed across unrelated topics — the dissatisfaction has a clear, addressable focus.",
+    "Gender balance in the sample (51% male, 49% female) is close to even, supporting confidence that findings reflect both male and female farmer perspectives rather than one gender's experience alone.",
+    "District-level response distribution (Gulu 88, Kampala 81, Mbarara 76, Jinja 75) is reasonably even, meaning no single district's experience is dominating the aggregate picture."
+  ],
+
+  "discussion": "The combination of a genuine production-side success (yield, attributed specifically to the seed programme) with persistent input- and output-side constraints (fertilizer cost, market pricing) is a classic value-chain pattern: an intervention that improves one stage of production can leave farmers still exposed at the stages before and after it. Farmers here are drawing this distinction clearly themselves — praising the seed variety specifically while separately and consistently flagging fertilizer and pricing as unresolved, rather than treating the whole farming experience as a single undifferentiated satisfaction score.\n\nThe market pricing finding is particularly worth flagging to programme design teams: an intervention that improves yield without a corresponding improvement in farmers' ability to capture fair value for that yield risks under-delivering on the ultimate goal of improved farmer income, even while succeeding at the agronomic objective it was designed to hit.",
+
+  "conclusions": "This round confirms the seed variety intervention is working as intended at the production stage and is recognized by farmers as the cause of improved yield. The next priority is addressing the input (fertilizer affordability) and output (market pricing) constraints that currently prevent yield gains from fully translating into farmer income — without action on these two fronts, the programme risks a ceiling on its ultimate income-improvement impact regardless of further yield gains.",
+
+  "recommendations": {
+    "immediate": [
+      "Document and communicate the seed-variety yield success with specific farmer testimony (with consent) to support continued or expanded programme funding.",
+      "Map current fertilizer supplier and pricing options available to surveyed districts to establish whether the affordability barrier is a genuine supply/price issue or an information gap about existing subsidized options."
+    ],
+    "medium_term": [
+      "Explore a bulk-purchasing or cooperative fertilizer access model in the districts with the strongest affordability complaints, informed by the supply mapping above.",
+      "Investigate market linkage or aggregation models (e.g., farmer cooperatives, off-take agreements) that could improve farmers' price-negotiating position at the point of sale."
+    ],
+    "long_term": [
+      "Establish farm-gate price tracking as a standing indicator alongside yield data, so future survey rounds can assess whether income — not just output — is improving for participating farmers.",
+      "Use this survey's district distribution as a baseline for evaluating whether input-access and market-linkage interventions, once introduced, close the gap between yield improvement and farmer-reported income improvement."
+    ]
+  },
+
+  "risks": [
+    "If fertilizer affordability is not addressed, farmers may be unable to sustain the input levels needed to repeat this season's yield improvement in future seasons, risking a one-time rather than durable gain.",
+    "Continued market price dissatisfaction, if unaddressed, could reduce farmer willingness to participate in future rounds of yield-focused interventions if they perceive the income benefit is not materializing."
+  ],
+
+  "opportunities": [
+    "The clear, farmer-attributed yield success is a strong, specific case study for donor reporting — more compelling than an aggregate yield statistic alone, since farmers themselves draw the causal link to the programme.",
+    "Because fertilizer and pricing concerns are consistent across all four districts rather than isolated, a single well-designed value-chain intervention (bulk input purchasing, market aggregation) could plausibly benefit the whole programme area rather than requiring district-by-district solutions."
+  ],
+
+  "lessons_learned": "Asking farmers open-ended questions about their experience — rather than a single yield-satisfaction rating — surfaced a value-chain insight (yield success not yet translating to income due to input and market constraints) that a narrower survey instrument would likely have missed. Future rounds in this sector should continue probing beyond the immediate agronomic outcome to capture the full farm-to-market experience."
+}

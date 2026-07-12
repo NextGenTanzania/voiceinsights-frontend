@@ -10,16 +10,18 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+<h1 class="visually-hidden">Organizations — Super Admin</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
       <div class="section-head">
         <p class="muted-note" style="margin:0;">Every client organization on the platform. Only visible to Super Admin accounts.</p>
         <div style="display:flex; gap:.6rem;">
           <a href="/admin/compare-organizations.html" class="btn btn-ghost btn-sm">Compare Organizations →</a>
-          <button class="btn btn-primary btn-sm" id="new-org-btn">+ New Organization</button>
+          <button type="button" class="btn btn-primary btn-sm" id="new-org-btn">+ New Organization</button>
         </div>
       </div>
       <div class="table-wrap">
@@ -33,16 +35,16 @@
 
       <div id="new-org-modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; align-items:center; justify-content:center; padding:5vw;">
         <div class="card" style="max-width:440px; width:100%; position:relative;">
-          <button id="new-org-modal-close" aria-label="Close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
+          <button type="button" id="new-org-modal-close" aria-label="Close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
           <div class="card-title">Create a New Organization</div>
-          <div class="field"><label>Organization Name</label><input id="new-org-name" placeholder="e.g. UNICEF Tanzania"></div>
+          <div class="field"><label>Organization Name</label><input aria-label="e.g. UNICEF Tanzania" id="new-org-name" placeholder="e.g. UNICEF Tanzania"></div>
           <div class="field"><label>Billing Tier</label>
             <select id="new-org-tier"><option value="starter">Starter</option><option value="professional">Professional</option><option value="enterprise">Enterprise</option></select>
           </div>
-          <div class="field"><label>Admin Full Name</label><input id="new-org-admin-name" placeholder="First point of contact"></div>
-          <div class="field"><label>Admin Email</label><input id="new-org-admin-email" type="email" placeholder="admin@theirorg.org"></div>
+          <div class="field"><label>Admin Full Name</label><input aria-label="First point of contact" id="new-org-admin-name" placeholder="First point of contact"></div>
+          <div class="field"><label>Admin Email</label><input aria-label="admin@theirorg.org" id="new-org-admin-email" type="email" placeholder="admin@theirorg.org"></div>
           <div id="new-org-error" style="display:none; color:var(--danger); font-size:.82rem; margin-bottom:.8rem;"></div>
-          <button class="btn btn-primary" id="new-org-create-btn" style="width:100%; justify-content:center;">Create Organization &amp; Send Login →</button>
+          <button type="button" class="btn btn-primary" id="new-org-create-btn" style="width:100%; justify-content:center;">Create Organization &amp; Send Login →</button>
           <p class="muted-note" style="margin-top:1rem; font-size:.76rem;">A login and temporary password will be emailed to the admin immediately.</p>
         </div>
       </div>
@@ -79,8 +81,8 @@
             <a class="btn btn-ghost btn-sm" href="/admin/organization-detail.html?id=${o.id}">Details</a>
             <a class="btn btn-primary btn-sm" href="/app/dashboard.html?org_id=${o.id}">View →</a>
             ${o.status === 'active'
-              ? `<button class="btn btn-ghost btn-sm suspend-btn" data-id="${o.id}">Suspend</button>`
-              : `<button class="btn btn-ghost btn-sm activate-btn" data-id="${o.id}">Activate</button>`}
+              ? `<button type="button" class="btn btn-ghost btn-sm suspend-btn" data-id="${o.id}">Suspend</button>`
+              : `<button type="button" class="btn btn-ghost btn-sm activate-btn" data-id="${o.id}">Activate</button>`}
           </td>
         </tr>`).join('') : '<tr><td colspan="7" class="muted-note" style="padding:1.5rem;">No organizations yet.</td></tr>';
     } catch (e) {
@@ -141,6 +143,6 @@
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
 <script src="/assets/js/admin-button-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

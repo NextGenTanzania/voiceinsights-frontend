@@ -60,12 +60,12 @@
   <div class="card" id="form-card">
     <form id="contact-form">
       <div class="field-row">
-        <div class="field"><label data-i18n="contact.full_name">Full Name *</label><input id="full_name" required></div>
-        <div class="field"><label data-i18n="contact.work_email">Work Email *</label><input id="work_email" type="email" required></div>
+        <div class="field"><label data-i18n="contact.full_name">Full Name *</label><input aria-label="full name" id="full_name" required></div>
+        <div class="field"><label data-i18n="contact.work_email">Work Email *</label><input aria-label="work email" id="work_email" type="email" required></div>
       </div>
       <div class="field-row">
-        <div class="field"><label data-i18n="contact.organization">Organization</label><input id="organization"></div>
-        <div class="field"><label data-i18n="contact.country">Country</label><input id="country"></div>
+        <div class="field"><label data-i18n="contact.organization">Organization</label><input aria-label="organization" id="organization"></div>
+        <div class="field"><label data-i18n="contact.country">Country</label><input aria-label="country" id="country"></div>
       </div>
       <div class="field-row">
         <div class="field"><label data-i18n="contact.org_type">Organization Type</label>
@@ -85,7 +85,7 @@
           </select>
         </div>
       </div>
-      <div class="field"><label data-i18n="contact.expected_respondents">Expected Number of Respondents</label><input id="expected_respondents" placeholder="e.g. 2,000"></div>
+      <div class="field"><label data-i18n="contact.expected_respondents">Expected Number of Respondents</label><input aria-label="e.g. 2,000" id="expected_respondents" placeholder="e.g. 2,000"></div>
       <div class="field">
         <label data-i18n="contact.preferred_channels">Preferred Channels</label>
         <div class="checkbox-row">
@@ -233,6 +233,6 @@
     }
   });
 </script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

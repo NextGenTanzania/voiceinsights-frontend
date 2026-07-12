@@ -10,9 +10,11 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+<h1 class="visually-hidden">Quality Control — Admin Console</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
       <div class="section-head"><h2 style="font-size:1.05rem;">Completion &amp; Confidence by Question</h2></div>
@@ -72,8 +74,8 @@
               <td class="muted-note">${new Date(r.started_at + 'Z').toLocaleDateString()}</td>
               <td>${r.qa_decision ? `<span class="badge ${QA_BADGE[r.qa_decision]}">${r.qa_decision}</span>` : '<span class="muted-note">Not reviewed</span>'}</td>
               <td>
-                <button class="btn btn-ghost btn-sm qa-btn" data-id="${r.id}" data-decision="approved" style="color:var(--success);">✓ Approve</button>
-                <button class="btn btn-ghost btn-sm qa-btn" data-id="${r.id}" data-decision="rejected" style="color:var(--danger);">✗ Reject</button>
+                <button type="button" class="btn btn-ghost btn-sm qa-btn" data-id="${r.id}" data-decision="approved" style="color:var(--success);">✓ Approve</button>
+                <button type="button" class="btn btn-ghost btn-sm qa-btn" data-id="${r.id}" data-decision="rejected" style="color:var(--danger);">✗ Reject</button>
               </td>
             </tr>`).join('')
         : '<tr><td colspan="6" class="muted-note" style="padding:1.5rem;">Nothing pending review right now.</td></tr>';
@@ -93,6 +95,6 @@
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
 <script src="/assets/js/admin-button-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

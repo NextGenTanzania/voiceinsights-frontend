@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This Municipal Public Services Feedback survey reached 1,000 residents across six regions of Tanzania — Mwanza, Dar es Salaam, Morogoro, Dodoma, Arusha, and Tanga — with full completion, assessing citizen experience of waste management, roads, water supply, and permit services consistent with SDG 11 (Sustainable Cities) and SDG 16 (Strong Institutions).\n\nSentiment is favourable (55.5%). Water supply and permits are jointly the leading concerns (6 mentions each), followed by complaints handling and roads (4 each), and trust in local government (3), with communication present but narrower. Water supply and permits being tied at the top is a significant governance finding: one is an infrastructure/utility concern, the other a bureaucratic/service-delivery concern, meaning residents face two quite different types of unmet need simultaneously.\n\nRegional coverage across all six areas, led by Mwanza and Dar es Salaam, provides a credible basis for both municipal-level and cross-regional governance comparison.",
+
+  "key_findings": [
+    "Water supply and permits are statistically tied as the leading concerns (6 mentions each) — one an infrastructure gap, the other a bureaucratic-service gap, requiring two entirely different response tracks.",
+    "Complaints handling and roads are tied as the second tier (4 mentions each) — residents want both better physical infrastructure and better mechanisms to report and resolve issues.",
+    "Trust in local government (3 mentions) is present but not yet the leading theme, suggesting institutional trust concerns are downstream of, or at least distinct from, the specific service-delivery gaps above.",
+    "Communication, while narrower this round, remains a relevant dimension warranting continued tracking given its frequent linkage to trust in governance research.",
+    "Regional coverage across all six areas, with Mwanza and Dar es Salaam contributing the largest shares, supports using this data for both municipal and cross-regional governance planning.",
+    "The tie between an infrastructure concern (water) and a bureaucratic concern (permits) means neither a purely infrastructure-focused nor a purely service-delivery-focused governance response alone would fully address citizen priorities."
+  ],
+
+  "discussion": "Water supply and permits being statistically tied as the top concern is a genuinely important municipal governance finding: these represent two structurally different categories of unmet need — one requiring physical infrastructure investment (water supply reliability), the other requiring process and bureaucratic reform (permit issuance speed and transparency). A municipal response that addresses only one — for example, investing heavily in water infrastructure while leaving permit processes unreformed — would leave an equally significant citizen concern unresolved. Complaints handling and roads following closely reinforces that citizens are evaluating both the physical infrastructure they receive and the institutional responsiveness they experience when something goes wrong, as two related but distinct governance dimensions.",
+
+  "conclusions": "This survey identifies water supply reliability and permit-processing efficiency as jointly the leading citizen concerns — one infrastructure-focused, one bureaucratic-focused — meaning municipal governance improvement requires parallel tracks rather than a single-focus initiative. Complaints handling and road quality follow closely as a second-tier priority pair.",
+
+  "recommendations": {
+    "immediate": [
+      "Present the tied water-supply and permit-processing finding to municipal leadership as two parallel priority tracks, avoiding a single-issue framing that would leave one unaddressed.",
+      "Conduct a rapid permit-processing time audit to identify the specific bureaucratic bottleneck driving citizen dissatisfaction in that theme."
+    ],
+    "medium_term": [
+      "Develop a water supply reliability improvement plan for the regions with the strongest water-related complaints, informed by infrastructure assessment.",
+      "Introduce a transparent, trackable permit-status system (e.g. SMS updates on application status) to directly address the permit-processing concern without requiring a full process overhaul immediately."
+    ],
+    "long_term": [
+      "Establish water supply reliability and permit-processing efficiency as two separately tracked, standing municipal governance indicators, given their tied prominence and distinct nature.",
+      "Incorporate complaints-handling turnaround time and road-quality metrics into standing municipal performance reporting, consistent with SDG 11 and SDG 16 monitoring practice."
+    ]
+  },
+
+  "risks": [
+    "If municipal leadership addresses only one of the two tied top concerns (water supply or permits), the other may be perceived as neglected, potentially undermining overall trust gains from the addressed issue.",
+    "Without a transparent permit-status system, citizen frustration with bureaucratic delay may persist even if underlying processing times improve, since the delay itself remains invisible to applicants."
+  ],
+
+  "opportunities": [
+    "A low-cost, transparent permit-status tracking system could meaningfully improve citizen sentiment on this theme without requiring the same capital investment as water infrastructure improvement.",
+    "Because both leading concerns are clearly identified and distinct, municipal leadership can pursue infrastructure and bureaucratic-reform tracks in parallel rather than sequentially, potentially improving overall citizen sentiment faster than a single-track approach."
+  ],
+
+  "lessons_learned": "Allowing residents to raise concerns in their own words revealed that two structurally different types of governance gaps (infrastructure and bureaucratic process) are equally salient to citizens — a survey design that only asked about infrastructure, or only about service quality, would have missed this important tie. Future municipal feedback surveys in this series should continue covering both dimensions explicitly."
+}

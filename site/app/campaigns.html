@@ -10,12 +10,14 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+<h1 class="visually-hidden">Campaigns — VoiceInsights Africa</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
-      <div class="section-head"><div></div><button class="btn btn-primary btn-sm" id="new-campaign-btn">+ New Campaign</button></div>
+      <div class="section-head"><div></div><button type="button" class="btn btn-primary btn-sm" id="new-campaign-btn">+ New Campaign</button></div>
 
       <div class="grid grid-3" style="margin-bottom:1.5rem;">
         <div class="card"><div class="card-title">Active Campaigns</div><div class="stat-value" id="stat-active">–</div></div>
@@ -41,13 +43,13 @@
 
       <div id="share-modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; align-items:center; justify-content:center; padding:5vw;">
         <div class="card" style="max-width:420px; width:100%; text-align:center; position:relative;">
-          <button id="share-modal-close" aria-label="Close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
+          <button type="button" id="share-modal-close" aria-label="Close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
           <div class="card-title">Share this campaign link</div>
           <h3 id="share-campaign-name" style="font-size:1.1rem; margin:.5rem 0 1.2rem;">—</h3>
           <img id="share-qr-img" src="" alt="QR code" style="background:#fff; padding:.6rem; border-radius:8px; width:180px; height:180px; margin:0 auto;">
           <div style="display:flex; gap:.5rem; margin-top:1.2rem;">
-            <input id="share-link-input" readonly style="flex:1; font-size:.8rem;">
-            <button class="btn btn-primary btn-sm" id="share-copy-btn">Copy</button>
+            <input aria-label="share link input" id="share-link-input" readonly style="flex:1; font-size:.8rem;">
+            <button type="button" class="btn btn-primary btn-sm" id="share-copy-btn">Copy</button>
           </div>
           <p class="muted-note" style="margin-top:1rem; font-size:.78rem;">Anyone with this link can answer your survey — no login required. Share it via WhatsApp, SMS, email, or print the QR code for in-person collection.</p>
           <div style="border-top:1px solid var(--border); margin-top:1.2rem; padding-top:1.2rem;">
@@ -60,7 +62,7 @@
 
       <div id="outbound-modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; align-items:center; justify-content:center; padding:5vw;">
         <div class="card" style="max-width:480px; width:100%; position:relative;">
-          <button id="outbound-modal-close" aria-label="Close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
+          <button type="button" id="outbound-modal-close" aria-label="Close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
           <div class="card-title">Call or Text Respondents Directly</div>
           <h3 id="outbound-campaign-name" style="font-size:1.1rem; margin:.5rem 0 1.2rem;">—</h3>
           <div class="field">
@@ -81,16 +83,16 @@
           </div>
           <div id="outbound-error" style="display:none; color:var(--danger); font-size:.82rem; margin-bottom:.8rem;"></div>
           <div id="outbound-result" style="display:none; font-size:.85rem; margin-bottom:.8rem;"></div>
-          <button class="btn btn-primary" id="outbound-start-btn" style="width:100%; justify-content:center;">Start Outbound Batch →</button>
+          <button type="button" class="btn btn-primary" id="outbound-start-btn" style="width:100%; justify-content:center;">Start Outbound Batch →</button>
           <p class="muted-note" style="margin-top:1rem; font-size:.76rem;">For phone calls, each person receives a real automated call asking the survey questions aloud. For SMS/WhatsApp, they receive the first question as a text and reply to continue — same as if they'd texted in themselves.</p>
         </div>
       </div>
 
       <div id="new-campaign-modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; align-items:center; justify-content:center; padding:5vw;">
         <div class="card" style="max-width:480px; width:100%; position:relative;">
-          <button id="new-campaign-modal-close" aria-label="Close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
+          <button type="button" id="new-campaign-modal-close" aria-label="Close" style="position:absolute; top:.8rem; right:.8rem; background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
           <div class="card-title">New Campaign</div>
-          <div class="field"><label>Campaign Name</label><input id="new-camp-name" placeholder="e.g. Access to Finance — Round 1 (Baseline)"></div>
+          <div class="field"><label>Campaign Name</label><input aria-label="e.g. Access to Finance — Round 1 (Baseline)" id="new-camp-name" placeholder="e.g. Access to Finance — Round 1 (Baseline)"></div>
           <div class="field">
             <label>Survey</label>
             <select id="new-camp-survey"><option value="">Loading surveys…</option></select>
@@ -105,7 +107,7 @@
               <option value="app">Offline Enumerator App</option>
             </select>
           </div>
-          <div class="field"><label>Target Respondents</label><input id="new-camp-target" type="number" placeholder="e.g. 100"></div>
+          <div class="field"><label>Target Respondents</label><input aria-label="e.g. 100" id="new-camp-target" type="number" placeholder="e.g. 100"></div>
           <div class="field">
             <label>Is this a follow-up round of an earlier study? <span class="muted-note">(optional — enables real Benchmarking/Forecasting)</span></label>
             <select id="new-camp-baseline"><option value="">No — this is a new, standalone study</option></select>
@@ -115,7 +117,7 @@
             <select id="new-camp-round-label"><option>Midline</option><option>Endline</option><option>Follow-up</option></select>
           </div>
           <div id="new-camp-error" style="display:none; color:var(--danger); font-size:.82rem; margin-bottom:.8rem;"></div>
-          <button class="btn btn-primary" id="new-camp-create-btn" style="width:100%; justify-content:center;">Create Campaign →</button>
+          <button type="button" class="btn btn-primary" id="new-camp-create-btn" style="width:100%; justify-content:center;">Create Campaign →</button>
         </div>
       </div>
     </div>
@@ -159,7 +161,7 @@
           <td>${reached}</td>
           <td style="width:150px;"><div class="progress"><span style="width:${pct}%"></span></div></td>
           <td><span class="badge ${badgeClass}">${c.status}</span></td>
-          <td style="display:flex; gap:.4rem;"><button class="btn btn-ghost btn-sm share-link-btn" data-id="${c.id}" data-name="${c.name}" data-code="${c.access_code || ''}">🔗 Share</button><button class="btn btn-ghost btn-sm outbound-btn" data-id="${c.id}" data-name="${c.name}">📞 Call/Text Respondents</button></td>
+          <td style="display:flex; gap:.4rem;"><button type="button" class="btn btn-ghost btn-sm share-link-btn" data-id="${c.id}" data-name="${c.name}" data-code="${c.access_code || ''}">🔗 Share</button><button type="button" class="btn btn-ghost btn-sm outbound-btn" data-id="${c.id}" data-name="${c.name}">📞 Call/Text Respondents</button></td>
         </tr>`;
       }).join('');
       document.getElementById('stat-active').textContent = activeCount;
@@ -301,6 +303,6 @@
   });
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

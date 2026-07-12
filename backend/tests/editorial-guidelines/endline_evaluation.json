@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Comparative and evaluative -- unlike baseline, endline's entire purpose is to make defensible causal-adjacent claims about programme performance relative to the documented Time Zero reference. Language should be confident where the baseline comparison supports it, and explicitly hedged where it does not.",
+
+  "section_rules": {
+    "executive_summary": "Must open with the baseline-to-endline comparison on the single most important indicator, stated with actual before/after numbers (e.g. 'affordability mentions fell from 8 to 6') -- never a vague 'things improved' statement without the baseline anchor.",
+    "discussion": "Must explicitly address the 'next barrier emerging' pattern common in sequential M&E (resolving the top baseline concern often reveals the next-most-salient one) -- this should be explained to the reader as an expected, positive pattern, not a shortfall.",
+    "methodology": "Confirm explicitly whether question wording and sample composition matched baseline -- if they did not match, this must be flagged prominently as a comparability limitation, not mentioned only in a footnote.",
+    "limitations": "If any endline finding cannot be directly compared to baseline (e.g. a new theme not present in baseline data), state this explicitly rather than implying false comparability.",
+    "recommendations": "Recommendations should explicitly build on the resolved baseline concern (e.g. 'now that affordability is improved, target access next') -- endline recommendations should read as the next logical programme phase, not a generic list.",
+    "policy_implications": "Should reference the specific, quantified change (not just direction) when escalating a policy implication, since endline's evidentiary strength over baseline is precisely its ability to quantify change.",
+    "lessons_learned": "Should explicitly credit any baseline-stage methodological discipline (e.g. maintaining identical question wording) that made this endline's comparison credible -- this reinforces the value of that discipline for future rounds.",
+    "conclusion": "Must state the specific, quantified achievement against baseline AND name the specific, next-priority finding for the following phase -- both halves are required for a complete endline conclusion.",
+    "annexes": "Include a direct baseline-vs-endline comparison table for every indicator tracked, since this side-by-side view is the core evidentiary artifact of an endline evaluation.",
+    "evidence_style": "Every comparative claim must cite BOTH the baseline and endline figures explicitly (e.g. '8 mentions at baseline vs. 6 at endline'), never only the endline figure with an implied comparison."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["baseline-to-endline change in dominant theme ranking", "sentiment shift (baseline vs. endline)", "new themes emerging at endline not present at baseline", "sample/methodology comparability confirmation"],
+    "common_risks": ["comparability broken by different question wording or sample composition between rounds", "over-attributing all observed change to the programme without considering external factors", "treating a 'next barrier emerging' finding as a programme failure rather than an expected sequential pattern"],
+    "typical_recommendations": ["next-phase Theory of Change targeting the newly-dominant concern", "formal close-out of any specific unmet commitment identified at endline", "retention of the baseline-endline comparison methodology for the next programme phase"],
+    "typical_policy_implications": ["next-phase programme design and resource allocation, directly informed by the quantified baseline-to-endline change"],
+    "typical_donor_expectations": "Donors expect endline reports to make explicit, quantified before/after claims -- an endline that only describes current conditions without the baseline comparison fails to deliver the evaluation's core evidentiary purpose."
+  },
+
+  "recommendation_categories": ["Strategic", "Policy", "Operational", "Monitoring", "Sustainability", "Institutional Strengthening"],
+
+  "forbidden_behaviors": [
+    "Never state an improvement or decline without citing the specific baseline figure being compared against.",
+    "Never attribute 100% of an observed change to the programme without acknowledging other possible contributing factors, unless a specific causal mechanism was independently verified.",
+    "Never treat a newly-emerged concern at endline as evidence of programme failure without first considering whether it reflects the 'next barrier' pattern following resolution of a prior, more dominant concern."
+  ]
+}

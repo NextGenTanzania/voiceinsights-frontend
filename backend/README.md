@@ -143,7 +143,7 @@ No setup needed — this works as soon as the backend is deployed and `config.js
 points to it. Share this link with respondents (optionally tag it to a specific
 campaign):
 ```
-https://voiceinsights-frontend.pages.dev/respondent.html?campaign=<campaign_id>
+https://voiceinsightsafrica.com/respondent.html?campaign=<campaign_id>
 ```
 It walks through every question in the survey, uses the browser's own
 microphone (no app install), and has an EN/SW toggle built in.

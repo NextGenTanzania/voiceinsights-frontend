@@ -11,15 +11,17 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
+<h1 class="visually-hidden">Compare Organizations — Admin Console</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
       <div class="card" style="margin-bottom:1.5rem;">
         <div class="card-title">Choose 2–5 Organizations to Compare</div>
         <select id="org-select" multiple size="6" style="width:100%; margin-bottom:.8rem;"></select>
-        <button class="btn btn-primary btn-sm" id="compare-btn">Compare →</button>
+        <button type="button" class="btn btn-primary btn-sm" id="compare-btn">Compare →</button>
       </div>
       <div class="table-wrap" id="compare-table-wrap" style="display:none;">
         <table>
@@ -87,6 +89,6 @@
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
 <script src="/assets/js/admin-button-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

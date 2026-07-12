@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This Digital Financial Services Adoption Study surveyed 1,000 consumers across six districts of Rwanda — Nyagatare, Huye, Musanze, Rubavu, Rwamagana, and Kigali — with full completion, assessing awareness, trust, and adoption drivers for a new digital financial services product.\n\nSentiment is positive overall (56.8%). Competitor comparison is by a clear margin the leading theme (7 mentions, nearly double any other) — consumers are actively benchmarking this product against alternatives rather than evaluating it in isolation, a critical signal for competitive positioning. Trust (4 mentions), awareness, digital access, and willingness to pay (3 each) follow, with pricing sensitivity and customer segment differences present but narrower this round.\n\nGeographic spread across both more urban Kigali and more rural Nyagatare and Rubavu supports a genuinely national adoption picture rather than an urban-only signal.",
+
+  "key_findings": [
+    "Competitor comparison dominates consumer feedback (7 mentions, nearly double the next theme) — this product is not being evaluated in a vacuum; every strategic decision should account for how consumers perceive it relative to specific alternatives.",
+    "Trust (4 mentions) is the clear second-tier concern — for a digital financial product specifically, trust is a precondition for adoption, not merely a satisfaction dimension.",
+    "Awareness, digital access, and willingness to pay are tied as a third tier (3 mentions each) — meaning marketing reach, infrastructure access, and pricing perception are roughly equally salient constraints on adoption.",
+    "Pricing sensitivity (1 mention) is narrower than expected for a financial product — this suggests price is not yet the primary adoption barrier, trust and competitive positioning matter more at this stage.",
+    "Customer segment differences (1 mention) were noted but not dominant — early data suggests adoption patterns may not yet be sharply segmented, though this should be tracked as adoption matures.",
+    "Coverage spanning both urban Kigali and more rural districts (Nyagatare, Rubavu) supports using this data for national go-to-market strategy, not an urban-pilot-only assessment."
+  ],
+
+  "discussion": "The dominance of competitor comparison as a theme is the single most important strategic signal in this study: it indicates the market is not asking 'should I adopt digital financial services at all' but 'which provider should I choose' — a market-maturity signal that should shift positioning strategy from category education toward direct competitive differentiation. Trust's second-place position reinforces this: in a comparison-driven market, trust signals (security messaging, visible reliability, social proof) become the primary lever for winning consumers away from a specific named alternative, more than general awareness-building. The relatively low pricing-sensitivity signal at this stage suggests there is room to compete on trust and experience before price becomes the deciding factor.",
+
+  "conclusions": "This study confirms the digital financial services market in these districts has moved past basic category awareness into active competitive comparison — go-to-market strategy should prioritize trust-building and direct competitive differentiation over generic awareness campaigns. Pricing, while present, is not yet the primary lever likely to determine adoption at this stage of market development.",
+
+  "recommendations": {
+    "immediate": [
+      "Conduct focused competitive-positioning research identifying which specific competitors are most commonly referenced in comparison feedback, to sharpen messaging directly against them.",
+      "Prioritize trust-signal messaging (security, reliability, social proof) in current marketing, given trust's clear second-place position."
+    ],
+    "medium_term": [
+      "Develop a formal Net Promoter Score or structured competitive-comparison tracking mechanism, converting this round's qualitative competitor-comparison signal into a trackable KPI.",
+      "Investigate the digital access barrier specifically in the more rural districts (Nyagatare, Rubavu) to determine whether infrastructure or device access is limiting broader adoption there."
+    ],
+    "long_term": [
+      "Establish trust, competitive positioning, and pricing sensitivity as three separately tracked quarterly indicators, since they currently sit at different levels of consumer salience and may shift independently as the market matures.",
+      "Build a customer-segmentation framework proactively, even though segment differences are narrow now, since digital financial services markets typically segment more sharply as adoption scales."
+    ]
+  },
+
+  "risks": [
+    "If competitive positioning is not sharpened based on the specific comparisons consumers are making, the product risks losing ground to named competitors in a market that has already moved past general category education.",
+    "Pricing sensitivity, while low now, could rise quickly once trust concerns are resolved and competitive differentiation narrows to price alone."
+  ],
+
+  "opportunities": [
+    "Because trust — not price — is the current second-tier barrier, there is a real opportunity to win market share through trust-building before competitors shift the conversation to price.",
+    "The relatively even geographic spread of adoption signals, including in more rural districts, suggests headroom for national expansion rather than an urban-ceiling adoption pattern."
+  ],
+
+  "lessons_learned": "Allowing consumers to describe their experience in open-ended terms revealed that this market has already moved into a comparison-driven phase — a fixed satisfaction-only survey instrument would likely have missed this critical market-maturity signal entirely. Future market research in this category should continue probing for competitive-comparison language specifically."
+}

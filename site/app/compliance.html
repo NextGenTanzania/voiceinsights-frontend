@@ -10,9 +10,11 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+<h1 class="visually-hidden">Compliance — VoiceInsights Africa</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
       <div class="pill-tabs">
@@ -35,7 +37,7 @@
 
       <div id="panel-consent" style="display:none;">
         <div style="display:flex; justify-content:flex-end; margin-bottom:.8rem;">
-          <button class="btn btn-ghost btn-sm" id="consent-export-btn">⬇ Export Consent Audit (CSV)</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="consent-export-btn">⬇ Export Consent Audit (CSV)</button>
         </div>
         <div class="table-wrap">
           <table>
@@ -60,7 +62,7 @@
           <textarea id="coherence-note" rows="4" placeholder="e.g. This complements the Ministry of Agriculture's ongoing fertilizer subsidy program in the same districts..."></textarea>
         </div>
         <div id="oecd-status" class="muted-note" style="margin-bottom:.8rem;"></div>
-        <button class="btn btn-primary btn-sm" id="oecd-save-btn">Save</button>
+        <button type="button" class="btn btn-primary btn-sm" id="oecd-save-btn">Save</button>
       </div>
     </div>
   </main>
@@ -168,7 +170,7 @@
               <option value="high" ${s.safeguarding_risk === 'high' ? 'selected' : ''}>${t('comp.risk_high', 'High')}</option>
             </select>
           </td>
-          <td><button class="btn btn-ghost btn-sm save-compliance-btn" data-survey="${s.survey_id}">${t('comp.save', 'Save')}</button></td>
+          <td><button type="button" class="btn btn-ghost btn-sm save-compliance-btn" data-survey="${s.survey_id}">${t('comp.save', 'Save')}</button></td>
         </tr>`).join('');
 
       document.querySelectorAll('.save-compliance-btn').forEach(btn => {
@@ -218,6 +220,6 @@
   loadConsent();
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

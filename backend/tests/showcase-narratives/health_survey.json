@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This National Health Access Survey reached 1,000 respondents across six regions of Tanzania — Arusha, Dar es Salaam, Dodoma, Mwanza, Mbeya, and Morogoro — with full response completion, assessing community access to primary healthcare against WHO service-delivery expectations and SDG 3 (Good Health and Well-being).\n\nSentiment is net positive (54.8% positive, 28.4% neutral, 16.8% negative). Affordability and child immunization are the two most-cited themes (5 mentions each), followed closely by referral challenges and facility access (4 each) — a pattern indicating cost and continuity-of-care are now the dominant access barriers, ahead of physical distance alone. Health worker attitude, digital health awareness, maternal health, and medicine availability each surfaced as secondary but real themes.\n\nThe sample achieved broad geographic coverage with reasonably even regional distribution (Arusha 187 to Morogoro 143), and demographic balance across all adult age brackets, supporting confident regional and national-level analysis.",
+
+  "key_findings": [
+    "Affordability and child immunization are statistically tied as the most-cited themes — cost barriers and immunization continuity are the two leading access concerns communities want addressed first.",
+    "Referral challenges (4 mentions) indicate that once a patient is identified as needing higher-level care, the handoff to district facilities is a specific, nameable weak point in the care pathway.",
+    "Health worker attitude shows a mixed but improving signal — some respondents specifically praised staff responsiveness relative to their past experience.",
+    "Digital health awareness remains low (1 mention) — SMS-based health reminders and digital tools are not yet widely known or used by the surveyed population, a specific gap relevant to SDG 3 digital-health-inclusion ambitions.",
+    "Regional coverage is broad and reasonably balanced across all six regions, supporting confidence that findings reflect the country context rather than one region's experience.",
+    "Medicine availability, while only 1 mention this round, was raised in the context of a specific, respondent-confirmed improvement relative to the prior year — a small but genuine positive signal worth protecting."
+  ],
+
+  "discussion": "The near-tie between affordability and child immunization as the leading themes is significant for SDG 3 programming: it suggests financial barriers are now directly intersecting with routine preventive care continuity, not just acute care access. Referral challenges compound this — a patient who overcomes the cost barrier to reach a facility may still face a weak link when escalation to district-level care is needed. Digital health's low awareness signals an untapped channel: WHO's growing emphasis on digital health tools for reminder-based immunization follow-up is not yet reaching this population, representing both a gap and a low-cost opportunity.",
+
+  "conclusions": "This survey establishes a credible national baseline showing affordability and immunization continuity as the joint leading barriers to health access, with referral pathway weaknesses compounding both. Medicine availability shows a genuine but fragile improvement worth institutional protection. Digital health awareness is a clear, low-cost opportunity for the next phase of community health engagement.",
+
+  "recommendations": {
+    "immediate": [
+      "Review referral pathway protocols at the facilities most associated with referral-challenge feedback, to identify whether the weak point is transport, communication, or district-facility capacity.",
+      "Communicate the medicine availability improvement to facility and regional health management as a result worth sustaining and protecting."
+    ],
+    "medium_term": [
+      "Pilot a subsidized-cost or fee-waiver pathway specifically for child immunization visits, given affordability's tie with immunization as the leading combined concern.",
+      "Launch a basic SMS-based immunization reminder pilot in the two regions with the lowest digital health awareness, directly targeting the identified gap."
+    ],
+    "long_term": [
+      "Establish affordability, immunization continuity, and referral-pathway completion as three standing, separately-tracked national indicators, consistent with SDG 3 monitoring practice.",
+      "Integrate digital health tool awareness-building into community health worker engagement as a standard, ongoing activity rather than a one-time campaign."
+    ]
+  },
+
+  "risks": [
+    "If affordability and immunization-continuity barriers are addressed separately rather than jointly, neither intervention may fully resolve the compounding effect identified here.",
+    "The medicine availability improvement was measured at a single point in time — without continued supply chain monitoring, this gain could reverse before the next survey round detects it."
+  ],
+
+  "opportunities": [
+    "Low digital health awareness, while currently a gap, represents a low-cost, high-leverage opportunity — SMS-based reminder systems are inexpensive relative to physical infrastructure investment.",
+    "The referral-pathway finding is specific enough to support a targeted, facility-level process fix rather than requiring a costly system-wide redesign."
+  ],
+
+  "lessons_learned": "Allowing respondents to raise concerns in their own words revealed a compound finding (affordability intersecting with immunization continuity) that a standard satisfaction scale would likely have reported as two unrelated statistics. Future national health access rounds should preserve this open-response format specifically for its ability to reveal how access barriers interact."
+}

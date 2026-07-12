@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This Multi-Sector Needs Assessment reached 1,000 displaced household respondents across six locations in South Sudan — Renk, Juba, Bentiu, Bor, Wau, and Malakal — with full completion, assessing conditions against Sphere minimum standards and Core Humanitarian Standard (CHS) accountability commitments across food security, shelter, WASH, protection, health, and education.\n\nSentiment is net positive (56.5%). Protection and health access are the most-cited themes (4 mentions each), followed by WASH, food security, and education disruption (3 each), with shelter and assistance timeliness (2 each) and safety (1) present as narrower but real concerns. This spread across nearly every assessed sector — rather than one dominant theme — is itself a significant finding: multi-sector need is genuinely distributed, consistent with the assessment's multi-sector design intent.\n\nCoverage across all six locations is reasonably even (177 to 160), supporting confidence that findings represent the broader displaced population rather than one location's specific circumstances.",
+
+  "key_findings": [
+    "Protection and health access are jointly the most-cited concerns (4 mentions each) — safety and healthcare access are the two most salient needs for this population, ahead of food security or shelter this round.",
+    "WASH, food security, and education disruption are tied as the next tier of concern (3 mentions each) — indicating a genuinely multi-sector need profile rather than one dominant crisis dimension.",
+    "Shelter and assistance timeliness (2 mentions each) remain present concerns, consistent with Sphere-standard shelter timing being a recurring humanitarian delivery challenge.",
+    "Safety (1 mention) is the narrowest theme this round but should not be deprioritized given its direct linkage to protection, the joint-highest concern overall.",
+    "The near-even spread across all six assessed sectors (protection, health, WASH, food security, education, shelter) confirms this population's needs are genuinely multi-sector, supporting continued integrated (not siloed) response programming.",
+    "Balanced coverage across all six locations supports using these findings for response-wide, not location-specific, prioritization."
+  ],
+
+  "discussion": "The absence of one overwhelmingly dominant sector — with protection, health, WASH, food security, and education disruption all appearing at meaningfully similar frequency — is itself the standout finding from this assessment. In many single-sector humanitarian assessments, one need visibly dominates; here, the evidence supports a genuinely integrated, multi-sector response rather than a single-sector emergency response. Protection and health being jointly highest is particularly significant for programme sequencing: protection concerns can undermine the effectiveness of health, WASH, and education interventions if population safety is not addressed in parallel, consistent with CHS Commitment 1 (appropriate to needs) requiring a holistic, not siloed, needs analysis.",
+
+  "conclusions": "This assessment confirms a genuinely multi-sector need profile among this displaced population, with protection and health access as the joint leading concerns. Sphere and CHS-aligned response planning should treat this as evidence for an integrated response strategy rather than a single dominant emergency track, with particular attention to how protection concerns may be undermining the effectiveness of parallel health, WASH, and education interventions.",
+
+  "recommendations": {
+    "immediate": [
+      "Cross-reference the protection concerns raised here against existing protection incident reporting to determine whether new or escalating safety issues are driving this finding.",
+      "Ensure health access programming is coordinated with protection actors, given the two are jointly the leading concern and likely interact."
+    ],
+    "medium_term": [
+      "Design the next response phase as an explicitly integrated, multi-sector plan addressing protection, health, WASH, food security, and education together, given the near-even distribution of need across all five.",
+      "Establish or strengthen a specific referral pathway between protection and health services, given their joint prominence in this assessment."
+    ],
+    "long_term": [
+      "Maintain multi-sector needs tracking (rather than reverting to single-sector assessments) as a standing monitoring practice for this population, since this round's evidence shows need does not concentrate in one sector.",
+      "Institutionalize Sphere-standard shelter timing and assistance-timeliness tracking as standing indicators, given their consistent appearance as a humanitarian delivery challenge across response contexts."
+    ]
+  },
+
+  "risks": [
+    "If protection concerns are not addressed in parallel with health, WASH, and food security programming, the effectiveness of those parallel interventions may be undermined by continued safety concerns.",
+    "Treating this as a single-sector response (e.g., food-security-led) risks under-resourcing the equally significant protection and health access findings."
+  ],
+
+  "opportunities": [
+    "The clear evidence of multi-sector, rather than single-sector, need supports a stronger, better-justified case for integrated multi-sector funding rather than siloed single-cluster appeals.",
+    "Because need is evenly distributed across sectors rather than concentrated, a coordinated inter-agency response has strong potential to address multiple concerns through shared logistics and access points."
+  ],
+
+  "lessons_learned": "This assessment's multi-sector design, allowing protection, health, WASH, food security, and education concerns to surface with comparable frequency rather than forcing a single-sector framing, demonstrates the diagnostic value of genuinely multi-sector needs assessment in a displacement context. Future assessments in this response should preserve this design rather than defaulting to single-cluster instruments."
+}

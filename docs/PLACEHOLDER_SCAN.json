@@ -1,0 +1,7 @@
+{
+  "files_scanned": [
+    "../site",
+    "../backend/src"
+  ],
+  "findings": []
+}

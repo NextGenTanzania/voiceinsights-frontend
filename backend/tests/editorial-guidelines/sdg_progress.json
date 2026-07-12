@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "National-scale and indicator-literate -- SDG Progress writing must explicitly link citizen-level findings to specific SDG targets and indicators, complementing (never replacing) administrative national indicator reporting. Written for national reporting and voluntary review audiences.",
+
+  "section_rules": {
+    "executive_summary": "Must state explicitly which SDG target(s) this citizen-level evidence is relevant to, using specific target numbers where the data genuinely supports the link -- never a vague 'this supports the SDGs' statement.",
+    "discussion": "Should explain how citizen-level ground-truth data complements administrative indicator reporting, and note explicitly that this is a complementary, not a substitute, data source for official national SDG reporting.",
+    "methodology": "State clearly this is citizen-perception data collected via the described channels, distinct from administrative or facility-level SDG indicator data.",
+    "limitations": "Must state plainly that this citizen feedback is not a substitute for official national statistics office SDG indicator reporting, and should be read as complementary ground-truth evidence.",
+    "recommendations": "Recommendations should include incorporating this citizen-level evidence into the next national SDG voluntary review cycle, and cross-referencing findings against administrative data where possible.",
+    "policy_implications": "Should reference the specific SDG target and, where relevant, the specific national policy or programme area the finding is relevant to -- avoid generic 'this matters for the SDGs' framing.",
+    "lessons_learned": "Reflect on the value of citizen-level feedback as a complement to administrative SDG indicator reporting, and any specific findings that citizen data captured that administrative data alone would likely have missed.",
+    "conclusion": "State clearly which SDG-relevant dimension shows the strongest citizen-validated progress and which remains a named, unresolved gap.",
+    "annexes": "Include a explicit mapping of each major finding to its most relevant SDG target number(s), to support direct use in national reporting documentation.",
+    "evidence_style": "Cite the specific SDG target number alongside every major finding where genuinely relevant, and explicitly flag findings that do NOT have a clear SDG target mapping rather than forcing an artificial link."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["citizen-perceived institutional responsiveness (SDG 16-relevant)", "affordability/access to services (sector-dependent SDG relevance)", "infrastructure completion (SDG 6/9/11-relevant depending on sector)", "regional/national coverage comprehensiveness"],
+    "common_risks": ["forcing an SDG target link where the data does not genuinely support one", "treating citizen perception data as equivalent to official administrative SDG indicator data", "under-reporting secondary concerns (affordability, access) because a stronger primary finding (responsiveness) dominates the narrative"],
+    "typical_recommendations": ["incorporate citizen-level findings into the next national SDG voluntary review", "cross-reference citizen-reported gaps (e.g. infrastructure) against administrative completion data", "establish this citizen feedback exercise as a recurring input to national SDG tracking"],
+    "typical_policy_implications": ["national SDG target-specific policy and resource allocation", "sub-national SDG progress reporting requirements"],
+    "typical_donor_expectations": "National and multilateral SDG reporting stakeholders expect citizen-level evidence to be explicitly and specifically mapped to SDG targets, with clear acknowledgment of where it complements rather than replaces official administrative statistics."
+  },
+
+  "recommendation_categories": ["Policy", "Monitoring", "Institutional Strengthening", "Governance"],
+
+  "forbidden_behaviors": [
+    "Never claim this citizen-level survey data constitutes official national SDG indicator reporting -- it is complementary ground-truth evidence only.",
+    "Never force an SDG target citation where the underlying finding does not genuinely and specifically relate to that target.",
+    "Never allow a strong primary finding (e.g. responsiveness) to overshadow or omit a weaker but still SDG-relevant secondary finding (e.g. affordability, access)."
+  ]
+}

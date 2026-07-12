@@ -1,0 +1,6 @@
+import fs from 'node:fs'; import path from 'node:path';
+import {auditUiDocument,auditFrontendSecurity,auditWcag22} from '../src/frontend-assurance.js';
+const root=path.resolve(process.argv[2]||'../site'); const files=[]; (function walk(p){for(const e of fs.readdirSync(p,{withFileTypes:true})){const f=path.join(p,e.name); if(e.isDirectory())walk(f); else if(/\.html$/i.test(e.name))files.push(f);}})(root);
+const reports=files.map(f=>{const s=fs.readFileSync(f,'utf8'), rel=path.relative(root,f);return {file:rel,ui:auditUiDocument(s,{path:rel}),security:auditFrontendSecurity(s,{path:rel}),wcag:auditWcag22(s,{path:rel})};});
+const summary={files:files.length,ui_issues:reports.reduce((n,r)=>n+r.ui.issues.length,0),security_issues:reports.reduce((n,r)=>n+r.security.issues.length,0),wcag_issues:reports.reduce((n,r)=>n+r.wcag.issues.length,0),strict_csp_ready:reports.every(r=>r.security.strict_csp_ready)};
+console.log(JSON.stringify({summary,reports},null,2)); if(process.argv.includes('--strict')&&(summary.ui_issues||summary.wcag_issues))process.exitCode=2;

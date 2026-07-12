@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This Retail Banking Satisfaction Survey reached 200 customers across five counties in Kenya — Kisumu, Nairobi, Mombasa, Nakuru, and Eldoret — with full response completion, providing a board-level view of customer experience across the retail branch network and digital channels.\n\nOverall satisfaction is favourable (56.5% positive, 29% neutral, 14.5% negative). Two concerns are tied for the top customer-cited theme — network access (branch and ATM coverage) and affordability (fees and charges) — each raised with equal frequency, meaning neither can be treated as the sole priority without addressing the other. This is a distinct pattern from a typical single-dominant-concern result and has direct implications for how the Board should sequence investment between physical network expansion and fee structure review.\n\nAmong specific channel feedback, the recently opened branch is credited with improving customer service experience, while the mobile banking application is described as fundamentally convenient but undermined by intermittent transaction failures — a technical reliability issue rather than a design or usability concern.\n\nThe customer sample achieved close to even gender balance (51% male, 49% female) and is distributed across five counties, with Kisumu, Nairobi, and Mombasa each contributing comparable response volumes. Data quality is consistent with this survey series, supporting confident use of these findings in quarterly Board reporting.",
+
+  "key_findings": [
+    "Network access and affordability are tied as the top customer concern (6 mentions each) — this dual-priority finding means neither branch/ATM expansion nor fee review alone will fully address customer concerns; both require Board attention in this reporting cycle.",
+    "The new branch opening is directly credited with improved customer service, providing a concrete, attributable return on this specific network investment that the Board can reference in future expansion business cases.",
+    "Mobile banking transaction failures are a specific, recurring technical complaint distinct from the network/affordability concerns — this is an operational reliability issue for the technology function, not a customer-facing branch or pricing issue.",
+    "Satisfaction is broadly consistent across all five counties surveyed, with no single county driving the negative 14.5% share — meaning the network access and affordability concerns are systemic rather than isolated to an underperforming branch or region.",
+    "Gender balance in the customer sample (51%/49%) is close to even, supporting confidence that this satisfaction reading reflects the full retail customer base.",
+    "County-level response distribution (Kisumu 44, Nairobi 43, Mombasa 43, Nakuru 36, Eldoret 34) is reasonably even, providing an adequate basis for county-level satisfaction comparison in future Board reporting."
+  ],
+
+  "discussion": "The tied prominence of network access and affordability is worth Board-level attention specifically because it resists a simple prioritization narrative: a Board presentation that addresses only fee structure, or only branch/ATM expansion, will leave an equally-weighted customer concern unaddressed. This suggests the appropriate response is a coordinated retail strategy review that considers both dimensions together — for example, evaluating whether fee levels are being used to fund network expansion, and whether that trade-off is well understood and accepted by the customer base, rather than treating them as competing budget lines.\n\nThe mobile banking reliability issue is analytically separate from both of these customer-experience themes and should be tracked and resourced as a distinct technology operations item, since conflating it with the branch network/affordability discussion risks under-resourcing a straightforward engineering fix by bundling it into a larger, slower-moving strategic review.",
+
+  "conclusions": "This satisfaction survey provides the Board with a clear, dual-priority customer view: network access and affordability require joint consideration in retail strategy, while mobile banking reliability is a separate, more immediately actionable technology fix. The recent branch investment demonstrates a positive return and supports continued, evidence-based network expansion decisions.",
+
+  "recommendations": {
+    "immediate": [
+      "Present the tied network-access/affordability finding to the Board as a joint agenda item, avoiding a single-priority framing that would leave one concern unaddressed.",
+      "Route mobile banking transaction failure reports to the technology operations function as a standalone reliability fix, separate from the retail strategy discussion."
+    ],
+    "medium_term": [
+      "Commission a combined network-expansion and fee-structure review that considers both customer priorities together, rather than as separate initiatives competing for the same budget approval cycle.",
+      "Use the new branch's demonstrated customer service improvement as a template for evaluating future branch investment business cases."
+    ],
+    "long_term": [
+      "Establish network access and fee-affordability as two permanently tracked, board-reported quarterly indicators, given their tied prominence in this round — rather than allowing one to be deprioritized based on a future round where it happens to rank second.",
+      "Build mobile channel reliability (transaction success rate) into standing technology-operations KPI reporting, separate from customer satisfaction reporting, to ensure it receives continuous engineering attention rather than only surfacing periodically in a satisfaction survey."
+    ]
+  },
+
+  "risks": [
+    "If the Board addresses only one of the two tied top concerns (network access or affordability) in the next strategic cycle, the other may be perceived by customers as neglected, potentially eroding overall satisfaction even if the addressed concern improves.",
+    "Continued mobile transaction failures, if not resourced as a distinct technology priority, could persist across multiple future survey rounds simply because it is not clearly 'owned' by either the retail strategy or customer experience functions."
+  ],
+
+  "opportunities": [
+    "The demonstrated customer service return from the new branch investment provides the Board with concrete, evidence-based support for continued network expansion, strengthening future capital allocation business cases.",
+    "Because the mobile reliability issue is analytically distinct and well-defined, it represents a comparatively low-cost, high-visibility fix that could measurably improve digital channel satisfaction scores in the very next survey round."
+  ],
+
+  "lessons_learned": "Presenting network access and affordability as a tied, dual-priority finding — rather than forcing a false single ranking — gives the Board a more accurate and more useful basis for resource allocation than a survey design that would have asked customers to rank a single 'top concern'. Future retail satisfaction surveys in this series should continue to allow ties to surface naturally in the data rather than being averaged away."
+}

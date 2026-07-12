@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { ROLE_PERMISSIONS, hasPermission, buildIamOverview, generateTotpSecret, buildOtpAuthUri, generateTotpCode, verifyTotpCode, validateSsoConfiguration, buildScimConfig, generateApiKey, sha256Hex, validateApiKeyScopes } from '../src/enterprise-identity-access.js';
+
+test('v210.3A defines all operational roles and founder wildcard authority',()=>{assert.ok(ROLE_PERMISSIONS.founder_executive.includes('*'));assert.equal(hasPermission('org_admin','sso.manage'),true);assert.equal(hasPermission('enumerator','api_key.manage'),false);});
+test('IAM overview calculates MFA coverage from live counts',()=>{const x=buildIamOverview({users:10,mfa_enabled:8,active_sso_connections:1,active_api_keys:2});assert.equal(x.metrics.mfa_coverage_pct,80);assert.equal(x.metrics.users_without_mfa,2);});
+test('TOTP enrollment URI and verification are RFC-style and functional',async()=>{const s=generateTotpSecret();assert.ok(s.length>=16);const uri=buildOtpAuthUri({secret:s,account:'admin@example.com'});assert.match(uri,/otpauth:\/\/totp/);const t=Date.now();const code=await generateTotpCode(s,t);assert.equal(await verifyTotpCode(s,code,t),true);});
+test('SSO validation rejects incomplete providers and accepts complete OIDC config',()=>{assert.equal(validateSsoConfiguration({provider:'oidc'}).ok,false);assert.equal(validateSsoConfiguration({provider:'oidc',issuer_url:'https://id.example.com',client_id:'abc',redirect_uri:'https://app.example.com/callback'}).ok,true);});
+test('SCIM contract exposes user lifecycle operations',()=>{const x=buildScimConfig({organization_id:'org1',base_url:'https://voiceinsightsafrica.com'});assert.match(x.endpoint,/\/api\/scim\/v2$/);assert.ok(x.supported_operations.includes('Users.suspend'));});
+test('API keys are random, hashable and scope validated',async()=>{const a=generateApiKey(),b=generateApiKey();assert.notEqual(a,b);assert.equal((await sha256Hex(a)).length,64);assert.equal(validateApiKeyScopes(['campaigns:read']).ok,true);assert.equal(validateApiKeyScopes(['root:all']).ok,false);});

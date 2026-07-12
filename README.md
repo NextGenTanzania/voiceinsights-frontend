@@ -1,15 +1,26 @@
-# VoiceInsights Africa — Full Prototype (v2)
+# VoiceInsights Africa
 
-Two parts:
+Production-oriented research intelligence, evidence assurance and international publication platform.
 
-- `site/`    — frontend (Cloudflare Pages), now in English, wired to call the real backend
-- `backend/` — Cloudflare Worker + D1 database + R2 storage (the real "brain": auth, surveys, WhatsApp AI pipeline)
+## Flagship Sample Reports Generator
 
-## Quick start
+The official sample library contains sixteen governed synthetic demonstration publications. Every sample is generated from the same report model used by the API and export pipeline; no sample is maintained as a manual one-off report.
 
-1. **Frontend only (what you already deployed):** works as a visual demo with mock data, same as before.
-2. **Full working system:** follow `backend/README.md` step by step (~15 minutes), then update
-   `site/assets/js/config.js` with your Worker URL and push to Git. Login, Dashboard, and Survey
-   Builder will then use real data instead of mock data.
+Generate the sample models:
 
-See `site/README.md` for frontend deploy details and `backend/README.md` for backend deploy details.
+```bash
+cd backend
+node scripts/generate-flagship-samples.js ../samples/flagship-reports
+```
+
+Run verification:
+
+```bash
+npm test
+npm run test:flagship
+npx wrangler deploy --dry-run
+```
+
+Open the public library through `site/sample-reports.html` or the API route `/api/public/flagship-sample-library`.
+
+All sample content is explicitly synthetic and must not be represented as official statistics or institutional endorsement.

@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This Municipal Services Feedback survey reached 300 residents across six regions of Tanzania — Mwanza, Mbeya, Dar es Salaam, Iringa, Dodoma, and Arusha — with full response completion, assessing citizen experience of recent local governance and complaint-handling reforms.\n\nOverall sentiment is favourable (59.3% positive, 28.7% neutral, 12% negative). Two specific institutional changes are directly credited by residents: the introduction of a new complaints desk at ward offices, described as a welcome change, and a broader sense that local leaders have become more responsive to citizen complaints than before. Both are attributable, specific governance improvements rather than a vague sense of general satisfaction.\n\nHowever, this survey also surfaces a specific accountability gap that stands in contrast to the responsiveness gains: residents repeatedly and independently noted that budget information is still not shared publicly. This is a meaningful distinction for governance reporting — citizens are acknowledging that complaint responsiveness has improved while simultaneously flagging that financial transparency, a distinct governance dimension, has not kept pace.\n\nThe sample achieved close to even gender balance (50.3% female, 49.7% male) and reasonably even distribution across all six regions, with Mwanza and Mbeya contributing the largest response shares. Data quality is strong and consistent with this survey series, supporting confident use of these findings for governance and accountability programming decisions.",
+
+  "key_findings": [
+    "The new ward-level complaints desk is directly credited by residents as a welcome institutional change — a specific, attributable service-delivery reform rather than a general sentiment improvement.",
+    "Local leader responsiveness to complaints is independently reported as improved 'than before' — this is a distinct governance-culture finding, separate from the complaints-desk infrastructure change itself.",
+    "Budget information transparency is repeatedly and specifically flagged as unmet — residents draw a clear distinction between complaint responsiveness (improving) and financial transparency (not improving), rather than treating governance as a single undifferentiated dimension.",
+    "Sentiment is net positive across all six regions, with no single region driving the 12% negative share — indicating the budget transparency gap is a systemic governance issue rather than isolated to one municipality.",
+    "Gender balance among respondents (50.3%/49.7%) is close to even, supporting confidence this feedback represents the full resident population rather than one demographic group.",
+    "Regional response distribution (Mwanza 62, Mbeya 52, Dar es Salaam 50, Iringa 47, Dodoma 47, Arusha 42) is reasonably even, providing an adequate basis for regional governance comparison."
+  ],
+
+  "discussion": "Citizens' clear distinction between improving complaint responsiveness and stagnant budget transparency reflects a sophisticated, specific form of civic feedback that a single blended 'trust in government' score would obscure. This distinction matters for governance programming: responsiveness reforms (complaints desks, more attentive local leaders) are process-level improvements that can be implemented relatively quickly, while budget transparency requires a specific, deliberate publication commitment that responsiveness reforms alone do not automatically deliver.\n\nThe fact that residents raised the budget transparency gap unprompted, in the same breath as praising responsiveness improvements, suggests citizens are not conflating the two — they recognize genuine progress in one area while holding local government accountable for a separate, unmet commitment in another. This is exactly the kind of nuanced, dimension-specific feedback that CHS-aligned and governance-accountability reporting frameworks are designed to capture.",
+
+  "conclusions": "This survey confirms genuine, citizen-recognized progress in complaint responsiveness and service-delivery infrastructure (the new complaints desk), while identifying budget transparency as a distinct, unaddressed accountability gap. The two should be reported and tracked separately, since responsiveness gains should not be allowed to substitute for the still-outstanding transparency commitment in official governance reporting.",
+
+  "recommendations": {
+    "immediate": [
+      "Formally acknowledge and communicate the complaints-desk and leader-responsiveness improvements to residents, reinforcing the visible institutional changes that generated this positive feedback.",
+      "Establish a specific, dated commitment for public budget information publication, given how consistently and specifically this gap was raised across all six regions surveyed."
+    ],
+    "medium_term": [
+      "Pilot a simple, accessible public budget summary format (e.g., ward-level noticeboards, SMS-based budget summaries) in the regions with the strongest transparency complaints, before committing to a full municipal rollout.",
+      "Document the complaints-desk model's specific design features as a replicable template for wards or municipalities that have not yet implemented it."
+    ],
+    "long_term": [
+      "Establish budget transparency as a standing, separately-tracked governance indicator alongside complaint responsiveness, ensuring future survey rounds can verify whether this specific gap has been closed.",
+      "Incorporate citizen-reported responsiveness and transparency findings into municipal governance performance reviews, ensuring both dimensions carry accountability weight rather than only the more easily-achieved responsiveness dimension."
+    ]
+  },
+
+  "risks": [
+    "If budget transparency remains unaddressed while responsiveness reforms continue to be highlighted, residents may become skeptical that positive survey results reflect selective governance reporting rather than comprehensive accountability.",
+    "Without a specific, dated transparency commitment, this gap risks being carried forward unresolved into future survey rounds, weakening the credibility of governance reporting over time."
+  ],
+
+  "opportunities": [
+    "The complaints-desk and leader-responsiveness findings are concrete, citizen-validated governance successes suitable for public communication and replication across additional wards or municipalities.",
+    "Because the budget transparency gap is consistently reported across all six regions rather than isolated, a single, well-designed public budget publication format could plausibly close this gap system-wide rather than requiring region-by-region solutions."
+  ],
+
+  "lessons_learned": "Citizens' ability to clearly distinguish between an improving governance dimension (responsiveness) and a stagnant one (transparency) in open-ended feedback demonstrates the value of avoiding a single blended trust-in-government score. Future municipal feedback surveys in this series should continue to track these as separate, named dimensions, since collapsing them into one score would have obscured the specific, actionable transparency gap this round identified."
+}

@@ -1,0 +1,8 @@
+{
+  "kind": "local_cpu_serialization_benchmark",
+  "events": 100000,
+  "elapsed_ms": 484.03,
+  "events_per_second": 206597.04,
+  "serialized_megabytes": 38.01,
+  "live_cloudflare_load_test": false
+}

@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This Rapid Humanitarian Needs Assessment reached 500 respondents across four locations in South Sudan — Wau, Yei, Malakal, and Juba — with full response completion, representing the largest sample in this reporting series. The assessment was conducted to evaluate the adequacy and timeliness of recent water, shelter, and food assistance interventions against Sphere minimum standards and Core Humanitarian Standard (CHS) accountability commitments.\n\nOverall sentiment is net positive (57% positive, 28% neutral, 15% negative), and one intervention stands out as a clear, specific success: newly constructed boreholes are directly and repeatedly credited by respondents with improving clean water access. This is a Sphere-relevant outcome that should be documented and reported to donors with confidence, as it represents a verified improvement in a core minimum-standard area.\n\nHowever, this assessment surfaces two accountability-relevant gaps that CHS commitments require be reported transparently rather than minimized. First, shelter materials in multiple locations arrived after the onset of the rainy season, meaning affected households experienced a period of continued exposure that the intervention was specifically designed to prevent — a timeliness failure with direct protection implications. Second, food assistance quantities were repeatedly described by recipients as insufficient for full household need, indicating either a targeting/allocation shortfall or a genuine resource gap between assessed need and available supply.\n\nThe sample achieved close to even gender balance (52% male, 48% female) and reasonably even distribution across all four locations, with Wau and Yei contributing the largest response volumes. Data quality remains consistent and high, supporting confident use of these findings for immediate operational decision-making, consistent with the urgency expected of a rapid needs assessment.",
+
+  "key_findings": [
+    "Borehole construction is a specific, respondent-confirmed water access success — this is a concrete, Sphere-relevant outcome distinct from general programme satisfaction, and should be reported to donors as a verified result.",
+    "Shelter material delivery timing is a documented gap: multiple respondents specifically noted materials arrived after the rainy season began, meaning the intervention's protective purpose was partially undermined by delivery delays.",
+    "Food assistance quantity, not quality or appropriateness, is the specific and repeated concern — respondents are not questioning what was provided, only that it was insufficient for the full household, indicating an allocation or resourcing gap.",
+    "'Service quality' and 'affordability' are the two most-cited themes (6 mentions each), roughly tied — meaning both the manner of assistance delivery and the sufficiency of assistance quantity are equally salient concerns to affected populations.",
+    "Sentiment is positive in the majority (57%) despite these gaps, suggesting affected populations are distinguishing between valuing the assistance received and flagging specific shortfalls — this is a mature, specific form of feedback rather than blanket dissatisfaction.",
+    "Response distribution across all four locations (Wau 130, Yei 125, Malakal 124, Juba 121) is unusually even for a humanitarian context, supporting confidence that findings reflect the assessment area broadly rather than one crisis-affected location."
+  ],
+
+  "discussion": "In humanitarian response, the distinction between 'the intervention worked as designed' and 'the intervention worked, but not fully or not in time' is operationally critical, and this assessment captures that distinction clearly. The borehole finding demonstrates a Sphere-standard outcome achieved and recognized. The shelter-timing and food-quantity findings, by contrast, describe partial delivery against the same standards — a distinction accountability frameworks like CHS specifically require agencies to report rather than aggregate into a single satisfaction score.\n\nThe shelter timing gap is particularly significant from a protection standpoint: Sphere shelter standards exist specifically to prevent exposure during predictable seasonal risk periods, and a delay past the onset of rains represents a specific, documentable service delivery failure with potential downstream health and protection consequences, not merely an inconvenience.",
+
+  "conclusions": "This assessment confirms meaningful progress on water access (a genuine Sphere-standard success) while identifying two specific, CHS-relevant accountability gaps — shelter delivery timing and food assistance sufficiency — that require documented follow-up rather than being absorbed into an overall positive sentiment narrative. Consistent with CHS Commitment 4 (timely and effective response) and Commitment 1 (appropriate to needs), these findings should be reported transparently to both affected populations and donors, alongside the water access success.",
+
+  "recommendations": {
+    "immediate": [
+      "Formally document the shelter material delivery delay as a service-delivery incident against Sphere shelter timing standards, and review the supply chain step where the delay occurred to prevent recurrence in the next seasonal cycle.",
+      "Review food assistance allocation calculations against actual household size data collected during registration, to determine whether the quantity gap is a targeting/calculation issue or a genuine resource shortfall requiring additional funding."
+    ],
+    "medium_term": [
+      "Establish a pre-positioning timeline for shelter materials ahead of the next rainy season, informed by the specific delay identified in this round, with a buffer sufficient to absorb typical supply chain disruption.",
+      "If the food assistance gap is confirmed as resource-driven rather than allocation-driven, prepare a specific, quantified funding gap analysis for donor communication."
+    ],
+    "long_term": [
+      "Incorporate borehole access as a standing water-point functionality indicator in future monitoring, to verify the water access improvement identified here is sustained rather than a point-in-time observation.",
+      "Establish a standing seasonal-readiness checklist for shelter material pre-positioning, directly informed by this assessment's finding, to institutionalize the lesson rather than relying on it being remembered informally."
+    ]
+  },
+
+  "risks": [
+    "If shelter delivery timing is not addressed before the next rainy season, affected households in the same locations face repeated exposure risk that this intervention was specifically designed to prevent.",
+    "Continued food assistance insufficiency, if resource-driven, could affect household coping strategies (e.g., negative coping mechanisms) that are not captured directly in this assessment but are a known risk when assistance persistently falls short of need."
+  ],
+
+  "opportunities": [
+    "The borehole water access success is a strong, Sphere-standard-referenced achievement suitable for donor reporting and replication planning in other locations facing similar water access constraints.",
+    "Because both accountability gaps (shelter timing, food quantity) are consistent across all four locations rather than isolated, a single supply-chain or funding-level fix could plausibly resolve both simultaneously rather than requiring location-specific interventions."
+  ],
+
+  "lessons_learned": "This round demonstrates the diagnostic value of open-ended, respondent-driven feedback in a humanitarian context: the shelter timing and food quantity findings are considerably more actionable than a generic satisfaction score would have been, because they identify the SPECIFIC nature of the gap (timing, quantity) rather than simply flagging dissatisfaction. Future rapid assessments in this response should preserve this open-response format specifically because it enables the kind of standard-referenced, accountability-relevant reporting that CHS commitments require."
+}

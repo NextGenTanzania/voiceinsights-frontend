@@ -10,16 +10,18 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+<h1 class="visually-hidden">AI Center — Admin Console</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
       <p class="muted-note" style="margin-bottom:1.5rem;">Each service's health is measured from real coverage over the last 48 hours — the percentage of eligible responses that actually got that stage's output — not a static status label.</p>
       <div id="ai-services-grid" class="grid grid-2" style="gap:1rem;">
         <p class="muted-note" style="padding:1.5rem;">Loading…</p>
       </div>
-      <button class="btn btn-ghost btn-sm" id="ai-refresh-btn" style="margin-top:1.5rem;">↻ Refresh</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="ai-refresh-btn" style="margin-top:1.5rem;">↻ Refresh</button>
 
       <div class="section-head" style="margin-top:2rem;">
         <h2 style="font-size:1.05rem;">Dead-Letter Queue — AI Enrichment</h2>
@@ -79,7 +81,7 @@
                   <div style="font-weight:600;">${item.organization_name} — ${item.campaign_name}</div>
                   <div class="muted-note" style="font-size:.78rem;">${item.phone_number || 'Unknown respondent'} · Failed after ${item.attempts} attempts · Last: ${new Date(item.updated_at + 'Z').toLocaleString()}</div>
                 </div>
-                <button class="btn btn-primary btn-sm dl-retry-btn" data-id="${item.id}">↻ Retry Now</button>
+                <button type="button" class="btn btn-primary btn-sm dl-retry-btn" data-id="${item.id}">↻ Retry Now</button>
               </div>
               <div style="margin-top:.6rem; font-size:.82rem; color:var(--danger);">Last error: ${item.last_error || 'Unknown'}</div>
               ${item.attempt_history && item.attempt_history.length ? `
@@ -113,6 +115,6 @@
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
 <script src="/assets/js/admin-button-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

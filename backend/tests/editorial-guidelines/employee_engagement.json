@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Internal, HR/leadership-facing, and confidential in register -- distinctly different from customer-facing reports since the audience (leadership) is also, in a sense, the subject of some findings (e.g. management transparency). Must balance candor about morale issues with a constructive, action-oriented framing.",
+
+  "section_rules": {
+    "executive_summary": "Must identify the single most-cited theme with clear numeric separation from other themes (e.g. 'roughly double the next concern') to give leadership an unambiguous first priority, since diffuse engagement action plans typically fail.",
+    "discussion": "Should explicitly note the value of company-wide (multi-office) participation in strengthening confidence that a finding is organizational rather than one office's local issue.",
+    "methodology": "State whether the survey was anonymous, since anonymity materially affects candor in employee engagement data and should be noted for reader confidence in findings.",
+    "limitations": "Note response rate relative to total eligible staff, since low participation can indicate either survey fatigue or that only particularly engaged/disengaged staff responded, skewing findings.",
+    "recommendations": "Must include a specific staff communication/feedback-loop recommendation, since engagement surveys not followed by visible action are known to depress future participation and trust.",
+    "policy_implications": "Frame as 'organizational policy implications' (e.g. HR policy, management practice) rather than public policy implications.",
+    "lessons_learned": "Should reflect on whether the open-ended format surfaced organization-wide priorities more clearly than a fixed-dimension rating scale would have.",
+    "conclusion": "State the specific leading concern and a commitment to visible follow-up -- an employee engagement report without a stated action commitment risks undermining trust in the exercise itself.",
+    "annexes": "Include response rate by office/region if available, to support confidence that findings reflect the whole organization rather than one location.",
+    "evidence_style": "Present sentiment and theme frequency data plainly; avoid quoting specific verbatim employee comments in ways that could risk identifying an individual respondent, even anonymized -- paraphrase where a quote might be too specific to a small team or role."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["response rate", "leading concern theme frequency (with numeric separation from other themes)", "regional/office participation balance", "overall engagement sentiment", "negative sentiment share (tracked explicitly, not absorbed into overall positive framing)"],
+    "common_risks": ["low response rate skewing toward particularly engaged or disengaged staff", "lack of follow-up communication depressing future survey participation", "verbatim quotes risking respondent identifiability even when anonymized"],
+    "typical_recommendations": ["visible leadership communication acknowledging survey findings", "targeted action plan for the leading concern with trackable milestones", "shorter-interval pulse surveys on the leading concern specifically"],
+    "typical_policy_implications": ["HR policy and management practice adjustments", "regional office performance review criteria"],
+    "typical_donor_expectations": "Not applicable -- internal HR/leadership audience; equivalent expectation is visible commitment to action, since engagement data without follow-through is a well-documented driver of declining trust in internal surveys."
+  },
+
+  "recommendation_categories": ["Immediate", "30-day", "90-day", "Operational", "Capacity Building", "Governance"],
+
+  "forbidden_behaviors": [
+    "Never quote a verbatim employee comment specific enough to risk identifying an individual, even when the survey is nominally anonymous.",
+    "Never present a low response rate as if it were fully representative of the whole organization without noting this limitation.",
+    "Never use customer-facing or development-sector terminology in an internal staff engagement report."
+  ]
+}

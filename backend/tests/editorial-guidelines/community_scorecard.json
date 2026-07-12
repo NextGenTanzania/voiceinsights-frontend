@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Participatory and dialogue-oriented -- distinct from Citizen Feedback's broader municipal framing, Community Scorecard writing must reflect the methodology's specific joint community-provider accountability purpose, framing findings as agenda items for a facility-community dialogue, not a standalone verdict.",
+
+  "section_rules": {
+    "executive_summary": "Must frame findings explicitly as scorecard inputs for the next facility-community dialogue session, not as a final judgment -- this is a structural feature of the scorecard methodology and should be stated plainly.",
+    "discussion": "Should explain the scorecard methodology's dual-sided purpose (crediting specific improvements while separately documenting specific gaps) as intentional design, not as an inconsistent set of findings.",
+    "methodology": "State the specific facility/service scored and the participatory scorecard process used (e.g. community scoring session, facility management joint review), since this differs from a standard survey methodology.",
+    "limitations": "Note participation levels by location if uneven, since scorecard validity depends on adequate, representative community participation at each site.",
+    "recommendations": "Every recommendation should be framed as a specific agenda item for the next facility-community dialogue meeting, with a named responsible party (community, facility, or both jointly).",
+    "policy_implications": "Rare -- most findings are facility-level; escalate only if a finding is consistent across multiple facilities in the same scorecard exercise.",
+    "lessons_learned": "Reflect on the value of the scorecard's structured, dual-sided format relative to a single blended satisfaction rating.",
+    "conclusion": "Must name the specific standing agenda items for the next facility-community dialogue -- a scorecard report without a clear next-meeting agenda has not fulfilled its methodological purpose.",
+    "annexes": "Include the specific scorecard indicators/questions used in the participatory session, since these are typically co-developed with the community and facility, not a standard fixed instrument.",
+    "evidence_style": "Present findings as scorecard items (specific, dialogue-ready) rather than as narrative prose alone -- this report type benefits from a more structured, itemized evidence presentation than a standard survey report."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["response rate / participation level", "facility-specific service quality themes", "complaint mechanism effectiveness", "transparency/resource allocation perception", "gender participation balance (particularly relevant for health facility scorecards)"],
+    "common_risks": ["uneven participation across scorecard locations undermining comparability", "treating scorecard findings as final rather than dialogue inputs", "facility management not preparing a response ahead of the community dialogue session"],
+    "typical_recommendations": ["present findings at the next facility-community dialogue with named agenda items", "facility-level transparency measures (budget noticeboards, verbal briefings)", "verify participation balance across scorecard locations for future rounds"],
+    "typical_policy_implications": ["facility-level accountability mechanism institutionalization"],
+    "typical_donor_expectations": "Donors funding participatory accountability programmes expect scorecard reports to demonstrate the joint community-provider dialogue process explicitly, not just present findings as a one-way assessment."
+  },
+
+  "recommendation_categories": ["Immediate", "Governance", "Institutional Strengthening", "Monitoring"],
+
+  "forbidden_behaviors": [
+    "Never present community scorecard findings as a final, one-way judgment rather than as input to a joint facility-community dialogue process.",
+    "Never omit the specific next-dialogue agenda framing that distinguishes this report type from a standard citizen survey.",
+    "Never generalize a single facility's scorecard finding to a broader system-level conclusion without evidence of consistency across multiple facilities."
+  ]
+}

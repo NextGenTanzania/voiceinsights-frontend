@@ -1,0 +1,43 @@
+{
+  "executive_summary": "This report presents the Endline Evaluation of the Maternal Health Program across the same three Malawian districts assessed at baseline — Lilongwe, Blantyre, and Mzuzu — surveying 400 respondents with full completion, enabling direct, like-for-like comparison against this programme's Time Zero reference values under its Results Framework.\n\nComparing endline to baseline, affordability concerns have measurably declined — from the dominant baseline concern (8 topic mentions) to the second-most-cited endline concern (6 mentions) — while access has become the most-cited theme at endline (7 mentions, up from 5 at baseline). Read together with a modest improvement in negative sentiment (from 17.5% at baseline to 15% at endline), this is a coherent and programmatically meaningful pattern: the programme appears to have made genuine progress on affordability, its originally-identified priority barrier, and in doing so has surfaced access as the next most salient constraint — a common and expected sequence in maternal health programming, not a sign of programme failure.\n\nRespondents explicitly and repeatedly compared current staff responsiveness favourably against 'the baseline period' — language that, unlike at baseline, can now be reasonably read as programme-attributable, since it directly references the comparison period this evaluation is designed to measure against.\n\nHowever, this endline also surfaces a specific implementation gap not present in the baseline: multiple respondents noted that 'some of the promised infrastructure has still not been completed' — an explicit, unprompted signal that a specific component of the programme's implementation plan has not yet reached full delivery, and should be reported transparently alongside the genuine gains documented above.\n\nThe sample achieved reasonable gender balance (52.75% male, 47.25% female) and comparable district distribution to baseline, supporting confident comparison across rounds.",
+
+  "key_findings": [
+    "Affordability concern declined from the dominant baseline theme (8 mentions) to the second-ranked endline theme (6 mentions) — this is measurable, direct evidence the programme's affordability-focused Theory of Change is working as designed.",
+    "Access has become the most-cited theme at endline (7 mentions, up from 5 at baseline) — in the context of declining affordability concern, this represents the programme's 'next priority barrier' emerging, not a new or worsening problem.",
+    "Negative sentiment improved modestly, from 17.5% at baseline to 15% at endline — a real but measured gain, consistent with a programme making genuine progress rather than delivering a dramatic transformation.",
+    "Respondents explicitly compared current staff responsiveness against 'the baseline period' — this endline-stage language, unlike the same phrase's appearance at baseline, can be reasonably attributed to the programme's own interventions given the direct temporal reference.",
+    "An implementation gap was newly identified at endline: multiple respondents noted specific promised infrastructure remains incomplete — this must be reported transparently as an unmet commitment, not omitted because other results are positive.",
+    "Gender balance (52.75%/47.25%) and district distribution at endline are comparable to baseline, supporting methodologically sound before/after comparison rather than a comparison confounded by sample composition changes."
+  ],
+
+  "discussion": "The affordability-to-access shift observed here is a well-documented pattern in maternal health programming: addressing a population's most acute barrier frequently reveals the next-most-binding constraint, rather than producing a uniformly satisfied population. Evaluators and donors should read this endline's finding — access now the top concern — not as evidence the programme fell short, but as evidence it succeeded on its originally-targeted barrier clearly enough that a different, previously second-order concern has become salient by comparison.\n\nThe unfinished infrastructure finding requires separate, direct treatment in this report specifically because it is the one endline finding that does NOT fit the 'genuine progress, next barrier emerging' narrative — it is a straightforward unmet commitment, and CHS-aligned reporting practice requires it be named plainly rather than allowed to be diluted by the surrounding positive results.",
+
+  "conclusions": "This endline evaluation provides credible, baseline-referenced evidence that the Maternal Health Program achieved its primary objective of reducing affordability as the dominant barrier to services, with a corresponding modest improvement in overall sentiment. Access has emerged as the logical next priority for a subsequent programme phase. One specific implementation gap — incomplete promised infrastructure — should be documented and addressed as a distinct action item, separate from the programme's overall positive result.",
+
+  "recommendations": {
+    "immediate": [
+      "Formally close out and report the incomplete infrastructure commitment identified at endline, including a specific timeline for completion or an explicit explanation if it will not be completed, per CHS transparency expectations.",
+      "Communicate the affordability improvement (8→6 mentions, baseline to endline) to donors and programme leadership as the primary, quantified result of this programme phase."
+    ],
+    "medium_term": [
+      "Design the next programme phase's Theory of Change around access as the primary targeted barrier, using this endline's finding as the evidentiary basis, mirroring how affordability was targeted in the phase now concluding.",
+      "Conduct a focused root-cause review of the access barrier specifically in the districts where it is most prominent, to ensure the next phase targets the correct access dimension (e.g., distance, hours of operation, referral pathways)."
+    ],
+    "long_term": [
+      "Retain this endline's baseline-referenced comparison methodology (identical question wording, comparable sample composition) as the template for evaluating the next programme phase, to preserve the ability to track sequential barrier resolution over multiple phases.",
+      "Institutionalize infrastructure delivery tracking as a standing implementation indicator, reported at each monitoring interval rather than only surfacing as an endline finding, to prevent recurrence of the completion gap identified here."
+    ]
+  },
+
+  "risks": [
+    "If the incomplete infrastructure is not addressed before the next programme phase begins, it may continue to constrain the access improvements the next phase is designed to deliver.",
+    "Without a next-phase design that explicitly targets access, the modest sentiment gains achieved in this phase could plateau rather than continue improving, since the newly-dominant barrier would remain unaddressed."
+  ],
+
+  "opportunities": [
+    "This endline provides a rare, methodologically clean, baseline-referenced quantification of barrier-reduction (affordability) — a strong, specific result for donor reporting that goes beyond a general satisfaction improvement claim.",
+    "The clear baseline-to-endline sequencing (affordability resolved, access next) gives the next programme phase an unusually well-evidenced starting Theory of Change, reducing the design uncertainty typically present at the start of a new phase."
+  ],
+
+  "lessons_learned": "Maintaining identical question wording and comparable sample composition between baseline and endline — a discipline flagged as a risk at the baseline stage — proved essential here: it is precisely what allows this report to make a credible, quantified claim about affordability improvement rather than a vaguer, harder-to-defend general satisfaction comparison. Future programme evaluations in this series should continue to treat baseline-endline methodological consistency as non-negotiable, given how directly it strengthens this report's evidentiary value."
+}

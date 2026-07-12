@@ -11,9 +11,11 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
+<h1 class="visually-hidden">Vault Health — Admin Console</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
 
@@ -24,9 +26,9 @@
           <div class="muted-note" id="vh-generated-at" style="font-size:.72rem;"></div>
         </div>
         <div style="display:flex; gap:.6rem;">
-          <button class="btn btn-ghost btn-sm" id="vh-refresh-btn">↻ Refresh</button>
-          <button class="btn btn-ghost btn-sm" id="vh-export-btn">⬇ Export Health Report</button>
-          <button class="btn btn-primary btn-sm" id="vh-rotate-btn">🔄 Start Key Rotation</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="vh-refresh-btn">↻ Refresh</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="vh-export-btn">⬇ Export Health Report</button>
+          <button type="button" class="btn btn-primary btn-sm" id="vh-rotate-btn">🔄 Start Key Rotation</button>
         </div>
       </div>
 
@@ -49,7 +51,7 @@
 
       <div class="section-head">
         <h2 style="font-size:1.05rem;">Failures by Secret Type (24h)</h2>
-        <input type="text" id="vh-failures-search" placeholder="Filter by secret type or error code…" style="max-width:260px;">
+        <input aria-label="Filter by secret type or error code…" type="text" id="vh-failures-search" placeholder="Filter by secret type or error code…" style="max-width:260px;">
       </div>
       <div class="table-wrap" style="margin-bottom:1.5rem;">
         <table>
@@ -210,6 +212,6 @@
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
 <script src="/assets/js/admin-button-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

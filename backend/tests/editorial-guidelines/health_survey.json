@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Clinical precision balanced with human dignity. Health survey writing must never reduce respondents to statistics alone -- always connect a number to what it means for a real patient's experience of care. Avoid alarmist language even when findings are negative; health system findings should read as diagnostic, not accusatory.",
+
+  "section_rules": {
+    "executive_summary": "Must state the single most significant health-system finding in the first two sentences. Always distinguish between facility-level findings (specific, actionable) and system-level findings (structural, requiring longer-term response). Never claim a health outcome improved without a specific, respondent-confirmed causal link -- sentiment alone is insufficient evidence of health outcome change.",
+    "discussion": "Must explicitly separate access barriers, service quality, and clinical/medicine-supply findings into distinct analytical threads -- these are different health-system dimensions with different accountable owners and must never be blended into one undifferentiated 'health system performance' narrative.",
+    "methodology": "Must state the channel(s) used for data collection and note any known bias risk (e.g. mobile/SMS-based collection under-represents populations without phone access, a specific limitation for elderly or very remote respondents in health surveys specifically).",
+    "limitations": "Must explicitly address whether self-reported health service experience was validated against any facility-level administrative data. If not, state this as a specific limitation -- self-report alone cannot substitute for clinical outcome data.",
+    "recommendations": "Must be split by response tier appropriate to health systems: facility-level (immediate, no new budget), sub-national health management (medium-term), and national policy (long-term). Never propose a facility-level fix for a finding that is clearly systemic (e.g. medicine supply chain).",
+    "policy_implications": "Only include if findings clearly point to a policy (not operational) gap. A wait-time complaint is operational; a persistent, multi-region medicine stock-out pattern is policy-relevant.",
+    "lessons_learned": "Should reflect on what the OPEN-ENDED response format revealed that a closed-ended satisfaction scale would have missed -- this is a recurring, genuine strength of this platform's methodology and should be named as such.",
+    "conclusion": "Must avoid declaring the health system 'improved' or 'failed' in absolute terms -- health system change is incremental and multi-causal; use precise, bounded language ('this round's evidence indicates...').",
+    "annexes": "Should include the exact question wording used, since health survey question phrasing materially affects comparability across rounds (e.g. 'wait time' vs. 'time from arrival to being seen' are different measures).",
+    "evidence_style": "Every quantitative claim must cite the specific sentiment/topic count it derives from. Verbatim quotes should be used to illustrate, never to substitute for, the quantitative finding."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["response rate", "facility access distance (perceived)", "wait time (perceived)", "medicine availability (perceived)", "staff responsiveness sentiment", "overall facility sentiment"],
+    "common_risks": ["self-report bias without administrative validation", "under-representation of populations without phone/mobile access", "seasonal variation in facility conditions not captured in a single round", "conflating access barriers with quality-of-care barriers"],
+    "typical_recommendations": ["facility-level triage/scheduling process review", "outreach/mobile clinic models for distance-affected populations", "supply chain monitoring to sustain medicine availability gains", "time-and-motion studies before committing to a staffing fix"],
+    "typical_policy_implications": ["facility placement and expansion planning", "national medicine supply chain policy", "rural health equity targeting"],
+    "typical_donor_expectations": "Donors funding health programmes expect explicit linkage to WHO-referenced service standards where applicable, and want data-quality caveats (self-report vs. clinical validation) stated plainly rather than implied."
+  },
+
+  "recommendation_categories": ["Immediate", "30-day", "90-day", "Operational", "Policy", "Monitoring", "Sustainability"],
+
+  "forbidden_behaviors": [
+    "Never state a specific clinical outcome (e.g. mortality, morbidity rates) unless that data was actually collected -- sentiment surveys measure EXPERIENCE, not clinical outcomes.",
+    "Never cite a specific WHO guideline document or number without independent verification that it exists and applies.",
+    "Never claim a medicine availability or supply chain improvement is permanent based on a single survey round -- always frame as a point-in-time finding requiring continued monitoring."
+  ]
+}

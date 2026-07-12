@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import { renderDocxBinary, renderXlsxBinary } from '../src/office-export-engine.js';
+import { evaluatePublicationReadiness } from '../src/publication-acceptance-engine.js';
+import { buildExportManifest } from '../src/enterprise-reports.js';
+const report={title:'Real Project Acceptance Report',executive_summary:'Decision-ready summary.',sample_size:120,findings:['Finding'],recommendations:['Action'],methodology:{design:'mixed methods'},limitations:['Representative limitations disclosed.'],evidence:[{claim:'Finding',confidence_score:91}],kpis:[{label:'Responses',value:120}]};
+test('Report Library defines publicationScoreText and avoids forced 98 scores',async()=>{const h=await fs.readFile(new URL('../../site/sample-reports.html',import.meta.url),'utf8');assert.match(h,/function publicationScoreText/);assert.doesNotMatch(h,/Math\.max\(98/);});
+test('publication acceptance blocks incomplete reports and passes complete projects',()=>{assert.equal(evaluatePublicationReadiness({title:'x'}).status,'BLOCK');assert.equal(evaluatePublicationReadiness(report).status,'PASS');});
+test('DOCX renderer produces a real OpenXML ZIP binary',async()=>{const a=await renderDocxBinary(report,{report_id:'r1'});assert.equal(a.binary_generated,true);assert.equal(String.fromCharCode(...a.bytes.slice(0,2)),'PK');assert.ok(a.byte_length>500);});
+test('XLSX renderer produces a real multi-sheet OpenXML ZIP binary',async()=>{const a=await renderXlsxBinary(report,{report_id:'r1'});assert.equal(a.binary_generated,true);assert.equal(String.fromCharCode(...a.bytes.slice(0,2)),'PK');assert.ok(a.quality.sheet_count>=6);});
+test('all four enterprise export formats are binary-ready',()=>{const m=buildExportManifest(report);for(const k of ['pdf','powerpoint','word','excel'])assert.equal(m[k].status,'binary-ready');});
+test('enterprise routes expose acceptance, DOCX and XLSX',async()=>{const s=await fs.readFile(new URL('../src/application.js',import.meta.url),'utf8');for(const r of ['/api/reports/enterprise/acceptance','/api/reports/enterprise/docx','/api/reports/enterprise/xlsx'])assert.ok(s.includes(r));});

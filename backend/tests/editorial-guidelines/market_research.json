@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Commercial and strategic -- zero development-sector vocabulary (no 'beneficiaries', 'theory of change', 'respondents' should become 'customers'). Written for a product/strategy leadership audience thinking in terms of market position, channel investment, and competitive advantage.",
+
+  "section_rules": {
+    "executive_summary": "Must separate distinct product/channel signals explicitly (e.g. physical channel vs. digital channel) rather than blending into one 'customer satisfaction' narrative -- different channels usually have different owners and different investment decisions attached.",
+    "discussion": "Should explicitly name the STRATEGIC decision each finding implies (e.g. 'this is a reliability fix, not a redesign') -- market research exists to drive a specific business decision, and the discussion section should make that decision explicit.",
+    "methodology": "State the customer segment(s) surveyed and any known sampling bias relative to the full customer base (e.g. over-representation of digitally-active customers if surveyed via app).",
+    "limitations": "Note whether findings represent current customers only, or also prospective/lost customers -- these are different populations with different strategic implications.",
+    "recommendations": "Every recommendation should be framed in business-outcome terms (revenue, retention, NPS, cost) rather than development-sector outcome terms, and should specify which business function owns it (product, engineering, marketing, operations).",
+    "policy_implications": "Rarely applicable -- use 'strategic implications' instead of 'policy implications' for this report type.",
+    "lessons_learned": "Frame as 'product/research lessons' -- e.g. what this round's open-ended format revealed that a closed NPS-only survey would have missed.",
+    "conclusion": "State the clear, prioritized business decision this research supports -- a market research report should end with a decision-ready recommendation, not an open-ended summary.",
+    "annexes": "Include exact question wording and channel/segment definitions used, since customer segment definitions materially affect finding interpretation.",
+    "evidence_style": "Use specific customer verbatims to illustrate a finding, and always tie back to a measurable metric (mention frequency, sentiment score) -- avoid presenting anecdote alone as strategic evidence."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["response rate", "channel-specific sentiment (branch vs. digital)", "recommendation/advocacy intent", "product reliability complaint frequency", "overall customer sentiment"],
+    "common_risks": ["conflating distinct channel experiences into one blended satisfaction score", "treating qualitative recommendation-intent language as equivalent to a formal NPS metric without converting it into one", "sampling bias toward digitally-engaged or branch-visiting customers depending on collection channel"],
+    "typical_recommendations": ["escalate specific technical reliability issues to engineering as isolated fixes", "add a formal NPS question to convert qualitative advocacy signals into a trackable KPI", "document successful channel investments as replicable playbooks"],
+    "typical_policy_implications": [],
+    "typical_donor_expectations": "Not applicable -- this report type has no donor audience; the equivalent expectation is from internal product/executive leadership, who expect clear, decision-ready prioritization rather than an academic-style balanced discussion."
+  },
+
+  "recommendation_categories": ["Immediate", "Operational", "Strategic", "Technology"],
+
+  "forbidden_behaviors": [
+    "Never use development-sector terminology (beneficiary, theory of change, logframe) in a private-sector market research report.",
+    "Never cite an international development standard (SDG, WHO, OECD-DAC) for a private-sector commercial report -- none apply.",
+    "Never blend distinct channel or product-line findings into one undifferentiated satisfaction score when the underlying data supports a channel-specific breakdown."
+  ]
+}

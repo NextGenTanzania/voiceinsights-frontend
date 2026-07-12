@@ -1,0 +1,32 @@
+{
+  "tone_and_voice": "Reference-establishing, not evaluative. Baseline writing must resist the temptation to draw conclusions about programme effectiveness -- its entire purpose is documenting Time Zero, not judging performance. Language should be neutral and descriptive of the starting condition, never celebratory or critical of a programme that has not yet been implemented.",
+
+  "section_rules": {
+    "executive_summary": "Must explicitly state this is a Time Zero reference point and that findings should not be read as evaluating any intervention -- this framing must appear in the first paragraph, not buried in a methodology section.",
+    "discussion": "Any respondent-reported sense of recent trend or change (e.g. 'things have improved lately') must be explicitly flagged as PRE-programme context, not evidence of this programme's effect, since no intervention has yet been evaluated under this Results Framework at baseline.",
+    "methodology": "Must state the exact question wording that will be repeated at midline/endline, since baseline value is largely a function of enabling exact future comparability.",
+    "limitations": "State explicitly that no causal or comparative claims can be made at baseline -- this is a structural feature of baseline reporting, not a limitation to apologize for.",
+    "recommendations": "Baseline recommendations should be about PROGRAMME DESIGN (e.g. 'the ToC should explicitly target X, given its dominance in baseline data') and about MEASUREMENT DESIGN (e.g. 'lock these questions for midline/endline'), not about implementation actions -- there is no implementation to act on yet.",
+    "policy_implications": "Rare and should be framed as 'this baseline suggests the programme's policy-relevant focus should be X', never as a standalone policy conclusion independent of the programme design process.",
+    "lessons_learned": "Should focus on methodological lessons for maintaining baseline-to-endline comparability, since this is the single most important baseline-stage discipline.",
+    "conclusion": "Must restate that these are the official Time Zero reference values, and name what they will be compared against (midline, endline) and when.",
+    "annexes": "Include the complete, exact question set used, flagged explicitly as 'to be repeated verbatim at future rounds' -- this is the single most operationally important annex content for a baseline.",
+    "evidence_style": "Present findings as clean reference values (e.g. 'affordability: 8 mentions, the highest of any theme') without interpretive framing about whether this is good or bad -- that judgment belongs to midline/endline, not baseline."
+  },
+
+  "sector_knowledge": {
+    "common_kpis": ["response rate", "dominant theme ranking (to establish programme design priority)", "sentiment distribution (Time Zero reference)", "demographic/regional composition (sampling reference for future rounds)"],
+    "common_risks": ["baseline being misread as an evaluation of a not-yet-implemented programme", "future rounds using different question wording, breaking comparability", "conflating respondent-perceived recent trend with programme-attributable change"],
+    "typical_recommendations": ["formal adoption of baseline values as official Results Framework Time Zero", "explicit Theory of Change targeting of the baseline's dominant concern", "identical question-wording and sampling framework locked for midline/endline"],
+    "typical_policy_implications": ["programme design and Theory of Change targeting decisions (design-stage, not implementation-stage)"],
+    "typical_donor_expectations": "Donors expect baselines to be methodologically rigorous and explicitly framed as non-evaluative reference points -- a baseline that reads like a performance evaluation of the pre-programme condition raises credibility concerns about the whole Results Framework."
+  },
+
+  "recommendation_categories": ["Monitoring", "Institutional Strengthening", "Governance"],
+
+  "forbidden_behaviors": [
+    "Never draw a conclusion about programme effectiveness at baseline -- no intervention has yet been evaluated under this Results Framework.",
+    "Never attribute a respondent-reported recent trend to a programme that has not yet been implemented or evaluated.",
+    "Never present baseline findings with celebratory or critical framing -- baseline is a neutral reference point, not a performance judgment."
+  ]
+}

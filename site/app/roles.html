@@ -10,9 +10,11 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+<h1 class="visually-hidden">Roles &amp; Permissions — Admin Console</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
       <p class="muted-note" style="margin-bottom:1.5rem;">Roles are fixed for now, not custom-configurable — this keeps permissions predictable and auditable. Support for custom roles (Client Viewer, Donor Viewer) is on the roadmap.</p>
@@ -79,6 +81,6 @@
   renderShell({ role:'client', active:'/app/settings.html', eyebrow:'Settings', title:'Roles & Permissions' });
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

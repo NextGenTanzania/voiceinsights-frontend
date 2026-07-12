@@ -1,0 +1,6133 @@
+{
+  "summary": {
+    "files": 142,
+    "ui_issues": 21,
+    "security_issues": 392,
+    "wcag_issues": 115,
+    "strict_csp_ready": false
+  },
+  "reports": [
+    {
+      "file": "about.html",
+      "ui": {
+        "path": "about.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "about.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "about.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/ai-center.html",
+      "ui": {
+        "path": "admin/ai-center.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/ai-center.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/ai-center.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/ai-retry-health.html",
+      "ui": {
+        "path": "admin/ai-retry-health.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/ai-retry-health.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/ai-retry-health.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/audit-center.html",
+      "ui": {
+        "path": "admin/audit-center.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/audit-center.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/audit-center.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/audit-logs.html",
+      "ui": {
+        "path": "admin/audit-logs.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/audit-logs.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/audit-logs.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/call-monitoring.html",
+      "ui": {
+        "path": "admin/call-monitoring.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/call-monitoring.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/call-monitoring.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/communications-health.html",
+      "ui": {
+        "path": "admin/communications-health.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/communications-health.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/communications-health.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/communications.html",
+      "ui": {
+        "path": "admin/communications.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/communications.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/communications.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/compare-organizations.html",
+      "ui": {
+        "path": "admin/compare-organizations.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/compare-organizations.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/compare-organizations.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/compliance/evidence-export.html",
+      "ui": {
+        "path": "admin/compliance/evidence-export.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/compliance/evidence-export.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/compliance/evidence-export.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/compliance/iso-pack.html",
+      "ui": {
+        "path": "admin/compliance/iso-pack.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/compliance/iso-pack.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/compliance/iso-pack.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/compliance/procurement-readiness.html",
+      "ui": {
+        "path": "admin/compliance/procurement-readiness.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/compliance/procurement-readiness.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/compliance/procurement-readiness.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/compliance/soc2-readiness.html",
+      "ui": {
+        "path": "admin/compliance/soc2-readiness.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/compliance/soc2-readiness.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/compliance/soc2-readiness.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/customer-success-dashboard.html",
+      "ui": {
+        "path": "admin/customer-success-dashboard.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/customer-success-dashboard.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/customer-success-dashboard.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/dashboard.html",
+      "ui": {
+        "path": "admin/dashboard.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/dashboard.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/dashboard.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/diagnostics.html",
+      "ui": {
+        "path": "admin/diagnostics.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/diagnostics.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/diagnostics.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/enterprise-governance-security-trust.html",
+      "ui": {
+        "path": "admin/enterprise-governance-security-trust.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/enterprise-governance-security-trust.html",
+        "strict_csp_ready": true,
+        "issues": []
+      },
+      "wcag": {
+        "path": "admin/enterprise-governance-security-trust.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/enumerators.html",
+      "ui": {
+        "path": "admin/enumerators.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/enumerators.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/enumerators.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/executive-forecasting.html",
+      "ui": {
+        "path": "admin/executive-forecasting.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/executive-forecasting.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/executive-forecasting.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/external-assurance-acceptance.html",
+      "ui": {
+        "path": "admin/external-assurance-acceptance.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/external-assurance-acceptance.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/external-assurance-acceptance.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/founder-customer-success.html",
+      "ui": {
+        "path": "admin/founder-customer-success.html",
+        "passed": false,
+        "issues": [
+          {
+            "code": "SILENT_ERROR_HANDLER"
+          }
+        ]
+      },
+      "security": {
+        "path": "admin/founder-customer-success.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/founder-customer-success.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/founder-dashboard-legacy.html",
+      "ui": {
+        "path": "admin/founder-dashboard-legacy.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/founder-dashboard-legacy.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/founder-dashboard-legacy.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/founder-dashboard.html",
+      "ui": {
+        "path": "admin/founder-dashboard.html",
+        "passed": false,
+        "issues": [
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button type=\"button\" class=\"btn btn-ghost\" data-close>"
+          },
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button type=\"button\" class=\"btn btn-ghost\" data-close>"
+          }
+        ]
+      },
+      "security": {
+        "path": "admin/founder-dashboard.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/founder-dashboard.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/fraud-alerts.html",
+      "ui": {
+        "path": "admin/fraud-alerts.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/fraud-alerts.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/fraud-alerts.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/intelligence-network-activation.html",
+      "ui": {
+        "path": "admin/intelligence-network-activation.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/intelligence-network-activation.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/intelligence-network-activation.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/invoice.html",
+      "ui": {
+        "path": "admin/invoice.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/invoice.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/invoice.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "INPUT_NAME_MISSING",
+            "value": null
+          },
+          {
+            "code": "INPUT_NAME_MISSING",
+            "value": null
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/lead-profile.html",
+      "ui": {
+        "path": "admin/lead-profile.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/lead-profile.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/lead-profile.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "TABLE_HEADERS_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/leads.html",
+      "ui": {
+        "path": "admin/leads.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/leads.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/leads.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/model-performance.html",
+      "ui": {
+        "path": "admin/model-performance.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/model-performance.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/model-performance.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/operations-customer-success.html",
+      "ui": {
+        "path": "admin/operations-customer-success.html",
+        "passed": false,
+        "issues": [
+          {
+            "code": "SILENT_ERROR_HANDLER"
+          }
+        ]
+      },
+      "security": {
+        "path": "admin/operations-customer-success.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/operations-customer-success.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/operations-manager-dashboard-legacy.html",
+      "ui": {
+        "path": "admin/operations-manager-dashboard-legacy.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/operations-manager-dashboard-legacy.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/operations-manager-dashboard-legacy.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/operations-manager-dashboard.html",
+      "ui": {
+        "path": "admin/operations-manager-dashboard.html",
+        "passed": false,
+        "issues": [
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button type=\"button\" class=\"btn btn-ghost\" data-close>"
+          },
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button type=\"button\" class=\"btn btn-ghost\" data-close>"
+          }
+        ]
+      },
+      "security": {
+        "path": "admin/operations-manager-dashboard.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/operations-manager-dashboard.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/operations.html",
+      "ui": {
+        "path": "admin/operations.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/operations.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/operations.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/organization-detail.html",
+      "ui": {
+        "path": "admin/organization-detail.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/organization-detail.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/organization-detail.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/organizations.html",
+      "ui": {
+        "path": "admin/organizations.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/organizations.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/organizations.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/production-readiness.html",
+      "ui": {
+        "path": "admin/production-readiness.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/production-readiness.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/production-readiness.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/proposal.html",
+      "ui": {
+        "path": "admin/proposal.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/proposal.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/proposal.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/quality-control.html",
+      "ui": {
+        "path": "admin/quality-control.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/quality-control.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/quality-control.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/scale-cloud-intelligence-operations.html",
+      "ui": {
+        "path": "admin/scale-cloud-intelligence-operations.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/scale-cloud-intelligence-operations.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/scale-cloud-intelligence-operations.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/security/audit-center.html",
+      "ui": {
+        "path": "admin/security/audit-center.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/security/audit-center.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/security/audit-center.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/security/encryption-center.html",
+      "ui": {
+        "path": "admin/security/encryption-center.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/security/encryption-center.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/security/encryption-center.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/security/identity-access-center.html",
+      "ui": {
+        "path": "admin/security/identity-access-center.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/security/identity-access-center.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/security/identity-access-center.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/security/secrets-manager.html",
+      "ui": {
+        "path": "admin/security/secrets-manager.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/security/secrets-manager.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/security/secrets-manager.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/security-dashboard.html",
+      "ui": {
+        "path": "admin/security-dashboard.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/security-dashboard.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/security-dashboard.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/super-admin-workspace.html",
+      "ui": {
+        "path": "admin/super-admin-workspace.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/super-admin-workspace.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/super-admin-workspace.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "LANG_MISSING"
+          },
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "H1_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/system-health.html",
+      "ui": {
+        "path": "admin/system-health.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/system-health.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/system-health.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "admin/vault-health.html",
+      "ui": {
+        "path": "admin/vault-health.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "admin/vault-health.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "admin/vault-health.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "api.html",
+      "ui": {
+        "path": "api.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "api.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "api.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/ai-customer-success-assistant.html",
+      "ui": {
+        "path": "app/ai-customer-success-assistant.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/ai-customer-success-assistant.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/ai-customer-success-assistant.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/analytics.html",
+      "ui": {
+        "path": "app/analytics.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/analytics.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/analytics.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/benchmark-cloud.html",
+      "ui": {
+        "path": "app/benchmark-cloud.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/benchmark-cloud.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/benchmark-cloud.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/billing.html",
+      "ui": {
+        "path": "app/billing.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/billing.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/billing.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/campaigns.html",
+      "ui": {
+        "path": "app/campaigns.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/campaigns.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/campaigns.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/collection-operations.html",
+      "ui": {
+        "path": "app/collection-operations.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/collection-operations.html",
+        "strict_csp_ready": true,
+        "issues": []
+      },
+      "wcag": {
+        "path": "app/collection-operations.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "INPUT_NAME_MISSING",
+            "value": null
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/compliance/consent-vault.html",
+      "ui": {
+        "path": "app/compliance/consent-vault.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/compliance/consent-vault.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/compliance/consent-vault.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/compliance.html",
+      "ui": {
+        "path": "app/compliance.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/compliance.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/compliance.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "INPUT_NAME_MISSING",
+            "value": null
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/conflict-review.html",
+      "ui": {
+        "path": "app/conflict-review.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/conflict-review.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/conflict-review.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/customer-success-workspace.html",
+      "ui": {
+        "path": "app/customer-success-workspace.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/customer-success-workspace.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/customer-success-workspace.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/dashboard.html",
+      "ui": {
+        "path": "app/dashboard.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/dashboard.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/dashboard.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/data-trust-intelligence-fabric.html",
+      "ui": {
+        "path": "app/data-trust-intelligence-fabric.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/data-trust-intelligence-fabric.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/data-trust-intelligence-fabric.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/enterprise-reports-studio.html",
+      "ui": {
+        "path": "app/enterprise-reports-studio.html",
+        "passed": false,
+        "issues": [
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button type=\"button\" class=\"er-btn prompt\">"
+          },
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button type=\"button\" class=\"er-btn prompt\">"
+          },
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button type=\"button\" class=\"er-btn prompt\">"
+          }
+        ]
+      },
+      "security": {
+        "path": "app/enterprise-reports-studio.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/enterprise-reports-studio.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/enumerator-workspace.html",
+      "ui": {
+        "path": "app/enumerator-workspace.html",
+        "passed": false,
+        "issues": [
+          {
+            "code": "SILENT_ERROR_HANDLER"
+          }
+        ]
+      },
+      "security": {
+        "path": "app/enumerator-workspace.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/enumerator-workspace.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/expansion-opportunities.html",
+      "ui": {
+        "path": "app/expansion-opportunities.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/expansion-opportunities.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/expansion-opportunities.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/field-intelligence-workspace.html",
+      "ui": {
+        "path": "app/field-intelligence-workspace.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/field-intelligence-workspace.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/field-intelligence-workspace.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "LANG_MISSING"
+          },
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "H1_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/flagship-report-engine.html",
+      "ui": {
+        "path": "app/flagship-report-engine.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/flagship-report-engine.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/flagship-report-engine.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/intelligence-network-governance.html",
+      "ui": {
+        "path": "app/intelligence-network-governance.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/intelligence-network-governance.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/intelligence-network-governance.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/intelligence-network.html",
+      "ui": {
+        "path": "app/intelligence-network.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/intelligence-network.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/intelligence-network.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/interactive-intelligence.html",
+      "ui": {
+        "path": "app/interactive-intelligence.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/interactive-intelligence.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/interactive-intelligence.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/interviews.html",
+      "ui": {
+        "path": "app/interviews.html",
+        "passed": false,
+        "issues": [
+          {
+            "code": "SILENT_ERROR_HANDLER"
+          }
+        ]
+      },
+      "security": {
+        "path": "app/interviews.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/interviews.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/knowledge-cloud.html",
+      "ui": {
+        "path": "app/knowledge-cloud.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/knowledge-cloud.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/knowledge-cloud.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/marketplace.html",
+      "ui": {
+        "path": "app/marketplace.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/marketplace.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/marketplace.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/me-operational-dashboard.html",
+      "ui": {
+        "path": "app/me-operational-dashboard.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/me-operational-dashboard.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/me-operational-dashboard.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/my-work.html",
+      "ui": {
+        "path": "app/my-work.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/my-work.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/my-work.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "TABLE_HEADERS_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/organization-admin-workspace.html",
+      "ui": {
+        "path": "app/organization-admin-workspace.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/organization-admin-workspace.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/organization-admin-workspace.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "LANG_MISSING"
+          },
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "H1_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/organization-operational-dashboard.html",
+      "ui": {
+        "path": "app/organization-operational-dashboard.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/organization-operational-dashboard.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/organization-operational-dashboard.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/pilot-management-center.html",
+      "ui": {
+        "path": "app/pilot-management-center.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/pilot-management-center.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/pilot-management-center.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/premium-publications.html",
+      "ui": {
+        "path": "app/premium-publications.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/premium-publications.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/premium-publications.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/presentation-publishing.html",
+      "ui": {
+        "path": "app/presentation-publishing.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/presentation-publishing.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/presentation-publishing.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/production-readiness-enterprise-scale.html",
+      "ui": {
+        "path": "app/production-readiness-enterprise-scale.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/production-readiness-enterprise-scale.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/production-readiness-enterprise-scale.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/programme-lifecycle.html",
+      "ui": {
+        "path": "app/programme-lifecycle.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/programme-lifecycle.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/programme-lifecycle.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/project-manager-dashboard.html",
+      "ui": {
+        "path": "app/project-manager-dashboard.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/project-manager-dashboard.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/project-manager-dashboard.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/project.html",
+      "ui": {
+        "path": "app/project.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/project.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/project.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "TABLE_HEADERS_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/projects.html",
+      "ui": {
+        "path": "app/projects.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/projects.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/projects.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/renewal-pipeline.html",
+      "ui": {
+        "path": "app/renewal-pipeline.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/renewal-pipeline.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/renewal-pipeline.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/report-analytics.html",
+      "ui": {
+        "path": "app/report-analytics.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/report-analytics.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/report-analytics.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/report-brief.html",
+      "ui": {
+        "path": "app/report-brief.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/report-brief.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/report-brief.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/report-donor.html",
+      "ui": {
+        "path": "app/report-donor.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/report-donor.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/report-donor.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/report-library.html",
+      "ui": {
+        "path": "app/report-library.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/report-library.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/report-library.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/report-viewer.html",
+      "ui": {
+        "path": "app/report-viewer.html",
+        "passed": false,
+        "issues": [
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button type=\"button\" class=\"btn btn-ghost btn-sm suggested-q\" style=\"font-size:.72rem;\">"
+          },
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button type=\"button\" class=\"btn btn-ghost btn-sm suggested-q\" style=\"font-size:.72rem;\">"
+          },
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button type=\"button\" class=\"btn btn-ghost btn-sm suggested-q\" style=\"font-size:.72rem;\">"
+          },
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button type=\"button\" class=\"btn btn-ghost btn-sm suggested-q\" style=\"font-size:.72rem;\">"
+          }
+        ]
+      },
+      "security": {
+        "path": "app/report-viewer.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/report-viewer.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/report.html",
+      "ui": {
+        "path": "app/report.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/report.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/report.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/reports.html",
+      "ui": {
+        "path": "app/reports.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/reports.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/reports.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/research-collaboration-hub.html",
+      "ui": {
+        "path": "app/research-collaboration-hub.html",
+        "passed": false,
+        "issues": [
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button class=\"gold\">"
+          }
+        ]
+      },
+      "security": {
+        "path": "app/research-collaboration-hub.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/research-collaboration-hub.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/respondents.html",
+      "ui": {
+        "path": "app/respondents.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/respondents.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/respondents.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/roles.html",
+      "ui": {
+        "path": "app/roles.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/roles.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/roles.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/security/api-keys.html",
+      "ui": {
+        "path": "app/security/api-keys.html",
+        "passed": false,
+        "issues": [
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button class=\"iam-button\">"
+          }
+        ]
+      },
+      "security": {
+        "path": "app/security/api-keys.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/security/api-keys.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/security/mfa.html",
+      "ui": {
+        "path": "app/security/mfa.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/security/mfa.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/security/mfa.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/security/scim.html",
+      "ui": {
+        "path": "app/security/scim.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/security/scim.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/security/scim.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/security/sso.html",
+      "ui": {
+        "path": "app/security/sso.html",
+        "passed": false,
+        "issues": [
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button class=\"iam-button\">"
+          }
+        ]
+      },
+      "security": {
+        "path": "app/security/sso.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/security/sso.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/security-dashboard.html",
+      "ui": {
+        "path": "app/security-dashboard.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/security-dashboard.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/security-dashboard.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/settings.html",
+      "ui": {
+        "path": "app/settings.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/settings.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/settings.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "INPUT_NAME_MISSING",
+            "value": null
+          },
+          {
+            "code": "TABLE_HEADERS_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/sla-management.html",
+      "ui": {
+        "path": "app/sla-management.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/sla-management.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/sla-management.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/support-ticketing-hub.html",
+      "ui": {
+        "path": "app/support-ticketing-hub.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/support-ticketing-hub.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/support-ticketing-hub.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/survey-builder.html",
+      "ui": {
+        "path": "app/survey-builder.html",
+        "passed": false,
+        "issues": [
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button type=\"button\" class=\"btn btn-ghost btn-sm remove-q\">"
+          }
+        ]
+      },
+      "security": {
+        "path": "app/survey-builder.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/survey-builder.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/surveys.html",
+      "ui": {
+        "path": "app/surveys.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/surveys.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/surveys.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/training-certification-center.html",
+      "ui": {
+        "path": "app/training-certification-center.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/training-certification-center.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/training-certification-center.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/transcripts.html",
+      "ui": {
+        "path": "app/transcripts.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/transcripts.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/transcripts.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/usage-adoption-analytics.html",
+      "ui": {
+        "path": "app/usage-adoption-analytics.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/usage-adoption-analytics.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/usage-adoption-analytics.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/voiceinsights-cloud.html",
+      "ui": {
+        "path": "app/voiceinsights-cloud.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/voiceinsights-cloud.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/voiceinsights-cloud.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "app/voiceinsights-orchestrator.html",
+      "ui": {
+        "path": "app/voiceinsights-orchestrator.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "app/voiceinsights-orchestrator.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "app/voiceinsights-orchestrator.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "careers.html",
+      "ui": {
+        "path": "careers.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "careers.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "careers.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "case-studies.html",
+      "ui": {
+        "path": "case-studies.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "case-studies.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "case-studies.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "contact.html",
+      "ui": {
+        "path": "contact.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "contact.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "contact.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          },
+          {
+            "code": "INPUT_NAME_MISSING",
+            "value": null
+          },
+          {
+            "code": "INPUT_NAME_MISSING",
+            "value": null
+          },
+          {
+            "code": "INPUT_NAME_MISSING",
+            "value": null
+          },
+          {
+            "code": "INPUT_NAME_MISSING",
+            "value": null
+          },
+          {
+            "code": "INPUT_NAME_MISSING",
+            "value": null
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "demo/me-dashboard.html",
+      "ui": {
+        "path": "demo/me-dashboard.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "demo/me-dashboard.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "demo/me-dashboard.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "developers/index.html",
+      "ui": {
+        "path": "developers/index.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "developers/index.html",
+        "strict_csp_ready": true,
+        "issues": []
+      },
+      "wcag": {
+        "path": "developers/index.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "developers/openapi.html",
+      "ui": {
+        "path": "developers/openapi.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "developers/openapi.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "developers/openapi.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "developers/playground.html",
+      "ui": {
+        "path": "developers/playground.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "developers/playground.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          }
+        ]
+      },
+      "wcag": {
+        "path": "developers/playground.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "developers/sdk.html",
+      "ui": {
+        "path": "developers/sdk.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "developers/sdk.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "developers/sdk.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "development-partners.html",
+      "ui": {
+        "path": "development-partners.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "development-partners.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "development-partners.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "enumerator.html",
+      "ui": {
+        "path": "enumerator.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "enumerator.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "online ="
+          },
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "enumerator.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "faq.html",
+      "ui": {
+        "path": "faq.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "faq.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "faq.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "flagship-sample-report.html",
+      "ui": {
+        "path": "flagship-sample-report.html",
+        "passed": false,
+        "issues": [
+          {
+            "code": "MISSING_FRAGMENT_TARGET",
+            "value": "#${ch.id}"
+          }
+        ]
+      },
+      "security": {
+        "path": "flagship-sample-report.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "flagship-sample-report.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "forgot-password.html",
+      "ui": {
+        "path": "forgot-password.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "forgot-password.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "forgot-password.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "government.html",
+      "ui": {
+        "path": "government.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "government.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "government.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "index.html",
+      "ui": {
+        "path": "index.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "index.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "index.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "industries.html",
+      "ui": {
+        "path": "industries.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "industries.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "industries.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "intelligence-network.html",
+      "ui": {
+        "path": "intelligence-network.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "intelligence-network.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "intelligence-network.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "login.html",
+      "ui": {
+        "path": "login.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "login.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "login.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "ngos.html",
+      "ui": {
+        "path": "ngos.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "ngos.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "ngos.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "platform.html",
+      "ui": {
+        "path": "platform.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "platform.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "platform.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "privacy.html",
+      "ui": {
+        "path": "privacy.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "privacy.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "privacy.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "research-firms.html",
+      "ui": {
+        "path": "research-firms.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "research-firms.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "research-firms.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "reset-password.html",
+      "ui": {
+        "path": "reset-password.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "reset-password.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "reset-password.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "respondent.html",
+      "ui": {
+        "path": "respondent.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "respondent.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "respondent.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "safeguarding.html",
+      "ui": {
+        "path": "safeguarding.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "safeguarding.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "safeguarding.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "sample-report-viewer.html",
+      "ui": {
+        "path": "sample-report-viewer.html",
+        "passed": false,
+        "issues": [
+          {
+            "code": "UNWIRED_BUTTON",
+            "value": "<button class=\"v203-more-btn\" type=\"button\">"
+          }
+        ]
+      },
+      "security": {
+        "path": "sample-report-viewer.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "sample-report-viewer.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "sample-report.html",
+      "ui": {
+        "path": "sample-report.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "sample-report.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "sample-report.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "sample-reports.html",
+      "ui": {
+        "path": "sample-reports.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "sample-reports.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_EVENT_HANDLER",
+            "value": "onclick="
+          },
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "sample-reports.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "security/trust-center.html",
+      "ui": {
+        "path": "security/trust-center.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "security/trust-center.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "security/trust-center.html",
+        "automated_passed": true,
+        "issues": [],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "security.html",
+      "ui": {
+        "path": "security.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "security.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "security.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "solutions.html",
+      "ui": {
+        "path": "solutions.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "solutions.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "solutions.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "status.html",
+      "ui": {
+        "path": "status.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "status.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          },
+          {
+            "code": "UNSAFE_HTML_SINK"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "status.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    },
+    {
+      "file": "terms.html",
+      "ui": {
+        "path": "terms.html",
+        "passed": true,
+        "issues": []
+      },
+      "security": {
+        "path": "terms.html",
+        "strict_csp_ready": false,
+        "issues": [
+          {
+            "code": "INLINE_SCRIPT"
+          },
+          {
+            "code": "INLINE_STYLE"
+          }
+        ]
+      },
+      "wcag": {
+        "path": "terms.html",
+        "automated_passed": false,
+        "issues": [
+          {
+            "code": "MAIN_LANDMARK_MISSING"
+          },
+          {
+            "code": "SKIP_LINK_MISSING"
+          },
+          {
+            "code": "HEADING_LEVEL_SKIP"
+          }
+        ],
+        "manual_checks": [
+          "keyboard_only",
+          "focus_order",
+          "visible_focus",
+          "contrast",
+          "zoom_200_percent",
+          "reflow_320_css_px",
+          "screen_reader_nvda",
+          "screen_reader_voiceover",
+          "touch_targets",
+          "reduced_motion"
+        ]
+      }
+    }
+  ]
+}

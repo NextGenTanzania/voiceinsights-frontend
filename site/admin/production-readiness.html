@@ -10,9 +10,11 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+<h1 class="visually-hidden">Production Readiness — Admin Console</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
-  <main class="main">
+  <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
 
@@ -25,8 +27,8 @@
       <div id="checklist-container"></div>
 
       <div style="text-align:right; margin-top:1.5rem; display:flex; justify-content:flex-end; gap:.6rem;">
-        <button class="btn btn-ghost btn-sm" id="export-btn">⬇ Export Report (JSON)</button>
-        <button class="btn btn-ghost btn-sm" id="refresh-btn">↻ Re-check</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="export-btn">⬇ Export Report (JSON)</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="refresh-btn">↻ Re-check</button>
       </div>
 
     </div>
@@ -102,6 +104,6 @@
 </script>
 <script src="/assets/js/admin-functional-qa.js"></script>
 <script src="/assets/js/admin-button-qa.js"></script>
-<script src="/assets/js/production-routing-v2102.js"></script>
+<script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

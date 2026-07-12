@@ -39,7 +39,8 @@
         "primary": "#082B55",
         "accent": "#8bd140",
         "highlight": "#D7B65A",
-        "motif": "national cartography"
+        "motif": "national cartography",
+        "layout_variant": 1
       },
       "visuals": [
         "Executive dashboard",
@@ -47,10 +48,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "National Human Development Intelligence Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Human Development.",
+      "promise": "A decision-ready human development publication for Tanzania, built from traceable synthetic evidence.",
+      "executive_story": "This national human development intelligence report tests multidimensional poverty transitions, primary healthcare continuity, school-to-work mobility and translates the resulting synthetic evidence into accountable decisions for government leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "128–176 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -83,7 +85,8 @@
         "primary": "#32105C",
         "accent": "#56482d",
         "highlight": "#F0C35A",
-        "motif": "results chain"
+        "motif": "results chain",
+        "layout_variant": 2
       },
       "visuals": [
         "Executive dashboard",
@@ -91,10 +94,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "Donor Impact Evaluation Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Integrated Livelihoods.",
+      "promise": "A decision-ready integrated livelihoods publication for Uganda, built from traceable synthetic evidence.",
+      "executive_story": "This donor impact evaluation report tests outcome additionality, value for money, livelihood resilience and translates the resulting synthetic evidence into accountable decisions for donor leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "128–176 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -126,7 +130,8 @@
         "primary": "#082B55",
         "accent": "#6d1900",
         "highlight": "#D7B65A",
-        "motif": "national cartography"
+        "motif": "national cartography",
+        "layout_variant": 3
       },
       "visuals": [
         "Executive dashboard",
@@ -134,10 +139,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "Government Policy Intelligence Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Public Service Delivery.",
+      "promise": "A decision-ready public service delivery publication for Kenya, built from traceable synthetic evidence.",
+      "executive_story": "This government policy intelligence report tests policy reach, administrative burden, county implementation variance and translates the resulting synthetic evidence into accountable decisions for government leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "128–176 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -170,7 +176,8 @@
         "primary": "#0B4C74",
         "accent": "#e3d665",
         "highlight": "#F47A38",
-        "motif": "severity map"
+        "motif": "severity map",
+        "layout_variant": 4
       },
       "visuals": [
         "Executive dashboard",
@@ -178,10 +185,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "Humanitarian Needs Assessment Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Humanitarian Response.",
+      "promise": "A decision-ready humanitarian response publication for Somalia, built from traceable synthetic evidence.",
+      "executive_story": "This humanitarian needs assessment report tests multisector severity, protection exposure, safe water access and translates the resulting synthetic evidence into accountable decisions for humanitarian leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "128–176 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -212,7 +220,8 @@
         "primary": "#111111",
         "accent": "#ce0b0f",
         "highlight": "#D4AF37",
-        "motif": "executive signal grid"
+        "motif": "executive signal grid",
+        "layout_variant": 5
       },
       "visuals": [
         "Executive dashboard",
@@ -220,10 +229,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "Executive Board Intelligence Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Enterprise Performance.",
+      "promise": "A decision-ready enterprise performance publication for South Africa, built from traceable synthetic evidence.",
+      "executive_story": "This executive board intelligence report tests profitable growth quality, operating leverage, strategic execution and translates the resulting synthetic evidence into accountable decisions for board leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "96–132 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -254,7 +264,8 @@
         "primary": "#111111",
         "accent": "#f329c8",
         "highlight": "#D4AF37",
-        "motif": "executive signal grid"
+        "motif": "executive signal grid",
+        "layout_variant": 6
       },
       "visuals": [
         "Executive dashboard",
@@ -262,10 +273,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "Customer Experience Intelligence Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Financial Services.",
+      "promise": "A decision-ready financial services publication for Tanzania, built from traceable synthetic evidence.",
+      "executive_story": "This customer experience intelligence report tests journey friction, first-contact resolution, trust and transparency and translates the resulting synthetic evidence into accountable decisions for corporate leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "96–132 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -296,7 +308,8 @@
         "primary": "#111111",
         "accent": "#189a49",
         "highlight": "#D4AF37",
-        "motif": "executive signal grid"
+        "motif": "executive signal grid",
+        "layout_variant": 7
       },
       "visuals": [
         "Executive dashboard",
@@ -304,10 +317,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "Employee Experience Intelligence Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Workforce Experience.",
+      "promise": "A decision-ready workforce experience publication for Rwanda, built from traceable synthetic evidence.",
+      "executive_story": "This employee experience intelligence report tests manager effectiveness, psychological safety, career mobility and translates the resulting synthetic evidence into accountable decisions for corporate leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "96–132 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -339,7 +353,8 @@
         "primary": "#0E5138",
         "accent": "#375845",
         "highlight": "#E5B84B",
-        "motif": "community scorecard"
+        "motif": "community scorecard",
+        "layout_variant": 8
       },
       "visuals": [
         "Executive dashboard",
@@ -347,10 +362,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "Community Scorecard Intelligence Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Primary Healthcare.",
+      "promise": "A decision-ready primary healthcare publication for Malawi, built from traceable synthetic evidence.",
+      "executive_story": "This community scorecard intelligence report tests respectful care, medicine availability, wait-time reliability and translates the resulting synthetic evidence into accountable decisions for ngo leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "96–132 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -382,7 +398,8 @@
         "primary": "#075C4A",
         "accent": "#ef25b5",
         "highlight": "#F2C14E",
-        "motif": "impact pathway"
+        "motif": "impact pathway",
+        "layout_variant": 9
       },
       "visuals": [
         "Executive dashboard",
@@ -390,10 +407,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "Annual Impact Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Youth Economic Inclusion.",
+      "promise": "A decision-ready youth economic inclusion publication for Zambia, built from traceable synthetic evidence.",
+      "executive_story": "This annual impact report tests decent employment outcomes, enterprise survival, young women participation and translates the resulting synthetic evidence into accountable decisions for ngo leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "96–132 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -424,7 +442,8 @@
         "primary": "#123A73",
         "accent": "#a99e89",
         "highlight": "#F0A629",
-        "motif": "performance pulse"
+        "motif": "performance pulse",
+        "layout_variant": 10
       },
       "visuals": [
         "Executive dashboard",
@@ -432,10 +451,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "Quarterly Performance Intelligence Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Programme Delivery.",
+      "promise": "A decision-ready programme delivery publication for Mozambique, built from traceable synthetic evidence.",
+      "executive_story": "This quarterly performance intelligence report tests milestone delivery, budget absorption quality, partner performance and translates the resulting synthetic evidence into accountable decisions for ngo leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "96–132 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -466,7 +486,8 @@
         "primary": "#111111",
         "accent": "#42919a",
         "highlight": "#D4AF37",
-        "motif": "executive signal grid"
+        "motif": "executive signal grid",
+        "layout_variant": 11
       },
       "visuals": [
         "Executive dashboard",
@@ -474,10 +495,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "Market Intelligence Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Digital Financial Services.",
+      "promise": "A decision-ready digital financial services publication for Ghana, built from traceable synthetic evidence.",
+      "executive_story": "This market intelligence report tests addressable demand, segment economics, digital trust and translates the resulting synthetic evidence into accountable decisions for corporate leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "96–132 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -508,7 +530,8 @@
         "primary": "#F8FAFC",
         "accent": "#8b38a6",
         "highlight": "#8B1E3F",
-        "motif": "statistical notation"
+        "motif": "statistical notation",
+        "layout_variant": 12
       },
       "visuals": [
         "Executive dashboard",
@@ -516,10 +539,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "Technical Research Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Agricultural Resilience.",
+      "promise": "A decision-ready agricultural resilience publication for Ethiopia, built from traceable synthetic evidence.",
+      "executive_story": "This technical research report tests climate exposure, technology adoption, yield stability and translates the resulting synthetic evidence into accountable decisions for research leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "88–120 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -550,7 +574,8 @@
         "primary": "#F8FAFC",
         "accent": "#28661d",
         "highlight": "#8B1E3F",
-        "motif": "statistical notation"
+        "motif": "statistical notation",
+        "layout_variant": 13
       },
       "visuals": [
         "Executive dashboard",
@@ -558,10 +583,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "Statistical Intelligence Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Health Systems.",
+      "promise": "A decision-ready health systems publication for Tanzania, built from traceable synthetic evidence.",
+      "executive_story": "This statistical intelligence report tests effective coverage, facility readiness, wealth-related inequity and translates the resulting synthetic evidence into accountable decisions for research leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "88–120 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -592,7 +618,8 @@
         "primary": "#061B2B",
         "accent": "#c9c1c7",
         "highlight": "#66E3D4",
-        "motif": "interactive evidence graph"
+        "motif": "interactive evidence graph",
+        "layout_variant": 14
       },
       "visuals": [
         "Executive dashboard",
@@ -600,10 +627,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "Interactive Intelligence Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Regional Development.",
+      "promise": "A decision-ready regional development publication for East Africa, built from traceable synthetic evidence.",
+      "executive_story": "This interactive intelligence report tests regional divergence, cross-border service access, evidence connectivity and translates the resulting synthetic evidence into accountable decisions for interactive leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "88–120 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -635,7 +663,8 @@
         "primary": "#21134F",
         "accent": "#6b16a3",
         "highlight": "#C9B8FF",
-        "motif": "evidence network"
+        "motif": "evidence network",
+        "layout_variant": 15
       },
       "visuals": [
         "Executive dashboard",
@@ -643,10 +672,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "Evidence Explorer Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Citizen Feedback.",
+      "promise": "A decision-ready citizen feedback publication for Tanzania, built from traceable synthetic evidence.",
+      "executive_story": "This evidence explorer report tests claim traceability, source triangulation, review consistency and translates the resulting synthetic evidence into accountable decisions for evidence leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "88–120 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",
@@ -678,7 +708,8 @@
         "primary": "#0B4F8A",
         "accent": "#909167",
         "highlight": "#F2C14E",
-        "motif": "SDG target wheel"
+        "motif": "SDG target wheel",
+        "layout_variant": 16
       },
       "visuals": [
         "Executive dashboard",
@@ -686,10 +717,11 @@
         "Decision matrix",
         "Evidence graph"
       ],
-      "executive_story": "SDG Progress Intelligence Report is a governed synthetic publication demonstrating evidence-led analysis, statistical discipline, decision intelligence and international publication quality for Sustainable Development.",
+      "promise": "A decision-ready sustainable development publication for Africa, built from traceable synthetic evidence.",
+      "executive_story": "This sdg progress intelligence report tests target trajectory, leave-no-one-behind gaps, financing alignment and translates the resulting synthetic evidence into accountable decisions for un leaders.",
       "quality_score": 100,
       "publication_profile": "International Publication Profile",
-      "pages_equivalent": "88–120 pages equivalent",
+      "pages_equivalent": "34 generated publication pages",
       "evidence_score": 100,
       "decision_intelligence_score": 100,
       "last_updated": "2026-07-11",

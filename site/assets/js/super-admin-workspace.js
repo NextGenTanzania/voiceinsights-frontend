@@ -17,9 +17,9 @@
   function renderFallback(){
     return {
       workspace:{
-        status:'demo_ready', enterprise_readiness_score:99.1,
+        status:'telemetry_unavailable', enterprise_readiness_score:null,
         mission_control:{
-          kpis:[{label:'Organizations',value:'Live'},{label:'Active projects',value:'Live'},{label:'Running surveys',value:'Live'},{label:'Reports today',value:'Live'}],
+          kpis:[{label:'Organizations',value:'Not verified'},{label:'Active projects',value:'Not verified'},{label:'Running surveys',value:'Not verified'},{label:'Reports today',value:'Not verified'}],
           quick_actions:[
             {label:'Create organization', route:'/admin/organizations.html?action=create', intent:'onboard_client'},
             {label:'Launch demo organization', route:'/admin/organizations.html?action=demo', intent:'sales_demo'},
@@ -30,20 +30,20 @@
           ]
         },
         operations_center:{services:[
-          {name:'API',status:'operational',route:'/admin/system-health.html'},
-          {name:'AI processing',status:'operational',route:'/admin/ai-center.html'},
-          {name:'Rendering',status:'operational',route:'/admin/rendering-health.html'},
-          {name:'Offline sync',status:'operational',route:'/admin/sync-health.html'},
-          {name:'Storage',status:'operational',route:'/admin/storage.html'},
-          {name:'Security',status:'operational',route:'/admin/security.html'}
-        ],alerts:[]},
+          {name:'API',status:'telemetry_unavailable',route:'/admin/system-health.html'},
+          {name:'AI processing',status:'telemetry_unavailable',route:'/admin/ai-center.html'},
+          {name:'Rendering',status:'telemetry_unavailable',route:'/admin/rendering-health.html'},
+          {name:'Offline sync',status:'telemetry_unavailable',route:'/admin/sync-health.html'},
+          {name:'Storage',status:'telemetry_unavailable',route:'/admin/storage.html'},
+          {name:'Security',status:'telemetry_unavailable',route:'/admin/security.html'}
+        ],alerts:[{label:'Live workspace telemetry could not be loaded',severity:'attention',action:'Verify authentication and API availability before making an operational claim.'}]},
         growth_center:{metrics:[{label:'MRR',value:'—'},{label:'Active trials',value:'—'},{label:'Conversions this month',value:'—'},{label:'Trial conversion rate',value:'—'}],workflows:[
           {label:'Lead pipeline',route:'/admin/leads.html'}, {label:'Demo organizations',route:'/admin/organizations.html?filter=demo'}, {label:'Procurement pack',route:'/admin/leads.html?view=procurement'}, {label:'Proposal follow-up',route:'/admin/leads.html?stage=proposal'}
         ]},
-        governance_center:{controls:[{label:'Organization isolation',status:'enforced'},{label:'Role-based access',status:'enforced'},{label:'Audit logs',status:'active',route:'/admin/audit-logs.html'},{label:'Security events',status:'active',route:'/admin/security.html'}]},
-        readiness_dashboard:{technical_readiness:99.2,operational_readiness:99,security_readiness:99.1,client_readiness:98.8,commercial_readiness:98.6,deployment_readiness:99}
+        governance_center:{controls:[{label:'Organization isolation',status:'not_verified'},{label:'Role-based access',status:'not_verified'},{label:'Audit logs',status:'not_verified',route:'/admin/audit-logs.html'},{label:'Security events',status:'not_verified',route:'/admin/security.html'}]},
+        readiness_dashboard:{}
       },
-      client_readiness:{rating:'9.9/10',status:'READY_FOR_ENTERPRISE_DEMOS'}
+      client_readiness:{rating:'Not verified',status:'LIVE_TELEMETRY_REQUIRED'}
     };
   }
   function render(data){

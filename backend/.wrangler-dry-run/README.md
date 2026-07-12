@@ -1,1 +1,0 @@
-This folder contains the built output assets for the worker "voiceinsights-api" generated at 2026-07-11T22:56:21.945Z.

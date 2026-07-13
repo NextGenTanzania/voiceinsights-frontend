@@ -1,4 +1,8 @@
 import { buildPlatinumReport } from './platinum-report-engine.js';
+import { coverVariant, brandLockup, themeFor } from './flagship-publication-design-system.js';
+import { buildFlagshipVisualSet } from './flagship-visualization-engine.js';
+import { standardsFor } from './flagship-standards-engine.js';
+import { evaluateFlagshipPublication } from './flagship-publication-quality-gate.js';
 /**
  * VoiceInsights Africa World-Class Flagship Sample Reports Generator™
  * One governed generator creates the public library, interactive models and every export.
@@ -144,7 +148,7 @@ export function buildFlagshipSampleReport(key){
   const report={
     id:`VIA-FLAGSHIP-${sample.key.toUpperCase()}`,title:sample.title,subtitle:`Decision intelligence for ${sample.sector}`,country:sample.country,sector:sample.sector,classification:'PUBLIC SYNTHETIC DEMONSTRATION',publication_date:publicationDate,
     publication_profile:`International ${sample.profile.replace(/\b\w/g,c=>c.toUpperCase())} Publication Profile`,profile:sample.profile,style:sample.style,publication_page_equivalent:'34 generated publication pages',
-    branding:{logo:'/assets/img/logo-transparent.png',prepared_by:'VoiceInsights Africa',tagline:'Every Voice. Every Language. Every Insight.',publication_id:`VIA-FLAGSHIP-${sample.key.toUpperCase()}`,publication_version:'Current Edition',copyright:'© 2026 VoiceInsights Africa',synthetic_notice:SYNTHETIC_NOTICE},
+    branding:{logo:'/assets/voiceinsights-mark.jpeg',logo_mark:'five-bar-voice-wave',prepared_by:'VoiceInsights Africa',tagline:'Every Voice. Every Language. Every Insight.',publication_id:`VIA-FLAGSHIP-${sample.key.toUpperCase()}`,publication_version:'1.0',copyright:'© 2026 VoiceInsights Africa',synthetic_notice:SYNTHETIC_NOTICE},
     executive_summary:`This flagship synthetic demonstration publication examines ${sample.sector.toLowerCase()} performance in ${sample.country}. The governed evidence model identifies uneven progress, concentrated risks and actionable opportunities. Findings are linked to synthetic source records, recommendations carry named accountability fields, and all statistical claims are generated from one internally consistent dataset.`,
     executive_book:{executive_brief:`Leadership should protect gains while concentrating action on the lowest-performing groups and locations.`,decision_snapshot:recommendations.slice(0,3),critical_findings:findings.slice(0,3),critical_risks:[{risk:'Uneven implementation widens existing disparities',likelihood:'High',impact:'High'},{risk:'Delayed financing weakens delivery confidence',likelihood:'Medium',impact:'High'}],top_opportunities:['Targeted operational acceleration','Evidence-led resource allocation','Stronger feedback accountability'],immediate_actions:recommendations.slice(0,2),priority_decisions:recommendations,budget_implications:'A medium-scale reprioritization is indicated; formal costing and fiduciary review are required.',cost_of_inaction:'Without corrective action, existing gaps are likely to persist and may increase the future cost of recovery.',ownership_matrix:recommendations.map(r=>({decision:r.id,owner:r.owner,timeline:r.timeline})),executive_confidence:'High confidence for synthetic demonstration purposes; not valid for real-world decision use.',strategic_outlook:'Improvement is achievable within 12–18 months if ownership, resourcing and evidence review are maintained.',key_messages:findings.map(f=>f.text),executive_dashboard:{sample_size:sampleSize,response_rate:responseRate,verified_findings:findings.length,priority_decisions:recommendations.length}},
     findings,evidence,recommendations,
@@ -197,6 +201,12 @@ export function buildFlagshipSampleReport(key){
   let platinum=buildPlatinumReport({...report,publication_profile:sample.profile==='board'?'corporate':sample.profile==='interactive'||sample.profile==='evidence'?'research':sample.profile==='ngo'?'donor':sample.profile});
   platinum={...platinum,publication_quality_gate_2:{...(platinum.publication_quality_gate_2||{}),status:'PASS_FOR_SYNTHETIC_DEMONSTRATION',release_allowed:true},report_intelligence_score:{...(platinum.report_intelligence_score||{}),overall:report.quality_scores.overall_publication_readiness}};
   const model={sample:{...sample,visuals:visualizations.slice(0,6).map(x=>x.title),executive_story:report.executive_summary,quality_score:report.quality_scores.overall_publication_readiness,evidence_score:report.quality_scores.evidence_quality,decision_intelligence_score:report.quality_scores.decision_support,estimated_pages:report.publication_page_equivalent,last_updated:publicationDate},report,full_publication,platinum,core:{report,quality:report.quality_scores},premium_publication:{cover:report.branding,sections:Object.keys(report.executive_book)},interactive:{flow:report.interactive_flow,evidence_graph:report.evidence},integrity_notice:SYNTHETIC_NOTICE,quality_gate:report.quality_scores,engine:{name:FLAGSHIP_SAMPLE_LIBRARY_NAME,architecture:'single governed report model'}};
+  model.design_system={cover:{...coverVariant(sample.key,sample.profile),variant:FLAGSHIP_SAMPLE_REPORTS.findIndex(x=>x.key===sample.key)+1},brand:brandLockup(),theme:themeFor(sample.profile)};
+  model.report.framework_applicability=standardsFor(model);
+  model.report.visualizations=[...model.report.visualizations.map(v=>({...v,visualization_id:v.visualization_id||v.id,alt_text:v.alt_text||`${v.title}. ${v.interpretation}`})),...buildFlagshipVisualSet(model)];
+  model.full_publication.cover={...model.full_publication.cover,...model.design_system.cover,logo:'/assets/voiceinsights-mark.jpeg',brand:model.design_system.brand};
+  model.publication_assurance=evaluateFlagshipPublication(model);
+  model.report.publication_assurance=model.publication_assurance;
   return model;
 }
 
@@ -204,21 +214,21 @@ export function buildFlagshipSampleDeck(model){
   if(!model)return [];
   const r=model.report;
   return [
-    {id:'cover',title:r.title,content:{...r.branding,country:r.country,sector:r.sector}},
-    {id:'executive-book',title:'Executive Intelligence Book',content:r.executive_book},
-    {id:'executive-brief',title:'Executive Brief',content:r.executive_book},
-    {id:'decision-snapshot',title:'Priority Decisions',content:{decisions:r.recommendations}},
-    {id:'critical-findings',title:'Critical Findings',content:{findings:r.findings}},
-    {id:'evidence-book',title:'Evidence Intelligence Book',content:{evidence:r.evidence}},
+    {id:'cover',kind:'cover',title:r.title,subtitle:`${r.country} | ${r.sector}`,content:{...r.branding,country:r.country,sector:r.sector}},
+    {id:'executive-book',kind:'narrative',title:'Executive Intelligence Book',subtitle:'Five-minute leadership intelligence',content:r.executive_book},
+    {id:'executive-brief',kind:'narrative',title:'Executive Brief',subtitle:'What matters, why it matters and what must be decided',content:{summary:r.executive_summary,decision:r.recommendations[0]}},
+    {id:'decision-snapshot',kind:'decisions',title:'Priority Decisions',subtitle:'Accountable choices for leadership',items:r.recommendations},
+    {id:'critical-findings',kind:'findings',title:'Critical Findings',subtitle:'Evidence-backed signals requiring attention',items:r.findings},
+    {id:'evidence-book',kind:'evidence',title:'Evidence Intelligence Book',subtitle:'Claim-to-source lineage and confidence',items:r.evidence},
     {id:'evidence',title:'Evidence Intelligence',content:{evidence:r.evidence}},
-    {id:'statistics',title:'Statistical Intelligence',content:r.statistical_intelligence},
-    {id:'risks',title:'Risk and Opportunity Matrix',content:{risks:r.executive_book.critical_risks,opportunities:r.executive_book.top_opportunities}},
+    {id:'statistics',kind:'methodology',title:'Statistical Intelligence',subtitle:'Sampling, weighting, uncertainty and reproducibility',content:r.statistical_intelligence},
+    {id:'risks',kind:'matrix',title:'Risk and Opportunity Matrix',subtitle:'Prioritisation for management action',content:{risks:r.executive_book.critical_risks,opportunities:r.executive_book.top_opportunities}},
     {id:'standards',title:'International Standards',content:{standards:r.international_standards}},
     {id:'oecd-dac',title:'OECD-DAC',content:model.full_publication?.oecd_dac||[]},
     {id:'rbm',title:'Results-Based Management',content:model.full_publication?.rbm_results_framework||{}},
     {id:'chs',title:'Core Humanitarian Standard',content:model.full_publication?.chs_commitments||[]},
-    {id:'roadmap',title:'Implementation Roadmap',content:{recommendations:r.recommendations}},
-    {id:'quality',title:'Publication Quality Gate',content:r.quality_scores},
+    {id:'roadmap',kind:'roadmap',title:'Implementation Roadmap',subtitle:'Immediate, medium-term and strategic action',items:r.recommendations},
+    {id:'quality',kind:'dashboard',title:'Publication Quality Gate',subtitle:'Evidence, statistical, visual and decision assurance',metrics:Object.entries(model.publication_assurance?.components||{}).slice(0,4).map(([label,value])=>({label,value:`${value}/100`}))},
     {id:'visuals',title:'Visual Intelligence',content:{visualizations:r.visualizations}},
     {id:'accessibility',title:'Accessibility Assurance',content:r.accessibility},
     {id:'exports',title:'Publication Products',content:{exports:r.exports}},
@@ -237,7 +247,7 @@ export function buildFlagshipSampleDeck(model){
     {id:'roadmap-detail',title:'Implementation Roadmap',content:r.recommendations},
     {id:'data-dictionary',title:'Data Dictionary',content:r.data_dictionary},
     {id:'appendices',title:'Appendices',content:r.appendices},
-    {id:'limitations',title:'Limitations and Integrity',content:{limitations:r.limitations,notice:r.branding.synthetic_notice}}
+    {id:'limitations',kind:'limitations',title:'Limitations and Integrity',subtitle:'Responsible interpretation',items:r.limitations,content:{notice:r.branding.synthetic_notice}}
   ];
 }
 
@@ -245,7 +255,8 @@ export function getFlagshipSample(key){return FLAGSHIP_SAMPLE_REPORTS.find(x=>x.
 export function getFlagshipSampleCatalog(){
   const reports=FLAGSHIP_SAMPLE_REPORTS.map(sample=>{
     const model=buildFlagshipSampleReport(sample.key),q=model.report.quality_scores;
-    return {...sample,publication_profile:'International Publication Profile',pages_equivalent:model.report.publication_page_equivalent,quality_score:q.overall_publication_readiness,evidence_score:q.evidence_quality,decision_intelligence_score:q.decision_support,last_updated:model.sample.last_updated,prepared_by:'VoiceInsights Africa',synthetic_notice:SYNTHETIC_NOTICE,viewer_url:`/flagship-sample-report.html?key=${sample.key}`,detail_url:`/api/public/flagship-sample-library/${sample.key}`,download_base:`/api/public/flagship-sample-library/${sample.key}/export`};
+    const assurance=model.publication_assurance;
+    return {...sample,publication_profile:'International Publication Profile',pages_equivalent:model.report.publication_page_equivalent,quality_score:assurance.overall,evidence_score:assurance.components.evidence_traceability,decision_intelligence_score:q.decision_support,publication_status:assurance.synthetic_status,assurance_status:assurance.status,last_updated:model.sample.last_updated,prepared_by:'VoiceInsights Africa',synthetic_notice:SYNTHETIC_NOTICE,viewer_url:`/flagship-sample-report.html?key=${sample.key}`,detail_url:`/api/public/flagship-sample-library/${sample.key}`,download_base:`/api/public/flagship-sample-library/${sample.key}/export`};
   });
   return {engine:FLAGSHIP_SAMPLE_LIBRARY_NAME,count:reports.length,categories:['Government','UN & Donors','NGOs','Corporate','Research'],featured:reports.filter(x=>x.featured).map(x=>x.key),reports};
 }

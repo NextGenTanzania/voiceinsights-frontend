@@ -93,6 +93,7 @@ import { getPremiumPublicationCatalog, composePremiumPublication, buildPremiumPu
 import { getInteractiveIntelligenceCatalog, buildEvidenceExplorer, answerGroundedReportQuestion, buildPrivacySafeBenchmark, extractKnowledgeRecords, searchKnowledge, buildInteractiveReport } from './interactive-intelligence.js';
 import { getPresentationPublishingCatalog, buildPublicationModel, evaluatePresentationQuality, buildDeck } from './presentation-publishing.js';
 import { getFlagshipSampleCatalog, buildFlagshipSampleReport, buildFlagshipSampleDeck } from './flagship-sample-library.js';
+import { resolveHybridFlagshipArtifact } from './hybrid-dedicated-rendering.js';
 import { renderFlagshipInteractiveHtml } from './flagship-interactive-html.js';
 import { buildMeDemoBrief } from './me-demo-brief.js';
 import { buildDocumentComposition } from './document-composer.js';
@@ -1437,14 +1438,14 @@ async function handleRequest(request, env, ctx) {
         const key=decodeURIComponent(sampleExportMatch[1]), format=sampleExportMatch[2];
         const model=buildFlagshipSampleReport(key); if(!model) return error('Flagship sample report not found',404);
         if(model.report?.quality_scores?.gate!=='PUBLICATION_READY') return json({ok:false,error:'Publication quality gate blocked export',quality_gate:model.report?.quality_scores||null},422,{'Cache-Control':'no-store'});
-        const report=model.report; let artifact;
-        if(format==='docx') artifact=await renderDocxBinary(report,{report_id:`flagship-${key}`});
-        else if(format==='xlsx') artifact=await renderXlsxBinary(report,{report_id:`flagship-${key}`});
-        else if(format==='pptx') artifact=await renderPptxBinary({report_id:`flagship-${key}`,metadata:{report_id:`flagship-${key}`,title:report.title,organization:'VoiceInsights Africa'},artifact:{slides:buildFlagshipSampleDeck(model)}},{profile:model.sample.style});
-        else if(format==='board-deck'||format==='investor-deck'){const product=format.replace('-','_'),deck=buildDeck(report,product);artifact=await renderPptxBinary({report_id:`flagship-${key}-${format}`,metadata:{report_id:`flagship-${key}-${format}`,title:report.title,organization:'VoiceInsights Africa'},artifact:{slides:deck.slides||buildFlagshipSampleDeck(model)}},{profile:model.sample.style,product});}
-        else if(format==='policy-brief'||format==='cabinet-memo'){const product=format.replace('-','_'),profile=format==='cabinet-memo'?'government':model.sample.profile,publication=buildPublicationModel({report},profile,product),composition=buildDocumentComposition({...report,title:publication.cover?.title||report.title},format==='cabinet-memo'?'government_report_pdf':'policy_brief_pdf',{tenant_id:'public-demo'});artifact=await renderPdfBinary(composition,{profile,product});}
-        else if(format==='html') artifact=await renderFlagshipInteractiveHtml(model);
-        else { const composition=buildDocumentComposition(report,'pdf',{tenant_id:'public-demo'}); composition.full_report=report; artifact=await renderPdfBinary(composition,{profile:model.sample.style}); }
+        const report=model.report; let artifact=await resolveHybridFlagshipArtifact(env,{key,format,model});
+        if(!artifact&&format==='docx') artifact=await renderDocxBinary(report,{report_id:`flagship-${key}`});
+        else if(!artifact&&format==='xlsx') artifact=await renderXlsxBinary(report,{report_id:`flagship-${key}`});
+        else if(!artifact&&format==='pptx') artifact=await renderPptxBinary({report_id:`flagship-${key}`,metadata:{report_id:`flagship-${key}`,title:report.title,organization:'VoiceInsights Africa'},artifact:{slides:buildFlagshipSampleDeck(model)}},{profile:model.sample.style});
+        else if(!artifact&&(format==='board-deck'||format==='investor-deck')){const product=format.replace('-','_'),deck=buildDeck(report,product);artifact=await renderPptxBinary({report_id:`flagship-${key}-${format}`,metadata:{report_id:`flagship-${key}-${format}`,title:report.title,organization:'VoiceInsights Africa'},artifact:{slides:deck.slides||buildFlagshipSampleDeck(model)}},{profile:model.sample.style,product});}
+        else if(!artifact&&(format==='policy-brief'||format==='cabinet-memo')){const product=format.replace('-','_'),profile=format==='cabinet-memo'?'government':model.sample.profile,publication=buildPublicationModel({report},profile,product),composition=buildDocumentComposition({...report,title:publication.cover?.title||report.title},format==='cabinet-memo'?'government_report_pdf':'policy_brief_pdf',{tenant_id:'public-demo'});artifact=await renderPdfBinary(composition,{profile,product});}
+        else if(!artifact&&format==='html') artifact=await renderFlagshipInteractiveHtml(model);
+        else if(!artifact) { const composition=buildDocumentComposition(report,'pdf',{tenant_id:'public-demo'}); composition.full_report=report; artifact=await renderPdfBinary(composition,{profile:model.sample.style}); }
         return new Response(artifact.bytes,{status:200,headers:{'Content-Type':artifact.content_type,'Content-Disposition':`attachment; filename="${artifact.filename}"`,'X-Content-Type-Options':'nosniff','Cache-Control':'public, max-age=300','X-Artifact-Checksum':artifact.checksum}});
       }
 

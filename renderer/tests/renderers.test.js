@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {buildFlagshipSampleReport} from '../../backend/src/flagship-sample-library.js';import {renderArtifact} from '../src/renderers.mjs';
+const logo=await readFile(new URL('../../site/assets/voiceinsights-mark.jpeg',import.meta.url)),model=buildFlagshipSampleReport('national-human-development');
+for(const format of ['pdf','docx','pptx','xlsx'])test(`${format} renderer produces a real branded binary`,async()=>{const a=await renderArtifact(format,model,{logo});assert.ok(a.bytes.length>10000);if(format==='pdf')assert.equal(a.bytes.subarray(0,4).toString(),'%PDF');else assert.equal(a.bytes.subarray(0,2).toString(),'PK');});

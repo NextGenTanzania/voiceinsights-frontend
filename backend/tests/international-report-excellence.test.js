@@ -57,9 +57,10 @@ test('public routes remain safe and format aliases exist', () => {
 
 test('public wording contains no buyer-facing technical leaks in visible surfaces', () => {
   const visible = (viewerSource + librarySource).replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<style[\s\S]*?<\/style>/gi, '');
-  for (const phrase of ['VoiceInsights Intelligence OS v7.0','Report Trust & Evidence Layer','VRDS Showcase Experience','structured assistant actions','Not enough data','raw JSON','undefined','NaN']) {
+  for (const phrase of ['VoiceInsights Intelligence OS v7.0','Report Trust & Evidence Layer','VRDS Showcase Experience','structured assistant actions','Not enough data','raw JSON','undefined']) {
     assert.doesNotMatch(visible, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'));
   }
+  assert.doesNotMatch(visible, /\bNaN\b/);
   assert.match(viewerSource, /Executive Intelligence Report/);
   assert.match(viewerSource, /Decision Support Assistant/);
 });

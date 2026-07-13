@@ -26,5 +26,5 @@ test('every publication is complete, traceable, unique and generated from one go
 
 test('catalog includes required scores, metadata and download paths',()=>{
  const c=getFlagshipSampleCatalog(); assert.equal(c.count,16);
- for(const x of c.reports){assert.ok(x.publication_profile);assert.ok(x.pages_equivalent);assert.equal(x.quality_score,100);assert.ok(x.evidence_score>=90);assert.ok(x.decision_intelligence_score>=90);assert.match(x.download_base,/\/export$/);}
+ for(const x of c.reports){assert.ok(x.publication_profile);assert.ok(x.pages_equivalent);assert.equal(x.publication_status,'DEMONSTRATION_READY');assert.ok(x.quality_score>0&&x.quality_score<100);assert.ok(x.evidence_score>=90);assert.ok(x.decision_intelligence_score>=90);assert.match(x.download_base,/\/export$/);}
 });

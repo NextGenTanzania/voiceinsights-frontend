@@ -23,8 +23,8 @@ test('public viewer uses honest export labels for preview and print flows', () =
 });
 
 test('public flagship library labels native governed exports by format', () => {
-  for (const action of ["['pdf','PDF']","['docx','DOCX']","['pptx','PPTX']","['xlsx','XLSX']"]) assert.ok(librarySource.includes(action));
-  assert.match(librarySource, /Open Full Report/);
+  for (const action of ["['pdf','Premium PDF']","['docx','Editable Word']","['pptx','Native PowerPoint']","['xlsx','Statistical Excel']"]) assert.ok(librarySource.includes(action));
+  assert.match(librarySource, /View Publication/);
   assert.doesNotMatch(librarySource, /Download Board Outline Preview/);
 });
 

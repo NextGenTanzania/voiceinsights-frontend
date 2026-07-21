@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Executive Intelligence — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/enterprise-dashboard-theme.css">
+<link rel="stylesheet" href="/assets/css/decision-workspace.css">
+<link rel="stylesheet" href="/assets/css/executive-intelligence.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main id="main-content" class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <h1 class="visually-hidden">Executive Intelligence — VoiceInsights Africa</h1>
+
+      <div id="ei-denied" class="alert alert-danger" style="display:none;" role="alert">
+        <span class="alert-icon">⛔</span>
+        <div><div class="alert-title">Executive Intelligence unavailable</div><p style="margin:0;">Your role does not have permission to view executive intelligence. Contact your organization administrator if you believe this is incorrect.</p></div>
+      </div>
+
+      <div id="ei-root" style="display:none;">
+
+        <!-- A. Executive Situation Header -->
+        <header class="ei-situation-header" id="ei-situation-header">
+          <div class="ei-situation-main">
+            <div class="ei-eyebrow">Program Beta · Executive Intelligence</div>
+            <h2 class="ei-org-name" id="ei-org-name">—</h2>
+            <div class="ei-situation-meta" id="ei-situation-meta">Loading situation…</div>
+          </div>
+          <div class="ei-situation-actions">
+            <span class="badge" id="ei-scope-badge">—</span>
+            <button class="btn btn-ghost btn-sm" id="ei-refresh-btn" type="button">Refresh</button>
+            <button class="btn btn-primary btn-sm" id="ei-briefing-btn" type="button">Enter Briefing Mode</button>
+          </div>
+        </header>
+        <div id="ei-stale-warning" class="alert alert-warn" style="display:none;" role="alert"></div>
+
+        <!-- B. Leadership Attention Brief -->
+        <section class="ei-section" aria-labelledby="ei-brief-heading">
+          <h2 class="ei-section-title" id="ei-brief-heading">Leadership Attention Brief</h2>
+          <p class="ei-section-sub">The most urgent, evidence-based issues right now — each one traceable to a real record, never a generated suggestion.</p>
+          <div id="ei-brief-loading" class="muted-note" style="padding:1rem 0;">Evaluating insight rules…</div>
+          <div id="ei-brief-error" class="alert alert-danger" style="display:none;"></div>
+          <div id="ei-brief-empty" class="alert alert-info" style="display:none;">No urgent issues detected by the current rule set.</div>
+          <ul class="ei-insight-list" id="ei-brief-list" style="display:none;"></ul>
+        </section>
+
+        <!-- Decisions Required -->
+        <section class="ei-section" id="ei-decisions-section" aria-labelledby="ei-decisions-heading">
+          <h2 class="ei-section-title" id="ei-decisions-heading">Decisions Required</h2>
+          <p class="ei-section-sub">Items that require leadership authority or intervention, with a deadline and the consequence of inaction.</p>
+          <div id="ei-decisions-loading" class="muted-note" style="padding:1rem 0;">Loading…</div>
+          <div id="ei-decisions-unavailable" class="alert alert-info" style="display:none;"></div>
+          <div id="ei-decisions-empty" class="alert alert-info" style="display:none;">No decisions currently require leadership intervention.</div>
+          <div class="table-wrap" id="ei-decisions-table-wrap" style="display:none;">
+            <table class="dw-actions-table">
+              <thead><tr><th>Decision Required</th><th>Deadline</th><th>Consequence of Inaction</th><th>Responsible Authority</th><th></th></tr></thead>
+              <tbody id="ei-decisions-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- C. Institutional Health Summary -->
+        <section class="ei-section" aria-labelledby="ei-health-heading">
+          <h2 class="ei-section-title" id="ei-health-heading">Institutional Health Summary</h2>
+          <div id="ei-health-loading" class="muted-note" style="padding:1rem 0;">Loading portfolio…</div>
+          <div id="ei-health-error" class="alert alert-danger" style="display:none;"></div>
+          <div class="ei-kpi-grid" id="ei-health-tiles" style="display:none;"></div>
+        </section>
+
+        <!-- D. Strategic Priority Performance -->
+        <section class="ei-section" id="ei-strategic-section" aria-labelledby="ei-strategic-heading">
+          <h2 class="ei-section-title" id="ei-strategic-heading">Strategic Priority Performance</h2>
+          <div id="ei-strategic-loading" class="muted-note" style="padding:1rem 0;">Loading…</div>
+          <div id="ei-strategic-unavailable" class="alert alert-info" style="display:none;"></div>
+          <div id="ei-strategic-empty" class="alert alert-info" style="display:none;">No strategic-priority data has been recorded on any Action yet.</div>
+          <div class="table-wrap" id="ei-strategic-table-wrap" style="display:none;">
+            <table class="dw-actions-table">
+              <thead><tr><th>Strategic Priority</th><th>Commitments</th><th>Completed</th><th>Verified</th><th>Overdue</th><th>Overdue Rate</th><th>Avg Progress</th></tr></thead>
+              <tbody id="ei-strategic-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- E. Portfolio Performance -->
+        <section class="ei-section" id="ei-portfolio-section" aria-labelledby="ei-portfolio-heading">
+          <h2 class="ei-section-title" id="ei-portfolio-heading">Portfolio Performance</h2>
+          <p class="ei-section-sub">Every project ranked by overdue exposure — strongest performers at the bottom, most at-risk at the top.</p>
+          <div id="ei-portfolio-loading" class="muted-note" style="padding:1rem 0;">Loading…</div>
+          <div id="ei-portfolio-unavailable" class="alert alert-info" style="display:none;"></div>
+          <div id="ei-portfolio-empty" class="alert alert-info" style="display:none;">No project portfolio data is available yet.</div>
+          <div class="table-wrap" id="ei-portfolio-table-wrap" style="display:none;">
+            <table class="dw-actions-table">
+              <thead><tr><th>Project</th><th>Total</th><th>Overdue</th><th>Escalated</th><th>High Risk</th><th>Completion</th><th>Verification</th></tr></thead>
+              <tbody id="ei-portfolio-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- F. Risk and Escalation Intelligence -->
+        <section class="ei-section" aria-labelledby="ei-risk-heading">
+          <h2 class="ei-section-title" id="ei-risk-heading">Risk and Escalation Intelligence</h2>
+          <div id="ei-risk-loading" class="muted-note" style="padding:1rem 0;">Loading…</div>
+          <div class="ei-kpi-grid" id="ei-risk-tiles" style="display:none;"></div>
+        </section>
+
+        <!-- G. Accountability and Workload -->
+        <section class="ei-section" id="ei-workload-section" aria-labelledby="ei-workload-heading">
+          <h2 class="ei-section-title" id="ei-workload-heading">Accountability and Workload</h2>
+          <p class="ei-section-sub" id="ei-workload-note">Workload is shown to identify institutional capacity risk, not to rank individual performance.</p>
+          <div id="ei-workload-loading" class="muted-note" style="padding:1rem 0;">Loading…</div>
+          <div id="ei-workload-unavailable" class="alert alert-info" style="display:none;"></div>
+          <div class="table-wrap" id="ei-workload-table-wrap" style="display:none;">
+            <table class="dw-actions-table">
+              <thead><tr><th>Owner</th><th>Assigned</th><th>In Progress</th><th>Overdue</th><th>Due Soon</th><th>Awaiting Verification</th></tr></thead>
+              <tbody id="ei-workload-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- H. Decision and Review Pipeline -->
+        <section class="ei-section" aria-labelledby="ei-pipeline-heading">
+          <h2 class="ei-section-title" id="ei-pipeline-heading">Decision and Review Pipeline</h2>
+          <div id="ei-pipeline-loading" class="muted-note" style="padding:1rem 0;">Loading…</div>
+          <div class="ei-pipeline-bar" id="ei-pipeline-bar" style="display:none;"></div>
+          <div class="ei-pipeline-legend" id="ei-pipeline-legend"></div>
+        </section>
+
+        <!-- I. Evidence and Assurance -->
+        <section class="ei-section" aria-labelledby="ei-evidence-heading">
+          <h2 class="ei-section-title" id="ei-evidence-heading">Evidence and Assurance</h2>
+          <div id="ei-evidence-loading" class="muted-note" style="padding:1rem 0;">Loading…</div>
+          <div class="ei-kpi-grid" id="ei-evidence-tiles" style="display:none;"></div>
+          <p class="ei-fine-print" id="ei-evidence-note"></p>
+        </section>
+
+        <!-- Trend and Movement -->
+        <section class="ei-section" aria-labelledby="ei-trend-heading">
+          <h2 class="ei-section-title" id="ei-trend-heading">Trend and Movement</h2>
+          <div id="ei-trend-loading" class="muted-note" style="padding:1rem 0;">Loading…</div>
+          <div id="ei-trend-unavailable" class="alert alert-info" style="display:none;"></div>
+          <div class="ei-trend-chart" id="ei-trend-chart" style="display:none;"></div>
+        </section>
+
+        <!-- J. Executive Timeline -->
+        <section class="ei-section" aria-labelledby="ei-timeline-heading">
+          <h2 class="ei-section-title" id="ei-timeline-heading">Executive Timeline</h2>
+          <div class="filter-bar">
+            <input type="text" id="ei-timeline-project" placeholder="Filter by project ID" aria-label="Filter timeline by project ID" style="width:12rem;">
+            <select id="ei-timeline-type" aria-label="Filter by event type">
+              <option value="">Any event type</option>
+              <option value="status">Status change</option>
+              <option value="assignment">Assignment</option>
+              <option value="evidence">Evidence</option>
+              <option value="verification">Verification</option>
+            </select>
+            <button class="btn btn-ghost btn-sm" id="ei-timeline-apply" type="button">Apply</button>
+            <button class="btn btn-ghost btn-sm" id="ei-timeline-reset" type="button">Reset</button>
+          </div>
+          <div id="ei-timeline-loading" class="muted-note" style="padding:1rem 0;">Loading…</div>
+          <div id="ei-timeline-empty" class="alert alert-info" style="display:none;">No institutionally significant events match these filters.</div>
+          <ul class="ei-timeline-list" id="ei-timeline-list" style="display:none;"></ul>
+        </section>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Briefing Mode overlay: reuses the SAME data already fetched into ei-root above (no second fetch), re-flowed full-screen. -->
+<div id="ei-briefing" class="ei-briefing" style="display:none;">
+  <div class="ei-briefing-bar no-print">
+    <span>Briefing Mode</span>
+    <button class="btn btn-ghost btn-sm" id="ei-briefing-print" type="button">Print</button>
+    <button class="btn btn-primary btn-sm" id="ei-briefing-exit" type="button">Exit Briefing Mode</button>
+  </div>
+  <div class="ei-briefing-body" id="ei-briefing-body"></div>
+</div>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/safe-dom.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/decision-workspace.js"></script>
+<script src="/assets/js/executive-intelligence-page.js"></script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

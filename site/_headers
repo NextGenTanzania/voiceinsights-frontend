@@ -6,7 +6,7 @@
   Permissions-Policy: camera=(), microphone=(self), geolocation=(self), payment=(), usb=()
   Cross-Origin-Opener-Policy: same-origin
   X-Permitted-Cross-Domain-Policies: none
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://voiceinsights-api.kitentyatsnp.workers.dev; font-src 'self' data: https:; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://voiceinsights-api.kitentyatsnp.workers.dev https://voiceinsights-api-preview.kitentyatsnp.workers.dev; font-src 'self' data: https:; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
 
 /sw.js
   Service-Worker-Allowed: /
@@ -18,8 +18,24 @@
 /flagship-sample-report.html
   Cache-Control: no-cache, no-store, must-revalidate
 
-/assets/js/config.js
+# RC1 finding: Cloudflare Pages *merges* Cache-Control directives from every
+# matching rule rather than letting a more specific rule replace a broader
+# one — confirmed live: config.js's intended "no-cache" was actually being
+# served as "public, max-age=86400, must-revalidate" because the blanket
+# /assets/* rule below also matched and its max-age got merged in. That
+# meant a genuinely critical fix (this sprint's optimistic-concurrency
+# change) could sit invisible in an already-cached browser or Cloudflare's
+# own edge cache for up to 24 hours after a real deploy — reproduced
+# directly (cf-cache-status: HIT serving pre-fix decision-detail-page.js
+# nearly 20 minutes after the corrected version was live at origin).
+# Logic files (JS/CSS) now get their own rule with no competing wildcard
+# match, so "no-cache, must-revalidate" actually takes effect; only true
+# static assets (images) keep the long cache.
+/assets/js/*
   Cache-Control: no-cache, must-revalidate
 
-/assets/*
+/assets/css/*
+  Cache-Control: no-cache, must-revalidate
+
+/assets/img/*
   Cache-Control: public, max-age=86400

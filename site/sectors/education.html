@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Education Intelligence | VoiceInsights Africa</title>
+<meta name="description" content="Voice-collected evidence on attendance, transition and learning-outcome barriers, built on the same Unified Publication Runtime as every VoiceInsights Africa sector.">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/sector-framework.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+<nav class="pub-nav">
+  <div class="pub-nav-row1">
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+    </a>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right">
+      <div id="site-search-mount" style="width:180px;"></div>
+      <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
+      <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="/contact.html?sector=education" class="btn btn-primary btn-sm">Book Demo</a>
+    </div>
+  </div>
+  <div class="pub-nav-collapse pub-nav-links">
+    <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
+    <a href="/solutions.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
+    <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
+    <a href="/sample-reports.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Intelligence Library</a>
+    <a href="/safeguarding.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
+  </div>
+</nav>
+
+<nav aria-label="Breadcrumb" style="max-width:1200px;margin:1rem auto 0;padding:0 5vw;font-size:.8rem;color:var(--text-dim);">
+  <a href="/index.html" style="color:var(--text-dim);">VoiceInsights Africa</a> ›
+  <a href="/industries.html" style="color:var(--text-dim);">Industries</a> ›
+  <span style="color:var(--text);">Education</span>
+</nav>
+
+<main id="main-content">
+  <div id="sector-content"></div>
+</main>
+
+
+<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
+  <div style="flex:1 1 220px;">
+    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
+    </div>
+    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Sectors</div>
+    <a href="/sectors/health.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Health</a>
+    <a href="/sectors/education.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Education</a>
+    <a href="/sectors/agriculture.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Agriculture</a>
+    <a href="/sectors/humanitarian.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Humanitarian</a>
+    <a href="/sectors/governance.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Governance</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Contact</div>
+    <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
+    <a href="/contact.html?sector=education" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+  </div>
+</footer>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/site-search.js"></script>
+<script src="/assets/js/sector-page.js"></script>
+<script>
+  lucide.createIcons();
+  initSiteSearch('site-search-mount');
+  renderSectorPage({
+    id: 'education',
+    meta: { title: 'Education Intelligence | VoiceInsights Africa', description: 'Voice-collected evidence on attendance, transition and learning-outcome barriers.' },
+    hero: {
+      eyebrow: 'Education Intelligence',
+      headline: 'Understand the barriers behind attendance and learning outcomes.',
+      subhead: 'Voice-collected feedback from teachers, parents and students, routed through the same governed editorial pipeline and canonical publication engine as every VoiceInsights Africa sector.',
+      primaryCta: { label: 'Book an Education Demo', href: '/contact.html?sector=education' },
+      secondaryCta: { label: 'Explore the Intelligence Library', href: '/sample-reports.html' },
+    },
+    executiveSummary: {
+      eyebrow: 'Why Education',
+      headline: 'The same governed engine, applied to a different decision problem.',
+      paragraphs: ['Attendance barriers, transition gaps and perceived learning-outcome quality are rarely captured by administrative data alone. Voice-collected feedback from teachers, parents and students fills that gap — analyzed through the same editorial pipeline, quality gate and Unified Publication Runtime every other sector on this platform uses.'],
+    },
+    challenges: {
+      headline: 'The problems education leaders bring to us.',
+      items: [
+        { title: 'Attendance & transition barriers', description: 'Why students disengage or fail to transition between grade levels is often invisible in enrollment data alone.' },
+        { title: 'Perceived learning quality', description: 'Test scores describe outcomes; they rarely describe what parents and teachers believe is driving them.' },
+        { title: 'Under-resourced feedback loops', description: 'Ministries and school networks often have no structured channel for teacher or parent voice at scale.' },
+      ],
+    },
+    whyVoiceInsights: {
+      headline: 'Why education leaders choose VoiceInsights Africa.',
+      items: [
+        { icon: '📞', title: 'Reaches who others miss', description: 'Multilingual voice collection across phone, WhatsApp, SMS and an offline mobile app reaches parents and out-of-school youth that a school-based survey misses.' },
+        { icon: '🧾', title: 'One canonical publication engine', description: 'The Unified Publication Runtime is the single source of truth behind Preview, View Publication and every export format — no sector-specific renderer, ever.' },
+        { icon: '🔬', title: 'Two real knowledge domains', description: 'Education spans two sector-knowledge domains — Education (attendance, transition, learning quality) and Youth Skills and Employability (training-to-employment conversion) — not one generic education template.' },
+        { icon: '✅', title: 'Assurance built in', description: 'Every Education publication passes the same evidence-traceability, statistical-documentation and accessibility gate every VoiceInsights Africa publication does.' },
+      ],
+    },
+    aiCapabilities: {
+      headline: 'AI capabilities behind Education Intelligence.',
+      items: [
+        { name: 'Voice transcription & translation', description: 'Converts recorded interviews and voice notes into structured, analyzable text across supported languages.', status: 'Live' },
+        { name: 'Distress-signal detection', description: 'Flags responses indicating risk to a student or respondent for urgent human review — the same safeguarding pipeline used platform-wide.', status: 'Live' },
+        { name: 'Evidence-ranked prioritization', description: 'The editorial brain ranks findings by real evidence-statistic values, not by a fixed position in a template.', status: 'Live' },
+        { name: 'Publication quality & prestige review', description: 'Every Education publication passes the same evidence-traceability, statistical-documentation and consensus-review gate as any other sector.', status: 'Live' },
+        { name: 'Transition-dropout risk scoring', description: 'A forthcoming module ranking districts by grade-transition dropout risk — not an individual-student prediction product.', status: 'Roadmap' },
+      ],
+    },
+    workflow: {
+      headline: 'How an Education publication gets made.',
+      steps: [
+        { index: 1, title: 'Teacher, parent & student voice collection', description: 'Teachers, parents and students respond by phone, WhatsApp, SMS or the offline enumerator app.' },
+        { index: 2, title: 'Transcription & translation', description: 'Voice responses become structured, analyzable text, with distress signals flagged for review as they arrive.' },
+        { index: 3, title: 'Editorial intelligence pipeline', description: 'The evidence is routed through the Education or Youth Skills and Employability knowledge domain and ranked by the editorial brain before a single finding is written.' },
+        { index: 4, title: 'Governed publication', description: 'The Unified Publication Runtime composes one canonical publication object — the same one every export format and every viewer reads from.' },
+        { index: 5, title: 'Executive decision intelligence', description: 'Findings become owned, timelined, monitored recommendations — not just a chart.' },
+      ],
+    },
+    dashboardPreview: {
+      headline: 'What an Education dashboard shows leadership.',
+      description: 'An illustrative preview of the kind of executive view this evidence supports — not a live data connection.',
+      tiles: [
+        { value: '—', label: 'School attendance rate', trend: 'Illustrative', trendDirection: 'flat' },
+        { value: '—', label: 'Grade-transition completion rate', trend: 'Illustrative', trendDirection: 'flat' },
+        { value: '—', label: 'Skills-to-employment conversion rate', trend: 'Illustrative', trendDirection: 'flat' },
+        { value: '—', label: 'Respondent response rate', trend: 'Illustrative', trendDirection: 'flat' },
+      ],
+    },
+    moduleShowcase: {
+      headline: 'The Education Intelligence module set.',
+      modules: [
+        { name: 'Attendance & Transition Intelligence', decisionProblem: 'Which districts have the sharpest grade-transition dropout.', aiCapability: 'Evidence-ranked district prioritization', linkedSampleKey: 'education-access-intelligence', status: 'Live sample' },
+        { name: 'Youth Skills & Employability Intelligence', decisionProblem: 'Which skills-to-employment conversion gap most needs investment.', aiCapability: 'Evidence-ranked programme prioritization', linkedSampleKey: 'youth-skills-employability-intelligence', status: 'Live sample' },
+        { name: 'Perceived Learning Quality Intelligence', decisionProblem: 'Where perceived learning quality diverges most from measured test scores.', status: 'Roadmap' },
+        { name: 'Teacher-Parent Feedback Channel Intelligence', decisionProblem: 'Which districts lack a structured teacher-parent feedback channel at scale.', status: 'Roadmap' },
+        { name: 'Curriculum Market-Relevance Intelligence', decisionProblem: 'Which training curricula are least aligned with current market-relevance data.', status: 'Roadmap' },
+      ],
+    },
+    publicationLibrary: {
+      headline: 'Education-related flagship publications.',
+      description: 'Real, governed synthetic demonstration publications generated by the Unified Publication Runtime — including the Youth Skills and Employability sub-domain.',
+      domain: ['Education Intelligence', 'Youth Skills and Employability Intelligence'],
+      emptyStateText: 'No flagship Education publications yet — this sector is on our near-term roadmap.',
+    },
+    integrations: {
+      headline: 'Where Education Intelligence connects.',
+      items: [
+        { name: 'National EMIS', description: 'National education management information systems — integration target' },
+        { name: 'School information systems', description: 'School-level attendance and records platforms — integration target' },
+        { name: 'TVET / skills-training platforms', description: 'Technical and vocational training-management platforms — integration target' },
+      ],
+    },
+    securityGovernance: {
+      headline: 'Security, privacy and AI governance.',
+      summaryPoints: [
+        'Respondent data — including data from minors, collected only with appropriate consent — is handled under the same consent, encryption and role-based access controls documented on our Security and Privacy pages.',
+        'Distress-signal detection and safeguarding review are always active on Education data collection.',
+        'Every flagship publication discloses its AI governance model in plain language: no generative or LLM model produces report text — a deterministic, versioned rule-based engine does.',
+      ],
+      links: [
+        { label: 'Security', href: '/security.html' },
+        { label: 'Privacy Policy', href: '/privacy.html' },
+        { label: 'Safeguarding & Compliance', href: '/safeguarding.html' },
+        { label: 'Trust Center', href: '/security/trust-center.html' },
+      ],
+    },
+    faqs: {
+      headline: 'Education Intelligence — frequently asked questions.',
+      items: [
+        { q: 'Do you have real Education flagship publications yet?', a: 'Yes — see the Intelligence Library above for a real, governed Education Access and Learning Quality publication. This page uses the exact same design system and publication engine as our fully-built Health Intelligence Suite, and will gain more Education publications as this sector matures.' },
+        { q: 'How does data collection work without smartphones?', a: 'Phone call, WhatsApp voice note, SMS, or an offline-first mobile app for enumerators working with zero connectivity.' },
+      ],
+    },
+    cta: {
+      headline: 'Interested in an Education pilot?',
+      description: 'Tell us about your programme and we can scope a pilot using this same governed pipeline.',
+      primary: { label: 'Book a Demo', href: '/contact.html?sector=education' },
+      secondary: { label: 'See Health, our deepest sector', href: '/sectors/health.html' },
+    },
+    bookDemo: { headline: 'Ready to talk?', description: 'We\'ll walk through a live pilot before any commercial discussion.', formHref: '/contact.html?sector=education' },
+    relatedSectors: [
+      { label: 'Health', href: '/sectors/health.html' },
+      { label: 'Agriculture', href: '/sectors/agriculture.html' },
+      { label: 'Humanitarian', href: '/sectors/humanitarian.html' },
+      { label: 'Governance', href: '/sectors/governance.html' },
+    ],
+  });
+</script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+/* VoiceInsights Africa — Platform Intelligence™
+   Product Experience Evolution Phase 1. Reuses design tokens from
+   tokens.css/style.css and executive-intelligence.css's KPI-tile/insight-
+   list primitives — new layout only, no new color values invented. */
+
+.pi-hero {
+  padding: var(--space-6) var(--space-6) var(--space-5);
+  margin-bottom: var(--space-5);
+  background: linear-gradient(160deg, var(--surface) 0%, var(--surface-2) 100%);
+  border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--elevation-2);
+}
+.pi-eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); font-weight: 700; }
+.pi-hero-title { font-family: var(--font-display); font-size: 2rem; margin: .2rem 0 .4rem; text-wrap: balance; }
+.pi-hero-sub { color: var(--text-muted); max-width: 62ch; margin: 0 0 var(--space-5); }
+
+.pi-copilot-form { display: flex; gap: var(--space-3); max-width: 720px; }
+.pi-copilot-form input[type="text"] {
+  flex: 1; font-size: 1rem; padding: .85em 1.1em; border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong); background: var(--surface); color: var(--text);
+}
+.pi-copilot-form input[type="text"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.pi-suggestions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4); }
+.pi-chip {
+  font-size: .78rem; padding: .4em .9em; border-radius: 999px; border: 1px solid var(--border-strong);
+  background: var(--surface-2); color: var(--text-muted); cursor: pointer; transition: var(--motion-fast);
+}
+.pi-chip:hover, .pi-chip:focus-visible { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+.pi-thread { display: flex; flex-direction: column; gap: var(--space-4); margin-bottom: var(--space-6); }
+.pi-answer-card {
+  background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent);
+  border-radius: var(--radius-sm); padding: var(--space-4);
+}
+.pi-question { font-family: var(--font-display); font-style: italic; color: var(--text-muted); margin-bottom: var(--space-3); }
+.pi-answer-body { white-space: pre-line; margin-bottom: var(--space-3); }
+.pi-answer-unmatched { color: var(--text-dim); }
+.pi-answer-meta { display: flex; gap: var(--space-4); align-items: center; font-size: .82rem; color: var(--text-dim); margin-bottom: var(--space-2); }
+.pi-source { font-family: var(--font-mono); font-size: .74rem; }
+.pi-answer-tags, .pi-answer-recs { font-size: .85rem; margin-bottom: var(--space-2); }
+.pi-answer-recs ul { margin: .3em 0 0 1.2em; }
+.pi-evidence-details { font-size: .8rem; color: var(--text-muted); margin-top: var(--space-2); }
+.pi-evidence-details summary { cursor: pointer; font-weight: 600; }
+.pi-evidence-json { background: var(--surface-2); border-radius: var(--radius-sm); padding: var(--space-3); overflow-x: auto; font-size: .74rem; max-height: 240px; overflow-y: auto; }
+
+.pi-picker-row { display: flex; gap: var(--space-3); align-items: center; margin-bottom: var(--space-4); flex-wrap: wrap; }
+.pi-picker-row select { min-width: 280px; }
+
+.pi-result-area { min-height: 2rem; }
+.pi-disclosure { font-size: .78rem; color: var(--text-dim); margin-top: var(--space-3); max-width: 70ch; }
+
+.pi-simulator-controls { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); flex-wrap: wrap; }
+.pi-simulator-controls input[type="range"] { width: 220px; }
+#pi-sim-overdue-value { font-family: var(--font-mono); font-weight: 700; min-width: 3em; }
+
+.pi-sim-compare { display: flex; gap: var(--space-5); margin-bottom: var(--space-3); flex-wrap: wrap; }
+.pi-sim-compare h4 { font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); margin: 0 0 .4em; }
+
+.pi-graph-svg { width: 100%; max-width: 600px; height: auto; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.pi-graph-legend { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-3); font-size: .78rem; color: var(--text-muted); }
+.pi-graph-legend-item { display: inline-flex; align-items: center; gap: .35em; }
+.pi-graph-legend-item i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pi-chip { transition: none; }
+}
+
+@media (max-width: 700px) {
+  .pi-copilot-form { flex-direction: column; }
+  .pi-picker-row select { min-width: 0; width: 100%; }
+  .pi-simulator-controls input[type="range"] { width: 100%; }
+}

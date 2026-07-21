@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Action Detail — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/enterprise-dashboard-theme.css">
+<link rel="stylesheet" href="/assets/css/decision-workspace.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main id="main-content" class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+
+      <div id="dd-denied" class="alert alert-danger" style="display:none;" role="alert">
+        <span class="alert-icon">⛔</span><div><div class="alert-title">Access denied</div><p style="margin:0;">You do not have permission to view this Action.</p></div>
+      </div>
+      <div id="dd-loading" class="muted-note" style="padding:2rem 0;">Loading Action…</div>
+      <div id="dd-error" class="alert alert-danger" style="display:none;"></div>
+      <div id="dd-stale-banner" class="alert alert-warn" style="display:none; margin-bottom:1rem;" role="alert">
+        <span class="alert-icon">⚠️</span><div><div class="alert-title">This Action changed after you opened it</div><p style="margin:0;">Refresh to review the latest state before making further changes.</p></div>
+        <button class="btn btn-ghost btn-sm" id="dd-refresh-btn" type="button" style="margin-left:auto;">Refresh</button>
+      </div>
+
+      <div id="dd-root" style="display:none;">
+        <a href="/app/decisions.html" class="btn btn-ghost btn-sm" style="margin-bottom:1rem;">← Back to Decision Workspace</a>
+
+        <div class="card" style="margin-bottom:1.5rem;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+            <div>
+              <h1 class="dw-hero-title" id="dd-title">—</h1>
+              <div style="display:flex; gap:.5rem; flex-wrap:wrap; align-items:center;">
+                <span class="badge" id="dd-status-badge"></span>
+                <span class="badge" id="dd-priority-badge"></span>
+                <span class="badge" id="dd-risk-badge" style="display:none;"></span>
+                <span class="badge badge-warn" id="dd-overdue-badge" style="display:none;">Overdue</span>
+                <span class="badge badge-danger" id="dd-escalated-badge" style="display:none;">Escalated</span>
+                <span class="badge badge-neutral" id="dd-legacy-badge" style="display:none;">Legacy record</span>
+              </div>
+            </div>
+            <div class="dw-freshness" id="dd-freshness"></div>
+          </div>
+
+          <div class="dw-field-grid" style="margin-top:1.5rem;">
+            <div><div class="dw-field-label">Project</div><div class="dw-field-value" id="dd-project">—</div></div>
+            <div><div class="dw-field-label">Report</div><div class="dw-field-value" id="dd-report">—</div></div>
+            <div><div class="dw-field-label">Owner</div><div class="dw-field-value" id="dd-owner">—</div></div>
+            <div><div class="dw-field-label">Department</div><div class="dw-field-value" id="dd-department">—</div></div>
+            <div><div class="dw-field-label">Strategic Priority</div><div class="dw-field-value" id="dd-strategic-priority">—</div></div>
+            <div><div class="dw-field-label">Progress</div><div class="dw-field-value" id="dd-progress">—</div></div>
+            <div><div class="dw-field-label">Due Date</div><div class="dw-field-value" id="dd-due-date">—</div></div>
+            <div><div class="dw-field-label">Start Date</div><div class="dw-field-value" id="dd-start-date">—</div></div>
+            <div><div class="dw-field-label">Completion Date</div><div class="dw-field-value" id="dd-completion-date">—</div></div>
+            <div><div class="dw-field-label">Verification Status</div><div class="dw-field-value" id="dd-verification-status">—</div></div>
+            <div><div class="dw-field-label">Created</div><div class="dw-field-value" id="dd-created">—</div></div>
+            <div><div class="dw-field-label">Last Updated</div><div class="dw-field-value" id="dd-updated">—</div></div>
+          </div>
+
+          <div style="margin-top:1.5rem;">
+            <div class="dw-field-label">Management Response</div>
+            <p id="dd-management-response" style="font-size:.92rem;">—</p>
+          </div>
+          <div style="margin-top:1rem;">
+            <div class="dw-field-label">Expected Outcome</div>
+            <p id="dd-expected-outcome" style="font-size:.92rem;">—</p>
+          </div>
+          <div style="margin-top:1rem;">
+            <div class="dw-field-label">Success Criteria</div>
+            <p id="dd-success-criteria" style="font-size:.92rem;">—</p>
+          </div>
+          <div style="margin-top:1rem;">
+            <div class="dw-field-label">Monitoring Indicator</div>
+            <p id="dd-monitoring-indicator" style="font-size:.92rem;">—</p>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:1.5rem;">
+          <div class="card-title">Governed Lifecycle Operations</div>
+          <div class="dw-op-panel" id="dd-op-panel"></div>
+          <p class="muted-note" id="dd-op-none" style="display:none; margin-top:.5rem;">No further lifecycle transitions are available from the current status.</p>
+        </div>
+
+        <div class="grid grid-2" style="align-items:start;">
+          <div class="card">
+            <div class="card-title">Assignment &amp; Progress</div>
+            <div style="margin-bottom:1rem;">
+              <div class="dw-field-label">Owner</div>
+              <div style="display:flex; gap:.6rem; align-items:center;">
+                <span id="dd-owner-2" class="dw-field-value">—</span>
+                <button class="btn btn-ghost btn-sm" id="dd-reassign-btn" type="button" style="display:none;">Reassign</button>
+              </div>
+            </div>
+            <div id="dd-progress-control" style="display:none;">
+              <label for="dd-progress-input">Progress (%)</label>
+              <div style="display:flex; gap:.6rem;">
+                <input type="number" id="dd-progress-input" min="0" max="100" step="1" style="width:6rem;">
+                <button class="btn btn-primary btn-sm" id="dd-progress-save" type="button">Update</button>
+              </div>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="dd-edit-btn" type="button" style="margin-top:1rem;">Edit Details</button>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Evidence</div>
+            <div id="dd-evidence-list"></div>
+            <p class="muted-note" id="dd-evidence-empty" style="display:none;">No evidence has been added yet.</p>
+            <button class="btn btn-ghost btn-sm" id="dd-add-evidence-btn" type="button" style="margin-top:1rem;">Add Evidence</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:1.5rem;">
+          <div class="card-title">Timeline</div>
+          <div id="dd-timeline-loading" class="muted-note">Loading history…</div>
+          <div id="dd-timeline-error" class="alert alert-danger" style="display:none;"></div>
+          <div id="dd-timeline-empty" class="muted-note" style="display:none;">No history recorded yet for this Action.</div>
+          <div class="timeline" id="dd-timeline" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Transition confirmation modal -->
+<div class="modal-overlay" id="dd-transition-modal">
+  <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="dd-transition-modal-title">
+    <button type="button" class="modal-close" id="dd-transition-modal-close" aria-label="Close">×</button>
+    <h2 id="dd-transition-modal-title">Confirm</h2>
+    <p id="dd-transition-modal-body" class="muted-note"></p>
+    <div class="field" id="dd-transition-reason-field">
+      <label for="dd-transition-reason">Reason</label>
+      <textarea id="dd-transition-reason" rows="3"></textarea>
+    </div>
+    <div id="dd-transition-modal-error" class="alert alert-danger" style="display:none;"></div>
+    <div style="display:flex; gap:.6rem; justify-content:flex-end; margin-top:1rem;">
+      <button class="btn btn-ghost btn-sm" id="dd-transition-cancel" type="button">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="dd-transition-confirm" type="button">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reassign modal -->
+<div class="modal-overlay" id="dd-reassign-modal">
+  <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="dd-reassign-title">
+    <button type="button" class="modal-close" id="dd-reassign-close" aria-label="Close">×</button>
+    <h2 id="dd-reassign-title">Reassign Owner</h2>
+    <p class="muted-note">Enter the exact user ID of the new owner. The Workspace does not yet provide a same-organization user picker for this field.</p>
+    <div class="field"><label for="dd-reassign-input">New Owner User ID</label><input type="text" id="dd-reassign-input"></div>
+    <div id="dd-reassign-error" class="alert alert-danger" style="display:none;"></div>
+    <div style="display:flex; gap:.6rem; justify-content:flex-end; margin-top:1rem;">
+      <button class="btn btn-ghost btn-sm" id="dd-reassign-cancel" type="button">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="dd-reassign-confirm" type="button">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add evidence modal -->
+<div class="modal-overlay" id="dd-evidence-modal">
+  <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="dd-evidence-title">
+    <button type="button" class="modal-close" id="dd-evidence-close" aria-label="Close">×</button>
+    <h2 id="dd-evidence-title">Add Evidence</h2>
+    <div class="field"><label for="dd-evidence-description">Description</label><textarea id="dd-evidence-description" rows="3"></textarea></div>
+    <div class="field"><label for="dd-evidence-url">URL (optional)</label><input type="url" id="dd-evidence-url" placeholder="https://…"></div>
+    <div id="dd-evidence-error" class="alert alert-danger" style="display:none;"></div>
+    <div style="display:flex; gap:.6rem; justify-content:flex-end; margin-top:1rem;">
+      <button class="btn btn-ghost btn-sm" id="dd-evidence-cancel" type="button">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="dd-evidence-confirm" type="button">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit details modal -->
+<div class="modal-overlay" id="dd-edit-modal">
+  <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="dd-edit-title" style="width:min(680px,100%);">
+    <button type="button" class="modal-close" id="dd-edit-close" aria-label="Close">×</button>
+    <h2 id="dd-edit-title">Edit Details</h2>
+    <div class="grid grid-2">
+      <div class="field"><label for="dd-edit-department">Department</label><input type="text" id="dd-edit-department"></div>
+      <div class="field"><label for="dd-edit-priority">Priority</label><select id="dd-edit-priority"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="critical">Critical</option></select></div>
+      <div class="field"><label for="dd-edit-strategic-priority">Strategic Priority</label><input type="text" id="dd-edit-strategic-priority"></div>
+      <div class="field"><label for="dd-edit-risk">Risk Level</label><select id="dd-edit-risk"><option value="">Not set</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="critical">Critical</option></select></div>
+      <div class="field"><label for="dd-edit-due-date">Due Date</label><input type="date" id="dd-edit-due-date"></div>
+      <div class="field"><label for="dd-edit-start-date">Start Date</label><input type="date" id="dd-edit-start-date"></div>
+      <div class="field"><label for="dd-edit-budget-estimated">Budget (Estimated)</label><input type="number" id="dd-edit-budget-estimated" step="0.01"></div>
+      <div class="field"><label for="dd-edit-budget-actual">Budget (Actual)</label><input type="number" id="dd-edit-budget-actual" step="0.01"></div>
+    </div>
+    <div class="field"><label for="dd-edit-expected-outcome">Expected Outcome</label><textarea id="dd-edit-expected-outcome" rows="2"></textarea></div>
+    <div class="field"><label for="dd-edit-success-criteria">Success Criteria</label><textarea id="dd-edit-success-criteria" rows="2"></textarea></div>
+    <div class="field"><label for="dd-edit-monitoring-indicator">Monitoring Indicator</label><input type="text" id="dd-edit-monitoring-indicator"></div>
+    <div id="dd-edit-error" class="alert alert-danger" style="display:none;"></div>
+    <div style="display:flex; gap:.6rem; justify-content:flex-end; margin-top:1rem;">
+      <button class="btn btn-ghost btn-sm" id="dd-edit-cancel" type="button">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="dd-edit-save" type="button">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/safe-dom.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/decision-workspace.js"></script>
+<script src="/assets/js/decision-detail-page.js"></script>
+<script src="/assets/js/admin-functional-qa.js"></script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

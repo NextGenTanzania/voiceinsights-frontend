@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise Sales &amp; Implementation | VoiceInsights Africa</title>
+<meta name="description" content="From pilot to national rollout — implementation journey, training, customer success, deployment options, and how to request a proposal or book a demonstration.">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/sector-framework.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+<nav class="pub-nav">
+  <div class="pub-nav-row1">
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+    </a>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right">
+      <div id="site-search-mount" style="width:180px;"></div>
+      <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
+      <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="/contact.html?intent=demo" class="btn btn-primary btn-sm">Book Demo</a>
+    </div>
+  </div>
+  <div class="pub-nav-collapse pub-nav-links">
+    <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
+    <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
+    <a href="/procurement.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Procurement Readiness</a>
+    <a href="/mobile-offline.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Mobile &amp; Offline</a>
+  </div>
+</nav>
+
+<main id="main-content">
+  <div id="sector-content"></div>
+</main>
+
+<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
+  <div style="flex:1 1 220px;">
+    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
+    </div>
+    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Enterprise</div>
+    <a href="/procurement.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Procurement Readiness</a>
+    <a href="/mobile-offline.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Mobile &amp; Offline</a>
+    <a href="/security.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Security</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Contact</div>
+    <a href="mailto:partnerships@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">partnerships@voiceinsightsafrica.com</a>
+    <a href="/contact.html?intent=proposal" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Request a Proposal</a>
+    <a href="/contact.html?intent=demo" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+  </div>
+</footer>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/site-search.js"></script>
+<script src="/assets/js/sector-page.js"></script>
+<script>
+  lucide.createIcons();
+  initSiteSearch('site-search-mount');
+  renderSectorPage({
+    id: 'enterprise-sales',
+    meta: { title: 'Enterprise Sales & Implementation | VoiceInsights Africa', description: 'From pilot to national rollout — implementation journey, training, customer success and deployment options.' },
+    hero: {
+      eyebrow: 'Enterprise Implementation',
+      headline: 'From pilot to national rollout.',
+      subhead: 'A structured path from first pilot to full-scale deployment, with training, customer success and deployment options built for government, UN agency, donor and enterprise partners.',
+      primaryCta: { label: 'Book a Demo', href: '/contact.html?intent=demo' },
+      secondaryCta: { label: 'Request a Proposal', href: '/contact.html?intent=proposal' },
+    },
+    executiveSummary: {
+      eyebrow: 'Implementation journey',
+      headline: 'Discovery, pilot, validation, scale-up, renewal.',
+      paragraphs: ['Every enterprise engagement follows the same structured path — never a rushed rollout. A scoped pilot on your own use case comes before any commercial commitment, and scale-up only follows validated results.'],
+    },
+    workflow: {
+      headline: 'The implementation journey.',
+      steps: [
+        { index: 1, title: 'Discovery', description: 'Understand your programme, decision problems, and data collection constraints.' },
+        { index: 2, title: 'Pilot', description: 'A scoped pilot on your own use case, before any commercial commitment.' },
+        { index: 3, title: 'Validation', description: 'Review pilot results together against the decision problem it was designed to test.' },
+        { index: 4, title: 'Scale-up', description: 'Expand collection channels and geographic coverage based on validated pilot results.' },
+        { index: 5, title: 'Renewal', description: 'Ongoing partnership, informed by what the platform has actually delivered.' },
+      ],
+    },
+    aiCapabilities: {
+      headline: 'Training and customer success.',
+      items: [
+        { name: 'Training & certification', description: 'Structured onboarding for your team, covering data collection, dashboards and publication exports.', status: 'Live' },
+        { name: 'Customer success partnership', description: 'A dedicated customer success workflow tracks your programme\'s health and surfaces issues proactively.', status: 'Live' },
+        { name: 'Change management support', description: 'Guidance for rolling out a new data-collection channel to field teams already using another method.', status: 'Live' },
+      ],
+    },
+    securityGovernance: {
+      headline: 'Deployment options.',
+      summaryPoints: [
+        'Cloud-hosted (shared infrastructure), dedicated tenant, or data-residency-specific deployment options — discussed during discovery, not assumed.',
+        'Multi-country and regional programmes are supported as separate, isolated deployments per country or region — never pooled data across borders without an explicit agreement to do so.',
+        'Support model and SLA details are scoped to your contract tier.',
+      ],
+      links: [
+        { label: 'Procurement Readiness', href: '/procurement.html' },
+        { label: 'Security', href: '/security.html' },
+      ],
+    },
+    faqs: {
+      headline: 'Enterprise Sales — frequently asked questions.',
+      items: [
+        { q: 'How quickly can we launch a project?', a: 'Most organizations go from account setup to their first live campaign within a day — build your survey, choose your channels, and share the link or number with respondents. Full enterprise rollout follows the structured implementation journey above.' },
+        { q: 'How is pricing structured?', a: 'Annual subscription plans (Starter, Professional, Enterprise) based on your expected volume and features needed. Request a demo for a tailored quote.' },
+        { q: 'Can we try it before committing?', a: 'Yes — request a demo and we\'ll walk through a live pilot on your own survey questions before any commercial discussion.' },
+        { q: 'What\'s the difference between "Book a Demo" and "Request a Proposal"?', a: 'Book a Demo is a live walkthrough with no commitment. Request a Proposal is for teams ready to move toward a formal procurement or contracting process.' },
+      ],
+    },
+    cta: {
+      headline: 'Ready to scope your rollout?',
+      description: 'Tell us where you are — first pilot or ready to scale — and we\'ll meet you there.',
+      primary: { label: 'Book a Demo', href: '/contact.html?intent=demo' },
+      secondary: { label: 'Request a Proposal', href: '/contact.html?intent=proposal' },
+    },
+    bookDemo: { headline: 'Ready to talk?', description: 'We\'ll walk through a live pilot before any commercial discussion.', formHref: '/contact.html?intent=demo' },
+    relatedSectors: [
+      { label: 'Procurement Readiness', href: '/procurement.html' },
+      { label: 'Mobile & Offline', href: '/mobile-offline.html' },
+    ],
+  });
+</script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

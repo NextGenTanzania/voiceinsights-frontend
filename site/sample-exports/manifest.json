@@ -1,454 +1,930 @@
 {
-  "generated_at": "2026-07-12T22:51:26.279Z",
-  "count": 64,
+  "generated_at": "2026-07-21T12:08:18.783Z",
+  "count": 132,
   "artifacts": [
     {
       "key": "national-human-development",
       "format": "pdf",
       "path": "/sample-exports/national-human-development/national-human-development.pdf",
-      "bytes": 72874,
-      "sha256": "8b454eab1241fbf73fbe63a5fd9138278e17abf6651fee5d4a806ef93b74f85d"
+      "bytes": 55449,
+      "sha256": "b82762aa650cf08ea37ac6c03a677a28291fa4744b12222978b36db996994642"
     },
     {
       "key": "national-human-development",
       "format": "docx",
       "path": "/sample-exports/national-human-development/national-human-development.docx",
-      "bytes": 39187,
-      "sha256": "10cd3dfa75cb8caa88e59e914a49bdc7b74432b30d07d24f8061484c0789e4ee"
+      "bytes": 35057,
+      "sha256": "32cc80a30113fc575701be9d754c31e4eb4d678f4ad92fb97577030286e39c01"
     },
     {
       "key": "national-human-development",
       "format": "pptx",
       "path": "/sample-exports/national-human-development/national-human-development.pptx",
-      "bytes": 698168,
-      "sha256": "6732ce85f204e806c42b6a193d64e4a7f81bea9b0944a277430db12382a9a4ea"
+      "bytes": 408252,
+      "sha256": "d88c16d2f6579c4d906f53376ca783482f85bb0283b2c5413c56307e6d3f09e5"
     },
     {
       "key": "national-human-development",
       "format": "xlsx",
       "path": "/sample-exports/national-human-development/national-human-development.xlsx",
-      "bytes": 81600,
-      "sha256": "9035b6ed65ef653785af2956ba417c44a15546df437588d6ee5a857aec998692"
+      "bytes": 202630,
+      "sha256": "da5d91d85373f5018589da6f436da2d9b99dbe4d662d61af9ad5907246b552aa"
     },
     {
       "key": "donor-impact-evaluation",
       "format": "pdf",
       "path": "/sample-exports/donor-impact-evaluation/donor-impact-evaluation.pdf",
-      "bytes": 73436,
-      "sha256": "447e509171c2947c22d46efab92b63369acd377939e83bc1a7926643ba3ed3eb"
+      "bytes": 56440,
+      "sha256": "f7408d2a512cb9b32090d2cf6d541b206d2c463645165d871f67f8a7496c1f7f"
     },
     {
       "key": "donor-impact-evaluation",
       "format": "docx",
       "path": "/sample-exports/donor-impact-evaluation/donor-impact-evaluation.docx",
-      "bytes": 39360,
-      "sha256": "08be201753858030f34299dbb2a828743ad6afd1421d20c7b9da84088f351a0e"
+      "bytes": 35288,
+      "sha256": "26dc3f0616600039f365dc050c3d2f084542ec6bd964eea64ad5cbb16fd82581"
     },
     {
       "key": "donor-impact-evaluation",
       "format": "pptx",
       "path": "/sample-exports/donor-impact-evaluation/donor-impact-evaluation.pptx",
-      "bytes": 696353,
-      "sha256": "302aa63f37009583d68ffae35590be39395fe51772c191c87233b7be9d133a4f"
+      "bytes": 408225,
+      "sha256": "e5db9fcfdac957e424f714719fb51d1d421c302d7f80f7b64a1f2949845b7f33"
     },
     {
       "key": "donor-impact-evaluation",
       "format": "xlsx",
       "path": "/sample-exports/donor-impact-evaluation/donor-impact-evaluation.xlsx",
-      "bytes": 84950,
-      "sha256": "9c50a4633d90be3b3aa7954ac093f39ee1d91d3688c372f0e326b352fad7121e"
+      "bytes": 203237,
+      "sha256": "0bc0ba6fd61ac18009d13fa2dad68531532fda8c7143bfcc2ae3b580fb54e9f4"
     },
     {
       "key": "government-policy-intelligence",
       "format": "pdf",
       "path": "/sample-exports/government-policy-intelligence/government-policy-intelligence.pdf",
-      "bytes": 72351,
-      "sha256": "8008dad1d47734d2b2dbddadd721ddb86b74086be6c85f8bf26f432ecbb883ec"
+      "bytes": 55051,
+      "sha256": "aac7ee6c10bc0106aa331cf40cbf790fb2ae47d161e754d59fa16385c838b196"
     },
     {
       "key": "government-policy-intelligence",
       "format": "docx",
       "path": "/sample-exports/government-policy-intelligence/government-policy-intelligence.docx",
-      "bytes": 39143,
-      "sha256": "6757e9890823abd2172b986e66737dd7306ec43e0e655582581312d09f8bdea6"
+      "bytes": 34456,
+      "sha256": "4bb1cc00aa1358db7278b80d56e3c5267e38f1afdcd79ebbb07ccb719eae38c3"
     },
     {
       "key": "government-policy-intelligence",
       "format": "pptx",
       "path": "/sample-exports/government-policy-intelligence/government-policy-intelligence.pptx",
-      "bytes": 692560,
-      "sha256": "44df4128e50c9110b65d7ad556dc7738fadf39d156cc8a78ae1b5443fe0ebfad"
+      "bytes": 408038,
+      "sha256": "d3a656e9027e7252c3b2fb860ae19ac47c1a47040a41927d44e4bdff12943443"
     },
     {
       "key": "government-policy-intelligence",
       "format": "xlsx",
       "path": "/sample-exports/government-policy-intelligence/government-policy-intelligence.xlsx",
-      "bytes": 84339,
-      "sha256": "309a5e67f94644b91937cc4a3cbb8bf68213070905b3589bc0a4e27cbbe00e0b"
+      "bytes": 202046,
+      "sha256": "5faa2905a8e735d81fbb54c3e16ea9136e93c4ed5641ca491aa39b53de87a466"
     },
     {
       "key": "humanitarian-needs-assessment",
       "format": "pdf",
       "path": "/sample-exports/humanitarian-needs-assessment/humanitarian-needs-assessment.pdf",
-      "bytes": 73648,
-      "sha256": "69fed15fabba44b335cc1faae7793ea4461a33f56d8e631f1c8800270c7fac98"
+      "bytes": 56189,
+      "sha256": "432c66ed6b35fa23647c5874ff83ebcff57ea843d88370a23270deef7ea48762"
     },
     {
       "key": "humanitarian-needs-assessment",
       "format": "docx",
       "path": "/sample-exports/humanitarian-needs-assessment/humanitarian-needs-assessment.docx",
-      "bytes": 39389,
-      "sha256": "7bb2283f5869d1e89380ff4bf1d3cd110a660f9a75f97070149529f0da14b6df"
+      "bytes": 35242,
+      "sha256": "af89edc91d8d5f7da93b5311e1213eef8ef6f6e52a1c06e057898d83982f071d"
     },
     {
       "key": "humanitarian-needs-assessment",
       "format": "pptx",
       "path": "/sample-exports/humanitarian-needs-assessment/humanitarian-needs-assessment.pptx",
-      "bytes": 696359,
-      "sha256": "5f71752a306a7699e983af309105128854356ce1355d7fcbb8d5c3abec459940"
+      "bytes": 408222,
+      "sha256": "75c94dc3f296cf33465c74e7c46188a814c9672b5c48510d2b5d3baee9d240e9"
     },
     {
       "key": "humanitarian-needs-assessment",
       "format": "xlsx",
       "path": "/sample-exports/humanitarian-needs-assessment/humanitarian-needs-assessment.xlsx",
-      "bytes": 84260,
-      "sha256": "b9f796b8cc21446d3cfc929076b5c7089d370035fb1ec003f61ad691169d576b"
+      "bytes": 202827,
+      "sha256": "9b380e200b177ebddf8c406f41163b5c25c71f3f532592ea83d13e2f34e5c3c2"
     },
     {
       "key": "executive-board-intelligence",
       "format": "pdf",
       "path": "/sample-exports/executive-board-intelligence/executive-board-intelligence.pdf",
-      "bytes": 71952,
-      "sha256": "262f7603ddbdf604ee580985eed43a1b6609da674c6528ddeed25b1e4e10a46c"
+      "bytes": 55546,
+      "sha256": "04ffb1a52cc14b9968369b745792fd80848522c10d41ba0ac7c89246d521ff81"
     },
     {
       "key": "executive-board-intelligence",
       "format": "docx",
       "path": "/sample-exports/executive-board-intelligence/executive-board-intelligence.docx",
-      "bytes": 39146,
-      "sha256": "069647840fc61e198287950b300a76cdabf911229dc3e2371305111d5c35a217"
+      "bytes": 34595,
+      "sha256": "1a15bdadd57a6c47ea6d768d7aa48b9963661c01635d6b523fab2b1b5881b7e8"
     },
     {
       "key": "executive-board-intelligence",
       "format": "pptx",
       "path": "/sample-exports/executive-board-intelligence/executive-board-intelligence.pptx",
-      "bytes": 692523,
-      "sha256": "12181b8a06633bc5ee2b8d0a9d1e507081f15f95d665740063dbdbf98ee0bd0d"
+      "bytes": 407999,
+      "sha256": "3d59acf8e1372e1ffd5ebc2df109143ec557cf058da0807e2ac97c4537404814"
     },
     {
       "key": "executive-board-intelligence",
       "format": "xlsx",
       "path": "/sample-exports/executive-board-intelligence/executive-board-intelligence.xlsx",
-      "bytes": 81832,
-      "sha256": "f1415bdd2d63f0bc11660ecf660b28f682c6705b88fe55a714a1b1423bd415d0"
+      "bytes": 200709,
+      "sha256": "0cb22af92f9d194af4e7a6bb94857093640fa4536e7321fcc71da9a436ae0a79"
     },
     {
       "key": "customer-experience-intelligence",
       "format": "pdf",
       "path": "/sample-exports/customer-experience-intelligence/customer-experience-intelligence.pdf",
-      "bytes": 71881,
-      "sha256": "b760e95a28a9f0c41a46152a041110eb22daea8d5914b89710e0b029efa939ec"
+      "bytes": 55472,
+      "sha256": "91074b1c2659e91371f1194d62d87dd1ac93010e4ed1ae3494e13ec6545b77cf"
     },
     {
       "key": "customer-experience-intelligence",
       "format": "docx",
       "path": "/sample-exports/customer-experience-intelligence/customer-experience-intelligence.docx",
-      "bytes": 39195,
-      "sha256": "8c2087dfb2725484cc2f0a86e922b5022f1f6a9b926c55194669e3cfb7939b79"
+      "bytes": 34610,
+      "sha256": "4ae5678b2fe2366a9ad0aff24bc3a889d38982f469ab9506c10cf1a04dcf20c6"
     },
     {
       "key": "customer-experience-intelligence",
       "format": "pptx",
       "path": "/sample-exports/customer-experience-intelligence/customer-experience-intelligence.pptx",
-      "bytes": 692453,
-      "sha256": "83a7f950fd14d43e269e42e21ef24be8be8d39a47cf74c1f04bad75427ae948e"
+      "bytes": 408107,
+      "sha256": "11f29a91c59a5c3014ed8d24b330142d5822eb248b1d4494f40a72e06495d50e"
     },
     {
       "key": "customer-experience-intelligence",
       "format": "xlsx",
       "path": "/sample-exports/customer-experience-intelligence/customer-experience-intelligence.xlsx",
-      "bytes": 81922,
-      "sha256": "fd0345049f558e4d512fac8a444f4c7773949b2dd5d7af5aa8ea779d97d8e4ed"
+      "bytes": 200949,
+      "sha256": "06cde1d44355dbe467e93603f94d0801cec171919c9dd837e53c8f7b858d9d5b"
     },
     {
       "key": "employee-experience-intelligence",
       "format": "pdf",
       "path": "/sample-exports/employee-experience-intelligence/employee-experience-intelligence.pdf",
-      "bytes": 71944,
-      "sha256": "0c117ef0c99784d0b2e87757b2548d17e011a7c83983039afe987ff52a96c23a"
+      "bytes": 54965,
+      "sha256": "52e2e35106e9da52bbc0c57e63db4941307aa93d68d82297472bc7ef9e76436e"
     },
     {
       "key": "employee-experience-intelligence",
       "format": "docx",
       "path": "/sample-exports/employee-experience-intelligence/employee-experience-intelligence.docx",
-      "bytes": 39197,
-      "sha256": "82055b8e7cf51208f6456e13df51ebb38fe1bf5b570c0063b64033e27a722d56"
+      "bytes": 34401,
+      "sha256": "3ddceff9e12c58a0774e6d318dcc222132bac4d95c77d1a4ab7c412d1cb8fbcc"
     },
     {
       "key": "employee-experience-intelligence",
       "format": "pptx",
       "path": "/sample-exports/employee-experience-intelligence/employee-experience-intelligence.pptx",
-      "bytes": 692552,
-      "sha256": "18ccf8fc4dcd503a05d9bb6cd3b3ff5a808329c8b1ebc7075d3f2a7b9398cc56"
+      "bytes": 408077,
+      "sha256": "fadc3742ca3d916218fc405b87283bca4f94dcf88332f22e2b71317e81744f7a"
     },
     {
       "key": "employee-experience-intelligence",
       "format": "xlsx",
       "path": "/sample-exports/employee-experience-intelligence/employee-experience-intelligence.xlsx",
-      "bytes": 85084,
-      "sha256": "f9d4968ae178583fb6696538ab49540f57a72754cf3432346c5fef30148e33ff"
+      "bytes": 202835,
+      "sha256": "a65c02f5f0e252814a602105a50a56686bacf82fd610be5da9862ed6c4d3e154"
     },
     {
       "key": "community-scorecard-intelligence",
       "format": "pdf",
       "path": "/sample-exports/community-scorecard-intelligence/community-scorecard-intelligence.pdf",
-      "bytes": 72559,
-      "sha256": "ec81bbe726fae53890b94f75c46cb873c9880673a1df9611b983739510c2c928"
+      "bytes": 55456,
+      "sha256": "0c5e4a79010f098395da098803b59bb69ce94f275a33298f1dea853bcb8df42a"
     },
     {
       "key": "community-scorecard-intelligence",
       "format": "docx",
       "path": "/sample-exports/community-scorecard-intelligence/community-scorecard-intelligence.docx",
-      "bytes": 39154,
-      "sha256": "2b495d39c1a34b987a70c523cfb336d56e47b9e5203947b2214355aecd53644c"
+      "bytes": 34743,
+      "sha256": "8eb7edb77801bbe3b205fac2c484078b4b693c52cc47406860aa7b48688d40f5"
     },
     {
       "key": "community-scorecard-intelligence",
       "format": "pptx",
       "path": "/sample-exports/community-scorecard-intelligence/community-scorecard-intelligence.pptx",
-      "bytes": 692493,
-      "sha256": "05caa5e58cf73c526ed9ccafc098d5572c97f0c66b3bc956e95e04c80762aef0"
+      "bytes": 407980,
+      "sha256": "61773ed4d69a2ee1019c6794b13a281d293c6e91f44584eb45317f3bf1f9f50e"
     },
     {
       "key": "community-scorecard-intelligence",
       "format": "xlsx",
       "path": "/sample-exports/community-scorecard-intelligence/community-scorecard-intelligence.xlsx",
-      "bytes": 83788,
-      "sha256": "94dea72b9bc4ae9bbf24d5169376231b9c316ca2e02f69f85a3ff700954aefca"
+      "bytes": 203975,
+      "sha256": "8b4c8811a707a49d4fe450e9acc96594a392e030f98e1e8c4f82839c2b101a27"
     },
     {
       "key": "annual-impact-report",
       "format": "pdf",
       "path": "/sample-exports/annual-impact-report/annual-impact-report.pdf",
-      "bytes": 72435,
-      "sha256": "296afb1e62ba09910e9d74f68ca0d22d09ac34b594576c8e7a951dda788d8eda"
+      "bytes": 56043,
+      "sha256": "8968f94a7a9260884ec5bf68baa2cad03b752707bc5e448ee8f82bcd68056b4b"
     },
     {
       "key": "annual-impact-report",
       "format": "docx",
       "path": "/sample-exports/annual-impact-report/annual-impact-report.docx",
-      "bytes": 39150,
-      "sha256": "2bb62624c609bcb985a9faf943fdcdd11711555c0756d1f55564e4abb01e4604"
+      "bytes": 34775,
+      "sha256": "165d47ef831e74aafc3b14a6def7f7fe04d18c6c12477b0f5e84202e96dbdb20"
     },
     {
       "key": "annual-impact-report",
       "format": "pptx",
       "path": "/sample-exports/annual-impact-report/annual-impact-report.pptx",
-      "bytes": 692544,
-      "sha256": "9c80058b5163126ca21b9fd470ed17db9103cd890ee9f2fff1a4f9eae2d26799"
+      "bytes": 408043,
+      "sha256": "cbaee6fbbc2891698095eef8da1c0f96b426f9c7ef56e513f111c2718a487ded"
     },
     {
       "key": "annual-impact-report",
       "format": "xlsx",
       "path": "/sample-exports/annual-impact-report/annual-impact-report.xlsx",
-      "bytes": 82267,
-      "sha256": "5982a799ed467ea707bc20e3fadd2574c9926a02934bd81e2c94c58bed0faed7"
+      "bytes": 200804,
+      "sha256": "ade6174192997af9867d5a44c2bda1193ef25d2d445d2c8350cb44eae5af700e"
     },
     {
       "key": "quarterly-performance-intelligence",
       "format": "pdf",
       "path": "/sample-exports/quarterly-performance-intelligence/quarterly-performance-intelligence.pdf",
-      "bytes": 72649,
-      "sha256": "b32256fe14593eb5ff79fccf5c1707a345ffb4b88d4d14daa9a3186ffc41f6ff"
+      "bytes": 55268,
+      "sha256": "52120671933b1c73b62d83da4a6b0a65b00f831474a8ca5189ddd2c6853d0fd4"
     },
     {
       "key": "quarterly-performance-intelligence",
       "format": "docx",
       "path": "/sample-exports/quarterly-performance-intelligence/quarterly-performance-intelligence.docx",
-      "bytes": 39158,
-      "sha256": "134a0d5747d51c884c993c36d38a0c59520b7de83ebb537ad46c789f6cb5dd0b"
+      "bytes": 34522,
+      "sha256": "1377bde710d316a2b55f83ad3f83142d120cf889237847cc1272001383aefd2c"
     },
     {
       "key": "quarterly-performance-intelligence",
       "format": "pptx",
       "path": "/sample-exports/quarterly-performance-intelligence/quarterly-performance-intelligence.pptx",
-      "bytes": 692558,
-      "sha256": "345d98a8aab6c3bfb76a0a1527eb085e4e0abd569c42134965e260e5377ea653"
+      "bytes": 408076,
+      "sha256": "40aa3c4a838db57f9d28bef22a743cdc2eda7691a1f169a7fd610f7c52513a9d"
     },
     {
       "key": "quarterly-performance-intelligence",
       "format": "xlsx",
       "path": "/sample-exports/quarterly-performance-intelligence/quarterly-performance-intelligence.xlsx",
-      "bytes": 83201,
-      "sha256": "139ff62a4b79b7af9bab30ede69a366e8758af587f8bafd74b2b97b2aa1397b6"
+      "bytes": 203724,
+      "sha256": "f16c9695510b6bcd28b8165ef11f7ad440b80e0af5a7b228121af5f8b819d0d1"
     },
     {
       "key": "market-intelligence",
       "format": "pdf",
       "path": "/sample-exports/market-intelligence/market-intelligence.pdf",
-      "bytes": 71800,
-      "sha256": "5afc46d6a18447d9dbb05e2fad7c6b99918cb45c0c1ced8c9e456d42e9b22d20"
+      "bytes": 55525,
+      "sha256": "05efd0dc9444b945e346c4d3997e434d4cd2054c2a8a02965a43d1bae085d94a"
     },
     {
       "key": "market-intelligence",
       "format": "docx",
       "path": "/sample-exports/market-intelligence/market-intelligence.docx",
-      "bytes": 39180,
-      "sha256": "071ffafb7f731d47888374de4e249cb83fe770b06d1ed7ffe4338f1810081877"
+      "bytes": 34240,
+      "sha256": "03e245ba1aa4b95a2a15bd9c8eef0ce9ca328f6013fdc3068b4d1eff4e3135ea"
     },
     {
       "key": "market-intelligence",
       "format": "pptx",
       "path": "/sample-exports/market-intelligence/market-intelligence.pptx",
-      "bytes": 692526,
-      "sha256": "72d1aa09132547abf1c6dd964645fa0dea57d6217c22139c2f96bd2b9552c903"
+      "bytes": 408053,
+      "sha256": "cbbd1bf1de9e14f99a8d50d0339f80e92ec06a088b2a0d593dbaf86bad01d0e2"
     },
     {
       "key": "market-intelligence",
       "format": "xlsx",
       "path": "/sample-exports/market-intelligence/market-intelligence.xlsx",
-      "bytes": 82754,
-      "sha256": "0dae186a2190bb17b318115fcd97c43b573fa37a071b784b3e71819b4fe189cf"
+      "bytes": 199167,
+      "sha256": "60ee4c1524d9e527b469787c360ff9286de4bd949e3f37eaea2a1b922988e033"
     },
     {
       "key": "technical-research",
       "format": "pdf",
       "path": "/sample-exports/technical-research/technical-research.pdf",
-      "bytes": 72461,
-      "sha256": "fbed1db17937f56a85df4f51df9fe1be494f65a7eb8e824983a6f18c6f5afe93"
+      "bytes": 54833,
+      "sha256": "ea3ee3708a47d74e218c8a1f82807c27876a25845d78a09f660da865ad7d2a15"
     },
     {
       "key": "technical-research",
       "format": "docx",
       "path": "/sample-exports/technical-research/technical-research.docx",
-      "bytes": 39150,
-      "sha256": "0bb62759d6d973ab0dfe76071021536e399ac5987b8ed8f4223fe0dd3bd6c29c"
+      "bytes": 34053,
+      "sha256": "38bd6760c6d46b93ef633bf1511e878c2614b1192253ae9e4b088eb69f6c559a"
     },
     {
       "key": "technical-research",
       "format": "pptx",
       "path": "/sample-exports/technical-research/technical-research.pptx",
-      "bytes": 692504,
-      "sha256": "2e2e20164b03eb919d628462f87b1cf3a839a1210058abf0151cf02d548bd719"
+      "bytes": 407928,
+      "sha256": "3f89c17c689ff1e3ea3a46ec6abac17bbdec78053c11368cdd3ebcc6a51d7dfd"
     },
     {
       "key": "technical-research",
       "format": "xlsx",
       "path": "/sample-exports/technical-research/technical-research.xlsx",
-      "bytes": 83588,
-      "sha256": "042a817e65c8ed53911d774d8a5069d0aa3c92762f8a1951b146443ff3440a06"
+      "bytes": 199007,
+      "sha256": "e302238c6657202e2972c11d75f4a4addbfabc78f328a290401f9dd988a16031"
     },
     {
       "key": "statistical-intelligence",
       "format": "pdf",
       "path": "/sample-exports/statistical-intelligence/statistical-intelligence.pdf",
-      "bytes": 71914,
-      "sha256": "a2388dbf0dc27fd951e7d4c437772f570ae0feaca1ad5f0e57616b6c1450e888"
+      "bytes": 54908,
+      "sha256": "292107d76209b2761adc094f970355dc1bdcdba8591b5cdee947359d5b412b70"
     },
     {
       "key": "statistical-intelligence",
       "format": "docx",
       "path": "/sample-exports/statistical-intelligence/statistical-intelligence.docx",
-      "bytes": 39135,
-      "sha256": "069cb92b322ddf194db2e96b5a42287aac10290a4597a324247d12c7e3a327cc"
+      "bytes": 34023,
+      "sha256": "2f91e8e731d70482e830d9f70688eb72c3b9f0e1e37c60e77b8d319d60b8c715"
     },
     {
       "key": "statistical-intelligence",
       "format": "pptx",
       "path": "/sample-exports/statistical-intelligence/statistical-intelligence.pptx",
-      "bytes": 692328,
-      "sha256": "e99dd3e1f2a2253eb923bdf55eefaf2fcb75245394a6c0edd45614346476b057"
+      "bytes": 407845,
+      "sha256": "ef360392682c8460fad8a800830440ed66de637e85313cdfb12118273a25cc52"
     },
     {
       "key": "statistical-intelligence",
       "format": "xlsx",
       "path": "/sample-exports/statistical-intelligence/statistical-intelligence.xlsx",
-      "bytes": 80818,
-      "sha256": "d34099ec17d1a1ea4a2ce46f8d334263549746a1666955f3954bf54ffef380a2"
+      "bytes": 198344,
+      "sha256": "d1221965324f65dcee0fa1993ebf254bc76a102bf4404e6469577067b85a9a1b"
     },
     {
       "key": "interactive-intelligence",
       "format": "pdf",
       "path": "/sample-exports/interactive-intelligence/interactive-intelligence.pdf",
-      "bytes": 71823,
-      "sha256": "8a6e7b12344ad9325e1137a68e54bb81cd6df3425ab3753afd53fb39b8462fe4"
+      "bytes": 54857,
+      "sha256": "c93197068d5161bb092e8d0049530df9ca8fa0a407e49f4142dc133ba42ac383"
     },
     {
       "key": "interactive-intelligence",
       "format": "docx",
       "path": "/sample-exports/interactive-intelligence/interactive-intelligence.docx",
-      "bytes": 39118,
-      "sha256": "f8ab519e613f813ceb51584fe4be5056c81d14ed5fd6c8721ae4dcc99295788c"
+      "bytes": 34073,
+      "sha256": "8d7d497a4d8fcd1049fdd0e91a4ade6760da1d16bfff5c342535e199c6511340"
     },
     {
       "key": "interactive-intelligence",
       "format": "pptx",
       "path": "/sample-exports/interactive-intelligence/interactive-intelligence.pptx",
-      "bytes": 692348,
-      "sha256": "bf394206efcb745cbb6eb9d5637265f031e5e9b7b322f15bb5e066bfa7ac1a43"
+      "bytes": 407882,
+      "sha256": "b17a5464d978b0ef1b079bb96f73afd8e55a67cec2cd8aa56ce7e89fcc53e88d"
     },
     {
       "key": "interactive-intelligence",
       "format": "xlsx",
       "path": "/sample-exports/interactive-intelligence/interactive-intelligence.xlsx",
-      "bytes": 78290,
-      "sha256": "8d758f846aaaf5cfed3dd48fe076f2d5742b5c335c69ca9ed4c0a677a5376cdd"
+      "bytes": 197919,
+      "sha256": "51bb3922762c7d34ac17f419551baf00de8664f828e753169d7b03d2fb5b89c2"
     },
     {
       "key": "evidence-explorer",
       "format": "pdf",
       "path": "/sample-exports/evidence-explorer/evidence-explorer.pdf",
-      "bytes": 71783,
-      "sha256": "979440e28161bb11b9180151071e606b76954b6059277a32603ba477d08a4786"
+      "bytes": 55567,
+      "sha256": "1c007b4996c2b772c2c41f5a0cdac494cdbc4086a36915411c3f42a124c161e8"
     },
     {
       "key": "evidence-explorer",
       "format": "docx",
       "path": "/sample-exports/evidence-explorer/evidence-explorer.docx",
-      "bytes": 39132,
-      "sha256": "0c9072b838e939e505a3b7a10ece5fec3873f2bb1ac2151ad1a40e86d630da13"
+      "bytes": 34371,
+      "sha256": "f4ca3b9ae55532a4e2e46b3036dbd9207dbd17a669b4791bbd38ea9111c3acaa"
     },
     {
       "key": "evidence-explorer",
       "format": "pptx",
       "path": "/sample-exports/evidence-explorer/evidence-explorer.pptx",
-      "bytes": 692392,
-      "sha256": "f602916b59dfb3262d8016fac3ed65503ba1f7f2d8bf36aaf181a26472b43cfd"
+      "bytes": 407879,
+      "sha256": "0143c8a33b17e403eaf67486235c622f4f76f3e5f4fc89856522640164137111"
     },
     {
       "key": "evidence-explorer",
       "format": "xlsx",
       "path": "/sample-exports/evidence-explorer/evidence-explorer.xlsx",
-      "bytes": 81890,
-      "sha256": "036b3247253f9a4f8b3b76e183d1b50a16df7abb7ad6c79211d3ec87c8232286"
+      "bytes": 197752,
+      "sha256": "d8eea752851e937ff3b82958aec3f14f22ca7f896aca8c59e49e7c84a3d2e24d"
     },
     {
       "key": "sdg-progress-intelligence",
       "format": "pdf",
       "path": "/sample-exports/sdg-progress-intelligence/sdg-progress-intelligence.pdf",
-      "bytes": 71953,
-      "sha256": "7d0ca9caf3091258403c952c25699ceb44d7c5e92be124e9d40312dd1c467487"
+      "bytes": 55421,
+      "sha256": "9b4a2b92b21d0ad3974ab8d5b9ad184ab78376f2979059898d763a760eb6ea52"
     },
     {
       "key": "sdg-progress-intelligence",
       "format": "docx",
       "path": "/sample-exports/sdg-progress-intelligence/sdg-progress-intelligence.docx",
-      "bytes": 38955,
-      "sha256": "268c5f8e38cd08fd555d3bb4b13052b051665e517210232b4677a072764cd282"
+      "bytes": 34790,
+      "sha256": "4e4a8e05719a97d138eff33366ef5e4dca92f966fabca787544c08747b47a605"
     },
     {
       "key": "sdg-progress-intelligence",
       "format": "pptx",
       "path": "/sample-exports/sdg-progress-intelligence/sdg-progress-intelligence.pptx",
-      "bytes": 688733,
-      "sha256": "cfb2940803eec3a3b93a47c6f750489c0b3b4a48db747895b9796bd8bf8f77bf"
+      "bytes": 407898,
+      "sha256": "a4073f2e21e62873c1967f31383b6b5cd666ed449febecd11bda9cb6d89e4721"
     },
     {
       "key": "sdg-progress-intelligence",
       "format": "xlsx",
       "path": "/sample-exports/sdg-progress-intelligence/sdg-progress-intelligence.xlsx",
-      "bytes": 80998,
-      "sha256": "39efcd8b6636940a3c2fdb09bbfc2252ebc34efd4e55a2339523418bf3508288"
+      "bytes": 199631,
+      "sha256": "58588fcc7b3116e529aba412b5eb60d9cc49027676119b6c57156dbd486569a5"
+    },
+    {
+      "key": "hospital-performance-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/hospital-performance-intelligence/hospital-performance-intelligence.pdf",
+      "bytes": 56422,
+      "sha256": "78e307f8a42ed4f80181bf9b8e6180e1045b849e61b5d75e8d4bfaceeb00ecd2"
+    },
+    {
+      "key": "hospital-performance-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/hospital-performance-intelligence/hospital-performance-intelligence.docx",
+      "bytes": 35552,
+      "sha256": "c4faaa34afc6afbb0f22363cff3d49e442e0b3d533a86759c9427233b0d5da84"
+    },
+    {
+      "key": "hospital-performance-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/hospital-performance-intelligence/hospital-performance-intelligence.pptx",
+      "bytes": 408736,
+      "sha256": "9176f5d03e1bc1abd45206ad98440d942f012a615e87c85328c962d95211427c"
+    },
+    {
+      "key": "hospital-performance-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/hospital-performance-intelligence/hospital-performance-intelligence.xlsx",
+      "bytes": 206115,
+      "sha256": "ef698b559561eb624528609de3f9e2e3e6aab716371f0e618c3c789e7977078f"
+    },
+    {
+      "key": "maternal-child-health-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/maternal-child-health-intelligence/maternal-child-health-intelligence.pdf",
+      "bytes": 56344,
+      "sha256": "eb1f9dadb78d0c155fc6b8fc3e0e15801e6b5602f6d8ddb7ed28ef987e5a4d3c"
+    },
+    {
+      "key": "maternal-child-health-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/maternal-child-health-intelligence/maternal-child-health-intelligence.docx",
+      "bytes": 35629,
+      "sha256": "08e87a7eaa03bfbe7d466f402d903ba4c6825315fa91a557ca7b784b91bcc137"
+    },
+    {
+      "key": "maternal-child-health-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/maternal-child-health-intelligence/maternal-child-health-intelligence.pptx",
+      "bytes": 408855,
+      "sha256": "8a9f59e6de7c220c70e453f6afe2e7a685e4665661ab2f951573f2cfc0c907ed"
+    },
+    {
+      "key": "maternal-child-health-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/maternal-child-health-intelligence/maternal-child-health-intelligence.xlsx",
+      "bytes": 205015,
+      "sha256": "90c33e66ca0a1f332bf2393ec46919c897a67fa5eac2175f605d8928e246839a"
+    },
+    {
+      "key": "disease-surveillance-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/disease-surveillance-intelligence/disease-surveillance-intelligence.pdf",
+      "bytes": 56341,
+      "sha256": "2092b2252f00069900bf4fe29eac8c8ec96ce556ccd845a001565a1e038895a2"
+    },
+    {
+      "key": "disease-surveillance-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/disease-surveillance-intelligence/disease-surveillance-intelligence.docx",
+      "bytes": 35634,
+      "sha256": "c0d5c9901dc6df5898ba51c593be0fc1c90ed13868dd6e6c1dcf2d9f30aca1e9"
+    },
+    {
+      "key": "disease-surveillance-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/disease-surveillance-intelligence/disease-surveillance-intelligence.pptx",
+      "bytes": 408911,
+      "sha256": "b2074fb5f81d0744f867eeaad361ad8ad2bb2997a43c941f5d99f4b5cee9231b"
+    },
+    {
+      "key": "disease-surveillance-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/disease-surveillance-intelligence/disease-surveillance-intelligence.xlsx",
+      "bytes": 206192,
+      "sha256": "a168c6ffd246cac20b84fc9b8e778cbdec17da0a59461bec9868f1431f6a9688"
+    },
+    {
+      "key": "nutrition-security-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/nutrition-security-intelligence/nutrition-security-intelligence.pdf",
+      "bytes": 55391,
+      "sha256": "e05bad4d6ced346d4c6cd92101b594ed7adf757d0e66ce71eed4d45509e0ea46"
+    },
+    {
+      "key": "nutrition-security-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/nutrition-security-intelligence/nutrition-security-intelligence.docx",
+      "bytes": 34711,
+      "sha256": "2f2e18458f9d67f4c4265d7360088f8c6985f6e89398c66eafa8b7d3fc7e4ba9"
+    },
+    {
+      "key": "nutrition-security-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/nutrition-security-intelligence/nutrition-security-intelligence.pptx",
+      "bytes": 408485,
+      "sha256": "cf1f94319b3b0b17cb7d7338fee273c10225959c675ede17cd62776ac1fe5d13"
+    },
+    {
+      "key": "nutrition-security-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/nutrition-security-intelligence/nutrition-security-intelligence.xlsx",
+      "bytes": 204267,
+      "sha256": "44dbe988838db2533ca9ecbd8b7e30d750e6ae18157ec7234e872633c9e1972a"
+    },
+    {
+      "key": "health-financing-uhc-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/health-financing-uhc-intelligence/health-financing-uhc-intelligence.pdf",
+      "bytes": 56671,
+      "sha256": "63aa8bc89e7db3696eb676413519198368f48e53cb756016019f325f99261ca8"
+    },
+    {
+      "key": "health-financing-uhc-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/health-financing-uhc-intelligence/health-financing-uhc-intelligence.docx",
+      "bytes": 35853,
+      "sha256": "d59fb7463eb69e3d12115f4c281c564ab9699bd74a1c70ca0341b343b05d125a"
+    },
+    {
+      "key": "health-financing-uhc-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/health-financing-uhc-intelligence/health-financing-uhc-intelligence.pptx",
+      "bytes": 409055,
+      "sha256": "a06890b8b17751ff02f0c4858f9584a81fa0562ae4c89527797f2621303b6507"
+    },
+    {
+      "key": "health-financing-uhc-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/health-financing-uhc-intelligence/health-financing-uhc-intelligence.xlsx",
+      "bytes": 205778,
+      "sha256": "ebf3a74a9d351c4001ff6c757b327863b89da1ebb6eaa93bc2c0c6cb6604fe00"
+    },
+    {
+      "key": "education-access-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/education-access-intelligence/education-access-intelligence.pdf",
+      "bytes": 55909,
+      "sha256": "a0f92b7913a8c86a8eb6e2de302e25632fc1e7c0f8d00e7c75fa4b45b4da14b6"
+    },
+    {
+      "key": "education-access-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/education-access-intelligence/education-access-intelligence.docx",
+      "bytes": 35270,
+      "sha256": "1adad7e7012651a4ee4479749597c1b543efbcb7427a664a9e5bee381365737f"
+    },
+    {
+      "key": "education-access-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/education-access-intelligence/education-access-intelligence.pptx",
+      "bytes": 408712,
+      "sha256": "128ab04032ebe8b25c43840c420cf4adcc0f12d439fa029be8fe02d7f0cf468a"
+    },
+    {
+      "key": "education-access-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/education-access-intelligence/education-access-intelligence.xlsx",
+      "bytes": 203249,
+      "sha256": "6a8e1388c54501217a1cd5c45214b420036874a09c0a3f25e6e7ca581c7350a6"
+    },
+    {
+      "key": "climate-adaptation-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/climate-adaptation-intelligence/climate-adaptation-intelligence.pdf",
+      "bytes": 55942,
+      "sha256": "f696d041ccff5eed74710eb33737fbfc0ae5d11940cd6c636061664aaabac4cc"
+    },
+    {
+      "key": "climate-adaptation-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/climate-adaptation-intelligence/climate-adaptation-intelligence.docx",
+      "bytes": 34967,
+      "sha256": "4314cbb9638bdb999635d58f6c4ed40c8de4b4e52331eb3e51c72f899cb12b66"
+    },
+    {
+      "key": "climate-adaptation-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/climate-adaptation-intelligence/climate-adaptation-intelligence.pptx",
+      "bytes": 408483,
+      "sha256": "c733e11000b0c39ac446c6ff7d820cd622fb8c127af220fa83a90c990e6b7227"
+    },
+    {
+      "key": "climate-adaptation-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/climate-adaptation-intelligence/climate-adaptation-intelligence.xlsx",
+      "bytes": 203506,
+      "sha256": "9c09fc98f5dc168f8a407e57741f84cb215af4921b80688dc947f9259436608a"
+    },
+    {
+      "key": "social-protection-targeting-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/social-protection-targeting-intelligence/social-protection-targeting-intelligence.pdf",
+      "bytes": 55436,
+      "sha256": "5fa680ee1a5d4cb22e841d7571e7cf0eb33f14e6040dd74d6784057dba1cec9c"
+    },
+    {
+      "key": "social-protection-targeting-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/social-protection-targeting-intelligence/social-protection-targeting-intelligence.docx",
+      "bytes": 34829,
+      "sha256": "7ee916188964167ba4af123d54616cb1667b6809d8fd49bba23594624ca3adc0"
+    },
+    {
+      "key": "social-protection-targeting-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/social-protection-targeting-intelligence/social-protection-targeting-intelligence.pptx",
+      "bytes": 408270,
+      "sha256": "ac92b9bf7434315da47fa047d5b0db9a58fee2dc74f53a972d1c07dfdebddbce"
+    },
+    {
+      "key": "social-protection-targeting-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/social-protection-targeting-intelligence/social-protection-targeting-intelligence.xlsx",
+      "bytes": 205623,
+      "sha256": "559fb475fb4e20eedfdc0b612e5b1c95757ff0907ee348f5e1cbae6694674734"
+    },
+    {
+      "key": "digital-government-services-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/digital-government-services-intelligence/digital-government-services-intelligence.pdf",
+      "bytes": 56341,
+      "sha256": "f15277f98d2b18181b600595f7a202c70a97f78685432ce871b4a33ad1cba00c"
+    },
+    {
+      "key": "digital-government-services-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/digital-government-services-intelligence/digital-government-services-intelligence.docx",
+      "bytes": 35446,
+      "sha256": "f4ecda0bd55ec7786f7cd0f60fb5eb05369338a051591ed18c0662c276cc9cc2"
+    },
+    {
+      "key": "digital-government-services-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/digital-government-services-intelligence/digital-government-services-intelligence.pptx",
+      "bytes": 408917,
+      "sha256": "ff3931c2bea633d607559a5ef02acbc3bf1a743056863808a62572cc2c9edee9"
+    },
+    {
+      "key": "digital-government-services-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/digital-government-services-intelligence/digital-government-services-intelligence.xlsx",
+      "bytes": 205161,
+      "sha256": "ad52d87b3a686bdc51fe99318844c5f44320b36a6d437601f8be6229058062ba"
+    },
+    {
+      "key": "wash-access-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/wash-access-intelligence/wash-access-intelligence.pdf",
+      "bytes": 55638,
+      "sha256": "8635cae3ea5b2db7f2d9a3b3fc54d2a4ce7e0796b4c0e8c8c729d3d4f3797733"
+    },
+    {
+      "key": "wash-access-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/wash-access-intelligence/wash-access-intelligence.docx",
+      "bytes": 34589,
+      "sha256": "1d8d3f19884896fd715a1d8f3f3fcbc5f596c0630646bf5b6dfa8f0933db09d8"
+    },
+    {
+      "key": "wash-access-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/wash-access-intelligence/wash-access-intelligence.pptx",
+      "bytes": 408603,
+      "sha256": "757f4051bb312acd251976dd2f2f3235765553236e8709af720cc4000c2d19b2"
+    },
+    {
+      "key": "wash-access-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/wash-access-intelligence/wash-access-intelligence.xlsx",
+      "bytes": 203266,
+      "sha256": "d9fbfd2df798170ca7923b5652a49c1367b02b9a3e6e5041fa5057cdb36498db"
+    },
+    {
+      "key": "energy-access-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/energy-access-intelligence/energy-access-intelligence.pdf",
+      "bytes": 55291,
+      "sha256": "2ed6589d61454cc1ada446c6652d1c42bc5c7de5d01f76ccfd944651fc5ea857"
+    },
+    {
+      "key": "energy-access-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/energy-access-intelligence/energy-access-intelligence.docx",
+      "bytes": 34588,
+      "sha256": "4301f1dff4f81a9ba4d9160ee7e0e79e73ef0ba2494fc88c0a3cfc5c44f2bfa3"
+    },
+    {
+      "key": "energy-access-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/energy-access-intelligence/energy-access-intelligence.pptx",
+      "bytes": 408707,
+      "sha256": "67ab986e8455825f867d8fdd4486156aa5d4119bb4f659cd7e5d9d08ec7fc665"
+    },
+    {
+      "key": "energy-access-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/energy-access-intelligence/energy-access-intelligence.xlsx",
+      "bytes": 201961,
+      "sha256": "ed7cd47f3b12c336a3f9f2fccd11b386e95a2f4f2cd65b3fae3e9864ae024cdb"
+    },
+    {
+      "key": "food-security-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/food-security-intelligence/food-security-intelligence.pdf",
+      "bytes": 56340,
+      "sha256": "51976ea5fdc457534e6a0fbe07861340e96cd13550b005f7fafb5021839a96fd"
+    },
+    {
+      "key": "food-security-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/food-security-intelligence/food-security-intelligence.docx",
+      "bytes": 35096,
+      "sha256": "a8715f57e5eac86def2528942625de730a76b761497c710134e28b62c2aed380"
+    },
+    {
+      "key": "food-security-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/food-security-intelligence/food-security-intelligence.pptx",
+      "bytes": 408725,
+      "sha256": "2c4ff66cf5819eef6f37f27edc7662918db687f23236606d4158eb4854f4f466"
+    },
+    {
+      "key": "food-security-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/food-security-intelligence/food-security-intelligence.xlsx",
+      "bytes": 202012,
+      "sha256": "419b4ff2ae0524be5aa42159c113caa826b610cd0d10cdba1842ec36723cb6a5"
+    },
+    {
+      "key": "justice-legal-services-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/justice-legal-services-intelligence/justice-legal-services-intelligence.pdf",
+      "bytes": 56999,
+      "sha256": "fff68b4fcd837810d0398fb46b0103290d02b777e11319da8bccb5a5a77a296d"
+    },
+    {
+      "key": "justice-legal-services-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/justice-legal-services-intelligence/justice-legal-services-intelligence.docx",
+      "bytes": 35820,
+      "sha256": "216317fd8dc3ef6da9c17a934bb44adf43f97f60fe379cbfb06a71bdfc4ab729"
+    },
+    {
+      "key": "justice-legal-services-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/justice-legal-services-intelligence/justice-legal-services-intelligence.pptx",
+      "bytes": 408772,
+      "sha256": "d894b662701eec55860333e76919680910905c4c46c81abd22e67ea83f6d2098"
+    },
+    {
+      "key": "justice-legal-services-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/justice-legal-services-intelligence/justice-legal-services-intelligence.xlsx",
+      "bytes": 205440,
+      "sha256": "b704f3b191744a4fbcbae4917bd39be3f43dd63a6efefe443c902410773a10dc"
+    },
+    {
+      "key": "financial-inclusion-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/financial-inclusion-intelligence/financial-inclusion-intelligence.pdf",
+      "bytes": 56074,
+      "sha256": "0b096e2ece0118b11cfafbd6df0a327001b809a49fe789b364c30b7ed9bd15cd"
+    },
+    {
+      "key": "financial-inclusion-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/financial-inclusion-intelligence/financial-inclusion-intelligence.docx",
+      "bytes": 35168,
+      "sha256": "cee7ab1447609e480ca2a2ce674fffef15d796118b616cbb2b7bb4fac6842fea"
+    },
+    {
+      "key": "financial-inclusion-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/financial-inclusion-intelligence/financial-inclusion-intelligence.pptx",
+      "bytes": 408625,
+      "sha256": "da994bebe7128701ad6e771672eaf3122aa00464af817682975486dd67b4f810"
+    },
+    {
+      "key": "financial-inclusion-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/financial-inclusion-intelligence/financial-inclusion-intelligence.xlsx",
+      "bytes": 204003,
+      "sha256": "702cd10e028a9dc10e1304a5ee19151ecb67cd334765b4a5f831ab7610e742cd"
+    },
+    {
+      "key": "displacement-durable-solutions-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/displacement-durable-solutions-intelligence/displacement-durable-solutions-intelligence.pdf",
+      "bytes": 57260,
+      "sha256": "8ee22c8ecccaba1fce591957a49c696b15a1b2c1a47b7ecf439db8965d10513d"
+    },
+    {
+      "key": "displacement-durable-solutions-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/displacement-durable-solutions-intelligence/displacement-durable-solutions-intelligence.docx",
+      "bytes": 36271,
+      "sha256": "56f9dec3ce0ee5d9e5389056524e40774b3d868706cce797d1285b46b1d93335"
+    },
+    {
+      "key": "displacement-durable-solutions-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/displacement-durable-solutions-intelligence/displacement-durable-solutions-intelligence.pptx",
+      "bytes": 409014,
+      "sha256": "112d47f8c62b2dd3910da24b465236c61d3d0a9059718d94e63ea68c5b4eaad7"
+    },
+    {
+      "key": "displacement-durable-solutions-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/displacement-durable-solutions-intelligence/displacement-durable-solutions-intelligence.xlsx",
+      "bytes": 210590,
+      "sha256": "ffb3eeb79bbfd561edc9a464d7ea73d2014eb3382b466c7a8024dab90c1ae12d"
+    },
+    {
+      "key": "youth-skills-employability-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/youth-skills-employability-intelligence/youth-skills-employability-intelligence.pdf",
+      "bytes": 56515,
+      "sha256": "d321d64e3e3dcac9c03e008da087c7fe3d1cc2ac413caf25a343c966a49f8450"
+    },
+    {
+      "key": "youth-skills-employability-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/youth-skills-employability-intelligence/youth-skills-employability-intelligence.docx",
+      "bytes": 35776,
+      "sha256": "4b311329ad0e1ee2341272eb227e510fdb23e9cee430272103e6e5666defe716"
+    },
+    {
+      "key": "youth-skills-employability-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/youth-skills-employability-intelligence/youth-skills-employability-intelligence.pptx",
+      "bytes": 408697,
+      "sha256": "be220ac56e6f960f1ec034129f18f215f05c64bfc206c03be4707414a4a63854"
+    },
+    {
+      "key": "youth-skills-employability-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/youth-skills-employability-intelligence/youth-skills-employability-intelligence.xlsx",
+      "bytes": 207969,
+      "sha256": "0d7598aba094e3045524b410ee428025cbcb1e7d3d5c146c2540fb5a7da4607f"
+    },
+    {
+      "key": "public-financial-management-intelligence",
+      "format": "pdf",
+      "path": "/sample-exports/public-financial-management-intelligence/public-financial-management-intelligence.pdf",
+      "bytes": 55691,
+      "sha256": "b9d65f5d70a7ef0a935394828abe184f183a856bc1583458a3016d04a4f9ab0c"
+    },
+    {
+      "key": "public-financial-management-intelligence",
+      "format": "docx",
+      "path": "/sample-exports/public-financial-management-intelligence/public-financial-management-intelligence.docx",
+      "bytes": 35142,
+      "sha256": "cd89a41884b1e9ee22732560505631f61affadc75a746808315ff944259dc7c3"
+    },
+    {
+      "key": "public-financial-management-intelligence",
+      "format": "pptx",
+      "path": "/sample-exports/public-financial-management-intelligence/public-financial-management-intelligence.pptx",
+      "bytes": 408628,
+      "sha256": "132bb78abbdca1c90e58e2e4362f9c691e42d8cf5c8a220e5d9ed648bf9a3e57"
+    },
+    {
+      "key": "public-financial-management-intelligence",
+      "format": "xlsx",
+      "path": "/sample-exports/public-financial-management-intelligence/public-financial-management-intelligence.xlsx",
+      "bytes": 206632,
+      "sha256": "b75f72442411b42129213572781a980f7bb1cb29f601473ed07b034c520dc721"
     }
   ]
 }

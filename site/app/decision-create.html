@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Action — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/enterprise-dashboard-theme.css">
+<link rel="stylesheet" href="/assets/css/decision-workspace.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main id="main-content" class="main">
+    <div id="topbar-mount"></div>
+    <div class="content" style="max-width:760px;">
+      <h1 class="visually-hidden">New Action — VoiceInsights Africa</h1>
+
+      <div id="dc-denied" class="alert alert-danger" style="display:none;" role="alert">
+        <span class="alert-icon">⛔</span><div><div class="alert-title">Access denied</div><p style="margin:0;">Your role does not have permission to create governed Actions.</p></div>
+      </div>
+
+      <form id="dc-form" style="display:none;" novalidate>
+        <a href="/app/decisions.html" class="btn btn-ghost btn-sm" style="margin-bottom:1rem;">← Back to Decision Workspace</a>
+        <div class="card">
+          <div class="card-title">New Governed Action</div>
+
+          <div class="field">
+            <label for="dc-recommendation">Recommendation <span aria-hidden="true">*</span></label>
+            <textarea id="dc-recommendation" rows="3" required aria-required="true"></textarea>
+            <p class="muted-note" id="dc-err-recommendation" style="display:none; color:var(--danger);">Recommendation is required.</p>
+          </div>
+
+          <div class="grid grid-2">
+            <div class="field">
+              <label for="dc-project-id">Project ID <span aria-hidden="true">*</span></label>
+              <input type="text" id="dc-project-id" required aria-required="true">
+              <p class="muted-note" id="dc-err-project" style="display:none; color:var(--danger);">Project ID is required.</p>
+            </div>
+            <div class="field">
+              <label for="dc-owner">Owner (User ID) <span aria-hidden="true">*</span></label>
+              <input type="text" id="dc-owner" required aria-required="true">
+              <p class="muted-note" id="dc-err-owner" style="display:none; color:var(--danger);">Owner is required.</p>
+            </div>
+            <div class="field">
+              <label for="dc-due-date">Due Date <span aria-hidden="true">*</span></label>
+              <input type="date" id="dc-due-date" required aria-required="true">
+              <p class="muted-note" id="dc-err-due" style="display:none; color:var(--danger);">Due date is required.</p>
+            </div>
+            <div class="field">
+              <label for="dc-start-date">Start Date</label>
+              <input type="date" id="dc-start-date">
+            </div>
+            <div class="field">
+              <label for="dc-department">Department</label>
+              <input type="text" id="dc-department">
+            </div>
+            <div class="field">
+              <label for="dc-priority">Priority</label>
+              <select id="dc-priority"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option><option value="critical">Critical</option></select>
+            </div>
+            <div class="field">
+              <label for="dc-strategic-priority">Strategic Priority</label>
+              <input type="text" id="dc-strategic-priority">
+            </div>
+            <div class="field">
+              <label for="dc-risk">Risk Level</label>
+              <select id="dc-risk"><option value="">Not set</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="critical">Critical</option></select>
+            </div>
+            <div class="field">
+              <label for="dc-budget-estimated">Budget (Estimated)</label>
+              <input type="number" id="dc-budget-estimated" step="0.01">
+            </div>
+            <div class="field">
+              <label for="dc-monitoring-indicator">Monitoring Indicator</label>
+              <input type="text" id="dc-monitoring-indicator">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="dc-management-response">Management Response</label>
+            <textarea id="dc-management-response" rows="3"></textarea>
+          </div>
+          <div class="field">
+            <label for="dc-expected-outcome">Expected Outcome</label>
+            <textarea id="dc-expected-outcome" rows="2"></textarea>
+          </div>
+          <div class="field">
+            <label for="dc-success-criteria">Success Criteria</label>
+            <textarea id="dc-success-criteria" rows="2"></textarea>
+          </div>
+          <div class="field">
+            <label for="dc-dependencies">Dependencies</label>
+            <textarea id="dc-dependencies" rows="2" placeholder="One dependency per line"></textarea>
+          </div>
+
+          <div id="dc-submit-error" class="alert alert-danger" style="display:none;"></div>
+
+          <div style="display:flex; gap:.6rem; justify-content:flex-end; margin-top:1.5rem;">
+            <button type="button" class="btn btn-ghost btn-sm" id="dc-cancel-btn">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm" id="dc-submit-btn">Create Action</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/safe-dom.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/decision-workspace.js"></script>
+<script src="/assets/js/decision-create-page.js"></script>
+<script src="/assets/js/admin-functional-qa.js"></script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

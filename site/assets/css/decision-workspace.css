@@ -1,0 +1,97 @@
+/* ============================================================
+   VoiceInsights Africa — Decision Workspace (Program Beta Sprint 2)
+   Additive only. Reuses .card/.badge/.btn/.tabs/.timeline/.modal-dialog/
+   .filter-bar/.pagination/.grid/.stat-value from style.css and
+   components.css as-is. Only what's genuinely new for this Workspace
+   lives here: clickable overview tiles, a compact freshness strip, an
+   aging-band bar, and the responsive table→card conversion for the
+   Action list.
+   Load after style.css, tokens.css, components.css.
+   ============================================================ */
+
+/* ---------- Visually-hidden utility ----------
+   Existing pages (dashboard.html, projects.html) already reference a
+   "visually-hidden" class on their static <h1> — a real semantic heading
+   distinct from renderShell()'s visible, JS-injected topbar title — but no
+   stylesheet anywhere actually defines the class (confirmed by search),
+   so those H1s currently render visibly rather than being hidden. That
+   pre-existing gap is out of this sprint's scope to fix sitewide (Part 32:
+   "do not redesign unrelated pages"), but this Workspace's own 3 new pages
+   need the same pattern, so the class is defined for real here, scoped to
+   whatever loads this stylesheet. */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Overview: clickable summary tiles ---------- */
+.dw-tile {
+  display: block; text-decoration: none; color: inherit;
+  border-radius: 14px;
+}
+.dw-tile .stat-value { font-size: 1.9rem; }
+.dw-tile:focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-ring-offset); }
+
+/* ---------- Freshness strip ---------- */
+.dw-freshness {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-size: .74rem; color: var(--text-dim);
+}
+.dw-freshness .badge { font-size: .64rem; }
+
+/* ---------- Aging bands (Organization/Project Portfolio) ---------- */
+.dw-aging-bar { display: flex; height: .55rem; border-radius: 999px; overflow: hidden; background: var(--surface-2); }
+.dw-aging-bar span { display: block; height: 100%; }
+.dw-aging-bar .band-0-7 { background: var(--success); }
+.dw-aging-bar .band-8-30 { background: var(--accent-2); }
+.dw-aging-bar .band-31-90 { background: var(--warn); }
+.dw-aging-bar .band-90-plus { background: var(--danger); }
+.dw-aging-legend { display: flex; gap: var(--space-4); flex-wrap: wrap; font-size: .72rem; color: var(--text-dim); margin-top: var(--space-2); }
+.dw-aging-legend span::before { content: "●"; margin-right: .35em; }
+.dw-aging-legend .band-0-7::before { color: var(--success); }
+.dw-aging-legend .band-8-30::before { color: var(--accent-2); }
+.dw-aging-legend .band-31-90::before { color: var(--warn); }
+.dw-aging-legend .band-90-plus::before { color: var(--danger); }
+
+/* ---------- Action list row affordances ---------- */
+.dw-action-row { cursor: pointer; }
+.dw-action-row td:first-child { font-weight: 600; }
+.dw-recommendation-cell { max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dw-active-filters { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-3); }
+.dw-active-filters .badge { cursor: pointer; }
+.dw-active-filters .badge::after { content: " ×"; opacity: .7; }
+
+/* ---------- Detail page field grid ---------- */
+.dw-field-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4) var(--space-5); }
+.dw-field-grid .dw-field-label { font-size: .68rem; text-transform: uppercase; letter-spacing: .07em; color: var(--text-dim); font-weight: 700; margin-bottom: .25em; }
+.dw-field-grid .dw-field-value { font-size: .92rem; color: var(--text); }
+.dw-hero-title { font-size: 1.3rem; font-weight: 700; margin: 0 0 var(--space-2); line-height: 1.35; }
+.dw-op-panel { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.dw-op-panel button[disabled] { opacity: .45; cursor: not-allowed; }
+
+/* ---------- Evidence list ---------- */
+.dw-evidence-item { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: 1px solid var(--border); }
+.dw-evidence-item:last-child { border-bottom: none; }
+
+/* ---------- Responsive: convert the Action list table into stacked cards ---------- */
+@media (max-width: 860px) {
+  .dw-field-grid { grid-template-columns: repeat(2, 1fr); }
+  .dw-actions-table thead { display: none; }
+  .dw-actions-table, .dw-actions-table tbody, .dw-actions-table tr, .dw-actions-table td { display: block; width: 100%; }
+  .dw-actions-table tr { border-bottom: 8px solid var(--bg); padding: var(--space-3) 0; }
+  .dw-actions-table td { border-bottom: none; padding: .3rem 1.1rem; }
+  .dw-actions-table td[data-label]::before {
+    content: attr(data-label); display: block; font-size: .66rem; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--text-dim); font-weight: 700; margin-bottom: .15em;
+  }
+  .dw-recommendation-cell { max-width: none; white-space: normal; }
+}
+@media (max-width: 640px) {
+  .dw-field-grid { grid-template-columns: 1fr; }
+  .filter-bar { flex-direction: column; align-items: stretch; }
+}

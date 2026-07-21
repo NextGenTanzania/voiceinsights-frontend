@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Procurement Readiness | VoiceInsights Africa</title>
+<meta name="description" content="Enterprise deployment, security, privacy, data governance, implementation methodology and the honest procurement-readiness evidence behind VoiceInsights Africa.">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/sector-framework.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+<nav class="pub-nav">
+  <div class="pub-nav-row1">
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+    </a>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right">
+      <div id="site-search-mount" style="width:180px;"></div>
+      <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
+      <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="/contact.html?intent=procurement" class="btn btn-primary btn-sm">Contact Sales</a>
+    </div>
+  </div>
+  <div class="pub-nav-collapse pub-nav-links">
+    <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
+    <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
+    <a href="/security.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Security</a>
+    <a href="/mobile-offline.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Mobile &amp; Offline</a>
+    <a href="/enterprise-sales.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Enterprise Sales</a>
+  </div>
+</nav>
+
+<main id="main-content">
+  <div id="sector-content"></div>
+</main>
+
+<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
+  <div style="flex:1 1 220px;">
+    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
+    </div>
+    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Trust</div>
+    <a href="/procurement.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Procurement Readiness</a>
+    <a href="/security.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Security</a>
+    <a href="/privacy.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Privacy Policy</a>
+    <a href="/safeguarding.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Safeguarding</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Enterprise</div>
+    <a href="/mobile-offline.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Mobile &amp; Offline</a>
+    <a href="/enterprise-sales.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Enterprise Sales</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Contact</div>
+    <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
+    <a href="/contact.html?intent=procurement" class="btn btn-primary btn-sm" style="margin-top:1rem;">Contact Sales</a>
+  </div>
+</footer>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/site-search.js"></script>
+<script src="/assets/js/sector-page.js"></script>
+<script>
+  lucide.createIcons();
+  initSiteSearch('site-search-mount');
+  renderSectorPage({
+    id: 'procurement',
+    meta: { title: 'Procurement Readiness | VoiceInsights Africa', description: 'Enterprise deployment, security, privacy, data governance and the honest procurement-readiness evidence behind VoiceInsights Africa.' },
+    hero: {
+      eyebrow: 'Enterprise Procurement',
+      headline: 'What your procurement team needs to evaluate us.',
+      subhead: 'Security, privacy, data governance, AI governance, accessibility and implementation methodology — with an honest account of what evidence exists today and what still requires independent verification.',
+      primaryCta: { label: 'Contact Sales', href: '/contact.html?intent=procurement' },
+      secondaryCta: { label: 'Read our Security page', href: '/security.html' },
+    },
+    executiveSummary: {
+      eyebrow: 'Enterprise deployment',
+      headline: 'Built for government, UN agency, donor and enterprise review.',
+      paragraphs: [
+        'VoiceInsights Africa is designed to withstand real procurement scrutiny: consent logging, encryption, role-based access, and a deterministic (never generative) publication engine that discloses exactly what produced every sentence in a report.',
+        'We hold ourselves to the same standard our own Procurement Readiness Pack sets: source-code evidence supports an enterprise pilot; full procurement readiness remains conditional on independent, external verification — listed honestly below, not glossed over.',
+      ],
+      pillars: [
+        { icon: '🔐', title: 'Security by default', description: 'Encryption, role-based access and session controls documented on our Security page.' },
+        { icon: '📜', title: 'Data governance', description: 'Consent logging, data minimization and organization-owned data — never sold or shared.' },
+        { icon: '🤖', title: 'Honest AI governance', description: 'No generative or LLM model produces report text — a deterministic, versioned rule-based engine does, disclosed on every publication.' },
+      ],
+    },
+    workflow: {
+      headline: 'The procurement process.',
+      steps: [
+        { index: 1, title: 'Vendor questionnaire / RFP response', description: 'We respond directly using the evidence on this page and our Procurement Readiness Pack.' },
+        { index: 2, title: 'Security & compliance review', description: 'Walk through our Security, Privacy and Safeguarding pages with your technical and compliance teams.' },
+        { index: 3, title: 'Pilot', description: 'A scoped pilot on your own use case before any commercial commitment.' },
+        { index: 4, title: 'Contract & onboarding', description: 'Implementation methodology and training begin once terms are agreed.' },
+      ],
+    },
+    securityGovernance: {
+      headline: 'Security, privacy, data governance and accessibility.',
+      summaryPoints: [
+        'Security controls: encryption, access control and infrastructure detail on our Security page.',
+        'Data governance: consent logging, data minimization, and organization ownership of every response, transcript and report.',
+        'Accessibility target: WCAG 2.2 AA, the same standard every flagship publication\'s accessibility section discloses.',
+        'AI governance: no generative or LLM model writes report text — a deterministic, versioned rule-based engine does.',
+      ],
+      links: [
+        { label: 'Security', href: '/security.html' },
+        { label: 'Privacy Policy', href: '/privacy.html' },
+        { label: 'Safeguarding & Compliance', href: '/safeguarding.html' },
+        { label: 'Trust Center', href: '/security/trust-center.html' },
+      ],
+    },
+    faqs: {
+      headline: 'Procurement — frequently asked questions.',
+      items: [
+        { q: 'What evidence is already included in your Procurement Readiness Pack?', a: 'Architecture and deployment guides; security controls; queue transport and retry handling; session revocation and authentication controls; AI assurance and publication gates; international methodology standards; accessibility and CSP audit registers; offline conflict-resolution controls; test and deployment evidence; rollback and live-acceptance checklists.' },
+        { q: 'What external evidence do you honestly still need?', a: 'An independent penetration test; a live Cloudflare load/resilience test; an NVDA and VoiceOver manual accessibility audit; Microsoft Entra/Google Workspace/Okta tenant acceptance; SCIM interoperability acceptance; live Twilio SMS/WhatsApp/Voice callback acceptance; statistical replication and methodology peer review; and data-protection legal review per operating jurisdiction. We are not claiming these are done when they are not.' },
+        { q: 'Do I need COSTECH or NBS approval to use this in Tanzania?', a: 'It depends on your study type. Scientific research, national studies, and foreign-funded research often need COSTECH clearance; studies producing official statistics may need NBS review. At project setup, we walk you through a compliance checklist to help identify what your specific study likely needs.' },
+        { q: 'How is pricing structured?', a: 'Annual subscription plans (Starter, Professional, Enterprise) based on expected volume and features needed. Request a demo for a tailored quote.' },
+      ],
+    },
+    cta: {
+      headline: 'Ready to start a procurement conversation?',
+      description: 'We\'ll walk your team through exactly what\'s verified today and what still requires independent evidence.',
+      primary: { label: 'Contact Sales', href: '/contact.html?intent=procurement' },
+      secondary: { label: 'See Mobile & Offline capability', href: '/mobile-offline.html' },
+    },
+    bookDemo: { headline: 'Ready to talk?', description: 'Reach out and we\'ll schedule a walkthrough with your technical and compliance teams.', formHref: '/contact.html?intent=procurement' },
+  });
+</script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

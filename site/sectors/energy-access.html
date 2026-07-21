@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Energy Access Intelligence | VoiceInsights Africa</title>
+<meta name="description" content="Voice-collected evidence on electrification prioritisation and supply-reliability gaps, built on the same Unified Publication Runtime as every VoiceInsights Africa sector.">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/sector-framework.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+<nav class="pub-nav">
+  <div class="pub-nav-row1">
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+    </a>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right">
+      <div id="site-search-mount" style="width:180px;"></div>
+      <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
+      <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="/contact.html?sector=energy-access" class="btn btn-primary btn-sm">Book Demo</a>
+    </div>
+  </div>
+  <div class="pub-nav-collapse pub-nav-links">
+    <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
+    <a href="/solutions.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
+    <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
+    <a href="/sample-reports.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Intelligence Library</a>
+    <a href="/safeguarding.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
+  </div>
+</nav>
+
+<nav aria-label="Breadcrumb" style="max-width:1200px;margin:1rem auto 0;padding:0 5vw;font-size:.8rem;color:var(--text-dim);">
+  <a href="/index.html" style="color:var(--text-dim);">VoiceInsights Africa</a> ›
+  <a href="/industries.html" style="color:var(--text-dim);">Industries</a> ›
+  <span style="color:var(--text);">Energy Access</span>
+</nav>
+
+<main id="main-content">
+  <div id="sector-content"></div>
+</main>
+
+<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
+  <div style="flex:1 1 220px;">
+    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
+    </div>
+    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Sectors</div>
+    <a href="/sectors/health.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Health</a>
+    <a href="/sectors/energy-access.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Energy Access</a>
+    <a href="/sectors/wash-access.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">WASH Access</a>
+    <a href="/sectors/climate.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Climate</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Contact</div>
+    <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
+    <a href="/contact.html?sector=energy-access" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+  </div>
+</footer>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/site-search.js"></script>
+<script src="/assets/js/sector-page.js"></script>
+<script>
+  lucide.createIcons();
+  initSiteSearch('site-search-mount');
+  renderSectorPage({
+    id: 'energy-access',
+    meta: { title: 'Energy Access Intelligence | VoiceInsights Africa', description: 'Voice-collected evidence on electrification prioritisation and supply-reliability gaps.' },
+    hero: {
+      eyebrow: 'Energy Access Intelligence',
+      headline: 'Direct the next electrification cycle where it actually pays off.',
+      subhead: 'Voice-collected feedback on grid-extension viability and supply reliability, routed through the same governed editorial pipeline and canonical publication engine as every VoiceInsights Africa sector.',
+      primaryCta: { label: 'Book an Energy Demo', href: '/contact.html?sector=energy-access' },
+      secondaryCta: { label: 'Explore the Intelligence Library', href: '/sample-reports.html' },
+    },
+    executiveSummary: {
+      eyebrow: 'Why Energy Access',
+      headline: 'A connection is not the same question as reliable supply.',
+      paragraphs: ['Grid-extension economics and off-grid viability point to different answers in different places, and a household counted as "connected" may still experience unreliable supply that undermines the entire investment case. Voice-collected feedback from newly connected and still-unserved households surfaces which answer actually holds, analyzed through the same editorial pipeline, quality gate and Unified Publication Runtime every other sector on this platform uses.'],
+    },
+    challenges: {
+      headline: 'The problems energy-access teams bring to us.',
+      items: [
+        { title: 'Grid extension vs. off-grid', description: 'Which unserved areas justify grid extension and which are better served off-grid is a real, per-area economic question.' },
+        { title: 'Supply-reliability gaps', description: 'A household counted as electrified may still face outages severe enough to undermine willingness to pay.' },
+        { title: 'Productive-use uptake', description: 'The return on electrification depends on whether connected households actually use power productively, not just whether they are connected.' },
+      ],
+    },
+    whyVoiceInsights: {
+      headline: 'Why energy-access teams choose VoiceInsights Africa.',
+      items: [
+        { icon: '📞', title: 'Reaches who others miss', description: 'Multilingual voice collection across phone, WhatsApp, SMS and an offline mobile app — no smartphone or literacy assumption for newly connected or still-unserved households.' },
+        { icon: '🧾', title: 'One canonical publication engine', description: 'The Unified Publication Runtime is the single source of truth behind Preview, View Publication and every export format — no sector-specific renderer, ever.' },
+        { icon: '🔬', title: 'A real energy-access knowledge domain', description: 'Findings are routed through a dedicated Energy Access Intelligence knowledge engine — grid-extension economics, supply reliability and productive-use uptake, not a generic infrastructure template.' },
+        { icon: '🛡️', title: 'Safeguarding-aware by default', description: 'The same distress-signal detection built for humanitarian and citizen-feedback collection protects respondents disclosing sensitive information.' },
+      ],
+    },
+    aiCapabilities: {
+      headline: 'AI capabilities behind Energy Access Intelligence.',
+      items: [
+        { name: 'Voice transcription & translation', description: 'Converts recorded interviews and voice notes into structured, analyzable text across supported languages.', status: 'Live' },
+        { name: 'Distress-signal detection', description: 'Flags responses indicating risk to a respondent for urgent human review — the same safeguarding pipeline used platform-wide.', status: 'Live' },
+        { name: 'Evidence-ranked prioritization', description: 'The editorial brain ranks findings by real evidence-statistic values, not by a fixed position in a template.', status: 'Live' },
+        { name: 'Publication quality & prestige review', description: 'Every Energy Access publication passes the same evidence-traceability, statistical-documentation and consensus-review gate as any other sector.', status: 'Live' },
+        { name: 'Grid-vs-off-grid economic scoring', description: 'A forthcoming module estimating which unserved areas favour grid extension vs. off-grid investment — not a substitute for a full engineering feasibility study.', status: 'Roadmap' },
+      ],
+    },
+    workflow: {
+      headline: 'How an Energy Access publication gets made.',
+      steps: [
+        { index: 1, title: 'Household voice collection', description: 'Connected and still-unserved households respond by phone, WhatsApp, SMS or the offline enumerator app.' },
+        { index: 2, title: 'Transcription & translation', description: 'Voice responses become structured, analyzable text, with distress signals flagged for review as they arrive.' },
+        { index: 3, title: 'Editorial intelligence pipeline', description: 'The evidence is routed through the Energy Access Intelligence knowledge domain and ranked by the editorial brain before a single finding is written.' },
+        { index: 4, title: 'Governed publication', description: 'The Unified Publication Runtime composes one canonical publication object — the same one every export format and every viewer reads from.' },
+        { index: 5, title: 'Executive decision intelligence', description: 'Findings become owned, timelined, monitored recommendations — not just a chart.' },
+      ],
+    },
+    dashboardPreview: {
+      headline: 'What an Energy Access dashboard shows leadership.',
+      description: 'An illustrative preview of the kind of executive view this evidence supports — not a live data connection.',
+      tiles: [
+        { value: '—', label: 'Household electrification rate', trend: 'Illustrative', trendDirection: 'flat' },
+        { value: '—', label: 'Average daily supply-reliability hours', trend: 'Illustrative', trendDirection: 'flat' },
+        { value: '—', label: 'Productive-use connection share', trend: 'Illustrative', trendDirection: 'flat' },
+        { value: '—', label: 'Household response rate', trend: 'Illustrative', trendDirection: 'flat' },
+      ],
+    },
+    moduleShowcase: {
+      headline: 'The Energy Access Intelligence module set.',
+      modules: [
+        { name: 'Grid Extension vs. Off-Grid Intelligence', decisionProblem: 'Which unserved areas justify grid extension vs. off-grid investment.', aiCapability: 'Evidence-ranked area prioritization', linkedSampleKey: 'energy-access-intelligence', status: 'Live sample' },
+        { name: 'Supply-Reliability Intelligence', decisionProblem: 'Which supply-reliability gaps most undermine the economic case for connection.', status: 'Roadmap' },
+        { name: 'Productive-Use Uptake Intelligence', decisionProblem: 'Which newly connected households are and are not using power productively.', status: 'Roadmap' },
+        { name: 'Connection Willingness-to-Pay Intelligence', decisionProblem: 'Where chronic supply unreliability is eroding willingness to pay.', status: 'Roadmap' },
+      ],
+    },
+    publicationLibrary: {
+      headline: 'Energy Access flagship publications.',
+      description: 'Real, governed synthetic demonstration publications generated by the Unified Publication Runtime.',
+      domain: 'Energy Access Intelligence',
+      emptyStateText: 'No flagship Energy Access publications yet — check back as this sector expands.',
+    },
+    integrations: {
+      headline: 'Where Energy Access Intelligence connects.',
+      items: [
+        { name: 'National utility billing/GIS systems', description: 'Utility connection and grid-mapping systems — integration target' },
+        { name: 'Mini-grid / off-grid operator platforms', description: 'Off-grid and mini-grid monitoring platforms — integration target' },
+        { name: 'National electrification MIS', description: 'National electrification management information systems — integration target' },
+      ],
+    },
+    securityGovernance: {
+      headline: 'Security, privacy and AI governance.',
+      summaryPoints: [
+        'Respondent data is handled under the same consent, encryption and role-based access controls documented on our Security and Privacy pages.',
+        'Distress-signal detection and safeguarding review are always active on Energy Access data collection.',
+        'Every flagship publication discloses its AI governance model in plain language: no generative or LLM model produces report text — a deterministic, versioned rule-based engine does.',
+      ],
+      links: [
+        { label: 'Security', href: '/security.html' },
+        { label: 'Privacy Policy', href: '/privacy.html' },
+        { label: 'Safeguarding & Compliance', href: '/safeguarding.html' },
+        { label: 'Trust Center', href: '/security/trust-center.html' },
+      ],
+    },
+    faqs: {
+      headline: 'Energy Access Intelligence — frequently asked questions.',
+      items: [
+        { q: 'Do you have a real Energy Access flagship publication?', a: 'Yes — see the Intelligence Library above for a real, governed Energy Access Intelligence publication covering electrification prioritisation and supply reliability.' },
+        { q: 'Does this work in areas with no mobile data connectivity?', a: 'Yes — phone call, WhatsApp voice note, SMS, or an offline-first mobile app for enumerators working with zero connectivity.' },
+      ],
+    },
+    cta: {
+      headline: 'Interested in an Energy Access pilot?',
+      description: 'Tell us about your programme and we can scope a pilot using this same governed pipeline.',
+      primary: { label: 'Book a Demo', href: '/contact.html?sector=energy-access' },
+      secondary: { label: 'See Health, our deepest sector', href: '/sectors/health.html' },
+    },
+    bookDemo: { headline: 'Ready to talk?', description: 'We\'ll walk through a live pilot before any commercial discussion.', formHref: '/contact.html?sector=energy-access' },
+    relatedSectors: [
+      { label: 'Climate', href: '/sectors/climate.html' },
+      { label: 'WASH Access', href: '/sectors/wash-access.html' },
+      { label: 'Governance', href: '/sectors/governance.html' },
+      { label: 'Health', href: '/sectors/health.html' },
+    ],
+  });
+</script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

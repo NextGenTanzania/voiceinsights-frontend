@@ -1,0 +1,132 @@
+/* ============================================================
+   VoiceInsights Africa — Sector Page Framework (Sector Intelligence
+   Platform release). Additive, 4th layer after style.css, tokens.css
+   and components.css. Every rule here reuses existing color/spacing
+   tokens (--accent, --success, --warn, --space-*, --radius) — no new
+   color or type primitive is introduced. This is the ONLY stylesheet
+   a sector page or a Parts 9-11 flagship page (procurement.html,
+   mobile-offline.html, enterprise-sales.html) needs beyond the three
+   base files, so every page built on this framework looks and behaves
+   identically — differences come from content (see sector-page.js's
+   config object), never from bespoke per-page CSS.
+   ============================================================ */
+
+/* ---------- Hero stat row ---------- */
+.sector-stat-row {
+  display: flex; gap: var(--space-6); flex-wrap: wrap; margin-top: var(--space-6);
+}
+.sector-stat { min-width: 140px; }
+.sector-stat-value {
+  font-family: var(--font-mono); font-size: 2rem; font-weight: 700; color: var(--text);
+  display: block; line-height: 1.1;
+}
+.sector-stat-label { font-size: .78rem; color: var(--text-dim); margin-top: .3rem; max-width: 22ch; }
+
+/* ---------- Section head (reused by every component below) ---------- */
+.sector-section-head { max-width: 62ch; margin-bottom: var(--space-6); }
+.sector-section-head .eyebrow { color: var(--accent-2); font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; display: block; margin-bottom: var(--space-2); }
+.sector-section-head h2 { font-size: clamp(1.5rem, 2.8vw, 2.1rem); margin: 0 0 var(--space-2); }
+.sector-section-head p { margin: 0; }
+
+/* ---------- Pillars / Why VoiceInsights (icon + title + description grid) ---------- */
+.sector-pillar-icon { font-size: 1.4rem; margin-bottom: var(--space-3); display: block; }
+
+/* ---------- AI Capabilities ---------- */
+.sector-capability-card { display: flex; flex-direction: column; gap: var(--space-2); }
+.sector-capability-top { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-3); }
+.sector-capability-top h3 { margin: 0; font-size: 1rem; }
+
+/* ---------- Workflow (wraps .stepper from components.css, vertical on mobile) ---------- */
+.sector-workflow-steps { display: flex; flex-direction: column; gap: var(--space-5); }
+.sector-workflow-step { display: flex; gap: var(--space-4); }
+.sector-workflow-step .step-index {
+  width: 2rem; height: 2rem; border-radius: 50%; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface-2); border: 1px solid var(--border-strong);
+  font-family: var(--font-mono); font-weight: 700; color: var(--accent);
+}
+.sector-workflow-step h3 { margin: 0 0 .3rem; font-size: .98rem; }
+.sector-workflow-step p { margin: 0; }
+
+/* ---------- Dashboard Preview (illustrative — never live data) ---------- */
+.sector-dashboard-preview-panel {
+  border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface);
+  padding: var(--space-6); box-shadow: var(--elevation-1);
+}
+.sector-dashboard-preview-label {
+  font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim);
+  margin-bottom: var(--space-4); display: flex; align-items: center; gap: var(--space-2);
+}
+.sector-dashboard-preview-label::before { content: "◐"; color: var(--warn); }
+.sector-dashboard-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--space-4); }
+.sector-dashboard-tile { background: var(--surface-2); border-radius: var(--radius-sm); padding: var(--space-4); }
+.sector-dashboard-tile-value { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700; }
+.sector-dashboard-tile-label { font-size: .74rem; color: var(--text-dim); margin-top: .2rem; }
+.sector-dashboard-tile-trend { font-size: .72rem; font-weight: 700; margin-top: .4rem; }
+.sector-dashboard-tile-trend.up { color: var(--success); }
+.sector-dashboard-tile-trend.down { color: var(--danger); }
+.sector-dashboard-tile-trend.flat { color: var(--text-dim); }
+
+/* ---------- Publication Library (real catalog, fetched client-side) ---------- */
+.sector-pub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: var(--space-5); }
+.sector-pub-card { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); background: var(--surface); display: flex; flex-direction: column; }
+.sector-pub-cover { padding: var(--space-5); color: #fff; min-height: 120px; display: flex; flex-direction: column; justify-content: flex-end; }
+.sector-pub-cover .eyebrow { font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; opacity: .85; }
+.sector-pub-cover h3 { margin: .4rem 0 0; font-size: 1.15rem; line-height: 1.2; }
+.sector-pub-body { padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-3); flex: 1; }
+.sector-pub-body p { font-size: .86rem; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.sector-pub-body a.btn { align-self: flex-start; margin-top: auto; }
+.sector-pub-empty, .sector-pub-loading, .sector-pub-error { padding: var(--space-6); text-align: center; color: var(--text-dim); border: 1px dashed var(--border-strong); border-radius: var(--radius); }
+
+/* ---------- Module Showcase (Health Intelligence Suite and future suites) ---------- */
+.sector-module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: var(--space-4); }
+.sector-module-card { display: flex; flex-direction: column; gap: var(--space-2); }
+.sector-module-top { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-2); }
+.sector-module-top h3 { margin: 0; font-size: .95rem; }
+.sector-module-card p { font-size: .82rem; margin: 0; }
+.sector-module-link { font-size: .78rem; font-weight: 700; color: var(--accent); }
+.sector-module-roadmap { margin-top: var(--space-5); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: var(--space-4); }
+.sector-module-roadmap summary { cursor: pointer; font-weight: 700; font-size: .88rem; color: var(--text-muted); list-style: none; padding: var(--space-3) 0; min-height: 44px; display: flex; align-items: center; }
+.sector-module-roadmap summary::-webkit-details-marker { display: none; }
+.sector-module-roadmap summary::before { content: '▸'; display: inline-block; margin-right: .5rem; transition: transform .15s ease; }
+.sector-module-roadmap[open] summary::before { transform: rotate(90deg); }
+
+/* ---------- Integrations ---------- */
+.sector-integration-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--space-4); }
+.sector-integration-card { text-align: center; padding: var(--space-4); }
+.sector-integration-card strong { display: block; margin-bottom: .3rem; font-size: .9rem; }
+.sector-integration-card span { font-size: .78rem; color: var(--text-dim); }
+
+/* ---------- Security & Governance ---------- */
+.sector-security-links { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+
+/* ---------- Customer Outcomes (always synthetic-labeled) ---------- */
+.sector-outcome-card { display: flex; flex-direction: column; gap: var(--space-3); }
+.sector-outcome-quote { font-family: var(--font-display); font-size: 1.05rem; line-height: 1.4; margin: 0; }
+.sector-outcome-context { font-size: .8rem; color: var(--text-dim); }
+.sector-outcome-label {
+  align-self: flex-start; font-size: .68rem; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--warn); background: var(--warn-bg); padding: .25em .6em; border-radius: 999px; font-weight: 700;
+}
+
+/* ---------- FAQ (previously redeclared per-page — now a shared framework primitive) ---------- */
+.sector-faq-item { border-bottom: 1px solid var(--border); padding: var(--space-5) 0; }
+.sector-faq-item h3 { font-size: 1.02rem; margin: 0 0 var(--space-2); color: var(--text); }
+.sector-faq-item p { margin: 0; }
+
+/* ---------- CTA / Book Demo ---------- */
+.sector-cta-block { text-align: center; }
+.sector-cta-block .btn { margin: 0 var(--space-2); }
+
+/* ---------- Related sectors ---------- */
+.sector-related-list { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.sector-related-list a {
+  padding: .6em 1.1em; border-radius: 999px; border: 1px solid var(--border-strong);
+  font-size: .84rem; font-weight: 600; color: var(--text-muted); transition: border-color var(--motion-base), color var(--motion-base);
+}
+.sector-related-list a:hover { border-color: var(--accent); color: var(--accent); }
+
+@media (max-width: 640px) {
+  .sector-stat-row { gap: var(--space-4); }
+  .sector-security-links { flex-direction: column; align-items: flex-start; }
+}

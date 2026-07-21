@@ -84,6 +84,9 @@ function makeDividerWave(bars = 60) {
 const NAV_APP = [
   { groupKey: 'app.nav.group.main', group: 'Main', items: [
     { href: '/app/dashboard.html', icon: 'layout-dashboard', key: 'app.nav.dashboard', label: 'Dashboard' },
+    { href: '/app/executive-intelligence.html', icon: 'compass', key: 'app.nav.executive_intelligence', label: 'Executive Intelligence' },
+    { href: '/app/platform-intelligence.html', icon: 'sparkles', key: 'app.nav.platform_intelligence', label: 'Platform Intelligence' },
+    { href: '/app/decisions.html', icon: 'check-square', key: 'app.nav.decisions', label: 'Decision Workspace' },
     { href: '/app/projects.html', icon: 'folder-kanban', key: 'app.nav.projects', label: 'Projects' },
     { href: '/app/surveys.html', icon: 'list-checks', key: 'app.nav.surveys', label: 'Surveys' },
     { href: '/app/campaigns.html', icon: 'megaphone', key: 'app.nav.campaigns', label: 'Campaigns' },
@@ -142,7 +145,7 @@ const APP_LANGS = [
   { code: 'sw', label: 'SW' },
 ];
 
-function renderShell({ role = 'client', active = '', title = '', eyebrow = '' }) {
+function renderShell({ role = 'client', active = '', title = '', eyebrow = '', breadcrumb = null }) {
   const storedUser = JSON.parse(localStorage.getItem('vi_user') || 'null');
   const userRole = storedUser?.role || 'org_admin';
 
@@ -188,7 +191,7 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
         </a>`).join('')}
     </div>`).join('');
 
-  const ROLE_DISPLAY = { me_officer: 'M&E Officer', enumerator: 'Enumerator', super_admin: 'Super Admin', org_admin: 'Org Admin' };
+  const ROLE_DISPLAY = { me_officer: 'M&E Officer', enumerator: 'Enumerator', super_admin: 'Super Admin', org_admin: 'Org Admin', founder_executive: 'Founder Executive', head_of_programs: 'Head of Programs', project_manager: 'Project Manager', operations_manager: 'Operations Manager', data_analyst: 'Data Analyst' };
   const displayName = storedUser?.full_name || VI.user.name;
   const displayInitials = displayName.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
   const displayRole = ROLE_DISPLAY[storedUser?.role] || (role === 'admin' ? 'Super Admin' : 'Org Admin');
@@ -220,13 +223,14 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
     topbarMount.innerHTML = `
       <header class="topbar">
         <div style="display:flex; align-items:center; gap:.9rem;">
-          <button class="btn btn-ghost btn-sm" id="menu-toggle" style="display:none;">${iconSvg('menu')}</button>
+          <button class="btn btn-ghost btn-sm" id="menu-toggle" aria-label="Open menu" style="display:none;">${iconSvg('menu')}</button>
           <div>
-            ${eyebrow ? `<div class="eyebrow">${eyebrow}</div>` : ''}
+            ${breadcrumb && breadcrumb.length ? `<nav aria-label="Breadcrumb" style="font-size:.76rem; color:var(--text-dim); margin-bottom:.2rem;">${breadcrumb.map((crumb, i) => i < breadcrumb.length - 1 ? `<a href="${crumb.href}" style="color:var(--text-dim);">${crumb.label}</a> › ` : `<span style="color:var(--text-muted);">${crumb.label}</span>`).join('')}</nav>` : (eyebrow ? `<div class="eyebrow">${eyebrow}</div>` : '')}
             <h1>${title}</h1>
           </div>
         </div>
         <div style="display:flex; align-items:center; gap:.9rem;">
+          <a class="btn btn-ghost btn-sm" href="/faq.html" title="Help" aria-label="Help" style="padding:.5em .7em;">${iconSvg('help-circle')}</a>
           <div style="position:relative;">
             <button class="btn btn-ghost btn-sm" id="notif-bell-btn" title="Notifications" aria-label="Notifications" style="padding:.5em .7em; position:relative;">🔔<span id="notif-badge" style="display:none; position:absolute; top:2px; right:2px; width:8px; height:8px; border-radius:50%; background:var(--danger);"></span></button>
             <div id="notif-dropdown" style="display:none; position:absolute; top:110%; right:0; width:320px; max-height:400px; overflow-y:auto; background:var(--surface); border:1px solid var(--border); border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.3); z-index:400; padding:.5rem;"></div>
@@ -237,8 +241,8 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
             ${APP_LANGS.map(l => `<button class="${currentLang === l.code ? 'active' : ''}" data-lang="${l.code}">${l.label}</button>`).join('')}
           </div>
           <div class="user-chip">
-            <div class="avatar">${VI.user.initials}</div>
-            <span style="font-size:.85rem; font-weight:600;">${VI.user.name}</span>
+            <div class="avatar">${displayInitials}</div>
+            <span style="font-size:.85rem; font-weight:600;">${displayName}</span>
             <span class="badge badge-neutral" style="font-size:.62rem;">${ROLE_DISPLAY[userRole] || (role === 'admin' ? 'Super Admin' : 'Org Admin')}</span>
           </div>
         </div>
@@ -323,6 +327,9 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '' })
 
 const ALL_NAV_ITEMS = [
   { href: '/app/dashboard.html', label: 'Dashboard', icon: 'layout-dashboard' },
+  { href: '/app/executive-intelligence.html', label: 'Executive Intelligence', icon: 'compass' },
+  { href: '/app/platform-intelligence.html', label: 'Platform Intelligence', icon: 'sparkles' },
+  { href: '/app/decisions.html', label: 'Decision Workspace', icon: 'check-square' },
   { href: '/app/projects.html', label: 'Projects', icon: 'folder-kanban' },
   { href: '/app/surveys.html', label: 'Surveys', icon: 'list-checks' },
   { href: '/app/campaigns.html', label: 'Campaigns', icon: 'megaphone' },
@@ -402,6 +409,7 @@ function renderViaAssistant() {
   if (document.getElementById('via-launcher')) return; // already mounted
   const launcher = document.createElement('button');
   launcher.id = 'via-launcher';
+  launcher.setAttribute('aria-label', t('via.launcher', 'Open VIA Assistant'));
   launcher.innerHTML = iconSvg('sparkles');
   launcher.style.cssText = 'position:fixed; bottom:1.75rem; right:1.75rem; width:52px; height:52px; border-radius:50%; background:var(--accent); color:var(--accent-ink); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 30px rgba(0,0,0,.4); z-index:50;';
   document.body.appendChild(launcher);

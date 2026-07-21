@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Expert Feedback — VoiceInsights Africa</title>
+<meta name="description" content="Structured expert feedback on VoiceInsights Africa, for reviewers invited to evaluate the platform ahead of a demonstration or procurement decision.">
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  .scale-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.4rem;}
+  .scale-option{flex:1 1 120px;}
+  .scale-option input{position:absolute;opacity:0;width:0;height:0;}
+  .scale-option label{display:block;text-align:center;padding:.6rem .5rem;border:1px solid var(--border-strong);border-radius:10px;cursor:pointer;font-size:.8rem;color:var(--text-muted);}
+  .scale-option input:checked + label{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700;}
+  .question-block{padding:1rem 0;border-bottom:1px solid var(--border);}
+  .question-block:last-of-type{border-bottom:none;}
+  .question-label{font-size:.92rem;font-weight:600;margin-bottom:.2rem;}
+</style>
+</head>
+<body>
+
+<nav class="pub-nav">
+  <div class="pub-nav-row1">
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+    </a>
+    <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right">
+      <button class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
+      <a href="/index.html" class="btn btn-ghost btn-sm">Home</a>
+    </div>
+  </div>
+</nav>
+
+<header class="pub-hero" style="padding-bottom:1rem;">
+  <span class="eyebrow">Expert Feedback Programme</span>
+  <h1 style="font-size:clamp(2rem,4vw,3rem);">Your assessment, in your own terms.</h1>
+  <p class="lead">You've been invited to evaluate VoiceInsights Africa ahead of a demonstration, procurement decision or partnership discussion. This form takes about 5 minutes. Your feedback goes directly to the product team — it is never published or attributed without your separate, explicit consent.</p>
+</header>
+
+<section class="pub-section" style="padding-top:0; max-width:720px;">
+  <div class="card" id="form-card">
+    <form id="feedback-form">
+      <div class="field-row">
+        <div class="field"><label>Your Name</label><input aria-label="name" id="reviewer_name"></div>
+        <div class="field"><label>Your Email</label><input aria-label="email" id="reviewer_email" type="email"></div>
+      </div>
+      <div class="field-row">
+        <div class="field" style="flex:1 1 100%;"><label>Organization</label><input aria-label="organization" id="organization"></div>
+      </div>
+      <div class="field">
+        <label>Which best describes you? *</label>
+        <select id="reviewer_category" required>
+          <option value="">Select…</option>
+          <option value="government">Government — Ministry official, cabinet-level policy staff</option>
+          <option value="hospital_executive">Hospital Executive — CEO, medical director, facility manager</option>
+          <option value="researcher_university">Researcher / University — academic M&amp;E specialist, methodologist</option>
+          <option value="ngo_development_partner">NGO / Development Partner — country director, programme manager</option>
+          <option value="me_specialist">M&amp;E Specialist — monitoring &amp; evaluation professional</option>
+          <option value="health_information_specialist">Health Information Specialist — HMIS/DHIS2 administrator</option>
+        </select>
+      </div>
+
+      <div style="margin-top:1.5rem;">
+        <div class="card-title" style="font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent);">Comprehension — rate each from 1 (Unclear) to 4 (Very clear)</div>
+        <div id="questions-mount"></div>
+      </div>
+
+      <div class="field"><label>What specifically was unclear, or what would you change? (the most useful part of this form)</label><textarea id="free_text" rows="4" placeholder="Be as specific as you can — this is what actually drives improvement."></textarea></div>
+
+      <div id="feedback-error" style="display:none; color:var(--danger); font-size:.85rem; margin-bottom:1rem;"></div>
+      <button class="btn btn-primary" type="submit" id="feedback-submit-btn" style="width:100%; justify-content:center;">Submit Feedback</button>
+    </form>
+  </div>
+</section>
+
+<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
+  <div><a href="mailto:partnerships@voiceinsightsafrica.com" style="color:var(--text-muted); font-size:.85rem;">partnerships@voiceinsightsafrica.com</a></div>
+</footer>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  lucide.createIcons();
+
+  const QUESTIONS = [
+    { id: 'product', text: 'Can you understand what the product does?' },
+    { id: 'deployment', text: 'Can you understand how it would be deployed?' },
+    { id: 'procurement', text: 'Can you understand the procurement process?' },
+    { id: 'implementation', text: 'Can you understand the implementation journey?' },
+    { id: 'offline_capability', text: 'Can you understand its offline capability?' },
+    { id: 'ai_capability', text: 'Can you understand its AI capability?' },
+    { id: 'publications', text: 'Can you understand the publications it produces?' },
+    { id: 'value_proposition', text: 'Can you understand the overall value proposition?' },
+  ];
+  const SCALE = [[1, 'Unclear'], [2, 'Partially clear'], [3, 'Clear'], [4, 'Very clear']];
+
+  document.getElementById('questions-mount').innerHTML = QUESTIONS.map(q => `
+    <div class="question-block">
+      <div class="question-label">${q.text}</div>
+      <div class="scale-row">
+        ${SCALE.map(([value, label]) => `
+          <div class="scale-option">
+            <input type="radio" name="q_${q.id}" id="q_${q.id}_${value}" value="${value}" required>
+            <label for="q_${q.id}_${value}">${value} · ${label}</label>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  document.getElementById('feedback-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('feedback-submit-btn');
+    const errorEl = document.getElementById('feedback-error');
+    errorEl.style.display = 'none';
+
+    const scores = {};
+    for (const q of QUESTIONS) {
+      const checked = document.querySelector(`input[name="q_${q.id}"]:checked`);
+      if (!checked) { errorEl.textContent = 'Please rate every question before submitting.'; errorEl.style.display = 'block'; return; }
+      scores[q.id] = Number(checked.value);
+    }
+    const category = document.getElementById('reviewer_category').value;
+    if (!category) { errorEl.textContent = 'Please select the category that best describes you.'; errorEl.style.display = 'block'; return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    try {
+      await apiRequest('/api/expert-feedback/submit', {
+        method: 'POST',
+        auth: false,
+        body: {
+          reviewer_category: category,
+          reviewer_name: document.getElementById('reviewer_name').value,
+          reviewer_email: document.getElementById('reviewer_email').value,
+          organization: document.getElementById('organization').value,
+          scores,
+          free_text: document.getElementById('free_text').value,
+        },
+      });
+      document.getElementById('form-card').innerHTML = `
+        <div style="text-align:center; padding:1.5rem 0;">
+          <div style="font-size:2.5rem; margin-bottom:1rem;">✓</div>
+          <h2 style="font-size:1.2rem; margin-bottom:.5rem;">Thank you — your feedback has been received.</h2>
+          <p class="muted-note">This will be reviewed directly by the product team and used to prioritize what gets built next.</p>
+        </div>`;
+    } catch (err) {
+      errorEl.textContent = err.message.includes('Failed to fetch')
+        ? 'Could not reach the server. Check your connection and try again.'
+        : 'Error: ' + err.message;
+      errorEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Submit Feedback';
+    }
+  });
+</script>
+</body>
+</html>

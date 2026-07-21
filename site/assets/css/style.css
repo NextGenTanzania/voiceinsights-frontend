@@ -16,12 +16,22 @@
   --border-strong: rgba(244, 239, 230, 0.18);
   --text:      #F4EFE6;
   --text-muted:#9FB3AB;
-  --text-dim:  #6C8079;
+  /* RC1 accessibility finding: #6C8079 measured 3.5:1 against this theme's
+     dark surfaces (axe-core, live Preview) — below the 4.5:1 WCAG AA text
+     threshold, and used in 20+ places (table headers, role badges, meta
+     text) via this one token. Reusing the light theme's already-designed
+     dim value (line ~50) rather than inventing a new color — same muted
+     sage-gray hue, now ~5:1 against --surface-2 and ~6.3:1 against --bg. */
+  --text-dim:  #8A9B94;
   --accent:    #E4A23A;   /* amber / marigold */
   --accent-ink:#231502;
   --accent-2:  #4FA490;   /* muted teal - data */
   --accent-2-ink:#04211B;
-  --danger:    #D9634A;
+  /* Sprint 3 accessibility finding: #D9634A measured 4.01:1 on badge-danger's
+     composited background (axe-core, live Preview Executive Intelligence
+     page) — just under the 4.5:1 AA text threshold. Lightened slightly,
+     same hue family, now ~4.9:1 in that context. --danger-bg unchanged. */
+  --danger:    #E17A62;
   --danger-bg: rgba(217, 99, 74, 0.12);
   --success:   #6FBF8B;
   --success-bg:rgba(111,191,139,0.12);

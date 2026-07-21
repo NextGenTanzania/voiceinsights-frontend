@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile &amp; Offline Capability | VoiceInsights Africa</title>
+<meta name="description" content="Field-ready data collection that works with zero connectivity — offline surveys, offline voice collection, synchronisation, and enumerator/supervisor workflows.">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/sector-framework.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+<nav class="pub-nav">
+  <div class="pub-nav-row1">
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+    </a>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right">
+      <div id="site-search-mount" style="width:180px;"></div>
+      <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
+      <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="/contact.html?intent=mobile" class="btn btn-primary btn-sm">Book Demo</a>
+    </div>
+  </div>
+  <div class="pub-nav-collapse pub-nav-links">
+    <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
+    <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
+    <a href="/procurement.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Procurement Readiness</a>
+    <a href="/security.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Security</a>
+    <a href="/enterprise-sales.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Enterprise Sales</a>
+  </div>
+</nav>
+
+<main id="main-content">
+  <div id="sector-content"></div>
+</main>
+
+<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
+  <div style="flex:1 1 220px;">
+    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
+    </div>
+    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Trust</div>
+    <a href="/procurement.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Procurement Readiness</a>
+    <a href="/security.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Security</a>
+    <a href="/safeguarding.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Safeguarding</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Try it</div>
+    <a href="/enumerator.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Offline Enumerator Demo</a>
+    <a href="/respondent.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Respondent Interview Demo</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Contact</div>
+    <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
+    <a href="/contact.html?intent=mobile" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+  </div>
+</footer>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/site-search.js"></script>
+<script src="/assets/js/sector-page.js"></script>
+<script>
+  lucide.createIcons();
+  initSiteSearch('site-search-mount');
+  renderSectorPage({
+    id: 'mobile-offline',
+    meta: { title: 'Mobile & Offline Capability | VoiceInsights Africa', description: 'Field-ready data collection that works with zero connectivity.' },
+    hero: {
+      eyebrow: 'Mobile & Offline',
+      headline: 'Field-ready. Works with zero connectivity.',
+      subhead: 'An offline-first mobile app for enumerators working in areas with no network coverage — responses record locally and sync automatically the moment a device reconnects.',
+      primaryCta: { label: 'Try the Offline Demo', href: '/enumerator.html' },
+      secondaryCta: { label: 'Book a Demo', href: '/contact.html?intent=mobile' },
+    },
+    executiveSummary: {
+      eyebrow: 'Why offline matters',
+      headline: 'No network shouldn\'t mean no data.',
+      paragraphs: ['Paper forms carried back to be transcribed by hand are slow and error-prone. Our offline-first mobile app lets enumerators record full interviews — including voice — with zero connectivity, then syncs everything automatically once the device reconnects.'],
+      pillars: [
+        { icon: '📴', title: 'Offline data collection', description: 'Full survey and interview capability with no live connection required.' },
+        { icon: '🎙️', title: 'Offline voice collection', description: 'Voice notes and recorded interviews captured and queued locally, transcribed on sync.' },
+        { icon: '🔄', title: 'Automatic synchronisation', description: 'Queued responses sync the moment the device reconnects — no manual export step.' },
+      ],
+    },
+    aiCapabilities: {
+      headline: 'What happens on sync.',
+      items: [
+        { name: 'Offline voice collection', description: 'Interviews and voice notes record locally, with zero connectivity required.', status: 'Live' },
+        { name: 'Sync queue & conflict resolution', description: 'Detects duplicate and version conflicts when multiple enumerators sync overlapping records.', status: 'Live' },
+        { name: 'Offline transcription queueing', description: 'Voice recordings queue for transcription automatically once connectivity returns.', status: 'Live' },
+        { name: 'Device management & remote posture', description: 'Device enrollment and encryption-at-rest posture, detailed on our Security page.', status: 'Live' },
+      ],
+    },
+    workflow: {
+      headline: 'Two real workflows: Enumerator and Supervisor.',
+      steps: [
+        { index: 1, title: 'Assign', description: 'Supervisors assign households, facilities or respondents to enumerators.' },
+        { index: 2, title: 'Collect offline', description: 'Enumerators record full interviews — including voice — with zero connectivity.' },
+        { index: 3, title: 'Local queue', description: 'Completed interviews queue locally on the device until a connection is available.' },
+        { index: 4, title: 'Sync on reconnect', description: 'Queued interviews upload and duplicate/version conflicts are automatically detected.' },
+        { index: 5, title: 'Supervisor review', description: 'Supervisors review synced batches, flag issues, and reassign as needed.' },
+      ],
+    },
+    dashboardPreview: {
+      headline: 'What a sync-status dashboard shows a supervisor.',
+      description: 'An illustrative preview — not a live data connection.',
+      tiles: [
+        { value: '—', label: 'Pending sync', trend: 'Illustrative', trendDirection: 'flat' },
+        { value: '—', label: 'Synced today', trend: 'Illustrative', trendDirection: 'flat' },
+        { value: '—', label: 'Conflicts flagged', trend: 'Illustrative', trendDirection: 'flat' },
+      ],
+    },
+    securityGovernance: {
+      headline: 'Device management and security.',
+      summaryPoints: [
+        'Device enrollment and encryption-at-rest are detailed on our Security page — this page summarizes, it doesn\'t re-author that content.',
+        'Every voice interaction opens with a spoken consent request explaining what\'s collected and why.',
+      ],
+      links: [
+        { label: 'Security', href: '/security.html' },
+        { label: 'Safeguarding & Compliance', href: '/safeguarding.html' },
+      ],
+    },
+    faqs: {
+      headline: 'Mobile & Offline — frequently asked questions.',
+      items: [
+        { q: 'What happens in villages with no phone network?', a: 'Field enumerators use our offline Mobile Application: they record responses on the device with zero connectivity, and everything syncs automatically the moment the device reconnects — no more carrying paper forms back to transcribe by hand.' },
+        { q: 'Do respondents know they\'re being recorded?', a: 'Always. Every interaction opens with a spoken consent request explaining what\'s collected, why, and confirming the respondent can stop at any point.' },
+        { q: 'Can I try the offline app before committing?', a: 'Yes — our Offline Enumerator Demo is live on this site right now.' },
+      ],
+    },
+    cta: {
+      headline: 'See the offline app for yourself.',
+      description: 'Try the real, working Offline Enumerator Demo — no account required.',
+      primary: { label: 'Try the Demo', href: '/enumerator.html' },
+      secondary: { label: 'Book a Demo', href: '/contact.html?intent=mobile' },
+    },
+    bookDemo: { headline: 'Ready to talk?', description: 'We\'ll walk through field deployment for your specific context.', formHref: '/contact.html?intent=mobile' },
+  });
+</script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

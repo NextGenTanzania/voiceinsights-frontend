@@ -1,0 +1,100 @@
+/* VoiceInsights Africa — Executive Intelligence Command Center
+   Program Beta Sprint 3. Reuses design tokens from tokens.css/style.css;
+   no new color values invented — only new layout for a new page. */
+
+.ei-situation-header {
+  display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-4);
+  padding: var(--space-5); margin-bottom: var(--space-5);
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--elevation-1);
+}
+.ei-eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); font-weight: 700; }
+.ei-org-name { font-family: var(--font-display); font-size: 1.6rem; margin: .2rem 0; }
+.ei-situation-meta { color: var(--text-muted); font-size: .88rem; }
+.ei-situation-actions { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+
+.ei-section { margin-bottom: var(--space-7); }
+.ei-section-title { font-family: var(--font-display); font-size: 1.15rem; margin-bottom: .2rem; }
+.ei-section-sub { color: var(--text-muted); font-size: .85rem; margin: 0 0 var(--space-4); max-width: 60ch; }
+.ei-fine-print { color: var(--text-dim); font-size: .78rem; margin-top: var(--space-3); }
+
+/* KPI tiles — reused across Institutional Health, Risk, Evidence sections */
+.ei-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--space-4); }
+.ei-kpi-tile { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: var(--space-4); }
+.ei-kpi-value { font-family: var(--font-mono); font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.ei-kpi-label { font-size: .78rem; color: var(--text-muted); margin-top: .2rem; }
+.ei-kpi-sub { font-size: .7rem; color: var(--text-dim); margin-top: .2rem; }
+
+/* Leadership Attention Brief */
+.ei-insight-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+.ei-insight-item {
+  background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--border-strong);
+  border-radius: var(--radius-sm); padding: var(--space-4);
+}
+.ei-insight-item.ei-severity-critical { border-left-color: var(--danger); }
+.ei-insight-item.ei-severity-high { border-left-color: var(--warn); }
+.ei-insight-item.ei-severity-medium { border-left-color: var(--accent-2); }
+.ei-insight-top { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2); }
+.ei-insight-rule { font-family: var(--font-mono); font-size: .72rem; color: var(--text-dim); }
+.ei-insight-message { font-weight: 600; margin: 0 0 var(--space-2); }
+.ei-insight-why, .ei-insight-next { font-size: .85rem; color: var(--text-muted); margin: 0 0 var(--space-2); }
+.ei-insight-meta { display: flex; gap: var(--space-4); font-size: .78rem; color: var(--text-dim); margin-bottom: var(--space-2); }
+
+/* Decision & Review Pipeline — a horizontal proportional bar, reusing the
+   established .dw-aging-bar CSS-only-chart pattern (no chart library
+   exists in this codebase; consistent, not a new invented technique). */
+.ei-pipeline-bar { display: flex; height: 28px; border-radius: 999px; overflow: hidden; margin-bottom: var(--space-3); }
+.ei-pipeline-bar span { display: block; height: 100%; }
+.ei-pipeline-legend { display: flex; flex-wrap: wrap; gap: var(--space-4); font-size: .8rem; color: var(--text-muted); }
+.ei-pipeline-legend-item { display: inline-flex; align-items: center; gap: .35em; }
+.ei-pipeline-legend-item i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+/* Trend chart — honest bar chart of real daily snapshot points; never
+   rendered at all when fewer than 3 points exist (see the *-unavailable
+   alert instead). */
+.ei-trend-chart { display: flex; align-items: flex-end; gap: var(--space-3); height: 140px; padding: var(--space-3) 0; }
+.ei-trend-bar-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; height: 100%; }
+.ei-trend-bar { width: 100%; max-width: 32px; background: var(--chart-1); border-radius: 4px 4px 0 0; min-height: 2px; }
+.ei-trend-bar-label { font-size: .68rem; color: var(--text-dim); margin-top: .3rem; font-family: var(--font-mono); }
+
+/* Executive Timeline */
+.ei-timeline-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+.ei-timeline-item { display: flex; gap: var(--space-3); align-items: flex-start; }
+.ei-timeline-icon { font-size: 1.1rem; line-height: 1.6; }
+.ei-timeline-headline a { font-weight: 600; }
+.ei-timeline-detail { font-size: .82rem; color: var(--text-muted); }
+.ei-timeline-time { font-size: .74rem; color: var(--text-dim); font-family: var(--font-mono); }
+
+/* Briefing Mode — clean, full-screen, print-friendly presentation. */
+.ei-briefing { position: fixed; inset: 0; z-index: 500; background: var(--bg); overflow-y: auto; }
+.ei-briefing-bar {
+  position: sticky; top: 0; z-index: 1; display: flex; justify-content: space-between; align-items: center;
+  padding: var(--space-4) var(--space-6); background: var(--surface); border-bottom: 1px solid var(--border);
+  font-weight: 700;
+}
+.ei-briefing-body { max-width: 860px; margin: 0 auto; padding: var(--space-7) var(--space-6); }
+.ei-brief-slide { margin-bottom: var(--space-8); padding-bottom: var(--space-7); border-bottom: 1px solid var(--border); }
+.ei-brief-slide:last-child { border-bottom: none; }
+.ei-brief-slide h1 { font-family: var(--font-display); font-size: 2.2rem; margin: .3rem 0; }
+.ei-brief-slide h2 { font-family: var(--font-display); font-size: 1.3rem; margin: 0 0 var(--space-4); }
+.ei-briefing-lede { font-size: 1.05rem; color: var(--text-muted); max-width: 55ch; }
+body.ei-briefing-active { overflow: hidden; }
+
+@media print {
+  .no-print, #sidebar-mount, #topbar-mount { display: none !important; }
+  .ei-briefing { position: static; background: #fff; color: #000; }
+  .ei-briefing-body { max-width: 100%; padding: 0; }
+  .ei-brief-slide { page-break-inside: avoid; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ei-insight-item, .ei-kpi-tile, .ei-trend-bar { transition: none; }
+}
+
+@media (max-width: 900px) {
+  .ei-situation-header { flex-direction: column; }
+  .ei-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+  .ei-kpi-grid { grid-template-columns: 1fr 1fr; }
+  .ei-situation-actions { width: 100%; }
+}

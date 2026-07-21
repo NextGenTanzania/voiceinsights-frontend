@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
 <!-- v202: report publication UI and mobile readability fix -->
@@ -14,11 +15,18 @@
   .eyebrow{text-transform:uppercase;letter-spacing:.12em;color:#E4A23A;font-weight:900;font-size:.78rem}.bridge h1{font-size:clamp(2rem,5vw,4rem);line-height:1;margin:.6rem 0}.bridge p{color:#B8C6BE;line-height:1.7}.actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.25rem}.btn{border-radius:999px;padding:.85rem 1.1rem;text-decoration:none;font-weight:800}.primary{background:#E4A23A;color:#111}.ghost{border:1px solid rgba(255,255,255,.18);color:#F6F3EA}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.75rem;margin-top:1.4rem}.card{border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:1rem;background:rgba(255,255,255,.04)}.card b{display:block;color:#E4A23A;margin-bottom:.3rem}@media(max-width:700px){body{padding:1rem}.bridge{padding:1.2rem}.actions{flex-direction:column}.btn{text-align:center}}
 </style>
 <script>
-  const DEFAULT_REPORT_ID = 'report_7a7367728bc24deab3cf08217f84fc39';
+  // Enterprise Market Validation Release, Part A: this bridge used to open
+  // sample-report-viewer.html, a legacy page whose separate /api/public/
+  // demo-reports/* API family renders several raw internal Quality Gate
+  // scores. Repointed to flagship-sample-report.html — the canonical
+  // Unified Publication Runtime viewer every other sample-report link on
+  // the site already uses — retiring the leak from this live journey
+  // rather than patching a second, parallel renderer.
+  const DEFAULT_REPORT_KEY = 'hospital-performance-intelligence';
   const params = new URLSearchParams(location.search);
-  const reportId = params.get('report_id') || params.get('id') || DEFAULT_REPORT_ID;
-  function openV200(){ location.href = `/sample-report-viewer.html?report_id=${encodeURIComponent(reportId)}#v200-suite`; }
-  if (params.get('no_redirect') !== '1') { setTimeout(openV200, 700); }
+  const reportKey = params.get('key') || DEFAULT_REPORT_KEY;
+  function openReport(){ location.href = `/flagship-sample-report.html?key=${encodeURIComponent(reportKey)}`; }
+  if (params.get('no_redirect') !== '1') { setTimeout(openReport, 700); }
 </script>
 </head>
 <body>
@@ -34,8 +42,8 @@
       <div class="card"><b>Responsive</b>Desktop, tablet and mobile report experience.</div>
     </div>
     <div class="actions">
-      <a class="btn primary" href="/sample-report-viewer.html">Open Intelligence Report</a>
-      <a class="btn ghost" href="/sample-reports.html">View all sample reports</a>
+      <a class="btn primary" href="/flagship-sample-report.html?key=hospital-performance-intelligence">Open Intelligence Report</a>
+      <a class="btn ghost" href="/sample-reports.html">Explore the Intelligence Library</a>
     </div>
   </main>
 <script src="/assets/js/production-routing.js"></script>

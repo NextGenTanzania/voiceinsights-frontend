@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Capability Statement | VoiceInsights Africa</title>
+<meta name="description" content="Africa's Health Intelligence Platform — capability statement for ministries of health, hospital networks, donors and NGOs.">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/sector-framework.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>@media print{.pub-nav,footer,.no-print{display:none!important}}</style>
+</head>
+<body>
+
+<nav class="pub-nav no-print">
+  <div class="pub-nav-row1">
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+    </a>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right">
+      <div id="site-search-mount" style="width:180px;"></div>
+      <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="window.print()">Print / Save as PDF</button>
+      <a href="/contact.html?sector=health&amp;intent=demo" class="btn btn-primary btn-sm">Book a Health Demo</a>
+    </div>
+  </div>
+  <div class="pub-nav-collapse pub-nav-links">
+    <a href="/sectors/health.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Health Intelligence Suite</a>
+    <a href="/procurement.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Procurement</a>
+    <a href="/mobile-offline.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Mobile &amp; Offline</a>
+  </div>
+</nav>
+
+<main id="main-content">
+  <div id="sector-content"></div>
+</main>
+
+<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
+  <div style="flex:1 1 220px;">
+    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
+    </div>
+    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Sales Assets</div>
+    <a href="/enterprise-capability-statement.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Enterprise Capability Statement</a>
+    <a href="/executive-one-pager.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Executive One-Pager</a>
+    <a href="/meeting-leave-behind.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Meeting Leave-Behind</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Contact</div>
+    <a href="mailto:partnerships@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">partnerships@voiceinsightsafrica.com</a>
+    <a href="/contact.html?sector=health&amp;intent=demo" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book a Health Demo</a>
+  </div>
+</footer>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/site-search.js"></script>
+<script src="/assets/js/sector-page.js"></script>
+<script>
+  lucide.createIcons();
+  initSiteSearch('site-search-mount');
+  renderSectorPage({
+    id: 'health-capability-statement',
+    meta: { title: 'Health Capability Statement | VoiceInsights Africa', description: "Africa's Health Intelligence Platform — capability statement for ministries of health, hospital networks, donors and NGOs." },
+    hero: {
+      eyebrow: 'Health Capability Statement',
+      headline: "Africa's Health Intelligence Platform.",
+      subhead: 'Not a hospital information system, not an EMR — an intelligence layer above them. Patient, facility-staff and community-health-worker voice, turned into governed, decision-ready publications for ministries of health, hospital networks, donors and NGOs.',
+      primaryCta: { label: 'Book a Health Demo', href: '/contact.html?sector=health&intent=demo' },
+      secondaryCta: { label: 'View the Health Intelligence Suite', href: '/sectors/health.html' },
+      stats: [
+        { value: '25', label: 'Health Intelligence Suite modules mapped' },
+        { value: '7', label: 'Live flagship demonstration publications today' },
+        { value: '6', label: 'Distinct Health knowledge domains — not one generic health template' },
+      ],
+    },
+    executiveSummary: {
+      eyebrow: 'The flagship vertical',
+      headline: 'What makes this a Health Intelligence Platform, not a survey tool.',
+      paragraphs: [
+        'Health data systems typically measure what a facility recorded. This platform measures what patients, families and frontline health workers actually experienced — by phone, WhatsApp voice note, SMS or an offline-first mobile app — and routes it through six distinct Health knowledge domains (Hospital Performance, Maternal & Child Health, Disease Surveillance, Nutrition Security, Universal Health Coverage & Financing, and general Health Systems) before a single finding is written.',
+        'Every Health publication is generated by the same Unified Publication Runtime that powers every other sector on this platform — there is no separate "health renderer" that could silently drift from the assurance standards the rest of the catalogue meets.',
+      ],
+      pillars: [
+        { icon: '🏥', title: 'Hospital-level intelligence', description: 'Facility performance, patient-safety and staffing questions, answered from real evidence, not aggregate averages.' },
+        { icon: '👶', title: 'Maternal & child health continuity', description: 'District-level continuity gaps that a national average hides.' },
+        { icon: '🛡️', title: 'Surveillance & financing', description: 'Disease-surveillance reporting lag and UHC financial-protection gaps, both covered by dedicated knowledge domains.' },
+      ],
+    },
+    aiCapabilities: {
+      headline: 'Health-specific AI capabilities.',
+      items: [
+        { name: 'Voice transcription & translation', description: 'Structured, analyzable text from facility staff and patient interviews.', status: 'Live' },
+        { name: 'Distress-signal detection', description: 'Flags responses indicating patient risk for urgent human review.', status: 'Live' },
+        { name: 'Evidence-ranked prioritization', description: 'Ranks Health findings by real evidence-statistic values, not template position.', status: 'Live' },
+        { name: 'AI-assisted clinical decision support readiness assessment', description: 'Assesses institutional readiness for safe clinical AI adoption — on the roadmap, not a clinical AI product itself.', status: 'Roadmap' },
+      ],
+    },
+    publicationLibrary: {
+      headline: 'Health flagship publications available today.',
+      description: 'Real, governed synthetic demonstration publications — the same engine behind every export and viewer on this platform.',
+      domain: ['Health Intelligence', 'Hospital Performance Intelligence', 'Maternal & Child Health Intelligence', 'Disease Surveillance Intelligence', 'Nutrition Intelligence', 'UHC and Health Financing Intelligence'],
+      emptyStateText: 'No flagship Health publications yet — check back soon.',
+    },
+    securityGovernance: {
+      headline: 'Security, safeguarding and AI governance for health data.',
+      summaryPoints: [
+        'Distress-signal detection and safeguarding review are always active on Health data collection.',
+        'No generative or LLM model produces report text — every Health publication discloses its deterministic, rule-based engine explicitly.',
+      ],
+      links: [
+        { label: 'Security', href: '/security.html' },
+        { label: 'Safeguarding & Compliance', href: '/safeguarding.html' },
+        { label: 'Procurement Readiness', href: '/procurement.html' },
+      ],
+    },
+    faqs: {
+      headline: 'Common Health evaluation questions.',
+      items: [
+        { q: 'Is this a hospital information system or EMR?', a: 'No. It is a Health Intelligence Platform that turns voice-collected evidence into governed publications and decision intelligence — it does not replace a hospital management system, EMR, or clinical records system.' },
+        { q: 'How many Health modules are genuinely built today?', a: '7 of the 25 Health Intelligence Suite modules are Live, backed by real flagship publications. The remaining 18 are an honest, named roadmap, visible on the Health Intelligence Suite page — not claimed as built.' },
+      ],
+    },
+    cta: {
+      headline: 'See the Health Intelligence Suite on your own use case.',
+      description: 'Book a guided walkthrough using a real decision problem from your own health programme.',
+      primary: { label: 'Book a Health Demo', href: '/contact.html?sector=health&intent=demo' },
+      secondary: { label: 'Explore the Health Intelligence Suite', href: '/sectors/health.html' },
+    },
+  });
+</script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

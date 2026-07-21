@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Intelligence Suite | VoiceInsights Africa</title>
+<meta name="description" content="Africa's Health Intelligence Platform — voice-collected evidence, a governed editorial pipeline, and decision-ready publications across the Health Intelligence Suite's 25 modules.">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/sector-framework.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+<nav class="pub-nav">
+  <div class="pub-nav-row1">
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+    </a>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right">
+      <div id="site-search-mount" style="width:180px;"></div>
+      <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
+      <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="/contact.html?sector=health" class="btn btn-primary btn-sm">Book Demo</a>
+    </div>
+  </div>
+  <div class="pub-nav-collapse pub-nav-links">
+    <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
+    <a href="/solutions.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
+    <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
+    <a href="/sample-reports.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Intelligence Library</a>
+    <a href="/index.html#pricing" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Pricing</a>
+    <a href="/safeguarding.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
+  </div>
+</nav>
+
+<nav aria-label="Breadcrumb" style="max-width:1200px;margin:1rem auto 0;padding:0 5vw;font-size:.8rem;color:var(--text-dim);">
+  <a href="/index.html" style="color:var(--text-dim);">VoiceInsights Africa</a> ›
+  <a href="/industries.html" style="color:var(--text-dim);">Industries</a> ›
+  <span style="color:var(--text);">Health</span>
+</nav>
+
+<main id="main-content">
+  <div id="sector-content"></div>
+</main>
+
+<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
+  <div style="flex:1 1 220px;">
+    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
+    </div>
+    <p style="max-width:32ch; font-size:.85rem; line-height:1.7;">VoiceInsights Africa is an enterprise voice intelligence platform helping organizations collect, analyze, and transform multilingual voice data into decision-ready insights.</p>
+    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); margin-top:1rem; line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+    <div style="margin-top:.6rem; display:flex; gap:1rem;">
+      <a href="/privacy.html" style="font-size:.75rem; color:var(--text-dim);">Privacy Policy</a>
+      <a href="/terms.html" style="font-size:.75rem; color:var(--text-dim);">Terms of Service</a>
+    </div>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Sectors</div>
+    <a href="/sectors/health.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Health</a>
+    <a href="/sectors/education.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Education</a>
+    <a href="/sectors/agriculture.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Agriculture</a>
+    <a href="/sectors/humanitarian.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Humanitarian</a>
+    <a href="/sectors/governance.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Governance</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Trust</div>
+    <a href="/procurement.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Procurement Readiness</a>
+    <a href="/security.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Security</a>
+    <a href="/mobile-offline.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Mobile &amp; Offline</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Contact</div>
+    <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
+    <a href="/contact.html?sector=health" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+  </div>
+</footer>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/site-search.js"></script>
+<script src="/assets/js/sector-page.js"></script>
+<script>
+  lucide.createIcons();
+  initSiteSearch('site-search-mount');
+
+  const HEALTH_DOMAINS = ['Health Intelligence','Hospital Performance Intelligence','Maternal & Child Health Intelligence','Disease Surveillance Intelligence','Nutrition Intelligence','UHC and Health Financing Intelligence'];
+
+  const HEALTH_SECTOR_CONFIG = {
+    id: 'health',
+    meta: {
+      title: 'Health Intelligence Suite | VoiceInsights Africa',
+      description: "Africa's Health Intelligence Platform — voice-collected evidence, a governed editorial pipeline, and decision-ready publications across the Health Intelligence Suite's 25 modules.",
+    },
+    hero: {
+      eyebrow: 'Health Intelligence Suite',
+      headline: "Africa's Health Intelligence Platform",
+      subhead: 'Voice-collected evidence from patients, facility staff and community health workers, turned into governed, decision-ready publications for ministries of health, hospital networks, donors and NGOs — not a hospital management system, an intelligence layer above one.',
+      primaryCta: { label: 'Book a Health Demo', href: '/contact.html?sector=health' },
+      secondaryCta: { label: 'See the Publication Library', href: '#sector-publication-library-mount' },
+      stats: [
+        { value: '25', label: 'Health Intelligence Suite modules mapped' },
+        { value: '7', label: 'Live flagship demonstration publications' },
+        { value: '18', label: 'Modules on the near-term roadmap' },
+      ],
+    },
+    executiveSummary: {
+      eyebrow: 'Why Health',
+      headline: 'One evidence pipeline, from a patient’s voice to a ministry’s decision.',
+      paragraphs: [
+        'Most health data systems measure what a facility recorded. VoiceInsights Africa measures what patients, families and frontline health workers actually experienced — collected by phone call, WhatsApp voice note, SMS or an offline-first mobile app — and routes it through the same governed editorial pipeline every VoiceInsights Africa publication uses.',
+        'Every Health publication is generated by the Unified Publication Runtime — the same canonical engine serving every sector and every export format on this platform. There is no separate "health renderer" to maintain, and no risk of the health catalogue drifting from the assurance standards every other publication meets.',
+      ],
+      pillars: [
+        { icon: '🎙️', title: 'Voice-first collection', description: 'Reaches facility staff and patients no web form or app-only survey reaches — in the languages they actually speak.' },
+        { icon: '🧠', title: 'Governed editorial pipeline', description: 'Fifteen sector-knowledge domains and a shared editorial brain rank evidence and write findings — never a single generic template reused across sectors.' },
+        { icon: '✅', title: 'Assurance built in', description: 'Every Health publication passes the same evidence-traceability, statistical-documentation and accessibility gate every VoiceInsights Africa publication does.' },
+      ],
+    },
+    challenges: {
+      headline: 'The problems health leaders actually bring to us.',
+      items: [
+        { title: 'Fragmented facility data', description: 'Patient-safety, staffing and equipment signals sit in separate systems that never get read together before a decision is made.' },
+        { title: 'Workforce distribution & retention', description: 'Aggregate staffing numbers hide which facilities are genuinely understaffed at peak demand.' },
+        { title: 'Financing & UHC gaps', description: 'Enrollment in a scheme is not the same as real financial protection — benefit-package gaps often surface only after a catastrophic bill.' },
+        { title: 'Surveillance reporting lag', description: 'A slow district-level reporting chain can turn an early signal into a missed outbreak window.' },
+        { title: 'Supply-chain visibility', description: 'Stockouts are usually diagnosed after the fact, not while there is still time to reroute supply.' },
+      ],
+    },
+    whyVoiceInsights: {
+      headline: 'Why health leaders choose VoiceInsights Africa.',
+      items: [
+        { icon: '📞', title: 'Reaches who others miss', description: 'Multilingual voice collection across phone, WhatsApp, SMS and an offline mobile app — no smartphone or literacy assumption.' },
+        { icon: '🧾', title: 'One canonical publication engine', description: 'The Unified Publication Runtime is the single source of truth behind Preview, View Publication and every export format — no sector-specific renderer, ever.' },
+        { icon: '🔬', title: 'Fifteen real knowledge domains', description: 'Health alone spans six sector-knowledge domains (Hospital Performance, Maternal & Child Health, Disease Surveillance, Nutrition, UHC & Financing, and general Health Intelligence) — not one generic health template.' },
+        { icon: '🛡️', title: 'Safeguarding-aware by default', description: 'The same distress-signal detection built for humanitarian and citizen-feedback collection protects patients disclosing sensitive information.' },
+      ],
+    },
+    aiCapabilities: {
+      headline: 'AI capabilities behind the Health Intelligence Suite.',
+      items: [
+        { name: 'Voice transcription & translation', description: 'Converts recorded interviews and voice notes into structured, analyzable text across supported languages.', status: 'Live' },
+        { name: 'Distress-signal detection', description: 'Flags responses indicating risk to a patient or respondent for urgent human review — the same safeguarding pipeline used platform-wide.', status: 'Live' },
+        { name: 'Evidence-ranked prioritization', description: 'The editorial brain ranks findings by real evidence-statistic values, not by a fixed position in a template.', status: 'Live' },
+        { name: 'Publication quality & prestige review', description: 'Every Health publication passes the same evidence-traceability, statistical-documentation and consensus-review gate as any other sector.', status: 'Live' },
+        { name: 'AI-assisted clinical decision support readiness', description: 'A forthcoming module assessing an institution’s readiness for safe clinical AI adoption — not a clinical AI product itself.', status: 'Roadmap' },
+      ],
+    },
+    workflow: {
+      headline: 'How a Health publication gets made.',
+      steps: [
+        { index: 1, title: 'Facility & community voice collection', description: 'Patients, facility staff and community health workers respond by phone, WhatsApp, SMS or the offline enumerator app.' },
+        { index: 2, title: 'Transcription & translation', description: 'Voice responses become structured, analyzable text, with distress signals flagged for review as they arrive.' },
+        { index: 3, title: 'Editorial intelligence pipeline', description: 'The evidence is routed through a real sector-knowledge domain and ranked by the editorial brain before a single finding is written.' },
+        { index: 4, title: 'Governed publication', description: 'The Unified Publication Runtime composes one canonical publication object — the same one every export format and every viewer reads from.' },
+        { index: 5, title: 'Executive decision intelligence', description: 'Findings become owned, timelined, monitored recommendations — not just a chart.' },
+      ],
+    },
+    dashboardPreview: {
+      headline: 'What a Health dashboard shows leadership.',
+      description: 'An illustrative preview of the kind of executive view this evidence supports — not a live data connection.',
+      tiles: [
+        { value: '—', label: 'Facility response rate', trend: 'Illustrative', trendDirection: 'flat' },
+        { value: '—', label: 'Patient-safety flag rate', trend: 'Illustrative', trendDirection: 'flat' },
+        { value: '—', label: 'Coverage indicator trend', trend: 'Illustrative', trendDirection: 'flat' },
+        { value: '—', label: 'Surveillance reporting lag', trend: 'Illustrative', trendDirection: 'flat' },
+      ],
+    },
+    moduleShowcase: {
+      headline: 'The Health Intelligence Suite — 25 modules.',
+      modules: [
+        { name: 'Hospital Performance & Patient Safety Intelligence', decisionProblem: 'Which referral hospitals need capacity or staffing intervention vs. reclassification.', aiCapability: 'Evidence-ranked facility prioritization', linkedSampleKey: 'hospital-performance-intelligence', status: 'Live sample' },
+        { name: 'Maternal & Child Health Continuity Intelligence', decisionProblem: 'Where to target antenatal-continuity investment to cut under-five mortality fastest.', aiCapability: 'Evidence-ranked district prioritization', linkedSampleKey: 'maternal-child-health-intelligence', status: 'Live sample' },
+        { name: 'Disease Surveillance & Outbreak Readiness Intelligence', decisionProblem: "Which districts' reporting lag creates the highest outbreak-response risk.", aiCapability: 'Reporting-lag pattern detection', linkedSampleKey: 'disease-surveillance-intelligence', status: 'Live sample' },
+        { name: 'Nutrition Security Intelligence', decisionProblem: 'Whether stunting drivers are food-access or care-practice, by sub-population.', aiCapability: 'Sub-population driver decomposition', linkedSampleKey: 'nutrition-security-intelligence', status: 'Live sample' },
+        { name: 'Universal Health Coverage & Financing Intelligence', decisionProblem: 'Which benefit-package gaps drive catastrophic out-of-pocket spending.', aiCapability: 'Benefit-package gap analysis', linkedSampleKey: 'health-financing-uhc-intelligence', status: 'Live sample' },
+        { name: 'Primary Healthcare Access & Continuity Intelligence', decisionProblem: 'Facility-level service-improvement contracting priorities.', aiCapability: 'Community-provider accountability scoring', linkedSampleKey: 'community-scorecard-intelligence', status: 'Live sample' },
+        { name: 'Health Systems Statistical Intelligence', decisionProblem: 'Effective-coverage estimation and equity decomposition.', aiCapability: 'Weighted coverage and equity modeling', linkedSampleKey: 'statistical-intelligence', status: 'Live sample' },
+        { name: 'Health Workforce Distribution Intelligence', decisionProblem: 'Whether shortage or retention failure explains the largest access gap.', status: 'Roadmap' },
+        { name: 'Essential Medicines & Supply Chain Intelligence', decisionProblem: 'Which facility tier’s stockouts are forecasting failures vs. logistics failures.', status: 'Roadmap' },
+        { name: 'Mental Health Access Intelligence', decisionProblem: 'Where to pilot community-based referral pathways first.', status: 'Roadmap' },
+        { name: 'Digital Health & Telemedicine Adoption Intelligence', decisionProblem: 'Urban vs. rural telemedicine scale-up sequencing.', status: 'Roadmap' },
+        { name: 'Non-Communicable Disease Burden Intelligence', decisionProblem: 'Which risk-factor cluster warrants the next screening investment.', status: 'Roadmap' },
+        { name: 'Adolescent & Youth Health Intelligence', decisionProblem: 'Which barrier most limits adolescent health-seeking.', status: 'Roadmap' },
+        { name: 'Health Emergency & Outbreak Response Coordination', decisionProblem: 'Which coordination gap most delayed the last response.', status: 'Roadmap' },
+        { name: 'Private Health Sector Regulation & Quality Intelligence', decisionProblem: 'Where regulatory attention yields the largest quality gain.', status: 'Roadmap' },
+        { name: 'Community Health Worker Performance Intelligence', decisionProblem: 'Which digital-tool barrier most limits CHW reporting completeness.', status: 'Roadmap' },
+        { name: 'Immunization Coverage & Cold Chain Intelligence', decisionProblem: 'Where cold-chain failure most threatens coverage targets.', status: 'Roadmap' },
+        { name: 'Reproductive Health & Family Planning Intelligence', decisionProblem: 'Which access barrier most limits method choice.', status: 'Roadmap' },
+        { name: 'Health Facility Infrastructure & Equipment Readiness', decisionProblem: 'Which facilities need capital investment vs. maintenance.', status: 'Roadmap' },
+        { name: 'Patient Experience & Trust Intelligence', decisionProblem: 'Which trust deficit most threatens care-seeking.', status: 'Roadmap' },
+        { name: 'Health Insurance Claims & Fraud Intelligence', decisionProblem: 'Where claims anomalies indicate fraud vs. genuine need.', status: 'Roadmap' },
+        { name: 'HIV / TB / Malaria Programme Intelligence', decisionProblem: "Which programme's cascade drop-off is most correctable.", status: 'Roadmap' },
+        { name: 'WASH in Health Facilities Intelligence', decisionProblem: 'Which facilities’ WASH gaps most threaten infection control.', status: 'Roadmap' },
+        { name: 'Health Data Governance & Interoperability Intelligence', decisionProblem: 'Which interoperability gap most limits continuity of care.', status: 'Roadmap' },
+        { name: 'AI-Assisted Clinical Decision Support Readiness Intelligence', decisionProblem: 'Which readiness gap most limits safe AI adoption.', status: 'Roadmap' },
+      ],
+    },
+    publicationLibrary: {
+      headline: 'Health flagship publications.',
+      description: 'Real, governed synthetic demonstration publications generated by the Unified Publication Runtime — the same engine behind every export and every viewer on this platform.',
+      domain: HEALTH_DOMAINS,
+      emptyStateText: 'No flagship Health publications yet — check back soon.',
+    },
+    integrations: {
+      headline: 'Where Health Intelligence connects.',
+      items: [
+        { name: 'DHIS2', description: 'District Health Information System 2 — integration target' },
+        { name: 'OpenMRS / EHR systems', description: 'Electronic medical record platforms — integration target' },
+        { name: 'National HMIS', description: 'National health management information systems — integration target' },
+      ],
+    },
+    securityGovernance: {
+      headline: 'Security, privacy and AI governance.',
+      summaryPoints: [
+        'Patient and respondent data is handled under the same consent, encryption and role-based access controls documented on our Security and Privacy pages.',
+        'Distress-signal detection and safeguarding review are always active on Health data collection.',
+        'Every flagship publication discloses its AI governance model in plain language: no generative or LLM model produces report text — a deterministic, versioned rule-based engine does.',
+      ],
+      links: [
+        { label: 'Security', href: '/security.html' },
+        { label: 'Privacy Policy', href: '/privacy.html' },
+        { label: 'Safeguarding & Compliance', href: '/safeguarding.html' },
+        { label: 'Trust Center', href: '/security/trust-center.html' },
+      ],
+    },
+    customerOutcomes: {
+      headline: 'Illustrative decision scenarios.',
+      items: [
+        { label: 'Synthetic demonstration scenario', quote: 'The referral-hospital prioritization made it obvious which three facilities needed staffing intervention this quarter, not a facility-wide freeze.', context: 'Ministry of Health planning use case' },
+        { label: 'Synthetic demonstration scenario', quote: 'Seeing the antenatal-continuity gap by district — not just a national average — changed where we targeted the next funding round.', context: 'Donor programme use case' },
+        { label: 'Synthetic demonstration scenario', quote: 'The reporting-lag pattern surfaced a district we would not have flagged from the national dashboard alone.', context: 'Disease surveillance use case' },
+      ],
+    },
+    faqs: {
+      headline: 'Health Intelligence Suite — frequently asked questions.',
+      items: [
+        { q: 'Is this a hospital information system or EMR?', a: 'No. VoiceInsights Africa is a Health Intelligence Platform — it turns voice-collected evidence into governed publications and decision intelligence. It is not a hospital management system, an EMR, or a clinical records system, and it does not replace one.' },
+        { q: 'Is the data in these sample publications real?', a: 'No. Every flagship Health publication is a clearly labeled synthetic demonstration — real methodology and a real editorial pipeline, but synthetic people, quotations, locations and statistics, never presented as official statistics.' },
+        { q: 'Does an AI model write the findings?', a: 'No generative or LLM model produces report text. A deterministic, versioned, rule-based engine does — the same disclosure appears on every flagship publication’s own AI governance section.' },
+        { q: 'How does data collection work without smartphones?', a: 'Phone call, WhatsApp voice note, SMS, or an offline-first mobile app for enumerators working with zero connectivity — the same multi-channel collection used across every VoiceInsights Africa sector.' },
+        { q: 'Can this integrate with our existing HMIS or DHIS2 instance?', a: 'DHIS2, OpenMRS/EHR systems and national HMIS platforms are named integration targets on our roadmap — reach out to discuss your specific system.' },
+      ],
+    },
+    cta: {
+      headline: 'See the Health Intelligence Suite on your own use case.',
+      description: 'Book a guided walkthrough using a real decision problem from your own health programme.',
+      primary: { label: 'Book a Health Demo', href: '/contact.html?sector=health' },
+      secondary: { label: 'Explore the Intelligence Library', href: '/sample-reports.html' },
+    },
+    bookDemo: {
+      headline: 'Ready to talk?',
+      description: 'Tell us about your health programme and we’ll walk through a live pilot before any commercial discussion.',
+      formHref: '/contact.html?sector=health',
+    },
+    relatedSectors: [
+      { label: 'Education', href: '/sectors/education.html' },
+      { label: 'Agriculture', href: '/sectors/agriculture.html' },
+      { label: 'Humanitarian', href: '/sectors/humanitarian.html' },
+      { label: 'Governance', href: '/sectors/governance.html' },
+    ],
+  };
+
+  renderSectorPage(HEALTH_SECTOR_CONFIG);
+</script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

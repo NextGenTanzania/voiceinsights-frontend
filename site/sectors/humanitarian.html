@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Humanitarian Intelligence | VoiceInsights Africa</title>
+<meta name="description" content="Voice-collected evidence on severity, protection and accountability to affected people, built on the same Unified Publication Runtime as every VoiceInsights Africa sector.">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/sector-framework.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+<nav class="pub-nav">
+  <div class="pub-nav-row1">
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+    </a>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right">
+      <div id="site-search-mount" style="width:180px;"></div>
+      <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
+      <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="/contact.html?sector=humanitarian" class="btn btn-primary btn-sm">Book Demo</a>
+    </div>
+  </div>
+  <div class="pub-nav-collapse pub-nav-links">
+    <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
+    <a href="/solutions.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
+    <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
+    <a href="/sample-reports.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Intelligence Library</a>
+    <a href="/safeguarding.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
+  </div>
+</nav>
+
+<nav aria-label="Breadcrumb" style="max-width:1200px;margin:1rem auto 0;padding:0 5vw;font-size:.8rem;color:var(--text-dim);">
+  <a href="/index.html" style="color:var(--text-dim);">VoiceInsights Africa</a> ›
+  <a href="/industries.html" style="color:var(--text-dim);">Industries</a> ›
+  <span style="color:var(--text);">Humanitarian</span>
+</nav>
+
+<main id="main-content">
+  <div id="sector-content"></div>
+</main>
+
+
+<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
+  <div style="flex:1 1 220px;">
+    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
+    </div>
+    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Sectors</div>
+    <a href="/sectors/health.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Health</a>
+    <a href="/sectors/education.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Education</a>
+    <a href="/sectors/agriculture.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Agriculture</a>
+    <a href="/sectors/humanitarian.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Humanitarian</a>
+    <a href="/sectors/governance.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Governance</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Contact</div>
+    <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
+    <a href="/contact.html?sector=humanitarian" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+  </div>
+</footer>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/site-search.js"></script>
+<script src="/assets/js/sector-page.js"></script>
+<script>
+  lucide.createIcons();
+  initSiteSearch('site-search-mount');
+  renderSectorPage({
+    id: 'humanitarian',
+    meta: { title: 'Humanitarian Intelligence | VoiceInsights Africa', description: 'Voice-collected evidence on severity, protection and accountability to affected people.' },
+    hero: {
+      eyebrow: 'Humanitarian Intelligence',
+      headline: 'Severity, protection and accountability to affected people.',
+      subhead: 'Rapid, voice-collected needs assessments and feedback loops, routed through the same governed editorial pipeline and canonical publication engine as every VoiceInsights Africa sector.',
+      primaryCta: { label: 'Book a Humanitarian Demo', href: '/contact.html?sector=humanitarian' },
+      secondaryCta: { label: 'Explore the Intelligence Library', href: '/sample-reports.html' },
+    },
+    executiveSummary: {
+      eyebrow: 'Why Humanitarian',
+      headline: 'The same governed engine, applied to a different decision problem.',
+      paragraphs: ['Severity, protection risk and accountability to affected people rarely surface through caseload counts alone. Voice-collected feedback captures them directly — including a real-time distress-signal safeguard — analyzed through the same editorial pipeline, quality gate and Unified Publication Runtime every other sector on this platform uses.'],
+    },
+    challenges: {
+      headline: 'The problems humanitarian leaders bring to us.',
+      items: [
+        { title: 'Severity vs. caseload', description: 'Caseload size alone doesn\'t indicate severity — voice feedback surfaces which locations need the next allocation round most.' },
+        { title: 'Protection mainstreaming', description: 'Understanding protection risk requires safe, dignified channels for disclosure, not just service-delivery counts.' },
+        { title: 'Accountability to affected people', description: 'Closing the feedback loop within a committed window, not letting it sit unanswered.' },
+      ],
+    },
+    whyVoiceInsights: {
+      headline: 'Why humanitarian responders choose VoiceInsights Africa.',
+      items: [
+        { icon: '📞', title: 'Reaches who others miss', description: 'Multilingual voice collection across phone, WhatsApp, SMS and an offline mobile app reaches affected people that in-person-only assessments miss.' },
+        { icon: '🧾', title: 'One canonical publication engine', description: 'The Unified Publication Runtime is the single source of truth behind Preview, View Publication and every export format — no sector-specific renderer, ever.' },
+        { icon: '🔬', title: 'Three real knowledge domains', description: 'Humanitarian spans three sector-knowledge domains — Humanitarian, Food Security and Displacement and Durable Solutions — not one generic emergency template.' },
+        { icon: '🛡️', title: 'Safeguarding-aware by default', description: 'Real-time distress-signal detection protects affected people disclosing protection risk during collection.' },
+      ],
+    },
+    aiCapabilities: {
+      headline: 'AI capabilities behind Humanitarian Intelligence.',
+      items: [
+        { name: 'Voice transcription & translation', description: 'Converts recorded interviews and voice notes into structured, analyzable text across supported languages.', status: 'Live' },
+        { name: 'Distress-signal detection', description: 'Flags responses indicating risk to an affected person for urgent human review — the same safeguarding pipeline used platform-wide.', status: 'Live' },
+        { name: 'Evidence-ranked prioritization', description: 'The editorial brain ranks findings by real evidence-statistic values, not by a fixed position in a template.', status: 'Live' },
+        { name: 'Publication quality & prestige review', description: 'Every Humanitarian publication passes the same evidence-traceability, statistical-documentation and consensus-review gate as any other sector.', status: 'Live' },
+        { name: 'Severity-ranking scoring', description: 'A forthcoming module estimating which locations show the sharpest multisector severity, beyond caseload alone — not an automated allocation decision.', status: 'Roadmap' },
+      ],
+    },
+    workflow: {
+      headline: 'How a Humanitarian publication gets made.',
+      steps: [
+        { index: 1, title: 'Affected-population voice collection', description: 'Affected people respond by phone, WhatsApp, SMS or the offline enumerator app, with real-time distress-signal monitoring active throughout.' },
+        { index: 2, title: 'Transcription & translation', description: 'Voice responses become structured, analyzable text, with distress signals flagged for urgent review as they arrive.' },
+        { index: 3, title: 'Editorial intelligence pipeline', description: 'The evidence is routed through the Humanitarian, Food Security or Displacement and Durable Solutions knowledge domain and ranked by the editorial brain before a single finding is written.' },
+        { index: 4, title: 'Governed publication', description: 'The Unified Publication Runtime composes one canonical publication object — the same one every export format and every viewer reads from.' },
+        { index: 5, title: 'Executive decision intelligence', description: 'Findings become owned, timelined, monitored recommendations — not just a chart.' },
+      ],
+    },
+    dashboardPreview: {
+      headline: 'What a Humanitarian dashboard shows leadership.',
+      description: 'An illustrative preview of the kind of executive view this evidence supports — not a live data connection.',
+      tiles: [
+        { value: '—', label: 'Multisector severity score', trend: 'Illustrative', trendDirection: 'flat' },
+        { value: '—', label: 'Protection referral coverage', trend: 'Illustrative', trendDirection: 'flat' },
+        { value: '—', label: 'Feedback-loop closure rate', trend: 'Illustrative', trendDirection: 'flat' },
+        { value: '—', label: 'Affected-population response rate', trend: 'Illustrative', trendDirection: 'flat' },
+      ],
+    },
+    moduleShowcase: {
+      headline: 'The Humanitarian Intelligence module set.',
+      modules: [
+        { name: 'Severity & Needs Intelligence', decisionProblem: 'Which locations need the next allocation round most, beyond caseload size alone.', aiCapability: 'Evidence-ranked location prioritization', linkedSampleKey: 'humanitarian-needs-assessment', status: 'Live sample' },
+        { name: 'Food Security Intelligence', decisionProblem: 'Which market-systems failure most drives household food insecurity.', aiCapability: 'Evidence-ranked market prioritization', linkedSampleKey: 'food-security-intelligence', status: 'Live sample' },
+        { name: 'Displacement & Durable Solutions Intelligence', decisionProblem: 'Which durable-solutions pathway most reduces protracted displacement risk.', aiCapability: 'Evidence-ranked pathway prioritization', linkedSampleKey: 'displacement-durable-solutions-intelligence', status: 'Live sample' },
+        { name: 'Protection Mainstreaming Intelligence', decisionProblem: 'Where protection referral-pathway gaps leave the highest-risk cases unaddressed.', status: 'Roadmap' },
+        { name: 'Accountability & Feedback-Loop Intelligence', decisionProblem: 'Which feedback loops are not closing within the committed response window.', status: 'Roadmap' },
+      ],
+    },
+    publicationLibrary: {
+      headline: 'Humanitarian-related flagship publications.',
+      description: 'Real, governed synthetic demonstration publications generated by the Unified Publication Runtime — including the Food Security and Displacement and Durable Solutions sub-domains.',
+      domain: ['Humanitarian Intelligence', 'Food Security Intelligence', 'Displacement and Durable Solutions Intelligence'],
+      emptyStateText: 'No flagship Humanitarian publications yet — check back soon.',
+    },
+    integrations: {
+      headline: 'Where Humanitarian Intelligence connects.',
+      items: [
+        { name: 'Cluster / inter-agency coordination platforms', description: 'Humanitarian cluster and inter-agency information-management systems — integration target' },
+        { name: 'Protection case-management systems', description: 'Protection referral and case-management platforms — integration target' },
+        { name: 'Early-warning / market-monitoring systems', description: 'Food-security early-warning and market-monitoring platforms — integration target' },
+      ],
+    },
+    securityGovernance: {
+      headline: 'Security, privacy and AI governance.',
+      summaryPoints: [
+        'Affected-population data is handled under the same consent, encryption and role-based access controls documented on our Security and Privacy pages, with do-no-harm and protection-risk safeguards active throughout.',
+        'Real-time distress-signal detection and safeguarding review are always active on Humanitarian data collection.',
+        'Every flagship publication discloses its AI governance model in plain language: no generative or LLM model produces report text — a deterministic, versioned rule-based engine does.',
+      ],
+      links: [
+        { label: 'Security', href: '/security.html' },
+        { label: 'Privacy Policy', href: '/privacy.html' },
+        { label: 'Safeguarding & Compliance', href: '/safeguarding.html' },
+        { label: 'Trust Center', href: '/security/trust-center.html' },
+      ],
+    },
+    faqs: {
+      headline: 'Humanitarian Intelligence — frequently asked questions.',
+      items: [
+        { q: 'How is distress detected during collection?', a: 'The platform watches for distress signals during voice collection and immediately flags that response for urgent human review — the same safeguarding pipeline used across every sector.' },
+        { q: 'How deep is Humanitarian coverage today?', a: 'Humanitarian now runs the same enterprise page framework as Health — real modules, workflow, AI capabilities and governance sections — alongside three real flagship publications spanning Humanitarian, Food Security, and Displacement and Durable Solutions.' },
+      ],
+    },
+    cta: {
+      headline: 'Interested in a Humanitarian pilot?',
+      description: 'Tell us about your response and we can scope a pilot using this same governed pipeline.',
+      primary: { label: 'Book a Demo', href: '/contact.html?sector=humanitarian' },
+      secondary: { label: 'See Health, our deepest sector', href: '/sectors/health.html' },
+    },
+    bookDemo: { headline: 'Ready to talk?', description: 'We\'ll walk through a live pilot before any commercial discussion.', formHref: '/contact.html?sector=humanitarian' },
+    relatedSectors: [
+      { label: 'Health', href: '/sectors/health.html' },
+      { label: 'Education', href: '/sectors/education.html' },
+      { label: 'Agriculture', href: '/sectors/agriculture.html' },
+      { label: 'Governance', href: '/sectors/governance.html' },
+    ],
+  });
+</script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise Capability Statement | VoiceInsights Africa</title>
+<meta name="description" content="What VoiceInsights Africa does, how it is deployed, and what evidence supports it — a capability statement for enterprise, government and donor evaluation.">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/sector-framework.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>@media print{.pub-nav,footer,.no-print{display:none!important}}</style>
+</head>
+<body>
+
+<nav class="pub-nav no-print">
+  <div class="pub-nav-row1">
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+    </a>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right">
+      <div id="site-search-mount" style="width:180px;"></div>
+      <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="window.print()">Print / Save as PDF</button>
+      <a href="/contact.html?intent=demo" class="btn btn-primary btn-sm">Book Demo</a>
+    </div>
+  </div>
+  <div class="pub-nav-collapse pub-nav-links">
+    <a href="/sectors/health.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Health</a>
+    <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
+    <a href="/procurement.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Procurement</a>
+    <a href="/enterprise-sales.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Enterprise Sales</a>
+  </div>
+</nav>
+
+<main id="main-content">
+  <div id="sector-content"></div>
+</main>
+
+<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
+  <div style="flex:1 1 220px;">
+    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
+    </div>
+    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Sales Assets</div>
+    <a href="/enterprise-capability-statement.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Enterprise Capability Statement</a>
+    <a href="/health-capability-statement.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Health Capability Statement</a>
+    <a href="/executive-one-pager.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Executive One-Pager</a>
+    <a href="/meeting-leave-behind.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Meeting Leave-Behind</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Contact</div>
+    <a href="mailto:partnerships@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">partnerships@voiceinsightsafrica.com</a>
+    <a href="/contact.html?intent=demo" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+  </div>
+</footer>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/site-search.js"></script>
+<script src="/assets/js/sector-page.js"></script>
+<script>
+  lucide.createIcons();
+  initSiteSearch('site-search-mount');
+  renderSectorPage({
+    id: 'enterprise-capability-statement',
+    meta: { title: 'Enterprise Capability Statement | VoiceInsights Africa', description: 'What VoiceInsights Africa does, how it is deployed, and what evidence supports it.' },
+    hero: {
+      eyebrow: 'Enterprise Capability Statement',
+      headline: 'Voice intelligence infrastructure for organizations that need decision-ready evidence.',
+      subhead: 'VoiceInsights Africa collects data by phone call, WhatsApp, SMS, web and an offline-first mobile app, then runs it through one governed editorial pipeline and a single canonical publication engine — the Unified Publication Runtime — to produce decision-ready reports across every sector we serve.',
+      primaryCta: { label: 'Book a Demo', href: '/contact.html?intent=demo' },
+      secondaryCta: { label: 'Request a Proposal', href: '/contact.html?intent=proposal' },
+      stats: [
+        { value: '33', label: 'Governed flagship demonstration publications, spanning 14 sectors' },
+        { value: '5', label: 'Collection channels — phone, WhatsApp, SMS, web, offline app' },
+        { value: '5', label: 'Native export formats per publication — PDF, DOCX, PPTX, XLSX, HTML' },
+      ],
+    },
+    executiveSummary: {
+      eyebrow: 'What we do',
+      headline: 'One platform, one publication engine, every sector.',
+      paragraphs: [
+        'Most survey platforms stop at data collection. VoiceInsights Africa continues past that point: every response is transcribed, routed through a real editorial pipeline specific to its sector, and composed into a governed publication — the same canonical object powering the interactive view, the PDF, and every other export format. There is no separate system behind the PDF than the one behind the web page.',
+        'This is a deliberate architectural choice, not a marketing claim: an organization that wants a hospital-performance report and a citizen-feedback report gets two genuinely different pieces of analysis, not the same template with the nouns swapped.',
+      ],
+      pillars: [
+        { icon: '🎙️', title: 'Multichannel voice collection', description: 'Phone call, WhatsApp voice note, SMS fallback, web form, and an offline-first mobile app for zero-connectivity fieldwork.' },
+        { icon: '🧭', title: 'Sector-specific editorial pipeline', description: '18 distinct knowledge domains route evidence through sector-appropriate frameworks before a single sentence is written.' },
+        { icon: '📄', title: 'One canonical publication engine', description: 'The same Unified Publication Runtime composes the interactive view, the PDF and every export — never a second, inconsistent renderer.' },
+      ],
+    },
+    aiCapabilities: {
+      headline: 'What is real today, and what is on the roadmap.',
+      items: [
+        { name: 'Voice transcription & translation', description: 'Converts recorded interviews and voice notes into structured, analyzable text.', status: 'Live' },
+        { name: 'Distress-signal detection', description: 'Flags responses indicating risk to a respondent for urgent human review before they sit in a general dataset.', status: 'Live' },
+        { name: 'Evidence-ranked editorial prioritization', description: 'Findings are ranked by real evidence-statistic values computed at generation time, not by a fixed template position.', status: 'Live' },
+        { name: 'Publication quality & consensus review', description: 'Every publication passes an evidence-traceability, statistical-documentation and multi-editor consensus gate before release.', status: 'Live' },
+        { name: 'AI-assisted clinical decision support readiness assessment', description: 'A forthcoming module assessing an institution\'s readiness for safe clinical AI adoption — not a clinical AI product.', status: 'Roadmap' },
+      ],
+    },
+    integrations: {
+      headline: 'Where the platform connects.',
+      items: [
+        { name: 'DHIS2', description: 'District Health Information System 2 — integration target' },
+        { name: 'National HMIS / EMR systems', description: 'Health management information and electronic medical record platforms — integration target' },
+        { name: 'API & Integrations', description: 'REST access to your own collected data — see the API & Integrations page' },
+      ],
+    },
+    securityGovernance: {
+      headline: 'Security, privacy and AI governance.',
+      summaryPoints: [
+        'Consent, encryption and role-based access control are core features, not add-ons — every voice interaction opens with a spoken consent request.',
+        'No generative or LLM model produces report text: a deterministic, versioned, rule-based engine does, and every publication discloses this explicitly.',
+        'A full evidence index of what is and is not yet independently verified is public on our Procurement Readiness page — we do not claim certifications we do not hold.',
+      ],
+      links: [
+        { label: 'Security', href: '/security.html' },
+        { label: 'Privacy Policy', href: '/privacy.html' },
+        { label: 'Procurement Readiness', href: '/procurement.html' },
+        { label: 'Trust Center', href: '/security/trust-center.html' },
+      ],
+    },
+    faqs: {
+      headline: 'Common evaluation questions.',
+      items: [
+        { q: 'Which sectors does the platform currently serve?', a: 'Health is the flagship, most deeply built vertical. The current 33-publication demonstration library also spans Government, NGOs/Development Partners, Hospitals, Agriculture, Humanitarian Response, Financial Services, Workforce Experience, Education, Climate Adaptation and Social Protection — see the <a href="/sample-reports.html" style="color:var(--accent-2);">Intelligence Library</a> for real examples.' },
+        { q: 'Is the sample data real?', a: 'No. Every flagship demonstration publication is clearly labeled synthetic — real methodology and a real editorial pipeline, but synthetic people, quotations, locations and statistics, never presented as official data.' },
+        { q: 'Can we pilot before committing?', a: 'Yes — request a demo and we will walk through a live pilot on your own use case before any commercial discussion.' },
+      ],
+    },
+    cta: {
+      headline: 'See it on your own use case.',
+      description: 'Book a guided walkthrough, or request a formal proposal if you are ready to move toward procurement.',
+      primary: { label: 'Book a Demo', href: '/contact.html?intent=demo' },
+      secondary: { label: 'Request a Proposal', href: '/contact.html?intent=proposal' },
+    },
+  });
+</script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

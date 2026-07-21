@@ -1,0 +1,57 @@
+/* ============================================================
+   VoiceInsights Africa — Unified Design Tokens (Milestone A)
+   Additive only: every value here either restates an existing
+   style.css token by reference or fills a genuine gap (spacing,
+   elevation, motion, focus). Nothing here overrides an existing
+   color/type/radius value — style.css remains the source of
+   truth for those. Load this AFTER style.css.
+   ============================================================ */
+
+:root {
+  /* Spacing scale (rem) — used by new Milestone A components */
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* Elevation scale — formalizes the ad hoc shadow values already
+     used across style.css (card, sidebar, dropdown) into 3 reusable
+     steps, so new components stop inventing one-off shadow strings. */
+  --elevation-1: 0 1px 0 rgba(255,255,255,.02) inset, 0 6px 16px -10px rgba(0,0,0,.5);
+  --elevation-2: 0 16px 32px -14px rgba(0,0,0,.6);
+  --elevation-3: 0 22px 48px -18px rgba(0,0,0,.65);
+
+  /* Motion — the existing convention across style.css is .12s-.2s ease;
+     named here so new components match it instead of guessing. */
+  --motion-fast: .12s ease;
+  --motion-base: .18s ease;
+  --motion-slow: .25s ease;
+
+  /* Focus ring — restates the existing global :focus-visible rule as a
+     token so new components can apply the identical treatment to
+     custom controls (e.g. inside a modal or dropdown) consistently. */
+  --focus-ring: 2px solid var(--accent);
+  --focus-ring-offset: 2px;
+
+  /* Chart tokens — aliases onto the existing semantic palette so charts
+     never invent their own colors; kept distinct from the brand accent
+     per the dataviz convention of separating semantic/categorical color
+     from a single brand accent. */
+  --chart-1: var(--accent);
+  --chart-2: var(--accent-2);
+  --chart-3: var(--success);
+  --chart-4: var(--warn);
+  --chart-5: var(--danger);
+  --chart-grid-line: var(--border);
+}
+
+/* Breakpoints are documented here for consistency, not enforced as CSS
+   custom properties — custom properties cannot be interpolated into an
+   @media query. Every new Milestone A component's responsive rules use
+   these exact widths, matching the ad hoc set already in style.css:
+   480px (small phone), 640px (phone), 860px (tablet portrait),
+   900px (tablet landscape), 1100px (small desktop). */

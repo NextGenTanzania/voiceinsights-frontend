@@ -7,26 +7,51 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Log in — VoiceInsights Africa</title>
 <link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
 <script src="https://unpkg.com/lucide@latest"></script>
-<style>
-  .site-lang-switch { display:flex; border:1px solid var(--border-strong); border-radius:999px; overflow:hidden; }
-  .site-lang-switch button { padding:.4rem .7rem; background:transparent; border:none; color:var(--text-dim); cursor:pointer; font-family:var(--font-body); font-weight:700; font-size:.72rem; letter-spacing:.03em; }
-  .site-lang-switch button.active { background:var(--accent); color:var(--accent-ink); }
-</style>
 </head>
-<body style="min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem;">
-<h1 class="visually-hidden">Log in — VoiceInsights Africa</h1>
-  <div class="site-lang-switch" id="site-lang-switch" style="margin-bottom:1.5rem;">
-    <button data-lang="en">EN</button>
-    <button data-lang="fr">FR</button>
-    <button data-lang="pt">PT</button>
-    <button data-lang="sw">SW</button>
+<body>
+
+<div style="background:var(--surface-3); color:var(--text-muted); text-align:center; padding:.5rem 1rem; font-size:.78rem; font-weight:600; letter-spacing:.01em;">
+  Trusted Voice Research Infrastructure for NGOs, Governments &amp; Global Development Partners
+</div>
+
+<nav class="pub-nav">
+  <div class="pub-nav-row1">
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+    </a>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right">
+      <div id="site-search-mount" style="width:200px;"></div>
+      <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
+      <div class="site-lang-switch" id="site-lang-switch">
+        <button type="button" data-lang="en" class="active">EN</button>
+        <button type="button" data-lang="fr">FR</button>
+        <button type="button" data-lang="pt">PT</button>
+        <button type="button" data-lang="sw">SW</button>
+      </div>
+      <a href="/contact.html" class="btn btn-primary btn-sm">Book Demo</a>
+    </div>
   </div>
+  <div class="pub-nav-collapse pub-nav-links">
+    <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
+    <a href="/solutions.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
+    <a href="/sample-reports.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Intelligence Library</a>
+    <a href="/security.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Security</a>
+    <a href="/contact.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Support</a>
+  </div>
+</nav>
+
+<main id="main-content" style="min-height:calc(100vh - 220px); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2.5rem 2rem;">
+<h1 class="visually-hidden">Log in — VoiceInsights Africa</h1>
 
   <div style="width:100%; max-width:400px;">
-    <div style="display:flex;align-items:center;gap:.6rem; margin-bottom:2.5rem; justify-content:center;">
-      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:42px; width:auto;">
-      <span style="font-family:var(--font-display); font-weight:600; font-size:1.2rem;">VoiceInsights Africa</span>
+    <div style="text-align:center; margin-bottom:1.5rem;">
+      <span class="badge badge-accent">Enterprise Application</span>
+      <p class="muted-note" style="margin-top:.6rem; font-size:.82rem;">Secure authentication, trusted by governments, NGOs, research institutions and development partners.</p>
     </div>
 
     <div class="card">
@@ -55,9 +80,13 @@
         <button class="btn btn-primary" style="width:100%; justify-content:center;" type="submit" id="tfa-submit-btn">Verify</button>
       </form>
 
-      <div style="margin-top:1rem; text-align:center;" id="demo-creds-note">
-        <button type="button" id="demo-creds-toggle" class="muted-note" style="text-decoration:underline;cursor:pointer;background:none;border:0;padding:0;">Want to see a demo login?</button>
-        <div class="muted-note" id="demo-creds-detail" style="display:none; margin-top:.6rem;">Interactive M&amp;E demo: <b style="color:var(--text-muted)">M&amp;E.demo@voiceinsightsafrica.com</b> / PIN: <b style="color:var(--text-muted)">DemoLogin2026</b><br><span style="font-size:.72rem">Synthetic data only. All demo buttons work as previews, but no production data can be changed.</span></div>
+      <div style="margin-top:1.2rem; padding-top:1rem; border-top:1px solid var(--border); text-align:center;" id="demo-creds-note">
+        <p class="muted-note" style="margin-bottom:.7rem;">Interactive product demonstration is being prepared. Request a guided demo.</p>
+        <div style="display:flex; gap:.5rem; justify-content:center; flex-wrap:wrap;">
+          <a href="/contact.html" class="btn btn-ghost btn-sm">Request Demo</a>
+          <a href="/contact.html" class="btn btn-ghost btn-sm">Contact Sales</a>
+          <a href="/index.html" class="btn btn-ghost btn-sm">Return to Website</a>
+        </div>
       </div>
 
       <div style="margin-top:1.2rem; display:flex; justify-content:space-between; font-size:.82rem;">
@@ -69,11 +98,52 @@
     <p style="text-align:center; margin-top:1.5rem; font-size:.78rem; color:var(--text-dim);">
       <span id="t-internal-team">Internal team? </span><a href="/admin/dashboard.html" id="t-admin-link" style="color:var(--text-muted);">Log in Admin Console</a>
     </p>
+
+    <div class="alert alert-info" style="margin-top:1.5rem; font-size:.8rem;">
+      <span class="alert-icon">🔐</span>
+      <div>
+        <div class="alert-title">Multi-factor authentication</div>
+        Privileged accounts require MFA after a short grace period. <span class="badge badge-neutral" style="margin-left:.3em;">Single sign-on (SSO) — Coming soon</span>
+      </div>
+    </div>
+
+    <p style="text-align:center; margin-top:1rem; font-size:.76rem; color:var(--text-dim);">
+      <a href="/security.html" style="color:var(--text-dim);">Security</a> ·
+      <a href="/privacy.html" style="color:var(--text-dim);">Privacy</a> ·
+      <a href="/contact.html" style="color:var(--text-dim);">Support</a>
+    </p>
   </div>
+</main>
+
+<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
+  <div style="flex:1 1 220px;">
+    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
+    </div>
+    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+    <div style="margin-top:.6rem; display:flex; gap:1rem;">
+      <a href="/privacy.html" style="font-size:.75rem; color:var(--text-dim);">Privacy Policy</a>
+      <a href="/terms.html" style="font-size:.75rem; color:var(--text-dim);">Terms of Service</a>
+    </div>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Trust</div>
+    <a href="/safeguarding.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Safeguarding</a>
+    <a href="/security.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Security</a>
+    <a href="/faq.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">FAQ</a>
+  </div>
+  <div><div class="nav-label" style="padding:0;">Contact</div>
+    <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
+    <a href="/contact.html" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+  </div>
+</footer>
+
 <script src="/assets/js/config.js"></script>
 <script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/app.js"></script>
+<script src="/assets/js/site-search.js"></script>
 <script>
+  initSiteSearch('site-search-mount');
   function applyLoginTranslations() {
     document.getElementById('t-welcome').textContent = t('login.welcome', 'Welcome back');
     document.getElementById('t-subtitle').textContent = t('login.subtitle', "Log in to your organization's account.");
@@ -90,11 +160,6 @@
   }
   applyLoginTranslations();
 
-  document.getElementById('demo-creds-toggle').addEventListener('click', (e) => {
-    e.preventDefault();
-    const detail = document.getElementById('demo-creds-detail');
-    detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
-  });
   document.querySelectorAll('#site-lang-switch button').forEach(b => {
     b.addEventListener('click', () => setAppLang(b.dataset.lang));
   });
@@ -107,14 +172,6 @@
     btn.textContent = 'Logging in…';
     btn.disabled = true;
     try {
-      const enteredEmail = document.getElementById('email').value.trim().toLowerCase();
-      const enteredPassword = document.getElementById('password').value;
-      if (enteredEmail === 'm&e.demo@voiceinsightsafrica.com' && enteredPassword === 'DemoLogin2026') {
-        localStorage.removeItem('vi_token'); localStorage.removeItem('vi_user');
-        sessionStorage.setItem('vi_demo_mode','me');
-        window.location.href='/demo/me-dashboard.html';
-        return;
-      }
       const data = await apiRequest('/api/auth/login', {
         method: 'POST',
         auth: false,
@@ -130,6 +187,10 @@
       }
       localStorage.setItem('vi_token', data.token);
       localStorage.setItem('vi_user', JSON.stringify(data.user));
+      if (data.must_change_password) {
+        window.location.href = '/app/change-password.html';
+        return;
+      }
       window.location.href = data.user.role === 'enumerator' ? '/app/my-work.html' : '/app/dashboard.html';
     } catch (err) {
       errBox.textContent = err.message.includes('Failed to fetch')
@@ -157,6 +218,10 @@
       });
       localStorage.setItem('vi_token', data.token);
       localStorage.setItem('vi_user', JSON.stringify(data.user));
+      if (data.must_change_password) {
+        window.location.href = '/app/change-password.html';
+        return;
+      }
       window.location.href = data.user.role === 'enumerator' ? '/app/my-work.html' : '/app/dashboard.html';
     } catch (err) {
       errBox.textContent = err.message;

@@ -1,0 +1,124 @@
+/* ============================================================
+   VoiceInsights Africa — Shared Component Primitives (Milestone A)
+   Only components confirmed absent from style.css: alerts, tabs,
+   modal/dialog, pagination, stepper, timeline, dropdown, a
+   filter/search bar, and semantic evidence/decision/recommendation
+   card variants. Buttons, cards, badges, tables, forms and
+   skeleton loaders already exist in style.css and are reused as-is.
+   Load this AFTER style.css and tokens.css.
+   ============================================================ */
+
+/* ---------- Alert ---------- */
+.alert {
+  display: flex; align-items: flex-start; gap: var(--space-3);
+  padding: var(--space-4); border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+  font-size: .88rem; line-height: 1.5;
+}
+.alert-icon { flex: none; font-size: 1.1rem; line-height: 1; }
+.alert-title { font-weight: 700; margin-bottom: .2em; }
+.alert-info    { border-color: rgba(79,164,144,.35); background: rgba(79,164,144,.08); }
+.alert-success { border-color: rgba(111,191,139,.35); background: var(--success-bg); color: var(--success); }
+.alert-warn    { border-color: rgba(228,194,58,.35); background: var(--warn-bg); color: var(--warn); }
+.alert-danger  { border-color: rgba(217,99,74,.35); background: var(--danger-bg); color: var(--danger); }
+
+/* ---------- Tabs ---------- */
+.tabs { display: flex; gap: var(--space-2); overflow-x: auto; border-bottom: 1px solid var(--border); padding-bottom: 0; }
+.tab {
+  flex: none; padding: var(--space-3) var(--space-4); border: none; background: transparent;
+  color: var(--text-dim); font-weight: 700; font-size: .85rem; cursor: pointer;
+  border-bottom: 2px solid transparent; transition: color var(--motion-base), border-color var(--motion-base);
+}
+.tab:hover { color: var(--text-muted); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ---------- Modal / Dialog ---------- */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none;
+  align-items: center; justify-content: center; padding: var(--space-5); z-index: 200;
+}
+.modal-overlay.open { display: flex; }
+.modal-dialog {
+  width: min(560px, 100%); max-height: 88vh; overflow: auto;
+  background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius);
+  padding: var(--space-6); box-shadow: var(--elevation-3);
+}
+.modal-dialog h2 { margin-top: 0; }
+.modal-close { position: absolute; top: var(--space-4); right: var(--space-4); background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1.1rem; }
+
+/* ---------- Pagination ---------- */
+.pagination { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+.pagination button {
+  min-width: 2.2rem; height: 2.2rem; padding: 0 .6rem; border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong); background: transparent; color: var(--text-muted);
+  cursor: pointer; font-size: .82rem; font-weight: 700;
+}
+.pagination button.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.pagination button:disabled { opacity: .35; cursor: not-allowed; }
+
+/* ---------- Stepper ---------- */
+.stepper { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+.step { display: flex; align-items: center; gap: var(--space-2); color: var(--text-dim); font-size: .82rem; font-weight: 700; }
+.step-index {
+  width: 1.6rem; height: 1.6rem; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border-strong); font-size: .76rem;
+}
+.step.done .step-index { background: var(--success-bg); color: var(--success); border-color: transparent; }
+.step.current .step-index { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.step.current { color: var(--text); }
+.step-connector { width: 1.5rem; height: 1px; background: var(--border-strong); }
+
+/* ---------- Timeline ---------- */
+.timeline { position: relative; padding-left: var(--space-5); border-left: 2px solid var(--border-strong); }
+.timeline-item { position: relative; margin-bottom: var(--space-5); }
+.timeline-item::before {
+  content: ""; position: absolute; left: calc(-1 * var(--space-5) - 5px); top: .3rem;
+  width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--bg);
+}
+.timeline-date { font-size: .74rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: .05em; font-weight: 700; }
+.timeline-title { font-weight: 700; margin: .2em 0; }
+
+/* ---------- Dropdown ---------- */
+.dropdown { position: relative; display: inline-block; }
+.dropdown-menu {
+  position: absolute; top: calc(100% + 6px); right: 0; min-width: 200px;
+  background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius);
+  box-shadow: var(--elevation-2); padding: var(--space-2); display: none; z-index: 60;
+}
+.dropdown-menu.open { display: block; }
+.dropdown-item {
+  display: block; width: 100%; text-align: left; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);
+  background: none; border: none; color: var(--text); font-size: .85rem; cursor: pointer;
+}
+.dropdown-item:hover { background: var(--surface-2); }
+
+/* ---------- Filter / search bar ---------- */
+.filter-bar { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; margin-bottom: var(--space-5); }
+.search-field { position: relative; flex: 1 1 240px; min-width: 0; }
+.search-field input {
+  width: 100%; padding: .6rem .9rem .6rem 2.1rem; border-radius: 999px;
+  border: 1px solid var(--border-strong); background: var(--surface); color: var(--text); font-size: .85rem;
+}
+.search-field input:focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-ring-offset); }
+.search-field::before {
+  content: "🔎"; position: absolute; left: .8rem; top: 50%; transform: translateY(-50%); font-size: .8rem; opacity: .6; pointer-events: none;
+}
+
+/* ---------- Semantic card variants (thin wrappers on .card) ---------- */
+.evidence-card, .decision-card, .recommendation-card {
+  border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface);
+  padding: var(--space-4); border-left-width: 4px; border-left-style: solid;
+}
+.evidence-card       { border-left-color: var(--accent-2); }
+.decision-card        { border-left-color: var(--accent); }
+.recommendation-card  { border-left-color: var(--success); }
+.evidence-card b, .decision-card b, .recommendation-card b { display: block; margin-bottom: .3em; }
+
+@media (max-width: 640px) {
+  .tabs { gap: var(--space-1); }
+  .modal-dialog { padding: var(--space-4); }
+  .filter-bar { flex-direction: column; align-items: stretch; }
+}

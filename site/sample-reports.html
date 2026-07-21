@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>World-Class Report Library | VoiceInsights Africa</title>
-  <meta name="description" content="Explore 16 governed flagship demonstration reports for governments, UN agencies, donors, NGOs, companies and research institutions.">
+  <title>Intelligence Library | VoiceInsights Africa</title>
+  <meta name="description" content="Explore the VoiceInsights Africa Intelligence Library — 33 governed flagship demonstration publications for governments, UN agencies, donors, NGOs, companies and research institutions.">
   <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
   <style>
     :root{--ink:#eef6f2;--muted:#a7bbb3;--panel:#0e1916;--line:#29483f;--gold:#d4af37;--bg:#07100d;--focus:#7dd3fc}
     *{box-sizing:border-box}html,body{overflow-x:hidden}body{margin:0;background:var(--bg);color:var(--ink)}
@@ -13,48 +16,229 @@
     .shell{display:block;width:min(100% - 32px,1440px);min-height:100vh;margin-inline:auto;padding:18px 0 64px}.nav{display:flex;justify-content:space-between;align-items:center;gap:16px}.brand{color:#fff;text-decoration:none;font-weight:900}.nav-actions{display:flex;align-items:center;gap:16px}.nav-actions a{color:var(--muted)}
     .hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(420px,.85fr);gap:clamp(28px,4vw,64px);align-items:center;padding:clamp(42px,7vw,86px) 0 36px}.hero-copy{min-width:0}.hero-copy h1{font-size:clamp(2.65rem,5.7vw,5.6rem);line-height:.96;margin:.18em 0;max-width:850px;letter-spacing:-.045em}.hero-copy p{max-width:760px;color:var(--muted);font-size:1.08rem;line-height:1.65}.eyebrow{font-size:.76rem;letter-spacing:.18em;text-transform:uppercase;font-weight:900;color:var(--gold)}
     .hero-art{height:360px;border:1px solid #665823;border-radius:28px;background:linear-gradient(145deg,#12261f,#09120f);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:22px;position:relative;overflow:hidden}.mini-cover{position:relative;border-radius:15px;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff;box-shadow:0 18px 42px #0007;min-width:0}.mini-cover:nth-child(2){transform:translateY(20px)}.mini-cover small{font-size:.67rem;letter-spacing:.12em;font-weight:900}.mini-cover strong{font-size:clamp(.95rem,1.4vw,1.3rem);line-height:1.15;margin-top:10px;overflow-wrap:normal;word-break:normal}
-    .notice{border:1px solid #6d5a21;background:#261f0b;padding:15px 17px;border-radius:14px;color:#f3dda0;line-height:1.55;max-width:820px}.filters{display:flex;gap:10px;overflow-x:auto;padding:12px 0 18px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}.filters button{white-space:nowrap;border:1px solid var(--line);background:#101f1b;color:var(--ink);padding:10px 16px;border-radius:999px;cursor:pointer}.filters button.active{background:var(--gold);color:#111;border-color:var(--gold)}button:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+    .notice{border:1px solid #6d5a21;background:#261f0b;padding:15px 17px;border-radius:14px;color:#f3dda0;line-height:1.55;max-width:820px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.library-controls{display:flex;gap:12px;flex-wrap:wrap;margin-top:36px}.library-controls input,.library-controls select{background:#101f1b;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:11px 14px;font-size:.92rem}.search-field{flex:1 1 320px}.search-field input{width:100%}.sort-field select{min-width:180px}
+    .filter-row{display:flex;align-items:center;gap:10px;margin:0 0 10px}.filter-row-label{flex:0 0 auto;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--muted);min-width:64px}.filters{display:flex;gap:10px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none;flex:1 1 auto}.filters::-webkit-scrollbar{display:none}.filters button{white-space:nowrap;border:1px solid var(--line);background:#101f1b;color:var(--ink);padding:10px 16px;border-radius:999px;cursor:pointer}.filters button.active{background:var(--gold);color:#111;border-color:var(--gold)}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
     .section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin:42px 0 18px}.section-head h2{font-size:clamp(1.8rem,3.1vw,2.65rem);margin:0}.section-head p{color:var(--muted);margin:0;max-width:620px;text-align:right}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:22px;align-items:stretch}.card{overflow:hidden;border:1px solid var(--line);border-radius:22px;background:#0d1714;display:flex;flex-direction:column;min-width:0}.cover{min-height:285px;padding:26px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;position:relative;isolation:isolate}.cover:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 84% 12%,#ffffff38,transparent 28%);pointer-events:none;z-index:-1}.cover h3{font-size:clamp(1.65rem,2.35vw,2.3rem);line-height:1.05;margin:32px 0 10px;overflow-wrap:normal;word-break:normal;hyphens:none;max-width:18ch}.cover-meta{line-height:1.45}.body{padding:20px;display:flex;flex-direction:column;gap:14px;flex:1}.badges,.actions{display:flex;gap:7px;flex-wrap:wrap}.badge{font-size:.72rem;border:1px solid var(--line);padding:5px 8px;border-radius:999px;color:var(--muted)}.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.meta div,.score{background:#101f1b;border-radius:11px;padding:10px}.meta small,.score small{display:block;color:var(--muted);margin-bottom:3px}.meta strong{font-size:.86rem}.scores{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.score strong{display:block;font-size:1.05rem}.story{color:var(--muted);line-height:1.55;margin:0;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}.actions{margin-top:auto}.actions a{padding:9px 11px;border-radius:10px;background:#172a24;color:var(--ink);text-decoration:none;font-size:.76rem;text-align:center}.actions a.primary{background:var(--gold);color:#111;font-weight:900;flex:1 0 100%}.empty{padding:54px;text-align:center;color:var(--muted);border:1px solid var(--line);border-radius:18px}.error button{margin-left:8px}
     @media(max-width:1080px){.hero{grid-template-columns:1fr}.hero-art{height:290px;max-width:760px}.grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr))}}
     .assurance-strip{margin:64px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.assurance-card{padding:22px;border:1px solid var(--line);border-radius:18px;background:#0d1714}.assurance-card h3{margin:.2rem 0 .5rem}.assurance-card p{color:var(--muted);line-height:1.55}.pipeline{margin:28px 0;padding:24px;border:1px solid #665823;border-radius:18px;background:#171509;color:#f3dda0;text-align:center;font-weight:800;letter-spacing:.03em}
-    @media(max-width:700px){.shell{display:block;width:min(100% - 24px,1440px)}.nav-actions a:first-child{display:none}.hero{padding:32px 0 24px;gap:22px}.hero-copy h1{font-size:clamp(2.45rem,13vw,4rem)}.hero-art{height:220px;padding:12px;gap:9px;border-radius:20px}.mini-cover{padding:12px}.mini-cover:nth-child(2){transform:none}.mini-cover small{font-size:.56rem}.section-head{display:block}.section-head p{text-align:left;margin-top:8px}.cover{min-height:245px}.scores{grid-template-columns:1fr}.actions a{flex:1 1 calc(50% - 7px)}}
+    @media(max-width:700px){.shell{display:block;width:min(100% - 24px,1440px)}.nav-actions a:first-child{display:none}.hero{padding:32px 0 24px;gap:22px}.hero-copy h1{font-size:clamp(2.45rem,13vw,4rem)}.hero-art{height:220px;padding:12px;gap:9px;border-radius:20px}.mini-cover{padding:12px}.mini-cover:nth-child(2){transform:none}.mini-cover small{font-size:.56rem}.section-head{display:block}.section-head p{text-align:left;margin-top:8px}.cover{min-height:245px}.scores{grid-template-columns:1fr}.actions a{flex:1 1 calc(50% - 7px)}.filter-row{align-items:flex-start}.filter-row-label{padding-top:10px}}
     @media(max-width:420px){.hero-art{display:none}.meta{grid-template-columns:1fr}.actions a{flex-basis:100%}}
+    .industry-group{border:1px solid var(--line);border-radius:20px;background:#0d1714;margin-bottom:16px;overflow:hidden}
+    .industry-summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;font-weight:800}
+    .industry-summary::-webkit-details-marker{display:none}
+    .industry-summary-main{display:flex;align-items:center;gap:14px;min-width:0}
+    .industry-chevron{flex:0 0 auto;width:11px;height:11px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(-45deg);transition:transform .15s ease}
+    details[open]>.industry-summary .industry-chevron{transform:rotate(45deg)}
+    .industry-name{font-size:1.2rem;color:#fff;min-width:0}
+    .industry-count{font-size:.76rem;color:var(--muted);font-weight:700;white-space:nowrap}
+    .industry-viewlink{flex:0 0 auto;font-size:.78rem;font-weight:800;color:var(--gold);text-decoration:none;padding:8px 14px;border:1px solid #665823;border-radius:999px;white-space:nowrap}
+    .industry-viewlink:hover{background:#171509}
+    .industry-body{padding:0 24px 26px}
+    .industry-more{margin-top:16px;text-align:center}
+    .industry-more a{color:var(--gold);font-weight:800;text-decoration:none;font-size:.86rem}
+    @media(max-width:700px){.industry-summary{padding:16px}.industry-body{padding:0 16px 20px}.industry-viewlink{display:none}}
   </style>
 </head>
 <body>
-  <a class="skip-link" href="#report-library">Skip to report library</a>
+  <a class="skip-link" id="skip-to-content" href="#report-library">Skip to Intelligence Library</a>
+
+  <div style="background:var(--surface-3); color:var(--text-muted); text-align:center; padding:.5rem 1rem; font-size:.78rem; font-weight:600; letter-spacing:.01em;">
+    Trusted Voice Research Infrastructure for NGOs, Governments &amp; Global Development Partners
+  </div>
+
+  <nav class="pub-nav">
+    <div class="pub-nav-row1">
+      <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
+        <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+        <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+      </a>
+      <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+      <div class="pub-nav-collapse pub-nav-row1-right">
+        <div id="site-search-mount" style="width:200px;"></div>
+        <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
+        <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
+        <a href="/contact.html" class="btn btn-primary btn-sm">Book Demo</a>
+      </div>
+    </div>
+    <div class="pub-nav-collapse pub-nav-links">
+      <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
+      <a href="/solutions.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
+      <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
+      <a href="/sample-reports.html" style="color:var(--accent); font-size:.85rem; font-weight:700;">Intelligence Library</a>
+      <a href="/safeguarding.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
+      <a href="/about.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">About</a>
+    </div>
+  </nav>
+
   <div class="shell">
-    <nav class="nav" aria-label="Primary"><a href="/" class="brand">VoiceInsights Africa</a><div class="nav-actions"><a href="/platform.html">Platform</a><a href="/contact.html" class="btn btn-primary">Book Demo</a></div></nav>
     <header class="hero">
-      <div class="hero-copy"><div class="eyebrow">World-Class Platinum Sample Library</div><h1>Full research intelligence built to move decisions.</h1><p>Sixteen governed synthetic demonstration publications with executive, evidence, statistical and decision intelligence books; interpreted visualisations; international standards; annexes; and native report exports.</p><div class="notice"><strong>Synthetic demonstration notice:</strong> All people, quotations, locations and statistics are synthetic. These publications demonstrate system capability and are not official statistics or real-world findings.</div></div>
+      <div class="hero-copy"><div class="eyebrow">World-Class Intelligence Library</div><h1>Full research intelligence built to move decisions.</h1><p>33 governed synthetic demonstration publications with executive, evidence, statistical and decision intelligence books; interpreted visualisations; international standards; annexes; and native report exports.</p><div class="notice"><strong>Synthetic demonstration notice:</strong> All people, quotations, locations and statistics are synthetic. These publications demonstrate system capability and are not official statistics or real-world findings.</div></div>
       <div class="hero-art" aria-hidden="true"><div class="mini-cover" style="background:linear-gradient(160deg,#0B2E59,#1C7ED6)"><small>GOVERNMENT</small><strong>National Development Intelligence</strong></div><div class="mini-cover" style="background:linear-gradient(160deg,#6B1E12,#E85D04)"><small>HUMANITARIAN</small><strong>Needs &amp; Severity Intelligence</strong></div><div class="mini-cover" style="background:linear-gradient(160deg,#143642,#0B7A75)"><small>UN &amp; DONORS</small><strong>Impact Evaluation Intelligence</strong></div></div>
     </header>
-    <main id="report-library"><div class="filters" id="filters" role="group" aria-label="Filter reports"></div><div id="library" aria-live="polite"><div class="empty">Loading the flagship report library…</div></div><section aria-labelledby="assurance-title"><div class="section-head"><div><div class="eyebrow">Publication assurance</div><h2 id="assurance-title">Built for evidence-conscious decision-makers.</h2></div><p>Every demonstration publication is generated from one governed model with explicit evidence, statistical, standards, accessibility and responsible-use controls.</p></div><div class="pipeline">Governed data → Evidence model → Statistical intelligence → Decision intelligence → Multi-format publication</div><div class="assurance-strip"><article class="assurance-card"><h3>Evidence traceability</h3><p>Material findings connect to synthetic source records, respondent voice, indicators and accountable decisions.</p></article><article class="assurance-card"><h3>Statistical governance</h3><p>Sampling, weighting, uncertainty, missing data, validity, reproducibility and limitations are documented.</p></article><article class="assurance-card"><h3>Applicable standards</h3><p>Frameworks are mapped only where relevant, with rationale, evidence and limitations—never decorative badges.</p></article><article class="assurance-card"><h3>Responsible publication</h3><p>Accessibility, privacy, safeguarding, responsible AI and human review requirements are visible in the quality gate.</p></article></div></section></main>
+    <main id="report-library">
+      <div class="library-controls">
+        <label class="search-field"><span class="sr-only">Search publications</span><input type="search" id="library-search" placeholder="Search by title, sector or country…" autocomplete="off"></label>
+        <label class="sort-field"><span class="sr-only">Browse by</span><select id="library-sort"><option value="industry">By Industry</option><option value="featured">Featured first</option><option value="newest">Newest</option></select></label>
+      </div>
+      <div class="filter-row"><span class="filter-row-label">Type</span><div class="filters" id="filters" role="group" aria-label="Filter by organization type"></div></div>
+      <div class="filter-row"><span class="filter-row-label">Country</span><div class="filters" id="filters-country" role="group" aria-label="Filter by country"></div></div>
+      <div class="filter-row" id="filters-sdg-row" style="display:none;"><span class="filter-row-label">SDG</span><div class="filters" id="filters-sdg" role="group" aria-label="Filter by Sustainable Development Goal"></div></div>
+      <div id="library" aria-live="polite"><div class="empty">Loading the Intelligence Library…</div></div>
+      <section aria-labelledby="assurance-title"><div class="section-head"><div><div class="eyebrow">Publication assurance</div><h2 id="assurance-title">Built for evidence-conscious decision-makers.</h2></div><p>Every demonstration publication is generated from one governed model with explicit evidence, statistical, standards, accessibility and responsible-use controls.</p></div><div class="pipeline">Governed data → Evidence model → Statistical intelligence → Decision intelligence → Multi-format publication</div><div class="assurance-strip"><article class="assurance-card"><h3>Evidence traceability</h3><p>Material findings connect to synthetic source records, respondent voice, indicators and accountable decisions.</p></article><article class="assurance-card"><h3>Statistical governance</h3><p>Sampling, weighting, uncertainty, missing data, validity, reproducibility and limitations are documented.</p></article><article class="assurance-card"><h3>Applicable standards</h3><p>Frameworks are mapped only where relevant, with rationale, evidence and limitations—never decorative badges.</p></article><article class="assurance-card"><h3>Responsible publication</h3><p>Accessibility, privacy, safeguarding, responsible AI and human review requirements are visible in the quality gate.</p></article></div></section>
+    </main>
   </div>
+
+  <footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
+    <div style="flex:1 1 220px;">
+      <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
+        <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
+        <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
+      </div>
+      <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.</p>
+      <div style="margin-top:.6rem; display:flex; gap:1rem;">
+        <a href="/privacy.html" style="font-size:.75rem; color:var(--text-dim);">Privacy Policy</a>
+        <a href="/terms.html" style="font-size:.75rem; color:var(--text-dim);">Terms of Service</a>
+      </div>
+    </div>
+    <div><div class="nav-label" style="padding:0;">Platform</div>
+      <a href="/app/dashboard.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Dashboard</a>
+      <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Analytics</a>
+      <a href="/api.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">API &amp; Integrations</a>
+    </div>
+    <div><div class="nav-label" style="padding:0;">Trust</div>
+      <a href="/safeguarding.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Safeguarding</a>
+      <a href="/security.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Security</a>
+      <a href="/faq.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">FAQ</a>
+    </div>
+    <div><div class="nav-label" style="padding:0;">Contact</div>
+      <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
+      <a href="/contact.html" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+    </div>
+  </footer>
+
   <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/i18n.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/site-search.js"></script>
   <script>
+    initSiteSearch('site-search-mount');
     const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,character=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
-    function publicationScoreText(report){const score=Number(report?.quality_score);return Number.isFinite(score)?`${Math.round(score)}/100 · Publication Ready`:'Not assessed';}window.publicationScoreText = publicationScoreText;
-    const safeScore=value=>Number.isFinite(Number(value))?Math.round(Number(value)):'—';
-    let reports=[];let selectedCategory='All';let categories=[];
+    let reports=[];let selectedCategory='All';let selectedCountry='All';let selectedSdg='All';let categories=[];let searchQuery='';let sortMode='industry';
+
+    // Real domain → sector-page mapping, built from each site/sectors/*.html
+    // page's own publicationLibrary.domain config (the same field the
+    // sector pages themselves filter on) — never an invented grouping.
+    // Publications whose domain isn't yet claimed by a dedicated sector
+    // page (e.g. the original cross-cutting keys: Human Development,
+    // Livelihood, Private Sector, Sustainable Development Intelligence)
+    // fall into the honestly-labeled "Cross-Sector" group below rather
+    // than being force-fit into an unrelated industry.
+    const SECTOR_PAGES=[
+      {href:'/sectors/health.html',label:'Health',domains:['Health Intelligence','Hospital Performance Intelligence','Maternal & Child Health Intelligence','Disease Surveillance Intelligence','Nutrition Intelligence','UHC and Health Financing Intelligence']},
+      {href:'/sectors/education.html',label:'Education',domains:['Education Intelligence','Youth Skills and Employability Intelligence']},
+      {href:'/sectors/humanitarian.html',label:'Humanitarian',domains:['Humanitarian Intelligence','Food Security Intelligence','Displacement and Durable Solutions Intelligence']},
+      {href:'/sectors/governance.html',label:'Governance',domains:['Governance Intelligence','Justice and Legal Services Intelligence','Public Financial Management Intelligence']},
+      {href:'/sectors/agriculture.html',label:'Agriculture',domains:['Agriculture Intelligence']},
+      {href:'/sectors/climate.html',label:'Climate',domains:['Climate Intelligence']},
+      {href:'/sectors/wash-access.html',label:'WASH Access',domains:['WASH Access Intelligence']},
+      {href:'/sectors/energy-access.html',label:'Energy Access',domains:['Energy Access Intelligence']},
+      {href:'/sectors/financial-inclusion.html',label:'Financial Inclusion',domains:['Financial Inclusion Intelligence']},
+      {href:'/sectors/social-protection.html',label:'Social Protection',domains:['Social Protection Intelligence']},
+      {href:'/sectors/digital-government.html',label:'Digital Government',domains:['Digital Government Intelligence']},
+      {href:'/sectors/market-research.html',label:'Market Research',domains:['Market Research Intelligence']},
+      {href:'/sectors/customer-experience.html',label:'Customer Experience',domains:['Customer Experience Intelligence']},
+      {href:'/sectors/employee-experience.html',label:'Employee Experience',domains:['Employee Experience Intelligence']},
+    ];
+    const DOMAIN_TO_SECTOR=Object.fromEntries(SECTOR_PAGES.flatMap(sector=>sector.domains.map(domain=>[domain,sector])));
+
     async function loadLibrary(){
-      document.querySelector('#library').innerHTML='<div class="empty">Loading the flagship report library…</div>';
-      try{const response=await fetch(`${API_BASE_URL}/api/public/flagship-sample-library`);if(!response.ok)throw new Error(`Service returned HTTP ${response.status}`);const payload=await response.json();reports=payload?.catalog?.reports||[];categories=payload?.catalog?.categories||[];renderFilters();renderLibrary();}
-      catch(error){document.querySelector('#library').innerHTML=`<div class="empty error">The report library is temporarily unavailable. ${escapeHtml(error.message)} <button type="button" onclick="loadLibrary()">Retry</button></div>`;}
+      document.querySelector('#library').innerHTML='<div class="empty">Loading the Intelligence Library…</div>';
+      try{const response=await fetch(`${API_BASE_URL}/api/public/flagship-sample-library`);if(!response.ok)throw new Error(`Service returned HTTP ${response.status}`);const payload=await response.json();reports=payload?.catalog?.reports||[];categories=payload?.catalog?.categories||[];renderFilters();renderCountryFilters();renderSdgFilters();renderLibrary();}
+      catch(error){document.querySelector('#library').innerHTML=`<div class="empty error">The Intelligence Library is temporarily unavailable. ${escapeHtml(error.message)} <button type="button" onclick="loadLibrary()">Retry</button></div>`;}
     }
-    function renderFilters(){const labels=['All','Featured',...categories];document.querySelector('#filters').innerHTML=labels.map(label=>`<button type="button" class="${label===selectedCategory?'active':''}" data-filter="${escapeHtml(label)}" aria-pressed="${label===selectedCategory}">${escapeHtml(label)}</button>`).join('');document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{selectedCategory=button.dataset.filter;renderFilters();renderLibrary();}));}
-
-function reportCard(report){
-  const cover=report.cover||{};
-  const standards=(report.standards||[]).slice(0,4);
-  const pages=report.pages_equivalent||report.estimated_pages||'Full publication';
-  const publicationUrl='/sample-exports/'+report.key+'/'+report.key+'.pdf';
-
-  return `<article class="card"><div class="cover" style="background:linear-gradient(135deg,${escapeHtml(cover.primary||'#082B55')},${escapeHtml(cover.accent||'#1669A8')})"><div class="eyebrow">Tier ${escapeHtml(report.tier)} · ${escapeHtml(report.category)}</div><div><h3>${escapeHtml(report.title)}</h3><div class="cover-meta">${escapeHtml(report.country)} · ${escapeHtml(report.sector)}</div></div></div><div class="body"><div class="badges">${standards.map(standard=>`<span class="badge">${escapeHtml(standard)}</span>`).join('')}</div><div class="meta"><div><small>Publication profile</small><strong>${escapeHtml(report.publication_profile)}</strong></div><div><small>Report type</small><strong>${escapeHtml(report.profile)}</strong></div><div><small>Publication depth</small><strong>${escapeHtml(pages)}</strong></div><div><small>Last reviewed</small><strong>${escapeHtml(report.last_updated)}</strong></div></div><p class="story">${escapeHtml(report.executive_story)}</p><div class="scores"><div class="score"><strong>${escapeHtml(report.publication_status||'Demonstration Ready')}</strong><small>Publication status</small></div><div class="score"><strong>Complete</strong><small>Evidence traceability</small></div><div class="score"><strong>${safeScore(report.decision_intelligence_score)}/100</strong><small>Decision support</small></div></div><div class="actions"><a class="primary" href="${escapeHtml(publicationUrl)}" target="_blank" rel="noopener">View Publication</a>${[['pdf','Premium PDF'],['docx','Editable Word'],['pptx','Native PowerPoint'],['xlsx','Statistical Excel']].map(([extension,label])=>`<a href="${escapeHtml('/sample-exports/'+report.key+'/'+report.key+'.'+extension)}" download>${label}</a>`).join('')}</div></div></article>`;
-}
-
+    // Commercial Launch Sprint: search matches the same real fields already
+    // rendered on each card (title, sector, country) — never a fabricated
+    // relevance score. Sort/filter facets are limited to real catalog
+    // fields (category, country, standards[]/SDG, last_updated, featured);
+    // "Most Downloaded" and "Editor's Choice" are not implemented because
+    // no real download-count or curation field exists anywhere in this
+    // data model — inventing one would be exactly the kind of fabricated
+    // signal this engagement does not do.
+    function applySearch(list){const q=searchQuery.trim().toLowerCase();if(!q)return list;return list.filter(report=>[report.title,report.sector,report.country].some(field=>String(field||'').toLowerCase().includes(q)));}
+    function applyFacets(list){return list.filter(report=>{if(selectedCategory==='Featured'&&!report.featured)return false;if(selectedCategory!=='All'&&selectedCategory!=='Featured'&&report.category!==selectedCategory)return false;if(selectedCountry!=='All'&&report.country!==selectedCountry)return false;if(selectedSdg!=='All'&&!(report.standards||[]).includes(selectedSdg))return false;return true;});}
+    function applySort(list){const sorted=list.slice();if(sortMode==='newest')sorted.sort((a,b)=>String(b.last_updated||'').localeCompare(String(a.last_updated||'')));else sorted.sort((a,b)=>Number(b.featured)-Number(a.featured));return sorted;}
+    function renderFilters(){const labels=['All','Featured',...categories];document.querySelector('#filters').innerHTML=labels.map(label=>`<button type="button" class="${label===selectedCategory?'active':''}" data-filter="${escapeHtml(label)}" aria-pressed="${label===selectedCategory}">${escapeHtml(label)}</button>`).join('');document.querySelectorAll('#filters [data-filter]').forEach(button=>button.addEventListener('click',()=>{selectedCategory=button.dataset.filter;renderFilters();renderLibrary();}));}
+    function renderCountryFilters(){const countries=[...new Set(reports.map(r=>r.country).filter(Boolean))].sort();const labels=['All',...countries];document.querySelector('#filters-country').innerHTML=labels.map(label=>`<button type="button" class="${label===selectedCountry?'active':''}" data-country="${escapeHtml(label)}" aria-pressed="${label===selectedCountry}">${escapeHtml(label)}</button>`).join('');document.querySelectorAll('#filters-country [data-country]').forEach(button=>button.addEventListener('click',()=>{selectedCountry=button.dataset.country;renderCountryFilters();renderLibrary();}));}
+    function renderSdgFilters(){
+      // Only real "SDG N" strings found in at least one publication's real
+      // standards[] array become a filter option — no invented SDG numbers,
+      // no full 1-17 grid pretending every goal has a matching publication.
+      const sdgs=[...new Set(reports.flatMap(r=>r.standards||[]).filter(s=>/^SDG \d+$/.test(s)))].sort((a,b)=>Number(a.slice(4))-Number(b.slice(4)));
+      document.querySelector('#filters-sdg-row').style.display=sdgs.length?'flex':'none';
+      const labels=['All',...sdgs];
+      document.querySelector('#filters-sdg').innerHTML=labels.map(label=>`<button type="button" class="${label===selectedSdg?'active':''}" data-sdg="${escapeHtml(label)}" aria-pressed="${label===selectedSdg}">${escapeHtml(label)}</button>`).join('');
+      document.querySelectorAll('#filters-sdg [data-sdg]').forEach(button=>button.addEventListener('click',()=>{selectedSdg=button.dataset.sdg;renderSdgFilters();renderLibrary();}));
+    }
+    function reportCard(report){
+      const cover=report.cover||{};const standards=(report.standards||[]).slice(0,4);const pages=report.pages_equivalent||report.estimated_pages||'Full publication';
+      // Enterprise Market Validation Release, Part A: this card used to
+      // print the raw internal decision-intelligence score as "XX/100" —
+      // an internal Quality Gate number with no place on a public card.
+      // report.trust_badges (computeTrustBadges) replaces it with the same
+      // pass/fail verification badges every export format now shows.
+      const badges=(report.trust_badges||[]).slice(0,3);
+      return `<article class="card"><div class="cover" style="background:linear-gradient(135deg,${escapeHtml(cover.primary||'#082B55')},${escapeHtml(cover.accent||'#1669A8')})"><div class="eyebrow">Tier ${escapeHtml(report.tier)} · ${escapeHtml(report.category)}</div><div><h3>${escapeHtml(report.title)}</h3><div class="cover-meta">${escapeHtml(report.country)} · ${escapeHtml(report.sector)}</div></div></div><div class="body"><div class="badges">${standards.map(standard=>`<span class="badge">${escapeHtml(standard)}</span>`).join('')}</div><div class="meta"><div><small>Publication profile</small><strong>${escapeHtml(report.publication_profile)}</strong></div><div><small>Report type</small><strong>${escapeHtml(report.profile)}</strong></div><div><small>Publication depth</small><strong>${escapeHtml(pages)}</strong></div><div><small>Last reviewed</small><strong>${escapeHtml(report.last_updated)}</strong></div></div><p class="story">${escapeHtml(report.executive_story)}</p><div class="scores"><div class="score"><strong>${escapeHtml(report.publication_status||'Demonstration Ready')}</strong><small>Publication status</small></div>${badges.map(badge=>`<div class="score"><strong>${badge.satisfied?'Passed':'Pending'}</strong><small>${escapeHtml(badge.label)}</small></div>`).join('')}</div><div class="actions"><a class="primary" href="${escapeHtml(report.viewer_url)}">View Publication</a>${[['pdf','Premium PDF'],['docx','Editable Word'],['pptx','Native PowerPoint'],['xlsx','Statistical Excel']].map(([extension,label])=>`<a href="${escapeHtml('/sample-exports/'+report.key+'/'+report.key+'.'+extension)}" download>${label}</a>`).join('')}</div></div></article>`;
+    }
     function renderSection(title,description,items){return items.length?`<section><div class="section-head"><h2>${escapeHtml(title)}</h2><p>${escapeHtml(description)}</p></div><div class="grid">${items.map(reportCard).join('')}</div></section>`:'';}
-    function renderLibrary(){let visible=reports;if(selectedCategory==='Featured')visible=reports.filter(report=>report.featured);else if(selectedCategory!=='All')visible=reports.filter(report=>report.category===selectedCategory);const featured=visible.filter(report=>report.featured);const collection=visible.filter(report=>!report.featured);document.querySelector('#library').innerHTML=renderSection('Featured Flagship Reports','Priority publications for government, donor and humanitarian decision-makers.',featured)+renderSection('Flagship Intelligence Collection','Enterprise, NGO, corporate and research publications generated from the same governed engine.',collection)||'<div class="empty">No reports are available in this category.</div>';}
+
+    // Groups the visible catalog by real sector page (via DOMAIN_TO_SECTOR),
+    // collapsed by default via native <details>/<summary> — accessible and
+    // functional without JavaScript, zero new script dependency. Each open
+    // group shows the first 4 publications inline plus a link to that
+    // sector's own full library; the "View full Library" link sits inside
+    // <summary> with its own click handler so opening a link never also
+    // silently toggles the disclosure.
+    function groupByIndustry(list){
+      const groups=new Map();
+      for(const report of list){
+        const sector=DOMAIN_TO_SECTOR[report.domain];
+        const key=sector?sector.href:'__cross_sector__';
+        if(!groups.has(key))groups.set(key,{sector,items:[]});
+        groups.get(key).items.push(report);
+      }
+      const ordered=SECTOR_PAGES.map(sector=>groups.get(sector.href)).filter(Boolean);
+      if(groups.has('__cross_sector__'))ordered.push(groups.get('__cross_sector__'));
+      return ordered;
+    }
+    function industryGroupHtml(group,openFirst){
+      const label=group.sector?group.sector.label:'Cross-Sector & Economic Development';
+      const items=applySort(group.items);
+      const shown=items.slice(0,4);
+      const viewLink=group.sector?`<a class="industry-viewlink" href="${escapeHtml(group.sector.href)}" onclick="event.stopPropagation()">View full ${escapeHtml(label)} Library &rarr;</a>`:`<a class="industry-viewlink" href="/industries.html" onclick="event.stopPropagation()">Browse all industries &rarr;</a>`;
+      const more=items.length>shown.length&&group.sector?`<div class="industry-more"><a href="${escapeHtml(group.sector.href)}">See all ${items.length} in ${escapeHtml(label)} &rarr;</a></div>`:'';
+      return `<details class="industry-group"${openFirst?' open':''}><summary class="industry-summary"><span class="industry-summary-main"><span class="industry-chevron" aria-hidden="true"></span><span class="industry-name">${escapeHtml(label)}</span><span class="industry-count">${items.length} publication${items.length===1?'':'s'}</span></span>${viewLink}</summary><div class="industry-body"><div class="grid">${shown.map(reportCard).join('')}</div>${more}</div></details>`;
+    }
+    function renderIndustryView(list){
+      const groups=groupByIndustry(list);
+      if(!groups.length){document.querySelector('#library').innerHTML='<div class="empty">No publications match your search.</div>';return;}
+      document.querySelector('#library').innerHTML=groups.map((group,index)=>industryGroupHtml(group,index===0)).join('');
+    }
+    function renderLibrary(){
+      let visible=applyFacets(reports);
+      visible=applySearch(visible);
+      if(sortMode==='industry'){renderIndustryView(visible);return;}
+      // "Newest" is a real cross-catalog ordering by last_updated, so it
+      // renders as one unified list rather than the industry grouping.
+      if(sortMode==='newest'){
+        const html=renderSection('Intelligence Library — Newest First','All governed demonstration publications, most recently reviewed first.',applySort(visible));
+        document.querySelector('#library').innerHTML=html||'<div class="empty">No publications match your search.</div>';
+        return;
+      }
+      const featured=applySort(visible.filter(report=>report.featured));const collection=applySort(visible.filter(report=>!report.featured));
+      document.querySelector('#library').innerHTML=renderSection('Featured Flagship Publications','Priority publications for government, donor and humanitarian decision-makers.',featured)+renderSection('Flagship Intelligence Collection','Enterprise, NGO, corporate and research publications generated from the same governed engine.',collection)||'<div class="empty">No publications match your search.</div>';
+    }
+    document.querySelector('#library-search').addEventListener('input',(e)=>{searchQuery=e.target.value;renderLibrary();});
+    document.querySelector('#library-sort').addEventListener('change',(e)=>{sortMode=e.target.value;renderLibrary();});
     loadLibrary();
   </script>
 </body>

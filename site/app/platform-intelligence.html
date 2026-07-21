@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Platform Intelligence — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/enterprise-dashboard-theme.css">
+<link rel="stylesheet" href="/assets/css/decision-workspace.css">
+<link rel="stylesheet" href="/assets/css/executive-intelligence.css">
+<link rel="stylesheet" href="/assets/css/platform-intelligence.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main id="main-content" class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <h1 class="visually-hidden">Platform Intelligence — VoiceInsights Africa</h1>
+
+      <div id="pi-denied" class="alert alert-danger" style="display:none;" role="alert">
+        <span class="alert-icon">⛔</span>
+        <div><div class="alert-title">Platform Intelligence unavailable</div><p style="margin:0;">Your role does not have permission to view this feature.</p></div>
+      </div>
+
+      <div id="pi-root" style="display:none;">
+
+        <header class="pi-hero">
+          <div class="pi-eyebrow">Platform Intelligence™</div>
+          <h2 class="pi-hero-title">Executive Copilot</h2>
+          <p class="pi-hero-sub">Ask a real question about your institution's decisions and evidence. Every answer is backed by a real record — never a guess.</p>
+
+          <form id="pi-copilot-form" class="pi-copilot-form">
+            <label for="pi-copilot-input" class="visually-hidden">Ask the Executive Copilot a question</label>
+            <input type="text" id="pi-copilot-input" placeholder="e.g. Why are projects delayed?" autocomplete="off">
+            <button class="btn btn-primary" type="submit">Ask</button>
+          </form>
+          <div class="pi-suggestions" id="pi-suggestions" role="group" aria-label="Suggested questions"></div>
+        </header>
+
+        <section aria-live="polite" id="pi-copilot-thread" class="pi-thread"></section>
+
+        <nav class="tabs" role="tablist" aria-label="Platform Intelligence capabilities" id="pi-tabs">
+          <button class="tab active" role="tab" aria-selected="true" id="pi-tabbtn-recommendations" aria-controls="pi-panel-recommendations" data-tab="recommendations">Recommendations</button>
+          <button class="tab" role="tab" aria-selected="false" id="pi-tabbtn-rootcause" aria-controls="pi-panel-rootcause" data-tab="rootcause">Root Cause</button>
+          <button class="tab" role="tab" aria-selected="false" id="pi-tabbtn-simulator" aria-controls="pi-panel-simulator" data-tab="simulator">Decision Simulator</button>
+          <button class="tab" role="tab" aria-selected="false" id="pi-tabbtn-forecast" aria-controls="pi-panel-forecast" data-tab="forecast">Impact Forecasting</button>
+          <button class="tab" role="tab" aria-selected="false" id="pi-tabbtn-memory" aria-controls="pi-panel-memory" data-tab="memory">Institutional Memory</button>
+          <button class="tab" role="tab" aria-selected="false" id="pi-tabbtn-graph" aria-controls="pi-panel-graph" data-tab="graph">Knowledge Graph</button>
+          <button class="tab" role="tab" aria-selected="false" id="pi-tabbtn-narrative" aria-controls="pi-panel-narrative" data-tab="narrative">Executive Narrative</button>
+        </nav>
+
+        <!-- Recommendation Engine -->
+        <section class="tab-panel active" id="pi-panel-recommendations" data-panel="recommendations" role="tabpanel" aria-labelledby="pi-tabbtn-recommendations">
+          <p class="ei-section-sub">Deterministic recommendations — every one explains why, its evidence, expected impact, priority, urgency, and dependencies.</p>
+          <div id="pi-rec-loading" class="muted-note" style="padding:1rem 0;">Loading…</div>
+          <div id="pi-rec-empty" class="alert alert-info" style="display:none;">No recommendation currently requires leadership intervention.</div>
+          <ul class="ei-insight-list" id="pi-rec-list" style="display:none;"></ul>
+        </section>
+
+        <!-- Root Cause Intelligence -->
+        <section class="tab-panel" id="pi-panel-rootcause" data-panel="rootcause" role="tabpanel" aria-labelledby="pi-tabbtn-rootcause">
+          <p class="ei-section-sub">Select an Action to see possible contributing factors, each grounded in a real, checkable signal.</p>
+          <div class="pi-picker-row">
+            <label for="pi-rootcause-select" class="visually-hidden">Choose an Action</label>
+            <select id="pi-rootcause-select"><option value="">Loading Actions…</option></select>
+            <button class="btn btn-primary btn-sm" id="pi-rootcause-run" type="button">Diagnose</button>
+          </div>
+          <div id="pi-rootcause-result" class="pi-result-area"></div>
+        </section>
+
+        <!-- Decision Simulator -->
+        <section class="tab-panel" id="pi-panel-simulator" data-panel="simulator" role="tabpanel" aria-labelledby="pi-tabbtn-simulator">
+          <p class="ei-section-sub">Test a hypothesis against the real current portfolio. Results are clearly labeled Measured vs Estimated — never a prediction.</p>
+          <div class="pi-simulator-controls">
+            <label for="pi-sim-overdue">Reduce overdue Actions by (%)</label>
+            <input type="range" id="pi-sim-overdue" min="0" max="100" value="0" step="5">
+            <output id="pi-sim-overdue-value">0%</output>
+            <button class="btn btn-primary btn-sm" id="pi-sim-run" type="button">Run Simulation</button>
+          </div>
+          <div id="pi-sim-result" class="pi-result-area"></div>
+        </section>
+
+        <!-- Impact Forecasting -->
+        <section class="tab-panel" id="pi-panel-forecast" data-panel="forecast" role="tabpanel" aria-labelledby="pi-tabbtn-forecast">
+          <p class="ei-section-sub">A simple, disclosed extrapolation of real historical snapshots — not a statistical model.</p>
+          <div id="pi-forecast-loading" class="muted-note" style="padding:1rem 0;">Loading…</div>
+          <div id="pi-forecast-unavailable" class="alert alert-info" style="display:none;"></div>
+          <div id="pi-forecast-result" class="pi-result-area" style="display:none;"></div>
+        </section>
+
+        <!-- Institutional Memory -->
+        <section class="tab-panel" id="pi-panel-memory" data-panel="memory" role="tabpanel" aria-labelledby="pi-tabbtn-memory">
+          <p class="ei-section-sub">Find resolved Actions that share real governed fields with a current one — similar projects, similar interventions, real outcomes.</p>
+          <div class="pi-picker-row">
+            <label for="pi-memory-select" class="visually-hidden">Choose an Action</label>
+            <select id="pi-memory-select"><option value="">Loading Actions…</option></select>
+            <button class="btn btn-primary btn-sm" id="pi-memory-run" type="button">Find Similar</button>
+          </div>
+          <div id="pi-memory-result" class="pi-result-area"></div>
+        </section>
+
+        <!-- Knowledge Graph -->
+        <section class="tab-panel" id="pi-panel-graph" data-panel="graph" role="tabpanel" aria-labelledby="pi-tabbtn-graph">
+          <p class="ei-section-sub">Real relationships around one Action — project, owner, evidence, history, strategic priority. No fabricated connections.</p>
+          <div class="pi-picker-row">
+            <label for="pi-graph-select" class="visually-hidden">Choose an Action</label>
+            <select id="pi-graph-select"><option value="">Loading Actions…</option></select>
+            <button class="btn btn-primary btn-sm" id="pi-graph-run" type="button">Show Graph</button>
+          </div>
+          <div id="pi-graph-result" class="pi-result-area"></div>
+        </section>
+
+        <!-- Executive Narrative Generator -->
+        <section class="tab-panel" id="pi-panel-narrative" data-panel="narrative" role="tabpanel" aria-labelledby="pi-tabbtn-narrative">
+          <p class="ei-section-sub">A short, evidence-referencing brief prepared for a specific audience — every sentence embeds a real figure.</p>
+          <div class="pi-picker-row">
+            <label for="pi-narrative-audience" class="visually-hidden">Choose an audience</label>
+            <select id="pi-narrative-audience">
+              <option value="board">Board Brief</option>
+              <option value="donor">Donor Brief</option>
+              <option value="government">Government Brief</option>
+              <option value="cabinet">Cabinet Brief</option>
+              <option value="partner">Partner Brief</option>
+              <option value="management" selected>Management Brief</option>
+            </select>
+            <button class="btn btn-primary btn-sm" id="pi-narrative-run" type="button">Generate</button>
+          </div>
+          <div id="pi-narrative-result" class="pi-result-area"></div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/safe-dom.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/decision-workspace.js"></script>
+<script src="/assets/js/platform-intelligence-page.js"></script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

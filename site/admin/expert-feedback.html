@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expert Feedback — Admin Console</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/enterprise-dashboard-theme.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  .fb-filters { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:1rem; }
+  .fb-filters button { padding:.4rem .8rem; border-radius:999px; border:1px solid var(--border); background:var(--surface-2); color:var(--text-muted); font-size:.78rem; cursor:pointer; }
+  .fb-filters button.active { background:var(--accent); color:var(--accent-ink); border-color:var(--accent); font-weight:700; }
+  .fb-row { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1rem; margin-bottom:.8rem; }
+  .fb-row-head { display:flex; justify-content:space-between; align-items:baseline; gap:1rem; flex-wrap:wrap; }
+  .fb-scores { display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.6rem; }
+  .fb-score-chip { font-size:.68rem; padding:.2rem .5rem; border-radius:999px; background:var(--surface-2); color:var(--text-muted); }
+  .fb-score-chip.low { color:var(--danger); }
+  .fb-freetext { margin-top:.6rem; font-size:.85rem; color:var(--text-muted); white-space:pre-wrap; }
+</style>
+</head>
+<body>
+<h1 class="visually-hidden">Expert Feedback — Admin Console</h1>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main id="main-content" class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <p class="muted-note" style="margin-bottom:1rem;">Structured feedback submitted via the Expert Feedback Programme — real reviewer submissions only, never fabricated. Each score is 1 (Unclear) to 4 (Very clear) across the same 8 comprehension questions this platform's own internal demonstration QA uses.</p>
+      <div class="fb-filters" id="category-filters"></div>
+      <div id="feedback-list"><div class="muted-note" style="padding:1.5rem;">Loading feedback…</div></div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+  if (!requireLogin()) { /* redirected */ }
+  const storedUserCheck = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  if (storedUserCheck?.role !== 'super_admin') {
+    document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center; padding:2rem;"><div><h2>Super Admin access required</h2><p class="muted-note">You do not have permission to view this page.</p><a href="/app/dashboard.html" class="btn btn-primary" style="margin-top:1rem;">Go to Dashboard</a></div></div>';
+    throw new Error('Access denied — not a Super Admin');
+  }
+  renderShell({ role:'admin', active:'/admin/expert-feedback.html', eyebrow:'Market Validation', title:'Expert Feedback' });
+
+  const CATEGORY_LABELS = {
+    government: 'Government', hospital_executive: 'Hospital Executive', researcher_university: 'Researcher / University',
+    ngo_development_partner: 'NGO / Development Partner', me_specialist: 'M&E Specialist', health_information_specialist: 'Health Information Specialist',
+  };
+  const QUESTION_LABELS = {
+    product: 'Product', deployment: 'Deployment', procurement: 'Procurement', implementation: 'Implementation',
+    offline_capability: 'Offline', ai_capability: 'AI', publications: 'Publications', value_proposition: 'Value prop',
+  };
+
+  let allFeedback = [];
+  let activeCategory = 'All';
+
+  function renderFilters() {
+    const categories = ['All', ...new Set(allFeedback.map(f => f.reviewer_category))];
+    document.getElementById('category-filters').innerHTML = categories.map(c =>
+      `<button data-cat="${c}" class="${c === activeCategory ? 'active' : ''}">${c === 'All' ? 'All' : (CATEGORY_LABELS[c] || c)} (${c === 'All' ? allFeedback.length : allFeedback.filter(f => f.reviewer_category === c).length})</button>`
+    ).join('');
+    document.querySelectorAll('[data-cat]').forEach(btn => btn.addEventListener('click', () => { activeCategory = btn.dataset.cat; renderFilters(); renderList(); }));
+  }
+
+  function renderList() {
+    const visible = activeCategory === 'All' ? allFeedback : allFeedback.filter(f => f.reviewer_category === activeCategory);
+    document.getElementById('feedback-list').innerHTML = visible.length ? visible.map(f => {
+      const avg = Object.values(f.scores || {}).reduce((s, v) => s + v, 0) / (Object.values(f.scores || {}).length || 1);
+      return `<div class="fb-row">
+        <div class="fb-row-head">
+          <div><b>${f.reviewer_name || 'Anonymous reviewer'}</b> — ${CATEGORY_LABELS[f.reviewer_category] || f.reviewer_category}${f.organization ? ` · ${f.organization}` : ''}</div>
+          <div class="muted-note">${new Date(f.created_at).toLocaleDateString()} · avg ${avg.toFixed(1)}/4</div>
+        </div>
+        <div class="fb-scores">${Object.entries(f.scores || {}).map(([q, v]) => `<span class="fb-score-chip${v <= 2 ? ' low' : ''}">${QUESTION_LABELS[q] || q}: ${v}/4</span>`).join('')}</div>
+        ${f.free_text ? `<div class="fb-freetext">${f.free_text}</div>` : ''}
+      </div>`;
+    }).join('') : '<p class="muted-note" style="padding:1.5rem;">No feedback submitted yet.</p>';
+  }
+
+  (async () => {
+    try {
+      const { feedback } = await apiRequest('/api/expert-feedback');
+      allFeedback = feedback;
+      renderFilters();
+      renderList();
+    } catch (e) {
+      document.getElementById('feedback-list').innerHTML = `<p class="muted-note" style="padding:1.5rem; color:var(--danger);">Could not load: ${e.message}</p>`;
+    }
+  })();
+</script>
+<script src="/assets/js/admin-functional-qa.js"></script>
+<script src="/assets/js/admin-button-qa.js"></script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

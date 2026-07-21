@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meeting Leave-Behind | VoiceInsights Africa</title>
+<meta name="description" content="A short recap of VoiceInsights Africa to keep after a demonstration or procurement meeting, with direct next-step links.">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/sector-framework.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  @media print{.pub-nav,footer,.no-print{display:none!important}body{font-size:11px}.pub-hero{padding:.5rem 0!important}.pub-section{padding:.75rem 0!important}}
+  .one-pager #sector-content{max-width:820px;margin:0 auto;}
+</style>
+</head>
+<body class="one-pager">
+
+<nav class="pub-nav no-print">
+  <div class="pub-nav-row1">
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
+      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
+      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
+    </a>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right">
+      <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="window.print()">Print / Save as PDF</button>
+      <a href="/contact.html?intent=demo" class="btn btn-primary btn-sm">Book Demo</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main-content">
+  <div id="sector-content"></div>
+</main>
+
+<footer class="pub-footer no-print" style="flex-wrap:wrap; gap:2.5rem;">
+  <div><a href="mailto:hello@voiceinsightsafrica.com" style="color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a></div>
+  <div><a href="/enterprise-capability-statement.html" style="color:var(--text-muted); font-size:.85rem;">Full Capability Statement →</a></div>
+</footer>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/sector-page.js"></script>
+<script>
+  lucide.createIcons();
+  renderSectorPage({
+    id: 'meeting-leave-behind',
+    meta: { title: 'Meeting Leave-Behind | VoiceInsights Africa', description: 'A short recap to keep after meeting with VoiceInsights Africa.' },
+    hero: {
+      eyebrow: 'Thank you for your time',
+      headline: 'What we discussed, and how to follow up.',
+      subhead: 'A short recap of VoiceInsights Africa — keep this alongside any notes from our conversation. Every link below goes straight to the real page, not a summary of it.',
+      primaryCta: { label: 'Book Your Next Session', href: '/contact.html?intent=demo' },
+      secondaryCta: { label: 'Request a Proposal', href: '/contact.html?intent=proposal' },
+    },
+    executiveSummary: {
+      eyebrow: 'Recap',
+      headline: 'The core idea.',
+      paragraphs: ['VoiceInsights Africa collects voice-first data across phone, WhatsApp, SMS, web and an offline-first mobile app, then runs it through a sector-specific editorial pipeline into one canonical publication engine — the same object behind the interactive view, the PDF, and every other export.'],
+      pillars: [
+        { title: 'Explore the Intelligence Library', description: 'See real (synthetic-demonstration) publications across 14 sectors.' },
+        { title: 'Read the Procurement page', description: 'What evidence is verified today, and what still requires independent review — stated honestly.' },
+        { title: 'Try the Offline Demo', description: 'A real, working offline-first field-collection app, no account required.' },
+      ],
+    },
+    integrations: {
+      headline: 'Direct links for your team.',
+      items: [
+        { name: 'Health Intelligence Suite', description: '/sectors/health.html' },
+        { name: 'Intelligence Library', description: '/sample-reports.html' },
+        { name: 'Procurement Readiness', description: '/procurement.html' },
+        { name: 'Mobile & Offline Capability', description: '/mobile-offline.html' },
+        { name: 'Security', description: '/security.html' },
+        { name: 'Offline Enumerator Demo', description: '/enumerator.html' },
+      ],
+    },
+    cta: {
+      headline: 'Ready for the next step?',
+      description: 'Book a follow-up session, or request a formal proposal if your team is ready to move toward procurement.',
+      primary: { label: 'Book Your Next Session', href: '/contact.html?intent=demo' },
+      secondary: { label: 'Request a Proposal', href: '/contact.html?intent=proposal' },
+    },
+  });
+</script>
+</body>
+</html>

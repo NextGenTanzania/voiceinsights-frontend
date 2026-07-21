@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Workspace — VoiceInsights Africa</title>
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/enterprise-dashboard-theme.css">
+<link rel="stylesheet" href="/assets/css/decision-workspace.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main id="main-content" class="main">
+    <div id="topbar-mount"></div>
+    <div class="content">
+      <h1 class="visually-hidden">Decision Workspace — VoiceInsights Africa</h1>
+
+      <div id="dw-denied" class="alert alert-danger" style="display:none;" role="alert">
+        <span class="alert-icon">⛔</span>
+        <div><div class="alert-title">Decision Workspace unavailable</div><p style="margin:0;">Your role does not have permission to view governed Actions. Contact your organization administrator if you believe this is incorrect.</p></div>
+      </div>
+
+      <div id="dw-root" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
+          <div class="dw-freshness" id="dw-freshness"><span class="badge badge-neutral">Checking freshness…</span></div>
+          <a href="/app/decision-create.html" class="btn btn-primary btn-sm" id="dw-create-link">+ New Action</a>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Decision Workspace sections" id="dw-tabs">
+          <button class="tab" role="tab" id="dw-tabbtn-overview" aria-controls="dw-panel-overview" data-tab="overview">Overview</button>
+          <button class="tab" role="tab" id="dw-tabbtn-all" aria-controls="dw-panel-all" data-tab="all">All Actions</button>
+          <button class="tab" role="tab" id="dw-tabbtn-mine" aria-controls="dw-panel-mine" data-tab="mine">My Actions</button>
+          <button class="tab" role="tab" id="dw-tabbtn-review" aria-controls="dw-panel-review" data-tab="review">Review Queue</button>
+          <button class="tab" role="tab" id="dw-tabbtn-verification" aria-controls="dw-panel-verification" data-tab="verification">Verification Queue</button>
+          <button class="tab" role="tab" id="dw-tabbtn-overdue" aria-controls="dw-panel-overdue" data-tab="overdue">Overdue</button>
+          <button class="tab" role="tab" id="dw-tabbtn-escalated" aria-controls="dw-panel-escalated" data-tab="escalated">Escalated</button>
+          <button class="tab" role="tab" id="dw-tabbtn-portfolio" aria-controls="dw-panel-portfolio" data-tab="portfolio">Portfolio</button>
+          <button class="tab" role="tab" id="dw-tabbtn-owners" aria-controls="dw-panel-owners" data-tab="owners">Owners</button>
+        </div>
+
+        <!-- Overview -->
+        <section class="tab-panel" id="dw-panel-overview" data-panel="overview" role="tabpanel" aria-labelledby="dw-tabbtn-overview">
+          <div id="dw-overview-loading" class="muted-note" style="padding:2rem 0;">Loading portfolio overview…</div>
+          <div id="dw-overview-error" class="alert alert-danger" style="display:none;"></div>
+          <div id="dw-overview-body" style="display:none;">
+            <div class="grid grid-4" id="dw-overview-tiles"></div>
+            <h2 class="card-title" style="margin-top:2rem;">Recently Updated</h2>
+            <div class="table-wrap"><table class="dw-actions-table"><thead><tr><th>Action</th><th>Status</th><th>Owner</th><th>Last Activity</th></tr></thead><tbody id="dw-recent-tbody"></tbody></table></div>
+          </div>
+        </section>
+
+        <!-- All Actions -->
+        <section class="tab-panel" id="dw-panel-all" data-panel="all" role="tabpanel" aria-labelledby="dw-tabbtn-all">
+          <div class="filter-bar" id="dw-filter-bar-all">
+            <div class="search-field"><input type="search" id="dw-f-q" placeholder="Search recommendation text…" aria-label="Search Actions"></div>
+            <select id="dw-f-status" aria-label="Filter by status"><option value="">Any status</option></select>
+            <select id="dw-f-priority" aria-label="Filter by priority"><option value="">Any priority</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select>
+            <select id="dw-f-risk" aria-label="Filter by risk"><option value="">Any risk</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select>
+            <input type="text" id="dw-f-project" placeholder="Project ID" aria-label="Filter by project ID" style="width:11rem;">
+            <input type="text" id="dw-f-department" placeholder="Department" aria-label="Filter by department" style="width:10rem;">
+            <label for="dw-f-overdue" style="display:flex; align-items:center; gap:.4em; font-size:.82rem; font-weight:600; margin-bottom:0;"><input type="checkbox" id="dw-f-overdue" style="width:auto;"> Overdue only</label>
+            <label for="dw-f-escalated" style="display:flex; align-items:center; gap:.4em; font-size:.82rem; font-weight:600; margin-bottom:0;"><input type="checkbox" id="dw-f-escalated" style="width:auto;"> Escalated only</label>
+            <select id="dw-f-sort" aria-label="Sort by">
+              <option value="last_activity">Last activity</option>
+              <option value="due_date">Due date</option>
+              <option value="priority">Priority</option>
+              <option value="risk">Risk</option>
+              <option value="created">Created date</option>
+              <option value="progress">Progress</option>
+              <option value="age">Age</option>
+            </select>
+            <select id="dw-f-direction" aria-label="Sort direction"><option value="desc">Descending</option><option value="asc">Ascending</option></select>
+            <button class="btn btn-ghost btn-sm" id="dw-f-reset" type="button">Reset filters</button>
+          </div>
+          <div id="dw-active-filters" class="dw-active-filters"></div>
+          <div id="dw-all-loading" class="muted-note" style="padding:1rem 0;">Loading Actions…</div>
+          <div id="dw-all-error" class="alert alert-danger" style="display:none;"></div>
+          <div id="dw-all-empty" class="alert alert-info" style="display:none;">No Actions match the current filters.</div>
+          <div class="table-wrap" id="dw-all-table-wrap" style="display:none;">
+            <table class="dw-actions-table">
+              <thead><tr><th>Action</th><th>Status</th><th>Priority</th><th>Risk</th><th>Owner</th><th>Due</th><th>Progress</th></tr></thead>
+              <tbody id="dw-all-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="dw-all-pagination" style="margin-top:1rem;"></div>
+        </section>
+
+        <!-- My Actions -->
+        <section class="tab-panel" id="dw-panel-mine" data-panel="mine" role="tabpanel" aria-labelledby="dw-tabbtn-mine">
+          <div class="filter-bar">
+            <button class="btn btn-ghost btn-sm dw-quick-filter" data-quick="assigned" type="button">Assigned</button>
+            <button class="btn btn-ghost btn-sm dw-quick-filter" data-quick="in_progress" type="button">In Progress</button>
+            <button class="btn btn-ghost btn-sm dw-quick-filter" data-quick="due_soon" type="button">Due Soon</button>
+            <button class="btn btn-ghost btn-sm dw-quick-filter" data-quick="overdue" type="button">Overdue</button>
+            <button class="btn btn-ghost btn-sm dw-quick-filter" data-quick="awaiting_verification" type="button">Awaiting Verification</button>
+            <button class="btn btn-ghost btn-sm dw-quick-filter active" data-quick="" type="button">All Mine</button>
+          </div>
+          <div id="dw-mine-loading" class="muted-note" style="padding:1rem 0;">Loading your Actions…</div>
+          <div id="dw-mine-error" class="alert alert-danger" style="display:none;"></div>
+          <div id="dw-mine-empty" class="alert alert-info" style="display:none;">No Actions are currently assigned to you.</div>
+          <div class="table-wrap" id="dw-mine-table-wrap" style="display:none;">
+            <table class="dw-actions-table"><thead><tr><th>Action</th><th>Status</th><th>Priority</th><th>Due</th><th>Progress</th></tr></thead><tbody id="dw-mine-tbody"></tbody></table>
+          </div>
+          <div class="pagination" id="dw-mine-pagination" style="margin-top:1rem;"></div>
+        </section>
+
+        <!-- Review Queue -->
+        <section class="tab-panel" id="dw-panel-review" data-panel="review" role="tabpanel" aria-labelledby="dw-tabbtn-review">
+          <p class="muted-note" style="margin-bottom:1rem;">This is a shared review queue, not a personal assignment list — the platform does not currently record who is assigned to review a specific Action, only who last acted on it.</p>
+          <div class="grid grid-3" id="dw-review-summary" style="margin-bottom:1.5rem;"></div>
+          <div class="filter-bar">
+            <button class="btn btn-ghost btn-sm dw-review-filter active" data-status="under_review,needs_clarification" type="button">All Pending Review</button>
+            <button class="btn btn-ghost btn-sm dw-review-filter" data-status="under_review" type="button">Under Review</button>
+            <button class="btn btn-ghost btn-sm dw-review-filter" data-status="needs_clarification" type="button">Needs Clarification</button>
+          </div>
+          <div id="dw-review-loading" class="muted-note" style="padding:1rem 0;">Loading review queue…</div>
+          <div id="dw-review-error" class="alert alert-danger" style="display:none;"></div>
+          <div id="dw-review-empty" class="alert alert-info" style="display:none;">Nothing is currently awaiting review.</div>
+          <div class="table-wrap" id="dw-review-table-wrap" style="display:none;">
+            <table class="dw-actions-table"><thead><tr><th>Action</th><th>Status</th><th>Owner</th><th>Priority</th><th>Risk</th><th>Since</th></tr></thead><tbody id="dw-review-tbody"></tbody></table>
+          </div>
+          <div class="pagination" id="dw-review-pagination" style="margin-top:1rem;"></div>
+        </section>
+
+        <!-- Verification Queue -->
+        <section class="tab-panel" id="dw-panel-verification" data-panel="verification" role="tabpanel" aria-labelledby="dw-tabbtn-verification">
+          <div id="dw-verification-loading" class="muted-note" style="padding:1rem 0;">Loading verification queue…</div>
+          <div id="dw-verification-error" class="alert alert-danger" style="display:none;"></div>
+          <div id="dw-verification-empty" class="alert alert-info" style="display:none;">Nothing is currently awaiting verification.</div>
+          <div class="table-wrap" id="dw-verification-table-wrap" style="display:none;">
+            <table class="dw-actions-table"><thead><tr><th>Action</th><th>Project</th><th>Owner</th><th>Completed</th><th>Priority</th><th>Risk</th></tr></thead><tbody id="dw-verification-tbody"></tbody></table>
+          </div>
+          <div class="pagination" id="dw-verification-pagination" style="margin-top:1rem;"></div>
+        </section>
+
+        <!-- Overdue -->
+        <section class="tab-panel" id="dw-panel-overdue" data-panel="overdue" role="tabpanel" aria-labelledby="dw-tabbtn-overdue">
+          <div id="dw-overdue-loading" class="muted-note" style="padding:1rem 0;">Loading overdue Actions…</div>
+          <div id="dw-overdue-error" class="alert alert-danger" style="display:none;"></div>
+          <div id="dw-overdue-empty" class="alert alert-info" style="display:none;">Nothing is currently overdue.</div>
+          <div class="table-wrap" id="dw-overdue-table-wrap" style="display:none;">
+            <table class="dw-actions-table"><thead><tr><th>Action</th><th>Status</th><th>Due Date</th><th>Days Overdue</th><th>Owner</th><th>Priority</th></tr></thead><tbody id="dw-overdue-tbody"></tbody></table>
+          </div>
+          <div class="pagination" id="dw-overdue-pagination" style="margin-top:1rem;"></div>
+        </section>
+
+        <!-- Escalated -->
+        <section class="tab-panel" id="dw-panel-escalated" data-panel="escalated" role="tabpanel" aria-labelledby="dw-tabbtn-escalated">
+          <div id="dw-escalated-loading" class="muted-note" style="padding:1rem 0;">Loading escalated Actions…</div>
+          <div id="dw-escalated-error" class="alert alert-danger" style="display:none;"></div>
+          <div id="dw-escalated-empty" class="alert alert-info" style="display:none;">Nothing is currently escalated.</div>
+          <div class="table-wrap" id="dw-escalated-table-wrap" style="display:none;">
+            <table class="dw-actions-table"><thead><tr><th>Action</th><th>Status</th><th>Escalated Since</th><th>Owner</th><th>Priority</th><th>Risk</th></tr></thead><tbody id="dw-escalated-tbody"></tbody></table>
+          </div>
+          <div class="pagination" id="dw-escalated-pagination" style="margin-top:1rem;"></div>
+        </section>
+
+        <!-- Portfolio -->
+        <section class="tab-panel" id="dw-panel-portfolio" data-panel="portfolio" role="tabpanel" aria-labelledby="dw-tabbtn-portfolio">
+          <div id="dw-portfolio-loading" class="muted-note" style="padding:1rem 0;">Loading organization portfolio…</div>
+          <div id="dw-portfolio-error" class="alert alert-danger" style="display:none;"></div>
+          <div id="dw-portfolio-body" style="display:none;">
+            <div class="grid grid-4" id="dw-portfolio-tiles" style="margin-bottom:1.5rem;"></div>
+            <div class="card" style="margin-bottom:1.5rem;">
+              <div class="card-title">Backlog Aging</div>
+              <div class="dw-aging-bar" id="dw-aging-bar"></div>
+              <div class="dw-aging-legend" id="dw-aging-legend"></div>
+            </div>
+            <div class="card" style="margin-bottom:1.5rem;">
+              <div class="card-title">Trend</div>
+              <div id="dw-trend-body" class="muted-note">—</div>
+            </div>
+            <div class="card">
+              <div class="card-title">Project Portfolio Lookup</div>
+              <div style="display:flex; gap:.6rem; margin-bottom:1rem;">
+                <label for="dw-project-lookup-input" class="visually-hidden">Project ID</label>
+                <input type="text" id="dw-project-lookup-input" placeholder="Enter a project ID…" style="flex:1;">
+                <button class="btn btn-primary btn-sm" id="dw-project-lookup-btn" type="button">View</button>
+              </div>
+              <div id="dw-project-lookup-result" class="muted-note">Enter a project ID above to see its portfolio.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Owners -->
+        <section class="tab-panel" id="dw-panel-owners" data-panel="owners" role="tabpanel" aria-labelledby="dw-tabbtn-owners">
+          <div id="dw-owners-loading" class="muted-note" style="padding:1rem 0;">Loading owner workload…</div>
+          <div id="dw-owners-error" class="alert alert-danger" style="display:none;"></div>
+          <div id="dw-owners-empty" class="alert alert-info" style="display:none;">No owner workload data is available yet.</div>
+          <div class="table-wrap" id="dw-owners-table-wrap" style="display:none;">
+            <table class="dw-actions-table"><thead><tr><th>Owner</th><th>Assigned</th><th>In Progress</th><th>Overdue</th><th>Due Soon</th><th>Awaiting Verification</th></tr></thead><tbody id="dw-owners-tbody"></tbody></table>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/safe-dom.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/decision-workspace.js"></script>
+<script src="/assets/js/decision-workspace-page.js"></script>
+<script src="/assets/js/admin-functional-qa.js"></script>
+<script src="/assets/js/production-routing.js"></script>
+</body>
+</html>

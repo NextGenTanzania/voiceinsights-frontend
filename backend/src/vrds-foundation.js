@@ -15,10 +15,19 @@ export const vrdsTokens = Object.freeze({
   riskColors: { low: '#1F8A4C', medium: '#E5A100', high: '#E67E22', critical: '#C0392B' },
   spacing: { 4: 4, 8: 8, 12: 12, 16: 16, 24: 24, 32: 32, 48: 48, 64: 64, 96: 96 },
   radius: { sm: 6, md: 10, card: 16, panel: 24, page: 28 },
-  grid: { htmlColumns: 12, pdfColumns: 6, pptColumns: 12, maxWidth: 1440, sidebarWidth: 280, evidencePanelWidth: 360 },
+  grid: { htmlColumns: 12, pdfColumns: 6, pptColumns: 12, maxWidth: 1440, sidebarWidth: 280, evidencePanelWidth: 360, matrixPlotHeight: 220 },
   typography: {
     fontSans: 'Inter, Segoe UI, Roboto, Arial, sans-serif',
-    scale: { displayXL: 56, displayL: 48, displayM: 40, h1: 34, h2: 28, h3: 24, h4: 20, bodyLarge: 18, body: 16, bodySmall: 14, caption: 12, footnote: 10 },
+    // PX Release 3, Part 7: a genuine display/body pairing for publication
+    // typography. Web-safe/system stacks only — Cloudflare's Browser
+    // Rendering container cannot reliably fetch external font files at
+    // render time, and no proprietary/external font may be introduced.
+    fontDisplay: 'Georgia, Cambria, "Times New Roman", Times, serif',
+    scale: {
+      displayXL: 56, displayL: 48, displayM: 40, h1: 34, h2: 28, h3: 24, h4: 20, bodyLarge: 18, body: 16, bodySmall: 14, caption: 12, footnote: 10,
+      // PX Release 3 additions — additive only, existing keys unchanged.
+      pullQuote: 24, statDisplay: 44, overline: 11,
+    },
     lineHeight: { tight: 1.08, heading: 1.18, body: 1.55, caption: 1.35 }
   }
 });

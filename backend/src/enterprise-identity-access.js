@@ -3,15 +3,28 @@
 
 export const V2103A_VERSION = 'v210.3A.0';
 
+// Program Beta Sprint 1: action.* permissions govern the Decision Action
+// lifecycle (create/read/update/submit/review/assign/progress/verify/cancel
+// — see international-programme-lifecycle.js's ACTION_TRANSITIONS). Grants
+// below mirror each role's existing report.publish/report.generate posture
+// rather than inventing a new authority tier: any role that can already
+// publish a report can also review and verify an Action; any role that can
+// already generate a report can create and progress one; enumerator (no
+// report permission at all today) gets none, unchanged from its existing
+// deliberately minimal scope.
+const ACTION_PERMISSIONS_FULL = ['action.create','action.read','action.update','action.submit','action.review','action.assign','action.progress','action.verify','action.cancel'];
+const ACTION_PERMISSIONS_CONTRIBUTOR = ['action.create','action.read','action.update','action.submit','action.progress'];
+const ACTION_PERMISSIONS_READ_ONLY = ['action.read'];
+
 export const ROLE_PERMISSIONS = Object.freeze({
   founder_executive: ['*'],
-  super_admin: ['organization.read','organization.create','project.read','project.create','campaign.read','campaign.launch','survey.read','survey.edit','data.read','data.export','report.read','report.generate','report.publish','user.read','user.invite','user.manage','iam.read','iam.manage','mfa.manage','sso.manage','scim.manage','api_key.manage','audit.read','security.configure'],
-  operations_manager: ['organization.read','project.read','project.create','campaign.read','campaign.launch','survey.read','data.read','report.read','report.generate','user.read','user.invite','iam.read','mfa.read','sso.read','scim.read','api_key.read'],
-  org_admin: ['organization.read','project.read','project.create','campaign.read','campaign.launch','survey.read','survey.edit','data.read','data.export','report.read','report.generate','report.publish','user.read','user.invite','user.manage','iam.read','mfa.manage','sso.manage','scim.manage','api_key.manage','audit.read'],
-  project_manager: ['project.read','project.create','campaign.read','campaign.launch','survey.read','survey.edit','data.read','data.export','report.read','report.generate','user.read','user.invite','iam.read','mfa.read','api_key.read'],
-  head_of_programs: ['project.read','project.create','campaign.read','campaign.launch','survey.read','data.read','data.export','report.read','report.generate','report.publish','user.read','iam.read','mfa.read'],
-  me_officer: ['project.read','campaign.read','survey.read','survey.edit','data.read','data.export','report.read','report.generate','iam.read','mfa.read'],
-  data_analyst: ['project.read','campaign.read','survey.read','data.read','data.export','report.read','report.generate','iam.read','mfa.read','api_key.read'],
+  super_admin: ['organization.read','organization.create','project.read','project.create','campaign.read','campaign.launch','survey.read','survey.edit','data.read','data.export','report.read','report.generate','report.publish','user.read','user.invite','user.manage','iam.read','iam.manage','mfa.manage','sso.manage','scim.manage','api_key.manage','audit.read','security.configure', ...ACTION_PERMISSIONS_FULL],
+  operations_manager: ['organization.read','project.read','project.create','campaign.read','campaign.launch','survey.read','data.read','report.read','report.generate','user.read','user.invite','iam.read','mfa.read','sso.read','scim.read','api_key.read', ...ACTION_PERMISSIONS_CONTRIBUTOR],
+  org_admin: ['organization.read','project.read','project.create','campaign.read','campaign.launch','survey.read','survey.edit','data.read','data.export','report.read','report.generate','report.publish','user.read','user.invite','user.manage','iam.read','mfa.manage','sso.manage','scim.manage','api_key.manage','audit.read', ...ACTION_PERMISSIONS_FULL],
+  project_manager: ['project.read','project.create','campaign.read','campaign.launch','survey.read','survey.edit','data.read','data.export','report.read','report.generate','user.read','user.invite','iam.read','mfa.read','api_key.read', ...ACTION_PERMISSIONS_CONTRIBUTOR],
+  head_of_programs: ['project.read','project.create','campaign.read','campaign.launch','survey.read','data.read','data.export','report.read','report.generate','report.publish','user.read','iam.read','mfa.read', ...ACTION_PERMISSIONS_FULL],
+  me_officer: ['project.read','campaign.read','survey.read','survey.edit','data.read','data.export','report.read','report.generate','iam.read','mfa.read', ...ACTION_PERMISSIONS_CONTRIBUTOR],
+  data_analyst: ['project.read','campaign.read','survey.read','data.read','data.export','report.read','report.generate','iam.read','mfa.read','api_key.read', ...ACTION_PERMISSIONS_READ_ONLY],
   enumerator: ['project.read','campaign.read','survey.read','data.collect','mfa.read']
 });
 

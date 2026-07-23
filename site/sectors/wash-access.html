@@ -25,14 +25,14 @@
       <div id="site-search-mount" style="width:180px;"></div>
       <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
       <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
-      <a href="/contact.html?sector=wash-access" class="btn btn-primary btn-sm">Book Demo</a>
+      <a href="/contact.html?sector=wash-access" class="btn btn-primary btn-sm">Request Demo</a>
     </div>
   </div>
   <div class="pub-nav-collapse pub-nav-links">
     <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
     <a href="/solutions.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
     <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
-    <a href="/sample-reports.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Intelligence Library</a>
+    <a href="/sample-reports.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Knowledge Hub</a>
     <a href="/safeguarding.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
   </div>
 </nav>
@@ -63,7 +63,7 @@
   </div>
   <div><div class="nav-label" style="padding:0;">Contact</div>
     <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
-    <a href="/contact.html?sector=wash-access" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+    <a href="/contact.html?sector=wash-access" class="btn btn-primary btn-sm" style="margin-top:1rem;">Request Demo</a>
   </div>
 </footer>
 
@@ -73,7 +73,7 @@
 <script src="/assets/js/site-search.js"></script>
 <script src="/assets/js/sector-page.js"></script>
 <script>
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
   initSiteSearch('site-search-mount');
   renderSectorPage({
     id: 'wash-access',
@@ -83,7 +83,7 @@
       headline: 'Find out which water points actually work, not just which were built.',
       subhead: 'Voice-collected feedback on water-point functionality and sanitation-access, routed through the same governed editorial pipeline and canonical publication engine as every VoiceInsights Africa sector.',
       primaryCta: { label: 'Book a WASH Demo', href: '/contact.html?sector=wash-access' },
-      secondaryCta: { label: 'Explore the Intelligence Library', href: '/sample-reports.html' },
+      secondaryCta: { label: 'Explore the Knowledge Hub', href: '/sample-reports.html' },
     },
     executiveSummary: {
       eyebrow: 'Why WASH Access',
@@ -178,7 +178,7 @@
     faqs: {
       headline: 'WASH Access Intelligence — frequently asked questions.',
       items: [
-        { q: 'Do you have a real WASH Access flagship publication?', a: 'Yes — see the Intelligence Library above for a real, governed WASH Access Intelligence publication covering water-point functionality and sanitation-access equity.' },
+        { q: 'Do you have a real WASH Access flagship publication?', a: 'Yes — see the Knowledge Hub above for a real, governed WASH Access Intelligence publication covering water-point functionality and sanitation-access equity.' },
         { q: 'Does this work in areas with no mobile data connectivity?', a: 'Yes — phone call, WhatsApp voice note, SMS, or an offline-first mobile app for enumerators working with zero connectivity.' },
       ],
     },
@@ -197,6 +197,6 @@
     ],
   });
 </script>
-<script src="/assets/js/production-routing.js"></script>
+<script src="/assets/js/intelligence-collection-components.js"></script><script src="/assets/js/industry-collection-shelf.js"></script><script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

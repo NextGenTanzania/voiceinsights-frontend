@@ -1,0 +1,81 @@
+warning: in the working copy of 'backend/README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/schema.sql', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/scripts/audit-frontend.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/auth.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/channel-pipeline.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/disaster-recovery.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/flagship-publication-quality-gate.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/flagship-report-engine.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/flagship-visualization-engine.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/hybrid-dedicated-rendering.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/international-publication-quality-engine.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/presentation-publishing.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/quality-scoring-engine.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/report-generator.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/report-trust.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/session-registry.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/utils.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/vrds-foundation.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/tests/autonomous-omni-channel-collection.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/tests/complete-consolidation.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/tests/enterprise-operations.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/tests/final-enterprise-consistency.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/tests/final-international-pilot-readiness.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/tests/hybrid-dedicated-rendering.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/tests/international-report-excellence.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/tests/organization-admin-workspace.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/tests/publication-excellence.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/tests/sample-report-live-fix.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/tests/security-remediation.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/tests/ui-functional-closure.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/tests/vrds-export-public-polish.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/tests/workstream3-governance-security.test.js', LF will be replaced by CRLF the next time Git touches it
+ backend/.gitignore                                 |    3 [32m+[m
+ backend/README.md                                  |   22 [32m+[m[31m-[m
+ backend/package-lock.json                          | 1589 [32m+++++++++++++++++++[m[31m-[m
+ backend/package.json                               |    6 [32m+[m
+ backend/schema.sql                                 |  104 [32m+[m[31m-[m
+ backend/src/application.js                         | 1013 [32m++++++++++++[m[31m-[m
+ backend/src/auth.js                                |    8 [32m+[m[31m-[m
+ backend/src/channel-pipeline.js                    |    6 [32m+[m[31m-[m
+ backend/src/cloudflare-queue-platform.js           |    6 [32m+[m[31m-[m
+ backend/src/dedicated-binary-renderer.js           |   30 [32m+[m[31m-[m
+ backend/src/disaster-recovery.js                   |   10 [32m+[m[31m-[m
+ backend/src/document-composer.js                   |    8 [32m+[m
+ backend/src/enterprise-identity-access.js          |   27 [32m+[m[31m-[m
+ backend/src/flagship-interactive-html.js           |   10 [31m-[m
+ backend/src/flagship-publication-design-system.js  |   10 [32m+[m[31m-[m
+ backend/src/flagship-publication-quality-gate.js   |   29 [32m+[m
+ backend/src/flagship-report-engine.js              |   28 [32m+[m
+ backend/src/flagship-sample-library.js             |  837 [32m++++++++++[m[31m-[m
+ backend/src/flagship-standards-engine.js           |   17 [32m+[m
+ backend/src/international-programme-lifecycle.js   |  110 [32m++[m
+ .../international-publication-quality-engine.js    |   30 [32m+[m[31m-[m
+ backend/src/office-export-engine.js                |   21 [32m+[m[31m-[m
+ backend/src/presentation-publishing.js             |   27 [32m+[m
+ backend/src/quality-scoring-engine.js              |  501 [32m++++++[m
+ backend/src/queue-adapters.js                      |   49 [32m+[m[31m-[m
+ backend/src/report-generator.js                    |  175 [32m++[m[31m-[m
+ backend/src/report-trust.js                        |   31 [32m+[m
+ backend/src/session-registry.js                    |   20 [32m+[m[31m-[m
+ backend/src/utils.js                               |   14 [32m+[m
+ backend/src/vrds-foundation.js                     |   13 [32m+[m[31m-[m
+ .../autonomous-omni-channel-collection.test.js     |   19 [32m+[m[31m-[m
+ backend/tests/complete-consolidation.test.js       |   18 [32m+[m
+ backend/tests/enterprise-operations.test.js        |   16 [32m+[m[31m-[m
+ backend/tests/final-enterprise-consistency.test.js |   12 [32m+[m[31m-[m
+ backend/tests/flagship-launch-regressions.test.js  |   20 [32m+[m[31m-[m
+ .../tests/flagship-report-engine-phase5.test.js    |   20 [32m+[m[31m-[m
+ backend/tests/flagship-sample-generator.test.js    |  144 [32m+[m[31m-[m
+ backend/tests/flagship-world-class-engine.test.js  |   17 [32m+[m[31m-[m
+ backend/tests/organization-admin-workspace.test.js |   17 [32m+[m[31m-[m
+ backend/tests/platinum-full-sample-library.test.js |    4 [32m+[m[31m-[m
+ backend/tests/platinum-report-engine.test.js       |    4 [32m+[m[31m-[m
+ backend/tests/publication-excellence.test.js       |   10 [32m+[m
+ backend/tests/security-remediation.test.js         |   65 [32m+[m[31m-[m
+ backend/tests/ui-functional-closure.test.js        |    4 [32m+[m[31m-[m
+ .../tests/workstream1-report-publication.test.js   |    5 [32m+[m[31m-[m
+ .../tests/workstream3-governance-security.test.js  |   17 [32m+[m
+ .../workstream4-scale-cloud-intelligence.test.js   |    7 [32m+[m[31m-[m
+ backend/wrangler.toml                              |  100 [32m++[m
+ 48 files changed, 4962 insertions(+), 291 deletions(-)

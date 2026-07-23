@@ -1,6 +1,14 @@
 // VoiceInsights v186 Document Composer
 // Additive, Worker-compatible composition layer. It never invents report content;
 // it organizes an existing document_model_json into renderable PDF/PPTX artifacts.
+//
+// Unified Publication Runtime migration status: OUT OF SCOPE. This is the
+// generic (non-flagship) composition path for policy-brief/cabinet-memo/
+// board-deck/investor-deck formats — a separate document type from the 16
+// flagship publications this migration covers. It is also still used as the
+// flagship route's own final PDF fallback (application.js, when Browser
+// Rendering is ineligible or fails). Left untouched deliberately; a
+// consolidation of this path is a follow-on effort, not part of this plan.
 
 import { buildReportLayout } from './report-layout-engine.js';
 import { buildPdfExport } from './pdf-export-engine.js';

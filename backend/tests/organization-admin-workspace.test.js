@@ -40,11 +40,24 @@ test('route and Organization Admin workspace page are wired into source and fron
   const page = fs.readFileSync(new URL('../../site/app/organization-admin-workspace.html', import.meta.url), 'utf8');
   const js = fs.readFileSync(new URL('../../site/assets/js/organization-admin-workspace.js', import.meta.url), 'utf8');
   const css = fs.readFileSync(new URL('../../site/assets/css/organization-admin-workspace.css', import.meta.url), 'utf8');
-  const dashboard = fs.readFileSync(new URL('../../site/app/dashboard.html', import.meta.url), 'utf8');
   assert.match(index, /admin-workspace/);
   assert.match(index, /Organization Admin access required/);
   assert.match(page, /v207b-workspace-root/);
   assert.match(js, /initV207BOrganizationAdminWorkspace/);
   assert.match(css, /Mobile|@media|v207b/);
-  assert.match(dashboard, /Open Organization Workspace/);
+});
+
+// Release 0B (2026-07-18): organization-admin-workspace.html is actually a
+// redirect stub (location.replace into organization-operational-dashboard.html,
+// which in turn calls a backend route that does not exist — confirmed 404 in
+// production). This test previously asserted the broken CTA's label
+// ("Open Organization Workspace") was present on dashboard.html as if that
+// were correct, healthy wiring; it wasn't — it was a dead end for every real
+// user who clicked it. The card was removed as part of the Release 0B
+// production-safety hotfix, and this now guards against it silently coming
+// back until the underlying chain is genuinely fixed.
+test('dashboard.html no longer links to the confirmed-broken Organization Admin Workspace chain', () => {
+  const dashboard = fs.readFileSync(new URL('../../site/app/dashboard.html', import.meta.url), 'utf8');
+  assert.doesNotMatch(dashboard, /Open Organization Workspace/);
+  assert.doesNotMatch(dashboard, /organization-admin-workspace\.html/);
 });

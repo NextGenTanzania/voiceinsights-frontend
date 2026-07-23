@@ -83,9 +83,10 @@
 </footer>
 
 <script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/app.js"></script>
 <script>
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
 
   const QUESTIONS = [
     { id: 'product', text: 'Can you understand what the product does?' },

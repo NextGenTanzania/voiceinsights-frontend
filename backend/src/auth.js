@@ -44,7 +44,13 @@ async function hmacKey(secret) {
   return crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']);
 }
 
-export async function signJWT(payload, secret, expiresInSeconds = 60 * 60 * 24 * 7) {
+// Default session token lifetime (7 days). Exported so callers that also
+// need to record this outside the JWT itself (e.g. user_sessions.expires_at)
+// stay in sync with the token's real exp claim instead of duplicating the
+// magic number.
+export const SESSION_TOKEN_TTL_SECONDS = 60 * 60 * 24 * 7;
+
+export async function signJWT(payload, secret, expiresInSeconds = SESSION_TOKEN_TTL_SECONDS) {
   const header = { alg: 'HS256', typ: 'JWT' };
   const body = { ...payload, iat: Math.floor(Date.now() / 1000), exp: Math.floor(Date.now() / 1000) + expiresInSeconds };
   const encHeader = base64url(new TextEncoder().encode(JSON.stringify(header)));

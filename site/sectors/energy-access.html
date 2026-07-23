@@ -25,14 +25,14 @@
       <div id="site-search-mount" style="width:180px;"></div>
       <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
       <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
-      <a href="/contact.html?sector=energy-access" class="btn btn-primary btn-sm">Book Demo</a>
+      <a href="/contact.html?sector=energy-access" class="btn btn-primary btn-sm">Request Demo</a>
     </div>
   </div>
   <div class="pub-nav-collapse pub-nav-links">
     <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
     <a href="/solutions.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
     <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
-    <a href="/sample-reports.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Intelligence Library</a>
+    <a href="/sample-reports.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Knowledge Hub</a>
     <a href="/safeguarding.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
   </div>
 </nav>
@@ -63,7 +63,7 @@
   </div>
   <div><div class="nav-label" style="padding:0;">Contact</div>
     <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
-    <a href="/contact.html?sector=energy-access" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+    <a href="/contact.html?sector=energy-access" class="btn btn-primary btn-sm" style="margin-top:1rem;">Request Demo</a>
   </div>
 </footer>
 
@@ -73,7 +73,7 @@
 <script src="/assets/js/site-search.js"></script>
 <script src="/assets/js/sector-page.js"></script>
 <script>
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
   initSiteSearch('site-search-mount');
   renderSectorPage({
     id: 'energy-access',
@@ -83,7 +83,7 @@
       headline: 'Direct the next electrification cycle where it actually pays off.',
       subhead: 'Voice-collected feedback on grid-extension viability and supply reliability, routed through the same governed editorial pipeline and canonical publication engine as every VoiceInsights Africa sector.',
       primaryCta: { label: 'Book an Energy Demo', href: '/contact.html?sector=energy-access' },
-      secondaryCta: { label: 'Explore the Intelligence Library', href: '/sample-reports.html' },
+      secondaryCta: { label: 'Explore the Knowledge Hub', href: '/sample-reports.html' },
     },
     executiveSummary: {
       eyebrow: 'Why Energy Access',
@@ -177,7 +177,7 @@
     faqs: {
       headline: 'Energy Access Intelligence — frequently asked questions.',
       items: [
-        { q: 'Do you have a real Energy Access flagship publication?', a: 'Yes — see the Intelligence Library above for a real, governed Energy Access Intelligence publication covering electrification prioritisation and supply reliability.' },
+        { q: 'Do you have a real Energy Access flagship publication?', a: 'Yes — see the Knowledge Hub above for a real, governed Energy Access Intelligence publication covering electrification prioritisation and supply reliability.' },
         { q: 'Does this work in areas with no mobile data connectivity?', a: 'Yes — phone call, WhatsApp voice note, SMS, or an offline-first mobile app for enumerators working with zero connectivity.' },
       ],
     },
@@ -196,6 +196,6 @@
     ],
   });
 </script>
-<script src="/assets/js/production-routing.js"></script>
+<script src="/assets/js/intelligence-collection-components.js"></script><script src="/assets/js/industry-collection-shelf.js"></script><script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

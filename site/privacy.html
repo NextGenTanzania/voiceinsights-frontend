@@ -9,37 +9,18 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-<nav class="pub-nav">
+<a class="skip-link" id="skip-to-content" href="#main-content">Skip to main content</a>
+<div class="public-trust-strip">Trusted Voice Research Infrastructure for NGOs, Governments &amp; Global Development Partners</div>
+<nav class="pub-nav" aria-label="Primary navigation">
   <div class="pub-nav-row1">
-    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
-      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
-      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
-    </a>
-    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
-    <div class="pub-nav-collapse pub-nav-row1-right">
-      <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
-      <div class="site-lang-switch" id="site-lang-switch">
-        <button type="button" data-lang="en" class="active">EN</button>
-        <button type="button" data-lang="fr">FR</button>
-        <button type="button" data-lang="pt">PT</button>
-        <button type="button" data-lang="sw">SW</button>
-      </div>
-      <a href="/login.html" data-i18n="nav.login" class="btn btn-ghost btn-sm">Log in</a>
-      <a href="/contact.html" data-i18n="topnav.book_demo" class="btn btn-primary btn-sm">Book Demo</a>
-    </div>
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;"><img src="/assets/img/logo-icon.png" alt="" style="height:34px;width:auto;"><span style="font-family:var(--font-display);font-weight:650;font-size:1.08rem;">VoiceInsights Africa</span></a>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right"><button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle colour theme"><span class="theme-toggle-icon" aria-hidden="true">◐</span></button><a href="/login.html" class="btn btn-ghost btn-sm">Login</a><a href="/contact.html?request=demo" class="btn btn-primary btn-sm">Request Demo</a></div>
   </div>
-  <div class="pub-nav-collapse pub-nav-links">
-    <a href="/platform.html" data-i18n="topnav.platform" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
-    <a href="/solutions.html" data-i18n="topnav.solutions" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
-    <a href="/industries.html" data-i18n="topnav.industries" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
-    <a href="/sample-reports.html" data-i18n="topnav.case_studies" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Intelligence Library</a>
-    <a href="/index.html#pricing" data-i18n="topnav.pricing" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Pricing</a>
-    <a href="/safeguarding.html" data-i18n="topnav.compliance" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
-    <a href="/about.html" data-i18n="topnav.about" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">About</a>
-    <a href="/respondent.html" style="color:var(--accent); font-size:.85rem; font-weight:700;">Try Demo</a>
-  </div>
+  <div class="pub-nav-collapse pub-nav-links"><a href="/platform.html">Platform</a><a href="/solutions.html">Solutions</a><a href="/industries.html">Industries</a><a href="/sample-reports.html">Knowledge Hub</a><a href="/security.html">Compliance</a><a href="/about.html">About Us</a><a href="/contact.html">Contact</a><a href="/procurement.html">Pricing</a></div>
 </nav>
 
+<main id="main-content">
 <header class="pub-hero" style="padding-bottom:1rem;">
   <span class="eyebrow">Legal</span>
   <h1 style="font-size:clamp(1.8rem,4vw,2.6rem);">Privacy Policy</h1>
@@ -48,81 +29,41 @@
 
 <section class="pub-section" style="padding-top:0; max-width:760px;">
   <div style="color:var(--text-muted); line-height:1.8;">
-    <h3 style="color:var(--text); margin-top:1.5rem;">What we collect</h3>
+    <h2 style="color:var(--text); margin-top:1.5rem;">What we collect</h2>
     <p>When you use VoiceInsights Africa as a respondent, we collect the voice recording and/or text you provide in response to survey questions, along with basic metadata (channel used, timestamp, and — if you provide it — demographic information like gender or age band). When you use the platform as a client organization, we collect account information (name, email, organization) needed to operate your account.</p>
 
-    <h3 style="color:var(--text); margin-top:1.5rem;">How we use it</h3>
+    <h2 style="color:var(--text); margin-top:1.5rem;">How we use it</h2>
     <p>Respondent data is processed to generate transcripts, sentiment analysis, and aggregated insights for the client organization that commissioned the survey. We do not sell respondent data to third parties. Client account data is used solely to operate and bill for the service.</p>
 
-    <h3 style="color:var(--text); margin-top:1.5rem;">Service providers and subprocessors</h3>
+    <h2 style="color:var(--text); margin-top:1.5rem;">Service providers and subprocessors</h2>
     <p>We use contracted service providers to operate the platform. Depending on the channel and configuration selected by the commissioning organization, these may include Cloudflare for application hosting and storage, Twilio for phone, SMS and WhatsApp delivery, OpenAI or Anthropic for configured language and AI processing, and an email delivery provider for transactional notices. These providers process data on our instructions to deliver the service; this is not a sale of respondent data. A project-specific subprocessor and data-transfer schedule should be agreed during enterprise onboarding where required.</p>
 
-    <h3 style="color:var(--text); margin-top:1.5rem;">Consent</h3>
-    <p>Every voice interview begins with a spoken consent request. Data is not collected from a respondent without their consent, and respondents may stop participating at any time. See our <a href="/safeguarding.html" style="color:var(--accent-2);">Safeguarding &amp; Compliance</a> page for details.</p>
+    <h2 style="color:var(--text); margin-top:1.5rem;">Consent</h2>
+    <p>Approved collection workflows must present and record the consent process required by the applicable research protocol and channel. Respondents may stop participating in accordance with that protocol. See our <a href="/safeguarding.html" style="color:var(--accent-2);">Safeguarding &amp; Compliance</a> page for details.</p>
 
-    <h3 style="color:var(--text); margin-top:1.5rem;">Data retention and security</h3>
+    <h2 style="color:var(--text); margin-top:1.5rem;">Data retention and security</h2>
     <p>Data is encrypted in transit and at rest, and access is restricted by role. Offline interview payloads are encrypted on the field device and are removed after a confirmed synchronization. Project retention periods, deletion schedules, permitted processing locations and international transfer safeguards must be configured in the client agreement; we do not claim a universal data-residency location for every provider. See our <a href="/security.html" style="color:var(--accent-2);">Security</a> page for technical detail.</p>
 
-    <h3 style="color:var(--text); margin-top:1.5rem;">Legal basis — Tanzania Personal Data Protection Act, 2022</h3>
-    <p>VoiceInsights Africa Ltd is registered with the Personal Data Protection Commission (PDPC) of Tanzania as a Data Controller, under the <b>Personal Data Protection Act, No. 11 of 2022</b>. We process personal data lawfully, fairly, and only for the specific research purpose it was collected for, in line with the Act's principles. Where we work with international donors or partners, we additionally design our systems in line with globally recognized principles such as GDPR.</p>
+    <h2 style="color:var(--text); margin-top:1.5rem;">Legal basis — Tanzania Personal Data Protection Act, 2022</h2>
+    <p>VoiceInsights Africa designs implementations to support applicable obligations under Tanzania's <b>Personal Data Protection Act, No. 11 of 2022</b>. The applicable agreement must identify controller and processor roles, permitted purposes, regulatory responsibilities and any transfer safeguards required for the customer and project. References to international principles describe design context and do not claim certification.</p>
 
-    <h3 style="color:var(--text); margin-top:1.5rem;">Your rights</h3>
+    <h2 style="color:var(--text); margin-top:1.5rem;">Your rights</h2>
     <p>If you are a respondent and want data associated with you removed, or if you are a client organization with questions about this policy, contact us at <a href="mailto:hello@voiceinsightsafrica.com" style="color:var(--accent-2);">hello@voiceinsightsafrica.com</a>.</p>
 
     <p style="margin-top:2rem; font-size:.85rem; color:var(--text-dim);">This is a working draft policy for an early-stage platform. If your organization requires a reviewed, jurisdiction-specific privacy policy for procurement purposes, please <a href="/contact.html" style="color:var(--accent-2);">contact us</a> and we will provide one.</p>
   </div>
 </section>
+</main>
 
-<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
-  <div style="flex:1 1 220px;">
-    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
-      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
-      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
-    </div>
-    <p style="max-width:32ch; font-size:.85rem; line-height:1.7;" data-i18n="footer.tagline">VoiceInsights Africa is an enterprise voice intelligence platform helping organizations collect, analyze, and transform multilingual voice data into decision-ready insights.</p>
-    <div style="display:flex; gap:.7rem; margin-top:1rem;">
-      <a href="https://www.linkedin.com/company/voiceinsights-africa/" target="_blank" rel="noopener" aria-label="VoiceInsights Africa on LinkedIn" style="width:32px; height:32px; border-radius:8px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.11 20.45H3.56V9h3.55v11.45z"/></svg>
-      </a>
-      <a href="https://x.com/voiceinsights_a" target="_blank" rel="noopener" aria-label="VoiceInsights Africa on X" style="width:32px; height:32px; border-radius:8px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.2 8.2L23.3 22H16.7l-5.2-6.8L5.5 22H2.4l7.7-8.8L1 2h6.8l4.7 6.2L18.9 2zm-2.3 18h1.9L7.5 3.9H5.5L16.6 20z"/></svg>
-      </a>
-    </div>
-    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); margin-top:1rem; line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.<br><span style="font-size:.68rem;">VoiceInsights Africa&trade; and VIA Intelligence Engine&trade; are proprietary trademarks of VoiceInsights Africa Ltd.</span></p>
-    <div style="margin-top:.6rem; display:flex; gap:1rem;">
-      <a href="/privacy.html" style="font-size:.75rem; color:var(--text-dim);">Privacy Policy</a>
-      <a href="/terms.html" style="font-size:.75rem; color:var(--text-dim);">Terms of Service</a>
-      <a href="/careers.html" style="font-size:.75rem; color:var(--text-dim);">Careers</a>
-    </div>
-  </div>
-  <div><div class="nav-label" style="padding:0;" data-i18n="footer.platform">Platform</div>
-    <a href="/app/dashboard.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.dashboard">Dashboard</a>
-    <a href="/respondent.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.demo_link">Interview Demo</a>
-    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.analytics">Analytics</a>
-    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.reporting">Reporting</a>
-    <a href="/api.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.api">API &amp; Integrations</a>
-  </div>
-  <div><div class="nav-label" style="padding:0;" data-i18n="footer.solutions">Solutions</div>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.survey_automation">Survey Automation</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.me">Monitoring &amp; Evaluation</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.beneficiary">Beneficiary Feedback</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.grievance">Grievance Systems</a>
-  </div>
-  <div><div class="nav-label" style="padding:0;" data-i18n="footer.trust">Trust</div>
-    <a href="/safeguarding.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.safeguarding_link">Safeguarding</a>
-    <a href="/security.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.security">Security</a>
-    <a href="/faq.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.faq_link">FAQ</a>
-  </div>
-  <div><div class="nav-label" style="padding:0;" data-i18n="footer.contact">Contact</div>
-    <a href="mailto:partnerships@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">partnerships@voiceinsightsafrica.com</a>
-    <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
-    <a href="/contact.html" class="btn btn-primary btn-sm" style="margin-top:1rem;" data-i18n="topnav.book_demo">Book Demo</a>
-  </div>
+<footer class="pub-footer" data-shell="enterprise" aria-labelledby="footer-brand-title">
+  <div class="footer-primary"><section class="footer-brand"><div class="footer-brand-heading"><img src="/assets/img/logo-icon.png" alt=""><h2 id="footer-brand-title">VOICEINSIGHTS AFRICA</h2></div><p>VoiceInsights Africa is an enterprise data intelligence and publication platform helping organizations collect, understand and transform multilingual data into dashboards, reports, datasets, publications and decision-ready evidence.</p><p class="footer-company">VoiceInsights Africa Ltd — Registered in Tanzania.</p><div class="footer-emails"><a href="mailto:partnerships@voiceinsightsafrica.com">partnerships@voiceinsightsafrica.com</a><a href="mailto:hello@voiceinsightsafrica.com">hello@voiceinsightsafrica.com</a></div><a class="btn btn-primary" href="/contact.html?request=demo">Request Demo</a></section>
+  <nav class="footer-links" aria-label="Footer navigation"><section><h2>Platform</h2><a href="/platform.html">Platform</a><a href="/login.html">Workspace Login</a><a href="/platform.html">Analytics</a><a href="/sample-reports.html">Reports &amp; Publications</a><a href="/sample-reports.html">Knowledge Hub</a><a href="/developers/index.html">API &amp; Integrations</a></section><section><h2>Solutions</h2><a href="/solutions.html">Research &amp; Evaluation</a><a href="/solutions.html">Monitoring &amp; Performance</a><a href="/solutions.html">Community Voice &amp; Accountability</a><a href="/solutions.html">Enterprise Decision Intelligence</a></section><section><h2>Compliance &amp; Trust</h2><a href="/security.html">Compliance</a><a href="/safeguarding.html">Safeguarding</a><a href="/privacy.html">Privacy Policy</a><a href="/terms.html">Terms of Service</a><a href="/faq.html">FAQ</a></section><section><h2>Company</h2><a href="/about.html">About Us</a><a href="/contact.html">Contact</a><a href="/careers.html">Careers</a><a href="/procurement.html">Pricing</a></section></nav></div>
+  <div class="footer-legal"><span>© 2026 VoiceInsights Africa. All rights reserved.</span><span>VoiceInsights Africa™ and VIA Intelligence Engine™ are proprietary trademarks of VoiceInsights Africa Ltd.</span></div>
 </footer>
 <script src="/assets/js/config.js"></script>
 <script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/app.js"></script>
-<script>lucide.createIcons(); initSiteLanguage();</script>
+<script>if (window.lucide) lucide.createIcons(); initSiteLanguage();</script>
 <script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

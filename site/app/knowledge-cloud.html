@@ -1,12 +1,75 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Knowledge Cloud — VoiceInsights Africa</title><link rel="stylesheet" href="/assets/css/style.css">
-<link rel="stylesheet" href="/assets/css/enterprise-dashboard-theme.css"><script src="/assets/js/config.js"></script><style>
-:root{color-scheme:dark}.kc{max-width:1280px;margin:auto;padding:24px}.hero{padding:28px;border:1px solid #29443d;border-radius:22px;background:linear-gradient(135deg,#0c1715,#122a25)}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:18px}.card{grid-column:span 4;background:#111b19;border:1px solid #29443d;border-radius:18px;padding:18px}.wide{grid-column:span 8}.full{grid-column:1/-1}.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.kpi{background:#0b1412;border:1px solid #29443d;border-radius:14px;padding:14px}.kpi strong{font-size:1.5rem;color:#e3bd5b;display:block}.search{display:flex;gap:10px;flex-wrap:wrap}.search input,.search select{background:#09110f;color:#fff;border:1px solid #35564d;border-radius:12px;padding:12px;min-height:44px}.search input{flex:1;min-width:230px}.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer;background:#e3bd5b;color:#10201c}.result{padding:14px 0;border-bottom:1px solid #263f38}.pill{display:inline-block;margin:4px 6px 0 0;padding:4px 9px;border-radius:999px;border:1px solid #3b6257;color:#b8d7ce;font-size:.78rem}.muted{color:#9eb5ae}@media(max-width:800px){.card,.wide{grid-column:1/-1}.kpis{grid-template-columns:repeat(2,1fr)}}
-</style></head><body>
-<a class="skip-link" href="#main-content">Skip to main content</a><main id="main-content" class="kc"><section class="hero"><p style="color:#e3bd5b;font-weight:900">VoiceInsights Knowledge Cloud™</p><h1>Institutional memory for research, evidence and decisions</h1><p class="muted">Search previous reports, recommendations, lessons learned and traceable evidence across your organization.</p></section><section class="grid"><div class="card full"><div class="kpis" id="kpis"></div></div><div class="card full"><div class="search"><input aria-label="Search knowledge, reports, recommendations or evidence..." id="q" placeholder="Search knowledge, reports, recommendations or evidence..."><select id="type"><option value="">All types</option><option value="report">Reports</option><option value="recommendation">Recommendations</option><option value="lesson">Lessons learned</option><option value="evidence">Evidence</option></select><button type="button" class="btn" id="searchBtn">Search</button></div></div><div class="card wide"><h2>Knowledge Search</h2><div id="results" class="muted">Search to explore organization knowledge.</div></div><div class="card"><h2>Knowledge Areas</h2><span class="pill">Previous Reports</span><span class="pill">Recommendations</span><span class="pill">Lessons Learned</span><span class="pill">Evidence Search</span><span class="pill">Organization Knowledge</span></div><div class="card full"><h2>Governance</h2><p class="muted">Organization scoped • evidence classification preserved • respondent raw data excluded by default • searches auditable</p></div></section></main><script>
-const apiBase=window.VI_API_BASE||'https://voiceinsights-api.kitentyatsnp.workers.dev';
-const token=localStorage.getItem('vi_token'); const headers=token?{Authorization:`Bearer ${token}`}:{}, api=(p)=>fetch(apiBase+p,{headers}).then(async r=>{if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json()});
-function metric(label,value){return `<div class="kpi"><strong>${value??0}</strong><span>${label}</span></div>`}
-async function load(){try{const d=await api('/api/knowledge/v2105/workspace');const o=d.overview||{};document.getElementById('kpis').innerHTML=[['Knowledge items',o.total_items],['Previous reports',o.previous_reports],['Recommendations',o.recommendations],['Lessons learned',o.lessons_learned],['Evidence items',o.evidence_items]].map(x=>metric(...x)).join('')}catch(e){document.getElementById('kpis').innerHTML=metric('Status','Login required')}}
-async function search(){const q=encodeURIComponent(document.getElementById('q').value),t=encodeURIComponent(document.getElementById('type').value);const box=document.getElementById('results');box.textContent='Searching...';try{const d=await api(`/api/knowledge/v2105/search?q=${q}&type=${t}`);box.innerHTML=d.results.length?d.results.map(r=>`<article class="result"><strong>${r.title}</strong><div><span class="pill">${r.type}</span><span class="pill">${r.sector||'cross-sector'}</span><span class="pill">Confidence ${r.confidence_score||0}%</span></div><p>${r.summary||r.content||'No summary available.'}</p></article>`).join(''):'No matching organization knowledge found.'}catch(e){box.textContent=`Could not search Knowledge Cloud: ${e.message}`}}
-document.getElementById('searchBtn').onclick=search;document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')search()});load();
-</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Knowledge — VoiceInsights Workspace</title>
+  <link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/enterprise-dashboard-theme.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <h1 class="visually-hidden" data-shell-heading-fallback>Knowledge — VoiceInsights Workspace</h1>
+  <div class="shell">
+    <div id="sidebar-mount"></div>
+    <main id="main-content" class="main">
+      <div id="topbar-mount"></div>
+      <div class="content">
+        <section class="dashboard-panel" aria-labelledby="knowledge-intro">
+          <span class="eyebrow">Governed organizational knowledge</span>
+          <h2 id="knowledge-intro" style="margin:.4rem 0 .55rem;">Find evidence in context.</h2>
+          <p style="max-width:72ch;">Search reports, recommendations, lessons and evidence within your organization. Raw respondent data remains excluded by default, and access follows existing permissions.</p>
+          <div class="format-list"><span class="format-badge">Report</span><span class="format-badge">Publication</span><span class="format-badge">Dataset</span><span class="format-badge">Evidence Pack</span><span class="format-badge">Methodology</span></div>
+        </section>
+        <section class="workspace-kpis" id="knowledge-kpis" aria-label="Knowledge summary" style="margin-top:1rem;">
+          <div class="kpi-card state-loading"><span class="kpi-value">—</span><span class="kpi-label">Loading knowledge summary</span></div>
+        </section>
+        <section class="dashboard-panel" style="margin-top:1rem;" aria-labelledby="knowledge-search-title">
+          <span class="eyebrow">Search</span><h2 id="knowledge-search-title" style="font-size:1.25rem;margin:.3rem 0 1rem;">Knowledge items</h2>
+          <div class="filter-bar">
+            <label class="search-field"><span class="visually-hidden">Search organization knowledge</span><input id="knowledge-query" name="knowledge_query" type="search" aria-label="Search organization knowledge" placeholder="Search reports, recommendations, lessons or evidence"></label>
+            <label><span class="visually-hidden">Filter by content type</span><select id="knowledge-type" name="knowledge_type"><option value="">All types</option><option value="report">Reports</option><option value="recommendation">Recommendations</option><option value="lesson">Lessons learned</option><option value="evidence">Evidence</option></select></label>
+            <button class="btn btn-primary" type="button" id="knowledge-search-button">Search</button>
+          </div>
+          <div id="knowledge-results" aria-live="polite"><div class="state-panel"><span class="component-icon"><i data-lucide="search" aria-hidden="true"></i></span><h3>Search your organization’s knowledge</h3><p>Use a title, topic, sector or evidence term to begin.</p></div></div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/i18n.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script>
+    if (!requireLogin()) { /* redirected */ }
+    renderShell({ role:'client', active:'/app/knowledge-cloud.html', eyebrow:'Knowledge', title:'Knowledge' });
+    const escapeKnowledge = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
+    const metric = (label, value) => `<div class="kpi-card"><span class="kpi-value">${escapeKnowledge(value ?? 0)}</span><span class="kpi-label">${escapeKnowledge(label)}</span></div>`;
+    async function loadKnowledgeSummary() {
+      const mount = document.getElementById('knowledge-kpis');
+      try {
+        const data = await apiRequest('/api/knowledge/v2105/workspace'); const overview = data.overview || {};
+        mount.innerHTML = [['Knowledge items',overview.total_items],['Previous reports',overview.previous_reports],['Recommendations',overview.recommendations],['Lessons learned',overview.lessons_learned],['Evidence items',overview.evidence_items]].map(item => metric(...item)).join('');
+      } catch (error) {
+        mount.innerHTML = `<div class="state-panel" style="grid-column:1/-1;"><span class="component-icon"><i data-lucide="circle-alert" aria-hidden="true"></i></span><h3>Knowledge summary unavailable</h3><p>${escapeKnowledge(error.message)}</p></div>`; if (window.lucide) lucide.createIcons();
+      }
+    }
+    async function searchKnowledge() {
+      const query = encodeURIComponent(document.getElementById('knowledge-query').value); const type = encodeURIComponent(document.getElementById('knowledge-type').value); const mount = document.getElementById('knowledge-results');
+      mount.innerHTML = '<div class="state-panel state-loading"><h3>Searching knowledge…</h3></div>';
+      try {
+        const data = await apiRequest(`/api/knowledge/v2105/search?q=${query}&type=${type}`); const results = data.results || [];
+        mount.innerHTML = results.length ? `<div class="product-grid">${results.map(item => `<article class="data-product-card"><div><span class="badge badge-neutral">${escapeKnowledge(item.type || 'Knowledge item')}</span><h3>${escapeKnowledge(item.title)}</h3><p>${escapeKnowledge(item.summary || item.content || 'No summary available.')}</p></div><div class="format-list"><span class="format-badge">${escapeKnowledge(item.sector || 'Cross-sector')}</span>${item.confidence_score == null ? '' : `<span class="format-badge">Confidence ${escapeKnowledge(item.confidence_score)}%</span>`}</div></article>`).join('')}</div>` : '<div class="state-panel"><h3>No matching knowledge found</h3><p>Try a broader term or remove the type filter.</p></div>';
+      } catch (error) {
+        mount.innerHTML = `<div class="state-panel"><span class="component-icon"><i data-lucide="circle-alert" aria-hidden="true"></i></span><h3>Knowledge search unavailable</h3><p>${escapeKnowledge(error.message)}</p></div>`; if (window.lucide) lucide.createIcons();
+      }
+    }
+    document.getElementById('knowledge-search-button').addEventListener('click', searchKnowledge);
+    document.getElementById('knowledge-query').addEventListener('keydown', event => { if (event.key === 'Enter') searchKnowledge(); });
+    loadKnowledgeSummary();
+  </script>
+</body>
+</html>

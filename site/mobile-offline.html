@@ -25,7 +25,7 @@
       <div id="site-search-mount" style="width:180px;"></div>
       <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
       <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
-      <a href="/contact.html?intent=mobile" class="btn btn-primary btn-sm">Book Demo</a>
+      <a href="/contact.html?intent=mobile" class="btn btn-primary btn-sm">Request Demo</a>
     </div>
   </div>
   <div class="pub-nav-collapse pub-nav-links">
@@ -60,7 +60,7 @@
   </div>
   <div><div class="nav-label" style="padding:0;">Contact</div>
     <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
-    <a href="/contact.html?intent=mobile" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+    <a href="/contact.html?intent=mobile" class="btn btn-primary btn-sm" style="margin-top:1rem;">Request Demo</a>
   </div>
 </footer>
 
@@ -70,7 +70,7 @@
 <script src="/assets/js/site-search.js"></script>
 <script src="/assets/js/sector-page.js"></script>
 <script>
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
   initSiteSearch('site-search-mount');
   renderSectorPage({
     id: 'mobile-offline',

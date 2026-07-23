@@ -95,5 +95,19 @@ export async function requireAuth(request, env) {
     throw { status: 503, message: 'Authentication service is temporarily unavailable.' };
   }
 
+  // A token issued while must_change_password was set (e.g. a rotated
+  // temporary password — see scripts/rotate-user-password.js) may only be
+  // used to change the password, check who's logged in, or log out. This is
+  // enforced from the JWT claim (set at login) rather than a fresh DB read,
+  // consistent with role/org already being claim-based; change-password
+  // clears the underlying column so the *next* login issues a normal token.
+  if (claims.mustChangePassword) {
+    const path = new URL(request.url).pathname;
+    const allowed = path === '/api/auth/change-password' || path === '/api/auth/me' || path === '/api/auth/logout';
+    if (!allowed) {
+      throw { status: 403, message: 'Password change required before continuing. Call POST /api/auth/change-password.' };
+    }
+  }
+
   return claims;
 }

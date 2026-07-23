@@ -10,6 +10,56 @@
 // ============================================================
 
 import { buildChartSpecs } from './visualization-engine.js';
+import { sha256Hex } from './enterprise-identity-access.js';
+
+// Deterministic dataset identity (Customer Report Generation Pilot Hardening
+// release, Part 1). The SAME underlying data must always produce the SAME
+// dataset_version — never random, never generation-timestamp-only, and
+// (this revision) never response-COUNT-only either: two datasets with the
+// same count but different content must not collide.
+//
+// KNOWN SCHEMA LIMITATION (documented per the release spec's own
+// allowance): backend/schema.sql's `responses` table has no `updated_at`
+// or explicit revision column — only `id, status, fraud_score, started_at,
+// completed_at`. This fingerprint uses those as the best available revision
+// proxy (COALESCE(completed_at, started_at) as the per-response "last
+// touched" signal, `status` as inclusion state, `fraud_score` as quality
+// state). It does NOT incorporate consent state (consent_vault_records is
+// not currently joined to `responses` in an indexed way) or an
+// answer/transcript revision id (no such column exists). If/when those
+// columns are added, extend the per-response string below — the hashing
+// approach does not need to change.
+export async function buildDatasetIdentity({ organizationId, projectId, surveyId, responseRows = [], analysisPlanVersion = null, datasetLockVersion = null }) {
+  const scope = projectId || 'org-wide';
+  const totalResponses = responseRows.length;
+  if (!totalResponses) {
+    return {
+      state: 'EMPTY',
+      organization_id: organizationId,
+      project_id: projectId || null,
+      survey_id: surveyId || null,
+      response_count: 0,
+      response_fingerprint: null,
+      dataset_version: `empty:${organizationId}:${scope}`,
+    };
+  }
+  // Sorted by response id so query row ORDER never affects the fingerprint
+  // ("Reordered query results alone -> unchanged version").
+  const perResponse = responseRows
+    .map(r => `${r.id}|${r.status || ''}|${r.fraud_score ?? ''}|${r.completed_at || r.started_at || ''}`)
+    .sort();
+  const responseFingerprint = await sha256Hex(perResponse.join('\n'));
+  const identitySeed = `${organizationId}:${scope}:${surveyId || 'no-survey'}:${responseFingerprint}:${analysisPlanVersion || 'no-plan'}:${datasetLockVersion || 'unlocked'}:n${totalResponses}`;
+  return {
+    state: 'POPULATED',
+    organization_id: organizationId,
+    project_id: projectId || null,
+    survey_id: surveyId || null,
+    response_count: totalResponses,
+    response_fingerprint: responseFingerprint,
+    dataset_version: await sha256Hex(identitySeed),
+  };
+}
 
 // Phase 11: fetches this report type's permanent editorial guideline, if
 // one exists. Returns null if not found -- every AI-writing function that
@@ -52,6 +102,12 @@ export async function buildDocumentModel(env, { templateId, organizationId, camp
          FROM campaigns c LEFT JOIN surveys s ON c.survey_id = s.id WHERE c.id = ? AND c.organization_id = ?`
       ).bind(campaignId, organizationId).first()
     : null;
+  // Part 3 (scope ownership validation): a campaign_id was explicitly
+  // requested but did not resolve for this organization — either it does
+  // not exist, or it belongs to a different organization. Either way this
+  // must be rejected explicitly, not silently downgraded to an
+  // organization-wide report as if no campaign had been requested at all.
+  if (campaignId && !campaign) throw new Error('Campaign not found for this organization');
 
   const campaignFilter = campaignId ? 'AND c.id = ?' : '';
   const bindArgs = campaignId ? [organizationId, campaignId] : [organizationId];
@@ -64,6 +120,13 @@ export async function buildDocumentModel(env, { templateId, organizationId, camp
     `SELECT COUNT(*) as n FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? ${campaignFilter} AND r.status = 'completed'`
   ).bind(...bindArgs).first();
   const responseRate = totalResponses.n ? Math.round((completedResponses.n / totalResponses.n) * 100) : null;
+  // Raw response identity rows for the dataset content fingerprint (Part 1,
+  // Enterprise Report Studio UI Pilot release) — id/status/fraud_score/
+  // completed_at only, never answer text or any respondent-identifying
+  // field, so the fingerprint itself carries no personal information.
+  const { results: responseIdentityRows } = await env.DB.prepare(
+    `SELECT r.id, r.status, r.fraud_score, r.completed_at, r.started_at FROM responses r JOIN campaigns c ON r.campaign_id = c.id WHERE c.organization_id = ? ${campaignFilter}`
+  ).bind(...bindArgs).all();
 
   // ---------- Demographics (real, with the Task 1.2.5 "Not provided" fallback pattern) ----------
   const { results: genderRows } = await env.DB.prepare(
@@ -105,10 +168,27 @@ export async function buildDocumentModel(env, { templateId, organizationId, camp
   const topics = Object.entries(topicCounts).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([topic, count]) => ({ topic, count }));
 
   // ---------- Representative quotes (real transcripts, capped — never the whole dataset) ----------
+  // Quote Evidence Traceability (Canonical Publication Gate release): every
+  // quote now carries transcript_id/response_id — real, existing primary
+  // keys from this exact join, never fabricated — so the canonical gate can
+  // verify a quote's source instead of treating every customer report as
+  // unsourced. Filtered to consenting, non-withdrawn respondents at the
+  // source: a withdrawn response or a respondent who never consented must
+  // never surface as a "representative quote" in the first place, so this
+  // is a selection filter, not a downstream label. KNOWN LIMITATION (see
+  // buildDatasetIdentity's own note above): there is no deleted/anonymized
+  // flag on responses or respondents in this schema today, so "source has
+  // not been deleted or anonymized" cannot be independently verified here —
+  // only "not withdrawn" and "consent given" are checked, because those are
+  // the only two states this schema actually tracks.
   const { results: quoteRows } = await env.DB.prepare(
-    `SELECT t.raw_text, r.overall_sentiment, r.started_at, r.channel FROM transcripts t
+    `SELECT t.raw_text, r.overall_sentiment, r.started_at, r.channel,
+            t.id as transcript_id, r.id as response_id, resp.consent_given as consent_given
+     FROM transcripts t
      JOIN answers a ON t.answer_id = a.id JOIN responses r ON a.response_id = r.id JOIN campaigns c ON r.campaign_id = c.id
+     JOIN respondents resp ON r.respondent_id = resp.id
      WHERE c.organization_id = ? ${campaignFilter} AND t.raw_text IS NOT NULL AND LENGTH(t.raw_text) > 15
+       AND r.status != 'withdrawn' AND resp.consent_given = 1
      ORDER BY r.started_at DESC LIMIT 12`
   ).bind(...bindArgs).all();
 
@@ -128,6 +208,11 @@ export async function buildDocumentModel(env, { templateId, organizationId, camp
     ? await env.DB.prepare('SELECT order_index, question_text, question_type FROM questions WHERE survey_id = ? ORDER BY order_index ASC').bind(campaign.survey_id).all()
     : { results: [] };
 
+  const datasetIdentity = await buildDatasetIdentity({
+    organizationId, projectId: campaignId || null, surveyId: campaign?.survey_id || null,
+    responseRows: responseIdentityRows,
+  });
+
   // ---------- Assemble the document model ----------
   return {
     metadata: {
@@ -141,7 +226,14 @@ export async function buildDocumentModel(env, { templateId, organizationId, camp
       campaign_name: campaign?.name || null,
       survey_title: campaign?.survey_title || null,
       generated_at: new Date().toISOString(),
+      // Part 3 (Customer Report Generation Pilot Hardening): explicit scope,
+      // never inferred solely from a nullable campaign_id. CAMPAIGN scope is
+      // only asserted once ownership has already been validated above (the
+      // "WHERE c.id = ? AND c.organization_id = ?" join returns null, not
+      // another org's campaign, if ownership does not hold).
+      scope_type: campaignId ? 'CAMPAIGN' : 'ORGANIZATION',
     },
+    dataset_identity: datasetIdentity,
     branding: branding ? {
       logo_r2_key: branding.logo_r2_key, primary_color: branding.primary_color, secondary_color: branding.secondary_color,
       font_family: branding.font_family, header_text: branding.header_text, footer_text: branding.footer_text,
@@ -192,5 +284,86 @@ export async function buildDocumentModel(env, { templateId, organizationId, camp
       questionnaire: questions,
       statistical_tables: { gender: genderRows, age: ageRows, regions: regionRows, sentiment: sentimentRows },
     },
+  };
+}
+
+// ------------------------------------------------------------
+// Canonical Publication Quality Gate input adapter (Customer Report
+// Generation Route Canonical Gate Pilot, Part 2).
+//
+// Converts a real customer documentModel (above) into the input shape
+// evaluatePublicationGate() (quality-scoring-engine.js) expects. Lives here,
+// not inside the canonical engine, so the canonical engine never has to
+// know anything customer-specific — this is deliberately the one place
+// that field-guesses for this one caller.
+//
+// Honesty constraint: the current customer documentModel has no evidence
+// registry, no methodology record, no claims/quotation-provenance layer,
+// and no dataset-versioning concept. This adapter does not invent any of
+// those — it maps only what genuinely exists. That means a real customer
+// report will typically come back BLOCKED / evidence_traceability=0 from
+// the canonical gate today: that is an accurate reflection of a real,
+// separate platform gap (no evidence-registry layer for customer reports
+// yet), not a bug in this adapter. See the pilot release notes.
+// ------------------------------------------------------------
+export function buildCustomerPublicationGateInput({
+  documentModel, organizationId, projectId, reportId, reportVersion, datasetVersion,
+  requestedBy, route, reportType, publicationVisibility, requestedFormat,
+} = {}) {
+  const dm = documentModel || {};
+  const totalResponses = dm.kpis?.total_responses || 0;
+  const topics = Array.isArray(dm.findings?.topics) ? dm.findings.topics : [];
+  const quotes = Array.isArray(dm.findings?.representative_quotes) ? dm.findings.representative_quotes : [];
+  const charts = Array.isArray(dm.charts) ? dm.charts : [];
+  const standards = Array.isArray(dm.metadata?.standards) ? dm.metadata.standards : [];
+
+  return {
+    dataset_version: datasetVersion || dm.dataset_identity?.dataset_version || null,
+    dataset_state: dm.dataset_identity?.state || (totalResponses > 0 ? 'POPULATED' : 'EMPTY'),
+    scope_type: dm.metadata?.scope_type || (projectId ? 'CAMPAIGN' : 'ORGANIZATION'),
+    organization_id: organizationId || null,
+    project_id: projectId || null,
+    // There is no separate "requested org" concept at this call site — the
+    // org the request is scoped to (via getEffectiveOrgId) IS the resource
+    // org, so this is always equal unless a future caller passes otherwise.
+    requested_by_org_id: organizationId || null,
+    is_demo: false, // Part 2: a customer report is never inferred as synthetic
+    report_type: reportType || (totalResponses > 0 ? 'standard' : 'insufficient_evidence'),
+    // Topic tallies are real, DB-backed counts (report-generator.js above) —
+    // restating them as findings text is not fabrication, but they carry no
+    // evidence_ids because the customer pipeline has no evidence registry yet.
+    findings: topics.map(t => ({ text: `${t.topic} (${t.count} mentions)`, evidence_ids: [] })),
+    evidence: [],
+    decisions: [], // recommendations are filled later by the AI Narrative Engine, not at generation time
+    methodology: null,
+    statistics: [],
+    claims: [],
+    // source_id/evidence_id are real transcripts/responses primary keys
+    // (see the query above) — never generated here, never a raw-text hash.
+    // organization_id lets the canonical engine's cross-tenant check
+    // confirm a quote's source actually belongs to the report's own org,
+    // even though today's query already guarantees this structurally (the
+    // WHERE c.organization_id = ? above) — defense in depth for any future
+    // caller of this adapter that might not have the same guarantee.
+    quotes: quotes.map(q => ({
+      text: q.raw_text,
+      source_id: q.response_id || null,
+      evidence_id: q.transcript_id || null,
+      organization_id: organizationId || null,
+    })),
+    approvals: { required: [], completed: [] },
+    exports: {},
+    accessibility: {},
+    sdgs: standards.filter(s => /^SDG/i.test(s)),
+    editorial: {},
+    // buildChartSpecs always emits at least one structural placeholder (a
+    // "data quality" KPI card) even with zero responses — that is chrome,
+    // not a data visualization making a claim, so it must not make the
+    // canonical gate's visualization_quality domain "applicable" (and then
+    // fail it) for a report that has nothing to visualize yet.
+    visualizations: totalResponses > 0 ? charts.map((c, i) => ({ id: c.id || `chart-${i + 1}`, evidence_ids: [] })) : [],
+    // Passed through untouched for the caller's own context object, not
+    // consumed by evaluatePublicationGate itself.
+    _context: { reportId, reportVersion, requestedBy, route, publicationVisibility, requestedFormat },
   };
 }

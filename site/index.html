@@ -1,575 +1,273 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VoiceInsights Africa — Voice intelligence for research and impact teams</title>
-<meta name="description" content="VoiceInsights Africa turns spoken interviews — by phone, WhatsApp, SMS, web, or offline field app — into research data, donor-ready reports, and fast insights for NGOs, governments, and research firms.">
-<link rel="stylesheet" href="/assets/css/style.css">
-<script src="https://unpkg.com/lucide@latest"></script>
-<style>
-  .site-lang-switch { display:flex; border:1px solid var(--border-strong); border-radius:999px; overflow:hidden; }
-  .site-lang-switch button { padding:.4rem .7rem; background:transparent; border:none; color:var(--text-dim); cursor:pointer; font-family:var(--font-body); font-weight:700; font-size:.72rem; letter-spacing:.03em; }
-  .site-lang-switch button.active { background:var(--accent); color:var(--accent-ink); }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>VoiceInsights Africa — Enterprise Data Intelligence & Publication Platform</title>
+  <meta name="description" content="VoiceInsights Africa transforms field and organizational data into governed dashboards, reports, datasets, publications, evidence and decisions.">
+  <link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
-
-<div style="background:var(--surface-3); color:var(--text-muted); text-align:center; padding:.5rem 1rem; font-size:.78rem; font-weight:600; letter-spacing:.01em;">
-  Trusted Voice Research Infrastructure for NGOs, Governments &amp; Global Development Partners
-</div>
-
-<nav class="pub-nav">
+<body class="phase1-home">
+  <a class="skip-link" id="skip-to-content" href="#main-content">Skip to main content</a>
+  <div class="public-trust-strip">Trusted Voice Research Infrastructure for NGOs, Governments &amp; Global Development Partners</div>
+<nav class="pub-nav" aria-label="Primary navigation">
   <div class="pub-nav-row1">
-    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
-      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
-      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
-    </a>
-    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
-    <div class="pub-nav-collapse pub-nav-row1-right">
-      <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
-      <div class="site-lang-switch" id="site-lang-switch">
-        <button type="button" data-lang="en" class="active">EN</button>
-        <button type="button" data-lang="fr">FR</button>
-        <button type="button" data-lang="pt">PT</button>
-        <button type="button" data-lang="sw">SW</button>
-      </div>
-      <a href="/login.html" data-i18n="nav.login" class="btn btn-ghost btn-sm">Log in</a>
-      <a href="/contact.html" data-i18n="topnav.book_demo" class="btn btn-primary btn-sm">Book Demo</a>
-    </div>
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;"><img src="/assets/img/logo-icon.png" alt="" style="height:34px;width:auto;"><span style="font-family:var(--font-display);font-weight:650;font-size:1.08rem;">VoiceInsights Africa</span></a>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right"><button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle colour theme"><span class="theme-toggle-icon" aria-hidden="true">◐</span></button><a href="/login.html" class="btn btn-ghost btn-sm">Login</a><a href="/contact.html?request=demo" class="btn btn-primary btn-sm">Request Demo</a></div>
   </div>
-  <div class="pub-nav-collapse pub-nav-links">
-    <a href="/platform.html" data-i18n="topnav.platform" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
-    <a href="/solutions.html" data-i18n="topnav.solutions" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
-    <a href="/industries.html" data-i18n="topnav.industries" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
-    <a href="/sample-reports.html" data-i18n="topnav.case_studies" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Intelligence Library</a>
-    <a href="/index.html#pricing" data-i18n="topnav.pricing" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Pricing</a>
-    <a href="/safeguarding.html" data-i18n="topnav.compliance" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
-    <a href="/about.html" data-i18n="topnav.about" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">About</a>
-    <a href="/respondent.html" style="color:var(--accent); font-size:.85rem; font-weight:700;">Try Demo</a>
-  </div>
+  <div class="pub-nav-collapse pub-nav-links"><a href="/platform.html">Platform</a><a href="/solutions.html">Solutions</a><a href="/industries.html">Industries</a><a href="/sample-reports.html">Knowledge Hub</a><a href="/security.html">Compliance</a><a href="/about.html">About Us</a><a href="/contact.html">Contact</a><a href="/procurement.html">Pricing</a></div>
 </nav>
 
-<header class="pub-hero">
-  <div class="hero-grid" style="display:grid; grid-template-columns: 1.15fr 1fr; gap:3rem; align-items:center;">
-    <div>
-      <span class="eyebrow" data-i18n="hero.eyebrow">Voice-first research infrastructure — for every market, in every language</span>
-      <h1 data-i18n="hero.h1">Any voice, any language, turned into decision-ready data — instantly.</h1>
-      <p class="lead" data-i18n="hero.lead">VoiceInsights Africa helps NGOs, governments, and research firms around the world collect, analyze, and report voice data — no paperwork, no months of waiting, no language left behind.</p>
-      <div style="display:flex; gap:.8rem; margin-top:2rem; flex-wrap:wrap;">
-        <a href="/contact.html" class="btn btn-primary" data-i18n="hero.cta1">Request Demo &rarr;</a>
-        <a href="/sample-reports.html" class="btn btn-ghost" data-i18n="hero.cta_sample">Explore Intelligence Library</a>
-        <a href="/respondent.html" class="btn btn-ghost" data-i18n="hero.cta2">Try Live Demo</a>
+  <main id="main-content">
+    <header class="phase1-hero">
+      <div class="phase1-hero-grid">
+        <div>
+          <h1>Any voice, any language, turned into decision-ready data — instantly.</h1>
+          <p class="hero-support">Via phone call, WhatsApp, SMS, a web link, or an offline field app — in their own everyday language. Where enabled, every channel enters the same governed processing, analytics and publication workflow.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/contact.html">Request a Demo <span aria-hidden="true">→</span></a>
+            <a class="btn btn-ghost" href="/sample-reports.html">Explore Knowledge Hub</a>
+          </div>
+          <div class="hero-institutional"><p>VoiceInsights Africa helps governments, NGOs, development partners and research teams collect, understand and publish multilingual evidence — without relying on paper-heavy workflows or months of manual processing.</p><a href="/respondent.html">Try Demo <span aria-hidden="true">→</span></a></div>
+        </div>
+
+        <figure class="hero-story" aria-labelledby="hero-story-title">
+          <figcaption class="hero-story-head"><div><span class="badge badge-neutral">Governed synthetic demonstration</span><strong id="hero-story-title">Community Health Access Study</strong></div><span>One project · one evidence chain</span></figcaption>
+          <div class="story-tabs" role="tablist" aria-label="Voice-to-decision demonstration states">
+            <button type="button" role="tab" aria-selected="true" aria-controls="story-collect" id="story-tab-collect">Collect</button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="story-understand" id="story-tab-understand" tabindex="-1">Understand</button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="story-monitor" id="story-tab-monitor" tabindex="-1">Monitor</button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="story-publish" id="story-tab-publish" tabindex="-1">Publish</button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="story-decide" id="story-tab-decide" tabindex="-1">Decide</button>
+          </div>
+          <div class="story-panel" role="tabpanel" id="story-collect" aria-labelledby="story-tab-collect"><div class="story-meta"><span>WhatsApp Voice Note</span><span>Kiswahili</span><span>Received</span></div><div class="voice-wave" aria-hidden="true"></div><blockquote>“Kituo kiko mbali, na usafiri huwa mgumu wakati wa mvua.”</blockquote><p>Clearly fictional response: the health facility is difficult to reach during the rainy season.</p></div>
+          <div class="story-panel" role="tabpanel" id="story-understand" aria-labelledby="story-tab-understand" hidden><div class="processing-list"><span class="complete">Transcribed</span><span class="complete">Language identified</span><span class="complete">Consent confirmed</span><span class="complete">Quality reviewed</span><span>Theme: geographic access</span><span>Evidence linked</span></div><p class="story-finding"><strong>Supported finding</strong> Transport disruption may be limiting seasonal access to services.</p></div>
+          <div class="story-panel" role="tabpanel" id="story-monitor" aria-labelledby="story-tab-monitor" hidden><div class="story-kpis"><span><strong>84%</strong> quality</span><span><strong>3</strong> access risks</span><span><strong>6</strong> districts</span></div><div class="story-chart" aria-label="Synthetic access trend"><span style="--value:38%"></span><span style="--value:54%"></span><span style="--value:49%"></span><span style="--value:72%"></span><span style="--value:64%"></span></div><p>Dashboard updated with a governed synthetic indicator and geographic-risk flag.</p></div>
+          <div class="story-panel" role="tabpanel" id="story-publish" aria-labelledby="story-tab-publish" hidden><div class="story-products"><span><i data-lucide="layout-dashboard" aria-hidden="true"></i> Dashboard updated</span><span><i data-lucide="database" aria-hidden="true"></i> Dataset v1.2 created</span><span><i data-lucide="file-text" aria-hidden="true"></i> Report finding added</span><span><i data-lucide="book-open" aria-hidden="true"></i> Publication review ready</span></div><a href="/sample-reports.html">Open governed samples <span aria-hidden="true">→</span></a></div>
+          <div class="story-panel" role="tabpanel" id="story-decide" aria-labelledby="story-tab-decide" hidden><div class="decision-record"><span class="badge badge-warn">Action requiring review</span><strong class="decision-title">Assess rainy-season transport support in priority districts.</strong><dl><div><dt>Owner</dt><dd>Programme Operations</dd></div><div><dt>Evidence</dt><dd>12 linked responses · Dataset v1.2</dd></div><div><dt>Status</dt><dd>Awaiting approval</dd></div></dl></div><p>Decision records retain the source, owner and review status.</p></div>
+        </figure>
       </div>
-      <div class="grid grid-4" style="margin-top:2.5rem; gap:1rem; max-width:560px;">
-        <div><div class="stat-value" style="font-size:1.4rem;">5</div><div class="muted-note" style="font-size:.72rem;">Collection channels</div></div>
-        <div><div class="stat-value" style="font-size:1.4rem;">4</div><div class="muted-note" style="font-size:.72rem;">Languages supported</div></div>
-        <div><div class="stat-value" style="font-size:1.4rem;">24/7</div><div class="muted-note" style="font-size:.72rem;">Live data collection</div></div>
-        <div><div class="stat-value" style="font-size:1.4rem;">0</div><div class="muted-note" style="font-size:.72rem;">Paper forms needed</div></div>
-      </div>
-      <div style="margin-top:1.75rem; display:flex; gap:1.75rem; flex-wrap:wrap; align-items:center;">
-        <span class="muted-note" style="font-size:.75rem; text-transform:uppercase; letter-spacing:.06em;">Trusted by</span>
-        <span style="color:var(--text-dim); font-size:.85rem; font-weight:600;">NGOs</span>
-        <span style="color:var(--text-dim); font-size:.85rem; font-weight:600;">Governments</span>
-        <span style="color:var(--text-dim); font-size:.85rem; font-weight:600;">Research Institutions</span>
-      </div>
+    </header>
+
+    <div class="proof-strip institutional-proof" aria-label="Platform scope and intended audiences">
+      <div class="proof-metric"><strong>5</strong><span>Collection channels</span></div>
+      <div class="proof-metric"><strong>Multilingual</strong><span>Voice and text workflows</span></div>
+      <div class="proof-metric"><strong>Offline-ready</strong><span>Field collection and synchronization</span></div>
+      <div class="proof-metric"><strong>0</strong><span>Paper forms required for digital collection</span></div>
+      <div class="proof-audiences"><strong>Built for</strong><span>NGOs</span><span>Governments</span><span>Development Partners</span><span>Research Institutions</span></div>
     </div>
 
-    <div class="card" style="padding:1.1rem; box-shadow:0 30px 60px rgba(0,0,0,.35);">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.9rem;">
-        <span class="badge badge-success"><span style="width:6px;height:6px;border-radius:50%;background:var(--success);display:inline-block;"></span> Incoming — WhatsApp</span>
-        <span class="muted-note" style="font-family:var(--font-mono); font-size:.72rem;">00:14</span>
+    <section class="pub-section lifecycle-section story-section story-section-wide" id="story-lifecycle" aria-labelledby="data-decisions-title">
+      <div class="section-header">
+        <span class="eyebrow">Voice-to-evidence pipeline</span>
+        <h2 id="data-decisions-title">Every stage produces a reviewable output.</h2>
+        <p id="pipeline-summary">Collect, validate, process and analyze first; then monitor, publish, govern the evidence and record accountable decisions. Stage numbers and output labels preserve the complete sequence without relying on connector colour.</p>
       </div>
-      <div id="hero-mock-wave" style="margin-bottom:1rem;"></div>
-      <div class="muted-note" style="font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4rem;">Live transcription</div>
-      <p style="font-size:.85rem; color:var(--text); margin-bottom:1rem; line-height:1.6;">"Mavuno yangu msimu huu yameongezeka, lakini bei ya mbolea imepanda sana…"</p>
-      <div class="grid grid-2" style="gap:.6rem;">
-        <div class="card" style="padding:.7rem;"><div class="muted-note" style="font-size:.68rem;">SENTIMENT</div><div style="font-weight:700; color:var(--success); font-size:.9rem;">Positive</div></div>
-        <div class="card" style="padding:.7rem;"><div class="muted-note" style="font-size:.68rem;">TOPIC</div><div style="font-weight:700; font-size:.9rem;">Fertilizer cost</div></div>
+      <ol class="pipeline-path" aria-describedby="pipeline-summary">
+        <li data-phase="01"><span class="pipeline-icon"><i data-lucide="radio" aria-hidden="true"></i></span><div><strong>Collect</strong><p>Phone, WhatsApp, SMS, web and offline inputs.</p><small><b>Output</b> Source record</small></div></li>
+        <li data-phase="02"><span class="pipeline-icon"><i data-lucide="clipboard-check" aria-hidden="true"></i></span><div><strong>Validate</strong><p>Consent, completeness and supervisor review.</p><small><b>Output</b> Approved response</small></div></li>
+        <li data-phase="03"><span class="pipeline-icon"><i data-lucide="languages" aria-hidden="true"></i></span><div><strong>Process</strong><p>Transcription, language handling and structuring.</p><small><b>Output</b> Structured evidence</small></div></li>
+        <li data-phase="04"><span class="pipeline-icon"><i data-lucide="chart-no-axes-combined" aria-hidden="true"></i></span><div><strong>Analyze</strong><p>Indicators, themes, patterns and maps.</p><small><b>Output</b> Analysis model</small></div></li>
+        <li data-phase="05"><span class="pipeline-icon"><i data-lucide="gauge" aria-hidden="true"></i></span><div><strong>Monitor</strong><p>Dashboards, quality, progress and risks.</p><small><b>Output</b> Monitoring view</small></div></li>
+        <li data-phase="06"><span class="pipeline-icon"><i data-lucide="files" aria-hidden="true"></i></span><div><strong>Report &amp; Publish</strong><p>Reports, publications, datasets and briefs.</p><small><b>Output</b> Governed data product</small></div></li>
+        <li data-phase="07"><span class="pipeline-icon"><i data-lucide="git-branch" aria-hidden="true"></i></span><div><strong>Govern Evidence</strong><p>Sources, methodology, metadata and versions.</p><small><b>Output</b> Evidence chain</small></div></li>
+        <li data-phase="08"><span class="pipeline-icon"><i data-lucide="list-checks" aria-hidden="true"></i></span><div><strong>Decide</strong><p>Actions, owners, deadlines and impact.</p><small><b>Output</b> Decision record</small></div></li>
+      </ol>
+    </section>
+
+    <section class="pub-section story-section story-section-products" id="story-products" aria-labelledby="products-title">
+      <div class="section-header">
+        <span class="eyebrow">Client-selected data products</span>
+        <h2 id="products-title">Everything your project produces — connected.</h2>
+        <p><strong>Choose the evidence products your organization needs.</strong> VoiceInsights does not stop at collection. Organizations select the dashboards, reports, publications, datasets and evidence products required for each project, programme, donor, governance or implementation need.</p>
       </div>
-    </div>
-  </div>
-</header>
+      <div class="product-grid">
+        <article class="data-product-card product-dashboard"><span class="component-icon"><i data-lucide="layout-dashboard" aria-hidden="true"></i></span><h3>Interactive Dashboard</h3><p>KPIs, trends, maps, quality, alerts and decisions in one monitored view.</p><div class="product-mini-preview" aria-hidden="true"><i style="--mini:72%"></i><i style="--mini:48%"></i><i style="--mini:83%"></i></div><details class="format-disclosure"><summary>Access types</summary><div class="format-list"><span class="format-badge">Interactive</span><span class="format-badge">PDF view</span></div></details><a class="download-action" href="/sample-report.html">View dashboard preview <span aria-hidden="true">→</span></a></article>
+        <article class="data-product-card product-report"><span class="component-icon"><i data-lucide="file-text" aria-hidden="true"></i></span><h3>Executive Report</h3><p>Executive summary, key findings, recommendations and a decision matrix.</p><div class="product-sheet-preview" aria-hidden="true"><span></span><span></span><span></span></div><details class="format-disclosure"><summary>Available formats</summary><div class="format-list"><span class="format-badge">PDF</span><span class="format-badge">Word</span><span class="format-badge">PowerPoint</span><span class="format-badge">Excel</span></div></details><a class="download-action" href="/sample-reports.html">View report preview <span aria-hidden="true">→</span></a></article>
+        <article class="data-product-card product-publication"><span class="component-icon"><i data-lucide="book-open" aria-hidden="true"></i></span><h3>Publication</h3><p>An editorially governed package with methodology, citation and dissemination formats.</p><div class="product-cover-preview" aria-hidden="true"><strong>Health access</strong><span>Evidence publication</span></div><details class="format-disclosure"><summary>Available formats</summary><div class="format-list"><span class="format-badge">Publication PDF</span><span class="format-badge">Presentation</span><span class="format-badge">Metadata</span></div></details><a class="download-action" href="/sample-reports.html">View publication package <span aria-hidden="true">→</span></a></article>
+        <article class="data-product-card product-dataset"><span class="component-icon"><i data-lucide="database" aria-hidden="true"></i></span><h3>Governed Dataset</h3><p>Versioned rows and variables with dictionary, metadata, provenance and access level.</p><div class="dataset-preview"><span>v1.2</span><span>Synthetic</span><span>Controlled access</span></div><details class="format-disclosure"><summary>Available formats</summary><div class="format-list"><span class="format-badge">CSV</span><span class="format-badge">Excel</span><span class="format-badge">JSON</span></div></details><a class="download-action" href="/sample-reports.html">View dataset details <span aria-hidden="true">→</span></a></article>
+        <article class="data-product-card product-evidence"><span class="component-icon"><i data-lucide="package-check" aria-hidden="true"></i></span><h3>Evidence Pack</h3><p>Sources, methodology, limitations, approvals and traceability grouped for verification.</p><div class="evidence-preview" aria-hidden="true"><span>Source</span><span>Review</span><span>Approval</span></div><details class="format-disclosure"><summary>Included material</summary><div class="format-list"><span class="format-badge">Evidence</span><span class="format-badge">Methodology</span><span class="format-badge">Metadata</span></div></details><a class="download-action" href="/sample-reports.html">Explore evidence chain <span aria-hidden="true">→</span></a></article>
+        <article class="data-product-card product-brief"><span class="component-icon"><i data-lucide="notebook-tabs" aria-hidden="true"></i></span><h3>Policy Brief</h3><p>A concise decision product for policy leads, programme owners and executive review.</p><details class="format-disclosure"><summary>Purpose and access</summary><div class="format-list"><span class="format-badge">Decision synthesis</span><span class="format-badge">Approved publication</span></div></details><a class="download-action" href="/sample-reports.html">View policy brief examples <span aria-hidden="true">→</span></a></article>
+        <article class="data-product-card product-presentation"><span class="component-icon"><i data-lucide="presentation" aria-hidden="true"></i></span><h3>Presentation</h3><p>A review-ready narrative for funders, boards, technical teams and stakeholder meetings.</p><details class="format-disclosure"><summary>Purpose and access</summary><div class="format-list"><span class="format-badge">Presentation</span><span class="format-badge">Permission controlled</span></div></details><a class="download-action" href="/sample-reports.html">View presentation packages <span aria-hidden="true">→</span></a></article>
+        <article class="data-product-card product-export"><span class="component-icon"><i data-lucide="plug" aria-hidden="true"></i></span><h3>API &amp; Integrations</h3><p>Governed access, approved exports and integration categories with an auditable trail.</p><div class="integration-preview"><span>API</span><span>Export</span><span>Audit</span></div><details class="format-disclosure"><summary>Access options</summary><div class="format-list"><span class="format-badge">API documentation</span><span class="format-badge">Configurable scope</span></div></details><a class="download-action" href="/developers/index.html">Explore integration options <span aria-hidden="true">→</span></a></article>
+      </div>
+      <div class="related-product-options" aria-label="Additional configurable evidence products"><strong>Related products</strong><span>Technical Report</span><span>Methodology</span><span>Metadata</span></div>
+      <p class="product-scope-note">Products, formats and access levels are configured around the approved workflow and implementation scope.</p>
+    </section>
 
-<div class="trust-bar">
-  <span class="muted-note" style="font-size:.72rem; text-transform:uppercase; letter-spacing:.08em;" data-i18n="trustbar.label">Built for high-impact organizations</span>
-  <div class="trust-bar-badges">
-    <span class="trust-badge">🔒 <span data-i18n="trustbar.b1">Encrypted in Transit &amp; at Rest</span></span>
-    <span class="trust-badge">🛡️ <span data-i18n="trustbar.b2">Role-Based Access Control</span></span>
-    <span class="trust-badge">🌍 <span data-i18n="trustbar.b3">GDPR-Aligned Architecture</span></span>
-    <span class="trust-badge">📋 <span data-i18n="trustbar.b4">Audit-Logged</span></span>
-    <span class="trust-badge">🗣️ <span data-i18n="trustbar.b5">Multilingual AI</span></span>
-  </div>
-</div>
-
-
-<section class="pub-section">
-  <span class="eyebrow" style="color:var(--accent);" data-i18n="dashprev.eyebrow">See it in action</span>
-  <h2 style="max-width:34ch;" data-i18n="dashprev.h2">See what decision-makers see.</h2>
-  <p style="max-width:60ch; margin-top:1rem;" data-i18n="dashprev.lead">A live look at the dashboard your team works in every day. Click any card to open a preview.</p>
-
-  <div class="grid grid-4" style="margin-top:2rem;">
-    <a href="/sample-report.html" class="feature-card demo-card" data-demo="responses" style="text-decoration:none; cursor:pointer;">
-      <span class="num">1</span><h3 style="font-size:.95rem;" data-i18n="dashprev.tab1">Executive Dashboard</h3>
-      <p style="font-size:.8rem;" data-i18n="dashprev.card1desc">Live responses across every channel, as they arrive.</p>
-    </a>
-    <a href="/sample-report.html" class="feature-card demo-card" data-demo="analytics" style="text-decoration:none; cursor:pointer;">
-      <span class="num">2</span><h3 style="font-size:.95rem;" data-i18n="dashprev.tab2">Analytics</h3>
-      <p style="font-size:.8rem;" data-i18n="dashprev.card2desc">Active surveys, respondents, and response rate at a glance.</p>
-    </a>
-    <a href="/sample-report.html" class="feature-card demo-card" data-demo="sentiment" style="text-decoration:none; cursor:pointer;">
-      <span class="num">3</span><h3 style="font-size:.95rem;" data-i18n="dashprev.tab3">Live Transcript</h3>
-      <p style="font-size:.8rem;" data-i18n="dashprev.card3desc">Raw voice transcript, sentiment, and topic tagging.</p>
-    </a>
-    <a href="/sample-report.html" class="feature-card demo-card" data-demo="export" style="text-decoration:none; cursor:pointer;">
-      <span class="num">4</span><h3 style="font-size:.95rem;" data-i18n="dashprev.tab4">PDF Report</h3>
-      <p style="font-size:.8rem;" data-i18n="dashprev.card4desc">Executive Intelligence and Donor Impact report formats.</p>
-    </a>
-  </div>
-
-  <div id="demo-modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:300; align-items:center; justify-content:center; padding:5vw;">
-    <div style="max-width:640px; width:100%; max-height:80vh; overflow-y:auto; position:relative;">
-      <button type="button" id="demo-modal-close" aria-label="Close" style="position:absolute; top:-2.5rem; right:0; background:none; border:none; color:var(--text); font-size:1.8rem; cursor:pointer; line-height:1;">&times;</button>
-
-      <div class="card" id="dash-panel-responses" style="display:none;">
-        <div class="table-wrap" style="border:none;">
-          <table>
-            <thead><tr><th>Respondent</th><th>Channel</th><th>Topic</th><th>Sentiment</th><th>Time</th></tr></thead>
-            <tbody>
-              <tr><td>+255 7XX-XX2841</td><td><span class="badge badge-neutral">WhatsApp</span></td><td>Fertilizer cost</td><td><span class="badge badge-success">Positive</span></td><td>0:14 ago</td></tr>
-              <tr><td>+255 6XX-XX9013</td><td><span class="badge badge-neutral">Phone Call</span></td><td>Water access</td><td><span class="badge badge-warn">Neutral</span></td><td>1:02 ago</td></tr>
-              <tr><td>+255 7XX-XX3357</td><td><span class="badge badge-neutral">Web</span></td><td>School attendance</td><td><span class="badge badge-danger">Negative</span></td><td>2:40 ago</td></tr>
-            </tbody>
-          </table>
+    <section class="pub-section story-section story-section-workspace" id="story-workspace" aria-labelledby="workspace-title">
+      <div class="section-header">
+        <span class="eyebrow">VoiceInsights Workspace</span>
+        <h2 id="workspace-title">See VoiceInsights Workspace in action.</h2>
+        <p>Explore nine role-aware views of one fictional project—from collection operations and quality review to governed publications and accountable decisions.</p>
+      </div>
+      <div class="workspace-mode-tabs story-tabs" role="tablist" aria-label="VoiceInsights Workspace demonstration modes">
+        <button type="button" role="tab" aria-selected="true" aria-controls="workspace-executive" id="workspace-tab-executive">Executive Dashboard</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="workspace-projects" id="workspace-tab-projects" tabindex="-1">Projects</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="workspace-collection" id="workspace-tab-collection" tabindex="-1">Collection</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="workspace-analytics" id="workspace-tab-analytics" tabindex="-1">Analytics</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="workspace-quality" id="workspace-tab-quality" tabindex="-1">Quality Review</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="workspace-publications" id="workspace-tab-publications" tabindex="-1">Reports &amp; Publications</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="workspace-evidence" id="workspace-tab-evidence" tabindex="-1">Datasets &amp; Evidence</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="workspace-ai" id="workspace-tab-ai" tabindex="-1">AI Analyst</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="workspace-decisions" id="workspace-tab-decisions" tabindex="-1">Decisions</button>
+      </div>
+      <div class="workspace-preview workspace-showcase" aria-label="Governed synthetic demonstration of VoiceInsights Workspace" data-project="Community Health Access Study">
+        <div class="workspace-preview-bar"><div><strong>VoiceInsights <span style="color:var(--accent);">Workspace</span></strong><span>Community Health Access Study · Tanzania · Kiswahili and English</span></div><span class="badge badge-neutral">Governed synthetic demonstration</span></div>
+        <div class="workspace-preview-body">
+          <aside class="workspace-preview-nav" aria-label="Synthetic Workspace context"><strong>Community Health Access Study</strong><span class="active">Project overview</span><span>Response review</span><span>Health programme</span><span>6 districts</span><span>Five-channel collection</span><span>Review-controlled</span><small>All values and records shown are fictional.</small></aside>
+          <div class="workspace-preview-main" aria-live="polite">
+            <section class="workspace-mode-panel" role="tabpanel" id="workspace-executive" aria-labelledby="workspace-tab-executive">
+              <div class="workspace-mode-summary"><strong>Executive Dashboard</strong><span>Programme performance, publication readiness and decisions requiring attention.</span></div>
+              <div class="workspace-kpis"><div class="kpi-card"><span class="kpi-value">4</span><span class="kpi-label">Active projects</span></div><div class="kpi-card"><span class="kpi-value">2,480</span><span class="kpi-label">Responses collected</span></div><div class="kpi-card"><span class="kpi-value">78%</span><span class="kpi-label">Response completion</span></div><div class="kpi-card"><span class="kpi-value">84%</span><span class="kpi-label">Quality reviewed</span></div></div>
+              <div class="workspace-grid"><article class="showcase-panel"><h3>Access indicator movement</h3><div class="workspace-trend" aria-label="Synthetic access indicator trend from 42 to 68 percent"><span style="--point:42%"></span><span style="--point:51%"></span><span style="--point:57%"></span><span style="--point:68%"></span></div><p>Reported access improved, while two wards remain below the review threshold.</p></article><article class="showcase-panel"><h3>Portfolio state</h3><dl class="showcase-facts"><div><dt>Languages</dt><dd>Kiswahili 72% · English 28%</dd></div><div><dt>Publication</dt><dd>Policy brief in review</dd></div><div><dt>Decisions</dt><dd>2 unresolved</dd></div></dl></article></div>
+            </section>
+            <section class="workspace-mode-panel" role="tabpanel" id="workspace-projects" aria-labelledby="workspace-tab-projects" hidden>
+              <div class="workspace-mode-summary"><strong>Projects</strong><span>A synthetic portfolio demonstrates how project status, quality and milestones remain comparable.</span></div>
+              <div class="workspace-table" role="table" aria-label="Synthetic project portfolio"><div class="workspace-row workspace-row-head" role="row"><span>Project</span><span>Geography / channels</span><span>Completion</span><span>Quality / next milestone</span></div><div class="workspace-row" role="row"><strong>Community Health Access Study</strong><span>6 districts · all five channels</span><span>78% of 3,200</span><span>Reviewed · policy brief approval</span></div><div class="workspace-row" role="row"><strong>Foundational Learning Review</strong><span>3 regions · web / offline</span><span>64% of 1,100</span><span>Review open · supervisor closeout</span></div><div class="workspace-row" role="row"><strong>Humanitarian Needs Pulse</strong><span>2 districts · phone / SMS</span><span>91% of 600</span><span>Flagged review · situation brief</span></div><div class="workspace-row" role="row"><strong>Citizen Service Feedback</strong><span>National pilot · WhatsApp / web</span><span>52% of 2,000</span><span>On track · mid-cycle review</span></div></div>
+            </section>
+            <section class="workspace-mode-panel" role="tabpanel" id="workspace-collection" aria-labelledby="workspace-tab-collection" hidden>
+              <div class="workspace-mode-summary"><strong>Collection</strong><span>Five channels enter one consent-aware, supervisor-reviewed project workflow.</span></div>
+              <div class="channel-status-grid"><article><strong>Phone</strong><span>640 received</span><small>Healthy · 180 assigned</small></article><article><strong>WhatsApp</strong><span>780 received</span><small>Healthy · voice and chat</small></article><article><strong>SMS</strong><span>310 received</span><small>Configurable reminders</small></article><article><strong>Web</strong><span>420 received</span><small>Healthy · 76% completion</small></article><article><strong>Offline App</strong><span>330 received</span><small>24 pending sync</small></article></div>
+              <div class="workspace-grid"><article class="showcase-panel"><h3>Field-team progress</h3><div class="progress-list"><span><b>Team North</b><i style="--progress:86%"></i><em>86%</em></span><span><b>Team Central</b><i style="--progress:72%"></i><em>72%</em></span><span><b>Team South</b><i style="--progress:61%"></i><em>61%</em></span></div></article><article class="showcase-panel"><h3>Collection controls</h3><dl class="showcase-facts"><div><dt>Consent recorded</dt><dd>98.4%</dd></div><div><dt>Pending supervisor review</dt><dd>46</dd></div><div><dt>Channel health</dt><dd>Operational in demonstration scope</dd></div></dl></article></div>
+            </section>
+            <section class="workspace-mode-panel" role="tabpanel" id="workspace-analytics" aria-labelledby="workspace-tab-analytics" hidden>
+              <div class="workspace-mode-summary"><strong>Analytics</strong><span>Indicators, themes and locations are presented with their review state—not as autonomous certainty.</span></div>
+              <div class="workspace-grid workspace-grid-analytics"><article class="showcase-panel"><h3>Maternal-health access trend</h3><div class="workspace-chart" aria-label="Synthetic monthly access trend"><span style="--bar:42%"></span><span style="--bar:48%"></span><span style="--bar:53%"></span><span style="--bar:47%"></span><span style="--bar:61%"></span><span style="--bar:68%"></span></div><small>Illustrative indicator · human-reviewed</small></article><article class="showcase-panel"><h3>Reviewed themes</h3><div class="theme-list"><span><b>Transport cost</b><em>32 sources</em></span><span><b>Travel distance</b><em>27 sources</em></span><span><b>Clinic scheduling</b><em>18 sources</em></span></div></article><article class="showcase-panel"><h3>Location comparison</h3><dl class="showcase-facts"><div><dt>Ward A</dt><dd>41% access concern</dd></div><div><dt>Ward B</dt><dd>38% access concern</dd></div><div><dt>Other wards</dt><dd>19% average</dd></div></dl><p><strong>Supported finding:</strong> transport constraints warrant follow-up in two wards. Review status: analyst verified.</p></article></div>
+            </section>
+            <section class="workspace-mode-panel" role="tabpanel" id="workspace-quality" aria-labelledby="workspace-tab-quality" hidden>
+              <div class="workspace-mode-summary"><strong>Quality Review</strong><span>AI-assisted checks direct attention; supervisors retain approval responsibility.</span></div>
+              <div class="quality-checklist"><article><span class="status-good">Passed</span><strong>Completeness</strong><small>2,401 complete responses</small></article><article><span class="status-good">Passed</span><strong>Consent</strong><small>Recorded and linked</small></article><article><span class="status-review">Review</span><strong>Possible duplicate</strong><small>12 records flagged for review</small></article><article><span class="status-review">Review</span><strong>Transcript quality</strong><small>18 low-confidence excerpts</small></article><article><span class="status-review">Review</span><strong>Anomaly check</strong><small>7 patterns require human assessment</small></article><article><span class="status-good">Approved</span><strong>Supervisor gate</strong><small>Batch 18 approved by fictional reviewer</small></article><article><span class="status-good">Linked</span><strong>Evidence source</strong><small>Dataset v1.2 and transcript version</small></article><article><span class="status-neutral">Logged</span><strong>Audit event</strong><small>Review action stored in demonstration history</small></article></div>
+            </section>
+            <section class="workspace-mode-panel" role="tabpanel" id="workspace-publications" aria-labelledby="workspace-tab-publications" hidden>
+              <div class="workspace-mode-summary"><strong>Reports &amp; Publications</strong><span>Product status, quality gates and approvals are visible before any approved export.</span></div>
+              <div class="workspace-table product-register" role="table" aria-label="Synthetic report and publication register"><div class="workspace-row workspace-row-head"><span>Product</span><span>Owner / updated</span><span>Quality gate</span><span>Formats / action</span></div><div class="workspace-row"><strong>Executive Report</strong><span>Research Lead · 18 Jul</span><span>Approved</span><span>PDF, Word · <a href="/sample-reports.html">View sample</a></span></div><div class="workspace-row"><strong>Quarterly Monitoring Report</strong><span>M&amp;E Lead · 17 Jul</span><span>Evidence review</span><span>PDF, Excel · <a href="/sample-reports.html">Preview</a></span></div><div class="workspace-row"><strong>Policy Brief</strong><span>Programme Lead · 16 Jul</span><span>Editorial review</span><span>PDF · <a href="/sample-reports.html">View sample</a></span></div><div class="workspace-row"><strong>Dataset &amp; Evidence Pack</strong><span>Data Controller · 15 Jul</span><span>Access approved</span><span>CSV, Excel, JSON · <a href="/sample-reports.html">Preview</a></span></div><div class="workspace-row"><strong>Presentation &amp; Publication</strong><span>Publisher · 14 Jul</span><span>Approval pending</span><span>PowerPoint, PDF · <a href="/sample-reports.html">View sample</a></span></div></div>
+            </section>
+            <section class="workspace-mode-panel" role="tabpanel" id="workspace-evidence" aria-labelledby="workspace-tab-evidence" hidden>
+              <div class="workspace-mode-summary"><strong>Datasets &amp; Evidence</strong><span>Reusable products retain their source, method, classification and access context.</span></div>
+              <div class="dataset-profile"><article><span>Dataset version</span><strong>CHAS v1.2</strong><small>2,480 synthetic records · 64 variables</small></article><article><span>Methodology</span><strong>Approved v2.1</strong><small>Mixed-channel sampling and review protocol</small></article><article><span>Metadata</span><strong>Complete</strong><small>Dictionary, provenance and language fields</small></article><article><span>Sensitivity</span><strong>Restricted</strong><small>Role-controlled project access</small></article></div>
+              <div class="evidence-chain" aria-label="Synthetic evidence traceability chain"><span>Response source</span><i aria-hidden="true">→</i><span>Reviewed transcript</span><i aria-hidden="true">→</i><span>Dataset v1.2</span><i aria-hidden="true">→</i><span>Finding</span><i aria-hidden="true">→</i><span>Evidence package</span></div>
+            </section>
+            <section class="workspace-mode-panel" role="tabpanel" id="workspace-ai" aria-labelledby="workspace-tab-ai" hidden>
+              <div class="workspace-mode-summary"><strong>AI Analyst</strong><span>AI-assisted analysis based on governed project evidence. Human approval is required.</span></div>
+              <div class="ai-analysis"><p class="ai-question">“What is limiting access to maternal health services?”</p><div class="ai-answer"><span class="badge badge-neutral">Analyst review required</span><h3>Transport cost and distance are the leading reviewed access themes.</h3><p>Thirty-two reviewed responses reference transport cost and twenty-seven reference travel distance. Ward-level comparison indicates higher concern in Wards A and B.</p><dl class="showcase-facts"><div><dt>Evidence references</dt><dd>CHAS-R032, R087, R114 · Dataset v1.2</dd></div><div><dt>Language sources</dt><dd>27 Kiswahili · 5 English</dd></div><div><dt>Confidence state</dt><dd>Supported finding · analyst verified</dd></div><div><dt>Recommended follow-up</dt><dd>Review clinic schedules and validate transport options with ward teams.</dd></div></dl></div></div>
+            </section>
+            <section class="workspace-mode-panel" role="tabpanel" id="workspace-decisions" aria-labelledby="workspace-tab-decisions" hidden>
+              <div class="workspace-mode-summary"><strong>Decisions</strong><span>Findings become owned records with evidence, dates, status and follow-up indicators.</span></div>
+              <div class="decision-register"><article><span class="badge badge-warn">Under review</span><h3>Review outreach-clinic scheduling in two wards.</h3><dl class="showcase-facts"><div><dt>Evidence</dt><dd>32 reviewed responses · transport-cost theme · ward comparison</dd></div><div><dt>Owner</dt><dd>Programme Manager</dd></div><div><dt>Due date</dt><dd>31 July 2026</dd></div><div><dt>Follow-up indicator</dt><dd>Appointments reached within target travel time</dd></div></dl></article><article><span class="badge badge-neutral">Evidence requested</span><h3>Assess rainy-season transport support options.</h3><dl class="showcase-facts"><div><dt>Evidence</dt><dd>Seasonal access finding · Dataset v1.2</dd></div><div><dt>Owner</dt><dd>Operations Lead</dd></div><div><dt>Due date</dt><dd>15 August 2026</dd></div><div><dt>Follow-up indicator</dt><dd>Transport referrals completed</dd></div></dl></article></div>
+            </section>
+          </div>
         </div>
       </div>
+      <p class="muted-note" style="margin-top:1rem;">This public showcase uses governed synthetic demonstration data. It does not call authenticated APIs, mimic a logged-in session or store actions as operational records.</p>
+    </section>
 
-      <div class="card" id="dash-panel-analytics" style="display:none;">
-        <div class="grid grid-3" style="gap:1rem;">
-          <div><div class="card-title">Active Surveys <small style="display:block;font-size:.62rem;font-weight:600;opacity:.75">Illustrative demonstration data</small></div><div class="stat-value">24</div></div>
-          <div><div class="card-title">Total Respondents</div><div class="stat-value">52,430</div></div>
-          <div><div class="card-title">Response Rate</div><div class="stat-value">83%</div></div>
+    <section class="pub-section story-section story-section-example" id="story-example" aria-labelledby="enterprise-ecosystem-title">
+      <div class="section-header"><span class="eyebrow">One evidence source</span><h2 id="enterprise-ecosystem-title">From response to decision.</h2><p>A governed synthetic demonstration showing how one fictional response remains connected to every downstream output.</p></div>
+      <div class="transformation-demo">
+        <article><span class="badge badge-neutral">Governed synthetic demonstration</span><span class="demo-step">01 · Respondent input</span><h3>WhatsApp Voice Note · Kiswahili</h3><blockquote>“Umbali na gharama ya usafiri vinafanya iwe vigumu kufika kwenye huduma za afya ya uzazi.”</blockquote><p>Fictional participant concern: travel distance and transport cost limit access to maternal health services.</p></article>
+        <article><span class="demo-step">02 · Processing &amp; evidence</span><h3>Reviewed before use</h3><ul><li>Consent recorded</li><li>Transcript generated</li><li>Language identified</li><li>Quality reviewed</li><li>Theme classified</li><li>Location aggregated</li><li>Evidence linked</li></ul></article>
+        <article><span class="demo-step">03 · Decision-ready outputs</span><h3>One source, connected products</h3><ul><li>Dashboard indicator updated</li><li>Operational finding created</li><li>Report section prepared</li><li>Evidence pack linked</li></ul><div class="decision-record compact"><strong class="decision-title">Review outreach-clinic scheduling in the two affected wards.</strong><dl><div><dt>Owner</dt><dd>Programme Manager</dd></div><div><dt>Status</dt><dd>Under review</dd></div></dl></div></article>
+      </div>
+    </section>
+
+    <section class="pub-section story-section story-section-problem" id="story-problem" aria-labelledby="enterprise-title">
+      <div class="section-header centered"><span class="eyebrow">The operating problem — and a connected solution</span><h2 id="enterprise-title">Replace fragmented handoffs with one governed workflow.</h2><p>VoiceInsights is designed to connect inclusive collection, human-reviewed processing, governed products and accountable action. Capabilities are configured to the approved implementation scope.</p></div>
+      <div class="workflow-comparison" role="table" aria-label="Traditional fragmented workflow compared with VoiceInsights">
+        <div class="comparison-head" role="row"><strong role="columnheader">Work</strong><strong role="columnheader">Fragmented traditional workflow</strong><strong role="columnheader">VoiceInsights connected workflow</strong></div>
+        <div role="row"><strong role="rowheader">Collection</strong><span role="cell">Separate tools and channels.</span><span role="cell">Five channels, one governed workflow.</span></div>
+        <div role="row"><strong role="rowheader">Processing</strong><span role="cell">Manual handoffs and disconnected files.</span><span role="cell">AI-assisted, review-controlled processing.</span></div>
+        <div role="row"><strong role="rowheader">Analytics</strong><span role="cell">Delayed analysis.</span><span role="cell">Connected dashboards and monitoring.</span></div>
+        <div role="row"><strong role="rowheader">Reporting</strong><span role="cell">Reports recreated manually.</span><span role="cell">Governed reports, publications and datasets.</span></div>
+        <div role="row"><strong role="rowheader">Evidence</strong><span role="cell">Difficult source tracing.</span><span role="cell">Evidence, methodology, metadata and versions connected.</span></div>
+        <div role="row"><strong role="rowheader">Decisions</strong><span role="cell">Insights stop in documents.</span><span role="cell">Actions, owners and decision tracking.</span></div>
+      </div>
+    </section>
+
+    <section class="pub-section story-section story-section-channels" id="story-channels" aria-labelledby="capabilities-title">
+      <div class="section-header"><span class="eyebrow">Five collection channels</span><h2 id="capabilities-title">Every community needs a different way to be heard.</h2><p>Collect through phone calls, WhatsApp, SMS, web links and an offline field app — then manage every response in one governed workflow.</p></div>
+      <div class="channel-grid">
+        <article><i data-lucide="phone" aria-hidden="true"></i><h3>Phone Call</h3><p>For voice-led participation using familiar handsets.</p><dl><div><dt>Connection</dt><dd>Telephony</dd></div><div><dt>Response</dt><dd>Voice</dd></div><div><dt>Use</dt><dd>Guided research</dd></div></dl></article>
+        <article><i data-lucide="message-circle" aria-hidden="true"></i><h3>WhatsApp Voice Notes &amp; Chat</h3><p>For conversational voice and text participation.</p><dl><div><dt>Connection</dt><dd>Data</dd></div><div><dt>Response</dt><dd>Voice or text</dd></div><div><dt>Use</dt><dd>Community feedback</dd></div></dl></article>
+        <article><i data-lucide="message-square" aria-hidden="true"></i><h3>SMS</h3><p>For concise structured responses on basic devices.</p><dl><div><dt>Connection</dt><dd>Mobile network</dd></div><div><dt>Response</dt><dd>Text</dd></div><div><dt>Use</dt><dd>Pulse checks</dd></div></dl></article>
+        <article><i data-lucide="link" aria-hidden="true"></i><h3>Web Link</h3><p>For self-completed forms on connected devices.</p><dl><div><dt>Connection</dt><dd>Internet</dd></div><div><dt>Response</dt><dd>Structured form</dd></div><div><dt>Use</dt><dd>Open studies</dd></div></dl></article>
+        <article><i data-lucide="wifi-off" aria-hidden="true"></i><h3>Offline Field App</h3><p>For enumerator-led work where connectivity is limited.</p><dl><div><dt>Connection</dt><dd>Offline then sync</dd></div><div><dt>Response</dt><dd>Multimedia form</dd></div><div><dt>Use</dt><dd>Field operations</dd></div></dl></article>
+      </div>
+      <details class="implementation-disclosure"><summary>Implementation availability</summary><p>Availability and configuration depend on the approved implementation scope. Channel outputs enter the same governed processing, analytics and publication workflow.</p></details>
+    </section>
+
+    <section class="pub-section story-section story-section-buyers" id="story-buyers" aria-labelledby="industries-title">
+      <div class="section-header"><span class="eyebrow">Who uses VoiceInsights</span><h2 id="industries-title">One platform, focused views for each evidence role.</h2><p>Each pathway connects an operating challenge to a governed workflow, Workspace view and practical output.</p></div>
+      <div class="industry-grid">
+        <article class="industry-card"><h3>Government</h3><p>Challenge: fragmented citizen and service-delivery data.</p><ul><li>Capability: multi-channel monitoring, governance and publication</li><li>Entry: departmental pilot or national programme</li></ul><details><summary>Typical products</summary><p>Executive Dashboard · Policy Brief · Dataset · Executive Report</p></details><a href="/government.html">Explore government <span aria-hidden="true">→</span></a></article>
+        <article class="industry-card"><h3>NGOs, INGOs &amp; Development Partners</h3><p>Challenge: connect field evidence to accountable delivery.</p><ul><li>Capability: baseline, monitoring and impact workflows</li><li>Entry: programme or portfolio implementation</li></ul><details><summary>Typical products</summary><p>Programme Dashboard · Donor Report · Annual Impact Publication · Dataset · Evidence Pack</p></details><a href="/ngos.html">Explore programme use <span aria-hidden="true">→</span></a></article>
+        <article class="industry-card"><h3>UN, Humanitarian &amp; Development Partners</h3><p>Challenge: review rapid needs, programme evidence and accountability signals.</p><ul><li>Capability: governed collection and response tracking</li><li>Entry: country programme or multi-agency workflow</li></ul><details><summary>Typical products</summary><p>Dashboard · Policy Brief · Dataset · Evidence Pack</p></details><a href="/sectors/humanitarian.html">Explore development use <span aria-hidden="true">→</span></a></article>
+        <article class="industry-card"><h3>Research &amp; Advisory Firms</h3><p>Challenge: deliver reproducible analysis and client products.</p><ul><li>Capability: study design, analysis and publication</li><li>Entry: study or multi-client research programme</li></ul><details><summary>Typical products</summary><p>Research Workspace · Technical Report · Statistical Dataset · Methodology · Publication · Client Presentation</p></details><a href="/research-firms.html">Explore research use <span aria-hidden="true">→</span></a></article>
+        <article class="industry-card"><h3>Evidence-led Enterprises</h3><p>Challenge: connect operating evidence to accountable decisions.</p><ul><li>Capability: integrated analytics and action tracking</li><li>Entry: executive reporting or performance programme</li></ul><details><summary>Typical products</summary><p>Executive Dashboard · Performance Report · Board Pack · Dataset · API · Decision Register</p></details><a href="/solutions.html">Explore enterprise decisions <span aria-hidden="true">→</span></a></article>
+      </div>
+    </section>
+
+    <section class="pub-section story-section story-section-knowledge" id="story-knowledge" aria-labelledby="knowledge-title">
+      <div class="knowledge-package">
+        <div class="section-header" style="margin:0;"><span class="eyebrow">Knowledge Hub</span><h2 id="knowledge-title">Evidence that remains useful after the project ends.</h2><p><strong>National Health Access Package</strong> is a governed synthetic example. Approved products enter the Knowledge Hub according to publication approval, permissions, sensitivity, governance and project scope.</p><div class="hero-actions"><a class="btn btn-primary" href="/sample-reports.html">Explore Knowledge Hub</a><a class="btn btn-ghost" href="/developers/index.html">Developer resources</a></div></div>
+        <div class="knowledge-package-map" aria-label="Related content types in an evidence package">
+          <div class="knowledge-node"><strong>Dashboard</strong><span>Interactive monitoring view</span></div>
+          <div class="knowledge-node"><strong>Report</strong><span>Operational analysis</span></div>
+          <div class="knowledge-node"><strong>Dataset</strong><span>Structured source product</span></div>
+          <div class="knowledge-node"><strong>Publication</strong><span>Approved external product</span></div>
+          <div class="knowledge-node"><strong>Evidence Pack</strong><span>Traceability and supporting material</span></div>
+          <div class="knowledge-node"><strong>Methodology</strong><span>Definitions, design and limitations</span></div>
+          <div class="knowledge-node"><strong>Metadata</strong><span>Version, source and access context</span></div>
+          <div class="knowledge-node"><strong>Policy Brief</strong><span>Decision-focused synthesis</span></div>
         </div>
       </div>
+    </section>
 
-      <div class="card" id="dash-panel-sentiment" style="display:none;">
-        <div class="muted-note" style="text-transform:uppercase; font-size:.68rem; letter-spacing:.06em; margin-bottom:.6rem;">Question 3 · WhatsApp</div>
-        <div style="background:var(--surface-2); border-radius:10px 10px 10px 2px; padding:.7rem 1rem; max-width:80%; margin-bottom:.6rem;">"Je, umepata changamoto gani msimu huu wa kilimo?"</div>
-        <div style="background:var(--surface-3); border-radius:10px 10px 2px 10px; padding:.7rem 1rem; max-width:80%; margin-left:auto;">"Mavuno yameongezeka lakini bei ya mbolea imepanda sana — hilo ndilo tatizo kubwa."</div>
-        <div style="margin-top:1rem; display:flex; gap:.5rem;">
-          <span class="badge badge-success">Positive</span>
-          <span class="badge badge-neutral">Topic: Fertilizer cost</span>
-        </div>
+    <section class="pub-section governance-callout story-section story-section-trust" id="story-trust" aria-labelledby="governance-title">
+      <div class="section-header"><span class="eyebrow">Compliance, Security &amp; Trust</span><h2 id="governance-title">Governance is part of the workflow, not an afterthought.</h2><p><strong>Security, trust and governance by design.</strong> Role-based access, tenant context, consent, safeguarding, audit events, controlled exports, retention, responsible AI, evidence traceability and human approval support a reviewable operating model. Certification and independent assurance are not implied.</p><div class="hero-actions"><a class="btn btn-ghost" href="/security.html">Explore Compliance</a><a class="btn btn-ghost" href="/faq.html">Read common questions</a></div></div>
+      <div class="governance-status"><span>Role-aware access</span><span>Audit events</span><span>Consent &amp; safeguarding</span><span>Human approval</span><span>Controlled exports</span><span>Retention controls</span></div>
+    </section>
+
+    <section class="pub-section story-section story-section-implementation" id="story-implementation" aria-labelledby="implementation-title">
+      <div class="section-header centered"><span class="eyebrow">Enterprise implementation</span><h2 id="implementation-title">A controlled path from discovery to operational use.</h2></div>
+      <p class="implementation-scope">Channels, data products, integrations, compliance controls and service levels are defined during implementation—not assumed as instant self-service defaults.</p>
+      <ol class="implementation-flow"><li><strong>Discovery</strong><span>Outcomes and constraints</span></li><li><strong>Solution Design</strong><span>Workflow and governance</span></li><li><strong>Configuration</strong><span>Workspace and templates</span></li><li><strong>Integration</strong><span>Approved systems and data</span></li><li><strong>Training</strong><span>Roles and operations</span></li><li><strong>Pilot Validation</strong><span>Test with users</span></li><li><strong>Launch</strong><span>Operate approved scope</span></li><li><strong>Support &amp; Review</strong><span>Measure and improve</span></li></ol>
+      <div class="implementation-deliverables"><span>Implementation plan</span><span>Configured Workspace</span><span>Collection workflows</span><span>Role setup</span><span>Training</span><span>Data-product templates</span><span>Governance controls</span><span>Support model</span></div>
+      <div class="hero-actions" style="justify-content:center"><a class="btn btn-primary" href="/contact.html">Request a Demo</a><a class="btn btn-ghost" href="/contact.html?request=proposal">Request a Tailored Proposal</a><a class="text-link" href="/contact.html?request=procurement">Request Procurement Pack</a></div>
+    </section>
+
+    <section class="pub-section faq-preview story-section story-section-faq" id="story-faq" aria-labelledby="faq-preview-title">
+      <div class="section-header"><span class="eyebrow">Common questions</span><h2 id="faq-preview-title">Practical answers before implementation.</h2><p>Scope, channels and support are confirmed during discovery and reflected in the approved implementation plan.</p></div>
+      <div class="faq-preview-grid">
+        <details><summary>Can field teams work offline?</summary><p>Supported offline workflows store assigned work locally and synchronize through controlled processes when connectivity returns.</p></details>
+        <details><summary>Who controls the data?</summary><p>Ownership, permitted processing, retention and portability are defined in the applicable customer agreement and implementation scope.</p></details>
+        <details><summary>Which downloads are available?</summary><p>Approved PDF, Word, PowerPoint, Excel, CSV and JSON outputs are shown only where the current governed workflow supports them.</p></details>
+        <details><summary>How is the platform implemented?</summary><p>Discovery, workflow design, configuration, training, pilot validation and launch are scoped to the organization.</p></details>
+        <details><summary>What support is included?</summary><p>Training, operational support and service levels are defined in the tailored proposal rather than assumed as a universal package.</p></details>
       </div>
+      <a class="text-link" href="/faq.html">Explore all common questions <span aria-hidden="true">→</span></a>
+    </section>
 
-      <div class="card" id="dash-panel-export" style="display:none;">
-        <div class="grid grid-3" style="gap:1rem;">
-          <div class="feature-card"><span class="num">1</span><h3 style="font-size:.95rem;">Executive Intelligence</h3><p style="font-size:.8rem;">Cover, KPIs, demographics, AI recommendations.</p></div>
-          <div class="feature-card"><span class="num">2</span><h3 style="font-size:.95rem;">Donor Impact Report</h3><p style="font-size:.8rem;">Baseline vs. current indicator scorecards.</p></div>
-          <div class="feature-card"><span class="num">→</span><h3 style="font-size:.95rem;">See a real sample</h3><p style="font-size:.8rem; margin-bottom:.5rem;">View the full format with real charts.</p><a href="/sample-reports.html" class="btn btn-ghost btn-sm">View the Intelligence Library</a></div>
-        </div>
-      </div>
+    <section class="pub-section story-section story-section-final" id="story-final" style="text-align:center;">
+      <div class="section-header centered"><span class="eyebrow">One connected Workspace</span><h2>Bring your next programme, study or evidence system into one connected Workspace.</h2><p>See how VoiceInsights can collect your data, govern the evidence and produce the dashboards, reports, datasets and publications your organization needs.</p></div>
+      <div class="hero-actions" style="justify-content:center;"><a class="btn btn-primary" href="/contact.html">Request a Demo</a><a class="btn btn-ghost" href="/contact.html">Contact Us</a></div>
+    </section>
+  </main>
 
-    </div>
-  </div>
-</section>
-
-<section class="pub-section" id="tatizo">
-  <span class="eyebrow" style="color:var(--accent);" data-i18n="problem.eyebrow">The Problem</span>
-  <h2 data-i18n="problem.h2">Traditional research in emerging and underserved markets is expensive, slow, and loses the real voice of the people.</h2>
-  <div class="grid grid-3" style="margin-top:2.5rem;">
-    <div class="feature-card"><i data-lucide="truck" style="color:var(--accent); width:28px; height:28px; margin-bottom:.6rem;"></i><h3 style="font-size:1.1rem;" data-i18n="problem.c1.title">Field costs</h3><p data-i18n="problem.c1.desc">Field teams, transport, and printed questionnaires eat up a large share of the project budget.</p></div>
-    <div class="feature-card"><i data-lucide="clock" style="color:var(--accent); width:28px; height:28px; margin-bottom:.6rem;"></i><h3 style="font-size:1.1rem;" data-i18n="problem.c2.title">Slow reporting</h3><p data-i18n="problem.c2.desc">Weeks to months between collecting data and having a donor-ready report.</p></div>
-    <div class="feature-card"><i data-lucide="audio-lines" style="color:var(--accent); width:28px; height:28px; margin-bottom:.6rem;"></i><h3 style="font-size:1.1rem;" data-i18n="problem.c3.title">Voices that get lost</h3><p data-i18n="problem.c3.desc">Rich qualitative answers go underused because analyzing them by hand is too much work — worse in languages most AI tools were never built for.</p></div>
-  </div>
-  <div class="grid grid-3" style="margin-top:1.25rem; text-align:center;">
-    <div class="card"><div class="stat-value" style="font-size:1.6rem; justify-content:center;" data-i18n="stats.s1.val">Majority</div><div class="muted-note" style="margin-top:.3rem;" data-i18n="stats.s1.label">of typical field-research budgets go to logistics, not analysis</div></div>
-    <div class="card"><div class="stat-value" style="font-size:1.6rem; justify-content:center;" data-i18n="stats.s2.val">Weeks</div><div class="muted-note" style="margin-top:.3rem;" data-i18n="stats.s2.label">commonly lost to manual transcription and data entry</div></div>
-    <div class="card"><div class="stat-value" style="font-size:1.6rem; justify-content:center;" data-i18n="stats.s3.val">Excluded</div><div class="muted-note" style="margin-top:.3rem;" data-i18n="stats.s3.label">respondents without literacy or a smartphone, on text-only tools</div></div>
-  </div>
-</section>
-
-
-<section class="pub-section" style="padding-top:0;">
-  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="solution.eyebrow">The Solution</span>
-  <h2 style="max-width:34ch;" data-i18n="solution.h2">One platform. Every voice. Instant insight.</h2>
-  <div class="grid grid-3" style="margin-top:2.5rem;">
-    <div class="feature-card"><span class="num" data-i18n="solution.c1.label">Collect</span><h3 style="font-size:1.1rem;" data-i18n="solution.c1.title">Capture voice anywhere</h3><p data-i18n="solution.c1.desc">Phone, WhatsApp, SMS, web, or an offline field app — respondents answer however is easiest for them.</p></div>
-    <div class="feature-card"><span class="num" data-i18n="solution.c2.label">Understand</span><h3 style="font-size:1.1rem;" data-i18n="solution.c2.title">AI transcribes and analyzes</h3><p data-i18n="solution.c2.desc">Speech becomes text, then topics, sentiment, and fraud signals are extracted automatically.</p></div>
-    <div class="feature-card"><span class="num" data-i18n="solution.c3.label">Act</span><h3 style="font-size:1.1rem;" data-i18n="solution.c3.title">Decision-ready reports</h3><p data-i18n="solution.c3.desc">A live dashboard and structured exports — insight your team can act on the same day, not next quarter.</p></div>
-  </div>
-</section>
-
-<section class="pub-section" style="background:var(--surface); border-radius:20px;">
-  <span class="eyebrow" style="color:var(--accent);" data-i18n="aiengine.eyebrow">AI Intelligence Engine</span>
-  <h2 data-i18n="aiengine.h2">This is what happens the instant someone speaks.</h2>
-  <p style="max-width:60ch; margin-top:1rem;" data-i18n="aiengine.lead">Every single response — on every channel — runs through the same six-stage AI pipeline, automatically, in seconds.</p>
-  <div class="ai-pipeline" style="margin-top:2.5rem;">
-    <div class="ai-pipeline-node"><span class="ai-pipeline-dot"></span><div class="ai-pipeline-label" data-i18n="aiengine.n1">Voice Input</div></div>
-    <div class="ai-pipeline-arrow">→</div>
-    <div class="ai-pipeline-node"><span class="ai-pipeline-dot"></span><div class="ai-pipeline-label" data-i18n="aiengine.n2">Speech Recognition</div></div>
-    <div class="ai-pipeline-arrow">→</div>
-    <div class="ai-pipeline-node"><span class="ai-pipeline-dot"></span><div class="ai-pipeline-label" data-i18n="aiengine.n3">Language Detection</div></div>
-    <div class="ai-pipeline-arrow">→</div>
-    <div class="ai-pipeline-node"><span class="ai-pipeline-dot"></span><div class="ai-pipeline-label" data-i18n="aiengine.n4">Sentiment Analysis</div></div>
-    <div class="ai-pipeline-arrow">→</div>
-    <div class="ai-pipeline-node"><span class="ai-pipeline-dot"></span><div class="ai-pipeline-label" data-i18n="aiengine.n5">Fraud Detection</div></div>
-    <div class="ai-pipeline-arrow">→</div>
-    <div class="ai-pipeline-node"><span class="ai-pipeline-dot" style="background:var(--accent);"></span><div class="ai-pipeline-label" data-i18n="aiengine.n6">Report Generation</div></div>
-  </div>
-</section>
-
-<section class="pub-section" id="channels">
-  <span class="eyebrow" style="color:var(--accent);" data-i18n="channels.eyebrow">Every way to reach respondents</span>
-  <h2 style="max-width:36ch;" data-i18n="channels.h2">Five channels, one platform — so no respondent is left out.</h2>
-  <p style="max-width:60ch; margin-top:1rem;" data-i18n="channels.intro">Different communities need different doors in. VoiceInsights Africa covers all of them, feeding the same AI pipeline and the same dashboard.</p>
-  <div class="grid grid-3" style="margin-top:2.5rem;">
-    <div class="feature-card">
-      <span class="num">01</span>
-      <h3 style="font-size:1.05rem;" data-i18n="channels.c1.title">Phone Call</h3>
-      <p data-i18n="channels.c1.desc">Works with any basic mobile number — no smartphone or app required. The system calls out or receives calls and records the response directly.</p>
-    </div>
-    <div class="feature-card">
-      <span class="num">02</span>
-      <h3 style="font-size:1.05rem;" data-i18n="channels.c2.title">WhatsApp — Voice Notes &amp; Chat</h3>
-      <p data-i18n="channels.c2.desc">Respondents reply however they prefer — a voice note or a typed message — in the app they already use every day. Highest adoption channel across East Africa.</p>
-    </div>
-    <div class="feature-card">
-      <span class="num">03</span>
-      <h3 style="font-size:1.05rem;" data-i18n="channels.c3.title">SMS (Feature-Phone Fallback)</h3>
-      <p data-i18n="channels.c3.desc">For areas with weak data coverage or basic phones — a simple text-based survey flow, no internet needed.</p>
-    </div>
-    <div class="feature-card">
-      <span class="num">04</span>
-      <h3 style="font-size:1.05rem;" data-i18n="channels.c4.title">Web Platform</h3>
-      <p data-i18n="channels.c4.desc">A shareable link that works in any browser — ideal for diaspora respondents or online-first audiences.</p>
-    </div>
-    <div class="feature-card">
-      <span class="num">05</span>
-      <h3 style="font-size:1.05rem;" data-i18n="channels.c5.title">Offline Mobile Application</h3>
-      <p data-i18n="channels.c5.desc">Built for field enumerators working in areas with zero network coverage. Records locally all day, syncs automatically the moment signal returns — no more transcribing paper forms by hand.</p>
-    </div>
-    <div class="feature-card" style="display:flex; flex-direction:column; justify-content:center; align-items:flex-start; background:transparent; border-style:dashed;">
-      <p style="margin-bottom:1rem;" data-i18n="channels.closing">Every channel feeds the same AI analysis, fraud detection, and dashboard — your team never has to reconcile data from five different tools.</p>
-      <a href="/faq.html" class="btn btn-ghost btn-sm" data-i18n="channels.faq_link">See the FAQ →</a>
-    </div>
-  </div>
-</section>
-
-<section class="pub-section" id="jinsi" style="padding-top:0;">
-  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="how5.eyebrow">How it works</span>
-  <h2 data-i18n="how5.h2">From survey setup to a donor-ready report — five steps.</h2>
-  <div class="grid grid-5" style="margin-top:2.5rem;">
-    <div class="feature-card">
-      <span class="num" data-i18n="how5.step1.label">Step 1</span>
-      <h3 style="font-size:1rem;" data-i18n="how5.step1.title">Survey Setup</h3>
-      <p style="font-size:.85rem;" data-i18n="how5.step1.desc">Build your questionnaire, pick your channels, and set your compliance requirements.</p>
-    </div>
-    <div class="feature-card">
-      <span class="num" data-i18n="how5.step2.label">Step 2</span>
-      <h3 style="font-size:1rem;" data-i18n="how5.step2.title">Voice Collection</h3>
-      <p style="font-size:.85rem;" data-i18n="how5.step2.desc">Via phone call, WhatsApp, SMS, a web link, or an offline field app — in their own everyday language.</p>
-    </div>
-    <div class="feature-card">
-      <span class="num" data-i18n="how5.step3.label">Step 3</span>
-      <h3 style="font-size:1rem;" data-i18n="how5.step3.title">Transcription</h3>
-      <p style="font-size:.85rem;" data-i18n="how5.step3.desc">Voice is converted to text, recognizing accents, dialects, and mixed-language speech.</p>
-    </div>
-    <div class="feature-card">
-      <span class="num" data-i18n="how5.step4.label">Step 4</span>
-      <h3 style="font-size:1rem;" data-i18n="how5.step4.title">AI Analysis</h3>
-      <p style="font-size:.85rem;" data-i18n="how5.step4.desc">Topics, sentiment, and signs of fraud are detected automatically.</p>
-    </div>
-    <div class="feature-card">
-      <span class="num" data-i18n="how5.step5.label">Step 5</span>
-      <h3 style="font-size:1rem;" data-i18n="how5.step5.title">Reports</h3>
-      <p style="font-size:.85rem;" data-i18n="how5.step5.desc">A live dashboard, a donor PDF, and an analyst Excel export — every time.</p>
-    </div>
-  </div>
-</section>
-
-<section class="pub-section">
-  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="whouses.eyebrow">Who it's for</span>
-  <h2 style="max-width:36ch;" data-i18n="whouses.h2">Built for teams that depend on reliable data.</h2>
-  <div class="grid grid-4" style="margin-top:2.5rem;">
-    <a href="/ngos.html" class="feature-card" style="display:block; text-decoration:none;"><h3 style="font-size:1.05rem;" data-i18n="whouses.c1.title">NGOs</h3><p style="font-size:.85rem;" data-i18n="whouses.c1.desc">Programme monitoring and beneficiary feedback at field scale.</p></a>
-    <a href="/government.html" class="feature-card" style="display:block; text-decoration:none;"><h3 style="font-size:1.05rem;" data-i18n="whouses.c2.title">Governments</h3><p style="font-size:.85rem;" data-i18n="whouses.c2.desc">Citizen feedback and public service monitoring.</p></a>
-    <a href="/research-firms.html" class="feature-card" style="display:block; text-decoration:none;"><h3 style="font-size:1.05rem;" data-i18n="whouses.c3.title">Research Firms</h3><p style="font-size:.85rem;" data-i18n="whouses.c3.desc">Large-scale studies across languages and geographies.</p></a>
-    <a href="/development-partners.html" class="feature-card" style="display:block; text-decoration:none;"><h3 style="font-size:1.05rem;" data-i18n="whouses.c4.title">Development Partners</h3><p style="font-size:.85rem;" data-i18n="whouses.c4.desc">Grant monitoring and portfolio-wide impact measurement.</p></a>
-  </div>
-</section>
-
-<section class="pub-section" style="background:var(--surface); border-radius:20px;">
-  <span class="eyebrow" style="color:var(--accent);" data-i18n="samplereports.eyebrow">Intelligence Library</span>
-  <h2 data-i18n="samplereports.h2">See the exact format your data would generate.</h2>
-  <p style="max-width:60ch; margin-top:1rem;" data-i18n="samplereports.lead">International intelligence report products for executives, donors, government, boards, researchers and field teams — with mobile-ready infographics and evidence transparency.</p>
-  <div class="grid grid-4" style="margin-top:2rem;">
-    <div class="feature-card"><span class="num">1</span><h3 style="font-size:1rem;" data-i18n="samplereports.c1.title">Executive Report</h3><p style="font-size:.82rem;" data-i18n="samplereports.c1.desc">Cover, KPIs, key findings, and AI recommendations — 8 pages.</p></div>
-    <div class="feature-card"><span class="num">2</span><h3 style="font-size:1rem;" data-i18n="samplereports.c2.title">Donor Impact Report</h3><p style="font-size:.82rem;" data-i18n="samplereports.c2.desc">Baseline-vs-current indicator scorecards for grant reporting.</p></div>
-    <div class="feature-card"><span class="num">3</span><h3 style="font-size:1rem;" data-i18n="samplereports.c3.title">Analytics Snapshot</h3><p style="font-size:.82rem;" data-i18n="samplereports.c3.desc">Chart-heavy, dashboard-style export for a fast visual read.</p></div>
-    <div class="feature-card"><span class="num">4</span><h3 style="font-size:1rem;" data-i18n="samplereports.c4.title">Intelligence Brief</h3><p style="font-size:.82rem;" data-i18n="samplereports.c4.desc">One headline finding, charts, and an action matrix — 4 pages.</p></div>
-  </div>
-  <div style="text-align:center; margin-top:2rem;">
-    <a href="/sample-reports.html" class="btn btn-primary" data-i18n="samplereports.cta">Explore the Intelligence Library &rarr;</a>
-  </div>
-</section>
-
-
-<section class="pub-section" id="moat" style="background:var(--surface); border-radius:20px;">
-  <span class="eyebrow" style="color:var(--accent);" data-i18n="moat.eyebrow">Why us</span>
-  <h2 data-i18n="moat.h2">Built for the languages global research tools ignore — not a translated Silicon Valley product.</h2>
-  <div class="grid grid-2" style="margin-top:2.5rem;">
-    <div class="feature-card"><h3 style="font-size:1.05rem;" data-i18n="moat.c1.title">Low-resource language datasets</h3><p data-i18n="moat.c1.desc">Every interview builds a unique language asset in markets where major AI labs have the least training data.</p></div>
-    <div class="feature-card"><h3 style="font-size:1.05rem;" data-i18n="moat.c2.title">Sovereign, compliant data</h3><p data-i18n="moat.c2.desc">Infrastructure that respects local data privacy and sovereignty laws, wherever your respondents are.</p></div>
-    <div class="feature-card"><h3 style="font-size:1.05rem;" data-i18n="moat.c3.title">Built for NGO workflows</h3><p data-i18n="moat.c3.desc">Logframes, indicators, and safeguarding procedures — not generic AI.</p></div>
-    <div class="feature-card"><h3 style="font-size:1.05rem;" data-i18n="moat.c4.title">Fraud detection</h3><p data-i18n="moat.c4.desc">The system flags repeated answers, suspicious speed, and synthetic voices.</p></div>
-  </div>
-  <div style="margin-top:2rem;">
-    <a href="/safeguarding.html" class="btn btn-ghost btn-sm" data-i18n="moat.safeguard_link">Read our full Safeguarding & Compliance policy →</a>
-  </div>
-</section>
-
-<section class="pub-section">
-  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="compare.eyebrow">Why VoiceInsights Africa</span>
-  <h2 style="max-width:34ch;" data-i18n="compare.h2">Not just faster — a different kind of tool.</h2>
-  <div class="table-wrap" style="margin-top:2rem;">
-    <table>
-      <thead><tr><th data-i18n="compare.col1">Traditional Tools</th><th data-i18n="compare.col2">VoiceInsights Africa</th></tr></thead>
-      <tbody>
-        <tr><td data-i18n="compare.r1.old">Text-first, low completion in low-literacy areas</td><td data-i18n="compare.r1.new">Voice-first — no literacy or smartphone required</td></tr>
-        <tr><td data-i18n="compare.r2.old">Manual cleaning and data entry</td><td data-i18n="compare.r2.new">AI processing from the moment audio arrives</td></tr>
-        <tr><td data-i18n="compare.r3.old">Weak qualitative analysis at scale</td><td data-i18n="compare.r3.new">Deep voice insight — sentiment, topics, fraud, on every response</td></tr>
-        <tr><td data-i18n="compare.r4.old">Generic, built for other markets first</td><td data-i18n="compare.r4.new">Africa-optimized — Kiswahili and code-switching from day one</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<section class="pub-section" style="background:var(--surface); border-radius:20px;">
-  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="roi.eyebrow">ROI Calculator</span>
-  <h2 data-i18n="roi.h2">Compare traditional field research vs. VoiceInsights Africa.</h2>
-  <p style="max-width:60ch; margin-top:1rem;" data-i18n="roi.lead">Adjust these to match your own project — the formula is shown below so you can check our math.</p>
-  <div class="grid grid-2" style="margin-top:2rem; gap:2rem; align-items:start;">
-    <div class="card">
-      <div class="field"><label data-i18n="roi.f1">Number of field enumerators</label><input aria-label="roi enumerators" type="number" id="roi-enumerators" value="6" min="0"></div>
-      <div class="field"><label data-i18n="roi.f2">Daily rate per enumerator (USD, incl. travel/per diem)</label><input aria-label="roi rate" type="number" id="roi-rate" value="35" min="0"></div>
-      <div class="field"><label data-i18n="roi.f3">Field duration (days)</label><input aria-label="roi days" type="number" id="roi-days" value="21" min="1"></div>
-      <div class="field"><label data-i18n="roi.f4">Number of respondents</label><input aria-label="roi respondents" type="number" id="roi-respondents" value="1500" min="1"></div>
-    </div>
-    <div>
-      <div class="grid grid-2" style="gap:1rem;">
-        <div class="card"><div class="card-title" data-i18n="roi.traditional">Traditional Field Research</div><div class="stat-value" id="roi-traditional-cost" style="font-size:1.6rem;">–</div></div>
-        <div class="card" style="border-color:var(--accent);"><div class="card-title" data-i18n="roi.voiceinsights">VoiceInsights Africa</div><div class="stat-value" id="roi-vi-cost" style="font-size:1.6rem;">–</div></div>
-      </div>
-      <div class="card" style="margin-top:1rem; text-align:center;">
-        <div class="card-title" data-i18n="roi.savings">Estimated Savings</div>
-        <div class="stat-value" id="roi-savings" style="font-size:2.2rem; color:var(--success);">–</div>
-      </div>
-      <p class="muted-note" style="margin-top:1rem; font-size:.76rem;" id="roi-formula" data-i18n="roi.formula">Traditional = (enumerators × daily rate × field days) + (respondents × $2 data-entry/printing). VoiceInsights = prorated platform license + per-project intelligence fee. Actual figures depend on your specific project — <a href="/contact.html" style="color:var(--accent-2);">request a formal quote</a>.</p>
-    </div>
-  </div>
-</section>
-
-<section class="pub-section" id="pricing">
-  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="pricing.eyebrow">Pricing</span>
-  <h2 data-i18n="pricing.h2">Plans that grow with your organization.</h2>
-  <p style="max-width:60ch; margin-top:1rem;" data-i18n="pricing.intro">Enterprise annual agreements — most of our clients pay via bank transfer or purchase order, not credit card.</p>
-  <div class="grid grid-3" style="margin-top:2.5rem; align-items:stretch;">
-    <div class="feature-card" style="display:flex; flex-direction:column;">
-      <h3 style="font-size:1.2rem;" data-i18n="pricing.starter.title">Starter</h3>
-      <p style="margin-bottom:1.5rem;" data-i18n="pricing.starter.blurb">Small NGOs, pilot projects, universities.</p>
-      <div class="stat-value" style="font-size:1.3rem; margin-bottom:.3rem;"><span data-i18n="pricing.starting_from">Starting from</span> $3,500<span style="font-size:.7rem; color:var(--text-dim); font-family:var(--font-body);" data-i18n="pricing.per_year"> /year USD</span></div>
-      <ul style="font-size:.85rem; color:var(--text-muted); margin:1rem 0; padding-left:1.1rem; line-height:1.8; flex:1;">
-        <li data-i18n="pricing.starter.f1">1 organization, 3 team members</li>
-        <li data-i18n="pricing.starter.f2">5,000 responses / year</li>
-        <li data-i18n="pricing.starter.f3">Phone &amp; WhatsApp collection</li>
-        <li data-i18n="pricing.starter.f4">AI transcription &amp; summaries</li>
-        <li data-i18n="pricing.starter.f5">Standard PDF report</li>
-      </ul>
-      <a href="/contact.html" class="btn btn-ghost btn-sm" data-i18n="pricing.starter.cta">Request Demo</a>
-    </div>
-    <div class="feature-card" style="border-color:var(--accent); display:flex; flex-direction:column;">
-      <span class="badge badge-accent" style="margin-bottom:.8rem;" data-i18n="pricing.popular">Most popular</span>
-      <h3 style="font-size:1.2rem;" data-i18n="pricing.pro.title">Professional</h3>
-      <p style="margin-bottom:1.5rem;" data-i18n="pricing.pro.blurb">Mid-size NGOs, INGOs, research firms.</p>
-      <div class="stat-value" style="font-size:1.3rem; margin-bottom:.3rem;">$12,000&ndash;$30,000<span style="font-size:.7rem; color:var(--text-dim); font-family:var(--font-body);" data-i18n="pricing.per_year"> /year USD</span></div>
-      <ul style="font-size:.85rem; color:var(--text-muted); margin:1rem 0; padding-left:1.1rem; line-height:1.8; flex:1;">
-        <li data-i18n="pricing.pro.f1">Up to 15 team members</li>
-        <li data-i18n="pricing.pro.f2">50,000 responses / year</li>
-        <li data-i18n="pricing.pro.f3">All 5 collection channels</li>
-        <li data-i18n="pricing.pro.f4">Gender/age analytics, sentiment, fraud detection</li>
-        <li data-i18n="pricing.pro.f5">Donor-ready reports (all 4 formats)</li>
-      </ul>
-      <a href="/contact.html" class="btn btn-primary btn-sm" data-i18n="pricing.pro.cta">Contact Sales</a>
-    </div>
-    <div class="feature-card" style="display:flex; flex-direction:column;">
-      <h3 style="font-size:1.2rem;" data-i18n="pricing.ent.title">Enterprise</h3>
-      <p style="margin-bottom:1.5rem;" data-i18n="pricing.ent.blurb">Governments, UN agencies, national studies.</p>
-      <div class="stat-value" style="font-size:1.3rem; margin-bottom:.3rem;"><span data-i18n="pricing.starting_at">Starting at</span> $50,000<span style="font-size:.7rem; color:var(--text-dim); font-family:var(--font-body);" data-i18n="pricing.per_year"> /year USD</span></div>
-      <ul style="font-size:.85rem; color:var(--text-muted); margin:1rem 0; padding-left:1.1rem; line-height:1.8; flex:1;">
-        <li data-i18n="pricing.ent.f1">Unlimited users &amp; projects</li>
-        <li data-i18n="pricing.ent.f2">Dedicated / private cloud infrastructure</li>
-        <li data-i18n="pricing.ent.f3">Custom compliance workflows</li>
-        <li data-i18n="pricing.ent.f4">API access</li>
-        <li data-i18n="pricing.ent.f5">Dedicated account manager</li>
-      </ul>
-      <a href="/contact.html" class="btn btn-ghost btn-sm" data-i18n="pricing.ent.cta">Request Proposal</a>
-    </div>
-  </div>
-  <p style="max-width:60ch; margin-top:1.5rem; font-size:.85rem; color:var(--text-dim);" data-i18n="pricing.footnote">Project intelligence fees (per study, on top of the annual license) range from $1,500 for a small study up to $20,000+ for large national studies, depending on sample size. <a href="/contact.html" style="color:var(--accent-2);">Talk to us</a> for a tailored quote.</p>
-</section>
-
-<section class="pub-section">
-  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="secpreview.eyebrow">Security &amp; Infrastructure</span>
-  <h2 style="max-width:36ch;" data-i18n="secpreview.h2">Built to pass a government procurement review.</h2>
-  <div class="grid grid-4" style="margin-top:2rem;">
-    <div class="feature-card"><h3 style="font-size:.95rem;" data-i18n="secpreview.c1.title">Encryption</h3><p style="font-size:.82rem;" data-i18n="secpreview.c1.desc">TLS in transit, encrypted storage at rest.</p></div>
-    <div class="feature-card"><h3 style="font-size:.95rem;" data-i18n="secpreview.c2.title">Access Control</h3><p style="font-size:.82rem;" data-i18n="secpreview.c2.desc">Role-based permissions on every account.</p></div>
-    <div class="feature-card"><h3 style="font-size:.95rem;" data-i18n="secpreview.c3.title">Audit Logs</h3><p style="font-size:.82rem;" data-i18n="secpreview.c3.desc">Every access and change is tracked.</p></div>
-    <div class="feature-card"><h3 style="font-size:.95rem;" data-i18n="secpreview.c4.title">Fraud Detection</h3><p style="font-size:.82rem;" data-i18n="secpreview.c4.desc">Automated checks on every incoming response.</p></div>
-  </div>
-  <div style="margin-top:1.5rem;">
-    <a href="/security.html" style="color:var(--accent-2); font-size:.9rem; font-weight:600;" data-i18n="secpreview.link">Read the full Security &amp; Infrastructure page &rarr;</a>
-  </div>
-</section>
-
-
-<section class="pub-section" style="background:var(--surface); border-radius:20px;">
-  <span class="eyebrow" style="color:var(--accent);" data-i18n="cspreview.eyebrow">Report Library</span>
-  <h2 style="max-width:36ch;" data-i18n="cspreview.h2">What a VoiceInsights Africa pilot looks like.</h2>
-  <p style="max-width:60ch; margin-top:1rem;" data-i18n="cspreview.lead">We're an early-stage platform working with our first pilot partners — see a representative example of how a pilot is typically structured.</p>
-  <div style="margin-top:1.5rem;">
-    <a href="/sample-reports.html" class="btn btn-ghost" data-i18n="cspreview.link">View Case Studies &rarr;</a>
-  </div>
-</section>
-
-
-<section class="pub-section">
-  <span class="eyebrow" style="color:var(--accent-2);" data-i18n="faqpreview.eyebrow">FAQ</span>
-  <h2 style="max-width:36ch;" data-i18n="faqpreview.h2">Common questions from procurement and research teams.</h2>
-  <div class="grid grid-2" style="margin-top:2rem; gap:1.5rem;">
-    <div><h3 style="font-size:.95rem;" data-i18n="faqpreview.q1">Do you need internet access to collect data?</h3><p style="font-size:.85rem;" data-i18n="faqpreview.a1">No — the offline Enumerator App syncs once a connection is available, and phone/SMS channels work on any network.</p></div>
-    <div><h3 style="font-size:.95rem;" data-i18n="faqpreview.q2">Who owns the data we collect?</h3><p style="font-size:.85rem;" data-i18n="faqpreview.a2">Your organization does, in full. We process it on your behalf and never sell or share it with third parties.</p></div>
-  </div>
-  <div style="margin-top:1.5rem;">
-    <a href="/faq.html" style="color:var(--accent-2); font-size:.9rem; font-weight:600;" data-i18n="faqpreview.link">See all FAQs &rarr;</a>
-  </div>
-</section>
-
-
-<section class="pub-section" style="text-align:center; background:var(--surface); border-radius:20px;">
-  <h2 data-i18n="finalcta.h2">Ready to see it on your own data?</h2>
-  <p style="max-width:50ch; margin:1rem auto;" data-i18n="finalcta.lead">We'll walk through a live pilot using your own survey questions before any commercial discussion.</p>
-  <div style="display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
-    <a href="/contact.html" class="btn btn-primary" data-i18n="hero.cta1">Request Demo &rarr;</a>
-    <a href="/sample-reports.html" class="btn btn-ghost" data-i18n="hero.cta_sample">Explore Intelligence Library</a>
-  </div>
-</section>
-
-
-<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
-  <div style="flex:1 1 220px;">
-    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
-      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
-      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
-    </div>
-    <p style="max-width:32ch; font-size:.85rem; line-height:1.7;" data-i18n="footer.tagline">VoiceInsights Africa is an enterprise voice intelligence platform helping organizations collect, analyze, and transform multilingual voice data into decision-ready insights.</p>
-    <div style="display:flex; gap:.7rem; margin-top:1rem;">
-      <a href="https://www.linkedin.com/company/voiceinsights-africa/" target="_blank" rel="noopener" aria-label="VoiceInsights Africa on LinkedIn" style="width:32px; height:32px; border-radius:8px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.11 20.45H3.56V9h3.55v11.45z"/></svg>
-      </a>
-      <a href="https://x.com/voiceinsights_a" target="_blank" rel="noopener" aria-label="VoiceInsights Africa on X" style="width:32px; height:32px; border-radius:8px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.2 8.2L23.3 22H16.7l-5.2-6.8L5.5 22H2.4l7.7-8.8L1 2h6.8l4.7 6.2L18.9 2zm-2.3 18h1.9L7.5 3.9H5.5L16.6 20z"/></svg>
-      </a>
-    </div>
-    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); margin-top:1rem; line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.<br><span style="font-size:.68rem;">VoiceInsights Africa&trade; and VIA Intelligence Engine&trade; are proprietary trademarks of VoiceInsights Africa Ltd.</span></p>
-    <div style="margin-top:.6rem; display:flex; gap:1rem;">
-      <a href="/privacy.html" style="font-size:.75rem; color:var(--text-dim);">Privacy Policy</a>
-      <a href="/terms.html" style="font-size:.75rem; color:var(--text-dim);">Terms of Service</a>
-      <a href="/careers.html" style="font-size:.75rem; color:var(--text-dim);">Careers</a>
-    </div>
-  </div>
-  <div><div class="nav-label" style="padding:0;" data-i18n="footer.platform">Platform</div>
-    <a href="/app/dashboard.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.dashboard">Dashboard</a>
-    <a href="/respondent.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.demo_link">Interview Demo</a>
-    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.analytics">Analytics</a>
-    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.reporting">Reporting</a>
-    <a href="/api.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.api">API &amp; Integrations</a>
-  </div>
-  <div><div class="nav-label" style="padding:0;" data-i18n="footer.solutions">Solutions</div>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.survey_automation">Survey Automation</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.me">Monitoring &amp; Evaluation</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.beneficiary">Beneficiary Feedback</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.grievance">Grievance Systems</a>
-  </div>
-  <div><div class="nav-label" style="padding:0;" data-i18n="footer.trust">Trust</div>
-    <a href="/safeguarding.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.safeguarding_link">Safeguarding</a>
-    <a href="/security.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.security">Security</a>
-    <a href="/faq.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.faq_link">FAQ</a>
-  </div>
-  <div><div class="nav-label" style="padding:0;" data-i18n="footer.contact">Contact</div>
-    <a href="mailto:partnerships@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">partnerships@voiceinsightsafrica.com</a>
-    <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
-    <a href="/contact.html" class="btn btn-primary btn-sm" style="margin-top:1rem;" data-i18n="topnav.book_demo">Book Demo</a>
-  </div>
+  <footer class="pub-footer" data-shell="enterprise" aria-labelledby="footer-brand-title">
+  <div class="footer-primary"><section class="footer-brand"><div class="footer-brand-heading"><img src="/assets/img/logo-icon.png" alt=""><h2 id="footer-brand-title">VOICEINSIGHTS AFRICA</h2></div><p>VoiceInsights Africa is an enterprise data intelligence and publication platform helping organizations collect, understand and transform multilingual data into dashboards, reports, datasets, publications and decision-ready evidence.</p><p class="footer-company">VoiceInsights Africa Ltd — Registered in Tanzania.</p><div class="footer-emails"><a href="mailto:partnerships@voiceinsightsafrica.com">partnerships@voiceinsightsafrica.com</a><a href="mailto:hello@voiceinsightsafrica.com">hello@voiceinsightsafrica.com</a></div><a class="btn btn-primary" href="/contact.html?request=demo">Request Demo</a></section>
+  <nav class="footer-links" aria-label="Footer navigation"><section><h2>Platform</h2><a href="/platform.html">Platform</a><a href="/login.html">Workspace Login</a><a href="/platform.html">Analytics</a><a href="/sample-reports.html">Reports &amp; Publications</a><a href="/sample-reports.html">Knowledge Hub</a><a href="/developers/index.html">API &amp; Integrations</a></section><section><h2>Solutions</h2><a href="/solutions.html">Research &amp; Evaluation</a><a href="/solutions.html">Monitoring &amp; Performance</a><a href="/solutions.html">Community Voice &amp; Accountability</a><a href="/solutions.html">Enterprise Decision Intelligence</a></section><section><h2>Compliance &amp; Trust</h2><a href="/security.html">Compliance</a><a href="/safeguarding.html">Safeguarding</a><a href="/privacy.html">Privacy Policy</a><a href="/terms.html">Terms of Service</a><a href="/faq.html">FAQ</a></section><section><h2>Company</h2><a href="/about.html">About Us</a><a href="/contact.html">Contact</a><a href="/careers.html">Careers</a><a href="/procurement.html">Pricing</a></section></nav></div>
+  <div class="footer-legal"><span>© 2026 VoiceInsights Africa. All rights reserved.</span><span>VoiceInsights Africa™ and VIA Intelligence Engine™ are proprietary trademarks of VoiceInsights Africa Ltd.</span></div>
 </footer>
 
-<script src="/assets/js/app.js"></script>
-<script src="/assets/js/i18n.js"></script>
-<script>
-  document.getElementById('hero-mock-wave').innerHTML = makeWaveform(32, true);
-  document.getElementById('divider-1').innerHTML = makeDividerWave(70);
-  lucide.createIcons();
-  initSiteLanguage();
-
-  document.querySelectorAll('.demo-card').forEach(card => {
-    card.addEventListener('click', (e) => {
-      e.preventDefault();
-      const demo = card.dataset.demo;
-      ['responses', 'analytics', 'sentiment', 'export'].forEach(name => {
-        document.getElementById('dash-panel-' + name).style.display = (name === demo) ? 'block' : 'none';
-      });
-      document.getElementById('demo-modal-backdrop').style.display = 'flex';
-    });
-  });
-  function closeDemoModal() { document.getElementById('demo-modal-backdrop').style.display = 'none'; }
-  document.getElementById('demo-modal-close').addEventListener('click', closeDemoModal);
-  document.getElementById('demo-modal-backdrop').addEventListener('click', (e) => {
-    if (e.target.id === 'demo-modal-backdrop') closeDemoModal();
-  });
-
-  // ---------- ROI Calculator ----------
-  function calcRoi() {
-    const enumerators = parseFloat(document.getElementById('roi-enumerators').value) || 0;
-    const rate = parseFloat(document.getElementById('roi-rate').value) || 0;
-    const days = parseFloat(document.getElementById('roi-days').value) || 0;
-    const respondents = parseFloat(document.getElementById('roi-respondents').value) || 0;
-
-    const traditionalCost = (enumerators * rate * days) + (respondents * 2);
-
-    // VoiceInsights: prorated Starter license for the field period + a project
-    // intelligence fee that scales with sample size (mirrors our real pricing tiers).
-    const proratedLicense = (3500 / 365) * days;
-    let projectFee;
-    if (respondents <= 5000) projectFee = 1500 + (respondents / 5000) * 2500;
-    else if (respondents <= 25000) projectFee = 5000 + ((respondents - 5000) / 20000) * 10000;
-    else projectFee = 20000 + ((respondents - 25000) / 10000) * 3000;
-    const viCost = proratedLicense + projectFee;
-
-    const savings = traditionalCost > 0 ? Math.max(0, Math.round(((traditionalCost - viCost) / traditionalCost) * 100)) : 0;
-
-    document.getElementById('roi-traditional-cost').textContent = '$' + Math.round(traditionalCost).toLocaleString();
-    document.getElementById('roi-vi-cost').textContent = '$' + Math.round(viCost).toLocaleString();
-    document.getElementById('roi-savings').textContent = (traditionalCost > viCost ? savings + '%' : '—');
-  }
-  ['roi-enumerators', 'roi-rate', 'roi-days', 'roi-respondents'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('input', calcRoi);
-  });
-  calcRoi();
-</script>
-<script src="/assets/js/production-routing.js"></script>
+  <script src="/assets/js/i18n.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script>if (window.lucide) lucide.createIcons();</script>
+  <script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

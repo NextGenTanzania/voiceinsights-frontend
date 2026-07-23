@@ -1,10 +1,12 @@
 {
+  "id": "/enumerator.html",
   "name": "VoiceInsights Africa — Enumerator",
   "short_name": "VIA Enumerator",
-  "description": "Offline-first voice data collection app for field enumerators. Record interviews with zero network coverage, sync automatically when signal returns.",
+  "description": "Offline-first voice data collection app for field enumerators. Record interviews with zero network coverage, then synchronize when connectivity returns.",
   "start_url": "/enumerator.html",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#0F1614",
   "theme_color": "#0F1614",
@@ -16,5 +18,6 @@
     { "src": "/assets/img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
     { "src": "/assets/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
-  "categories": ["business", "productivity", "utilities"]
+  "categories": ["business", "productivity", "utilities"],
+  "prefer_related_applications": false
 }

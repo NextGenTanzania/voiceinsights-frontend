@@ -39,6 +39,12 @@
         <tr><td>API</td><td id="status-api" class="muted-note">Checking…</td></tr>
         <tr><td>Database (D1)</td><td id="status-db" class="muted-note">Checking…</td></tr>
         <tr><td>Audio Storage (R2)</td><td id="status-storage" class="muted-note">Checking…</td></tr>
+        <tr><td>Authentication</td><td class="muted-note">Covered by aggregate API health; no separate public check</td></tr>
+        <tr><td>AI services</td><td class="muted-note">Workflow-dependent; no separate public check</td></tr>
+        <tr><td>Report engine &amp; exports</td><td class="muted-note">No separate public check</td></tr>
+        <tr><td>Notifications</td><td class="muted-note">Channel-dependent; no separate public check</td></tr>
+        <tr><td>Offline sync</td><td class="muted-note">Client synchronization is not continuously tested here</td></tr>
+        <tr><td>Workers &amp; queue</td><td class="muted-note">Covered by aggregate API health; no separate public check</td></tr>
       </tbody>
     </table>
   </div>
@@ -52,6 +58,10 @@
     </div>
     <div id="history-strip" style="display:flex; gap:2px; flex-wrap:wrap;"></div>
   </div>
+  <div class="grid grid-2" style="margin-top:1rem;">
+    <article class="feature-card"><h2 style="font-size:1rem;">Incident archive</h2><p style="font-size:.8rem;">The live 24-hour history above is currently the public operational record. A longer-form public incident archive is not yet available.</p></article>
+    <article class="feature-card"><h2 style="font-size:1rem;">Maintenance notices</h2><p style="font-size:.8rem;">Planned customer-impacting maintenance is communicated through contracted support channels. No public maintenance notice is active on this page.</p></article>
+  </div>
 </section>
 
 <footer class="pub-section" style="text-align:center; padding-top:0;">
@@ -59,6 +69,7 @@
 </footer>
 
 <script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/app.js"></script>
 <script>
   const STATUS_LABEL = { true: '✓ Operational', false: '✗ Down' };

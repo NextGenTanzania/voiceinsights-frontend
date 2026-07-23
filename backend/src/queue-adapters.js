@@ -4,6 +4,8 @@ import { buildDocumentComposition } from './document-composer.js';
 import { renderPdfBinary, renderPptxBinary, storeBinaryArtifact } from './dedicated-binary-renderer.js';
 import { renderDocxBinary, renderXlsxBinary } from './office-export-engine.js';
 import { sendEmail, sendPushNotification } from './notifications.js';
+import { dispatchDecisionEvent } from './decision-event-consumers.js';
+import { PROJECTION_CONSUMER_REGISTRY } from './decision-projection-consumers.js';
 
 function permanent(message, code = 'INVALID_JOB_PAYLOAD', status = 422) {
   const error = new Error(message);
@@ -123,9 +125,53 @@ async function processOfflineSync(message, env) {
   return { ok: true, accepted, duplicates, total: records.length };
 }
 
+// Program Beta Sprint 1.5 — the queue-side half of the transactional
+// outbox. The publisher (decision-event-publisher.js) hands this adapter
+// only a pointer (outbox_event_id); the adapter re-reads the real row from
+// domain_event_outbox (never trusts a payload copy that could have drifted)
+// and dispatches it to the registered consumers.
+async function processDecisionEvent(message, env) {
+  const outboxEventId = required(message.payload?.outbox_event_id, 'payload.outbox_event_id');
+  const row = await env.DB.prepare('SELECT * FROM domain_event_outbox WHERE event_id=?').bind(outboxEventId).first();
+  if (!row) throw permanent('Outbox event not found', 'PAYLOAD_NOT_FOUND', 404);
+  if (row.status === 'published') return { ok: true, outcome: 'already_published' };
+  const event = {
+    event_id: row.event_id, event_type: row.event_type, event_version: row.event_version,
+    aggregate_type: row.aggregate_type, aggregate_id: row.aggregate_id, organization_id: row.organization_id,
+    project_id: row.project_id, report_id: row.report_id, actor_id: row.actor_id, actor_role: row.actor_role,
+    correlation_id: row.correlation_id, causation_id: row.causation_id, source: row.source,
+    occurred_at: row.occurred_at, recorded_at: row.created_at, schema_version: row.event_version,
+    payload: JSON.parse(row.payload_json || '{}'), metadata: JSON.parse(row.metadata_json || '{}'),
+  };
+  const dispatchResult = await dispatchDecisionEvent(event, env);
+  // Program Beta Sprint 1.6 — the same real dispatch mechanism (validation,
+  // per-consumer idempotency via decision_event_processed, error isolation)
+  // is reused against the projection consumer set. Both dispatches record
+  // their outcomes under the SAME event_id but distinct consumer_name
+  // values, so there is no idempotency collision between the two registries.
+  const projectionDispatchResult = dispatchResult.rejected ? dispatchResult : await dispatchDecisionEvent(event, env, PROJECTION_CONSUMER_REGISTRY);
+  const combinedOk = dispatchResult.ok && projectionDispatchResult.ok;
+  const now = new Date().toISOString();
+  if (combinedOk) {
+    await env.DB.prepare(`UPDATE domain_event_outbox SET status='published', published_at=?, updated_at=? WHERE event_id=?`).bind(now, now, outboxEventId).run();
+    return { ok: true, outcome: 'published', consumers: dispatchResult.outcomes, projections: projectionDispatchResult.outcomes };
+  }
+  await env.DB.prepare(`UPDATE domain_event_outbox SET status='failed', attempt_count=attempt_count+1, last_attempt_at=?, last_error=?, updated_at=? WHERE event_id=?`)
+    .bind(now, JSON.stringify({ consumers: dispatchResult, projections: projectionDispatchResult }).slice(0, 500), now, outboxEventId).run();
+  // Retryable: at least one consumer failed transiently. A rejected/malformed
+  // envelope (dispatchResult.rejected) is permanent — retrying won't fix a
+  // bad envelope, so it goes straight to dead-letter via the real queue
+  // transport's own classifyError() instead of looping forever.
+  const error = new Error('One or more decision-event consumers failed');
+  error.code = dispatchResult.rejected ? 'INVALID_MESSAGE' : 'CONSUMER_FAILURE';
+  error.retryable = !dispatchResult.rejected;
+  error.status = dispatchResult.rejected ? 400 : 500;
+  throw error;
+}
+
 const BUILTIN_ADAPTERS = Object.freeze({
   'ai.processing': async (message, env) => ({ ok: true, analysis: await analyzeText(env, required(message.payload?.text, 'payload.text')) }),
-  'audio.transcription': async (message, env) => ({ ok: true, transcript: await transcribeAudio(env, await loadPayloadBytes(message, env), message.payload?.media_type || 'audio/mpeg') }),
+  'audio.transcription': async (message, env) => ({ ok: true, transcript: await transcribeAudio(env, await loadPayloadBytes(message, env), message.payload?.media_type || 'audio/mpeg', message.payload?.language) }),
   'translation': async (message, env) => ({ ok: true, ...(await translateText(env, message.payload || {})) }),
   'whatsapp.delivery': async (message, env) => ({ ok: true, provider_result: await sendTwilioMessage(env, { to: required(message.payload?.to, 'payload.to'), body: required(message.payload?.body, 'payload.body'), whatsapp: true }) }),
   'sms.delivery': async (message, env) => ({ ok: true, provider_result: await sendTwilioMessage(env, { to: required(message.payload?.to, 'payload.to'), body: required(message.payload?.body, 'payload.body'), whatsapp: false }) }),
@@ -141,6 +187,7 @@ const BUILTIN_ADAPTERS = Object.freeze({
     return { ok: true, provider_result: await sendEmail(env, { to: required(p.to, 'payload.to'), subject: required(p.subject, 'payload.subject'), html: required(p.html, 'payload.html') }) };
   },
   'offline.sync': processOfflineSync,
+  'decision.event': processDecisionEvent,
   'webhook.followup': async (message, env) => {
     if (!message.payload?.url) throw permanent('payload.url is required');
     const response = await fetch(message.payload.url, { method: message.payload.method || 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(message.payload.body || {}) });

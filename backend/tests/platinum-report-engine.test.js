@@ -7,8 +7,8 @@ test('platinum engine exposes seven international publication profiles',()=>{
  assert.deepEqual(Object.keys(PLATINUM_PROFILES).sort(),['corporate','donor','government','humanitarian','research','un','world_bank'].sort());
 });
 
-test('all sixteen flagship samples receive platinum books and quality scores',()=>{
- assert.equal(FLAGSHIP_SAMPLE_REPORTS.length,16);
+test('all real flagship samples receive platinum books and quality scores',()=>{
+ assert.equal(FLAGSHIP_SAMPLE_REPORTS.length,33);
  for(const s of FLAGSHIP_SAMPLE_REPORTS){
   const m=buildFlagshipSampleReport(s.key);
   assert.ok(m.platinum);

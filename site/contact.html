@@ -18,38 +18,19 @@
 </style>
 </head>
 <body>
+<a class="skip-link" id="skip-to-content" href="#main-content">Skip to main content</a>
 
-<nav class="pub-nav">
+<div class="public-trust-strip">Trusted Voice Research Infrastructure for NGOs, Governments &amp; Global Development Partners</div>
+<nav class="pub-nav" aria-label="Primary navigation">
   <div class="pub-nav-row1">
-    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;">
-      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:34px; width:auto;">
-      <span style="font-family:var(--font-display); font-weight:600; font-size:1.1rem;">VoiceInsights Africa</span>
-    </a>
-    <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
-    <div class="pub-nav-collapse pub-nav-row1-right">
-      <button class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
-      <div class="site-lang-switch" id="site-lang-switch">
-        <button data-lang="en" class="active">EN</button>
-        <button data-lang="fr">FR</button>
-        <button data-lang="pt">PT</button>
-        <button data-lang="sw">SW</button>
-      </div>
-      <a href="/login.html" data-i18n="nav.login" class="btn btn-ghost btn-sm">Log in</a>
-      <a href="/contact.html" data-i18n="topnav.book_demo" class="btn btn-primary btn-sm">Book Demo</a>
-    </div>
+    <a href="/index.html" class="pub-nav-logo" style="display:flex;align-items:center;gap:.6rem;"><img src="/assets/img/logo-icon.png" alt="" style="height:34px;width:auto;"><span style="font-family:var(--font-display);font-weight:650;font-size:1.08rem;">VoiceInsights Africa</span></a>
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span><span></span></button>
+    <div class="pub-nav-collapse pub-nav-row1-right"><button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle colour theme"><span class="theme-toggle-icon" aria-hidden="true">◐</span></button><a href="/login.html" class="btn btn-ghost btn-sm">Login</a><a href="/contact.html?request=demo" class="btn btn-primary btn-sm">Request Demo</a></div>
   </div>
-  <div class="pub-nav-collapse pub-nav-links">
-    <a href="/platform.html" data-i18n="topnav.platform" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
-    <a href="/solutions.html" data-i18n="topnav.solutions" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
-    <a href="/industries.html" data-i18n="topnav.industries" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
-    <a href="/sample-reports.html" data-i18n="topnav.case_studies" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Intelligence Library</a>
-    <a href="/index.html#pricing" data-i18n="topnav.pricing" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Pricing</a>
-    <a href="/safeguarding.html" data-i18n="topnav.compliance" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
-    <a href="/about.html" data-i18n="topnav.about" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">About</a>
-    <a href="/respondent.html" style="color:var(--accent); font-size:.85rem; font-weight:700;">Try Demo</a>
-  </div>
+  <div class="pub-nav-collapse pub-nav-links"><a href="/platform.html">Platform</a><a href="/solutions.html">Solutions</a><a href="/industries.html">Industries</a><a href="/sample-reports.html">Knowledge Hub</a><a href="/security.html">Compliance</a><a href="/about.html">About Us</a><a href="/contact.html">Contact</a><a href="/procurement.html">Pricing</a></div>
 </nav>
 
+<main id="main-content">
 <header class="pub-hero" style="padding-bottom:1rem;">
   <span class="eyebrow" data-i18n="contact.eyebrow">Get in touch</span>
   <h1 style="font-size:clamp(2rem,4vw,3rem);" data-i18n="contact.h1">Talk to our team.</h1>
@@ -60,16 +41,16 @@
   <div class="card" id="form-card">
     <form id="contact-form">
       <div class="field-row">
-        <div class="field"><label data-i18n="contact.full_name">Full Name *</label><input aria-label="full name" id="full_name" required></div>
-        <div class="field"><label data-i18n="contact.work_email">Work Email *</label><input aria-label="work email" id="work_email" type="email" required></div>
+    <div class="field"><label for="full_name" data-i18n="contact.full_name">Full Name *</label><input aria-label="full name" id="full_name" name="full_name" required></div>
+    <div class="field"><label for="work_email" data-i18n="contact.work_email">Work Email *</label><input aria-label="work email" id="work_email" name="work_email" type="email" required></div>
       </div>
       <div class="field-row">
-        <div class="field"><label data-i18n="contact.organization">Organization</label><input aria-label="organization" id="organization"></div>
-        <div class="field"><label data-i18n="contact.country">Country</label><input aria-label="country" id="country"></div>
+    <div class="field"><label for="organization" data-i18n="contact.organization">Organization</label><input aria-label="organization" id="organization" name="organization"></div>
+    <div class="field"><label for="country" data-i18n="contact.country">Country</label><input aria-label="country" id="country" name="country"></div>
       </div>
       <div class="field-row">
         <div class="field"><label data-i18n="contact.org_type">Organization Type</label>
-          <select id="organization_type">
+      <select id="organization_type" name="organization_type">
             <option value="">Select…</option>
             <option>NGO</option><option>INGO</option><option>Government</option>
             <option>Research Firm / University</option><option>UN Agency</option>
@@ -77,7 +58,7 @@
           </select>
         </div>
         <div class="field"><label data-i18n="contact.project_size">Expected Project Size</label>
-          <select id="project_size">
+      <select id="project_size" name="project_size">
             <option value="">Select…</option>
             <option>Pilot (under 500 respondents)</option>
             <option>Medium (500–5,000 respondents)</option>
@@ -85,21 +66,21 @@
           </select>
         </div>
       </div>
-      <div class="field"><label data-i18n="contact.expected_respondents">Expected Number of Respondents</label><input aria-label="e.g. 2,000" id="expected_respondents" placeholder="e.g. 2,000"></div>
+    <div class="field"><label for="expected_respondents" data-i18n="contact.expected_respondents">Expected Number of Respondents</label><input aria-label="e.g. 2,000" id="expected_respondents" name="expected_respondents" placeholder="e.g. 2,000"></div>
       <div class="field">
         <label data-i18n="contact.preferred_channels">Preferred Channels</label>
         <div class="checkbox-row">
-          <label class="checkbox-pill"><input type="checkbox" value="Phone Call"> Phone Call</label>
-          <label class="checkbox-pill"><input type="checkbox" value="WhatsApp"> WhatsApp</label>
-          <label class="checkbox-pill"><input type="checkbox" value="SMS"> SMS</label>
-          <label class="checkbox-pill"><input type="checkbox" value="Web"> Web</label>
-          <label class="checkbox-pill"><input type="checkbox" value="Offline App"> Offline App</label>
+    <label class="checkbox-pill"><input type="checkbox" name="channels" value="Phone Call"> Phone Call</label>
+    <label class="checkbox-pill"><input type="checkbox" name="channels" value="WhatsApp"> WhatsApp</label>
+    <label class="checkbox-pill"><input type="checkbox" name="channels" value="SMS"> SMS</label>
+    <label class="checkbox-pill"><input type="checkbox" name="channels" value="Web"> Web</label>
+    <label class="checkbox-pill"><input type="checkbox" name="channels" value="Offline App"> Offline App</label>
         </div>
       </div>
-      <div class="field"><label data-i18n="contact.message_label">Tell us about your use case</label><textarea id="message" rows="4" placeholder="What are you trying to research or monitor?"></textarea></div>
+    <div class="field"><label for="message" data-i18n="contact.message_label">Tell us about your use case</label><textarea id="message" name="message" rows="4" placeholder="What are you trying to research or monitor?"></textarea></div>
 
       <div id="contact-error" style="display:none; color:var(--danger); font-size:.85rem; margin-bottom:1rem;"></div>
-      <button class="btn btn-primary" type="submit" id="contact-submit-btn" data-i18n="contact.submit" style="width:100%; justify-content:center;">Request Demo</button>
+      <button class="btn btn-primary" type="submit" id="contact-submit-btn" style="width:100%; justify-content:center;">Send enquiry</button>
     </form>
   </div>
 </section>
@@ -128,59 +109,19 @@
     </div>
   </div>
 </section>
+</main>
 
-<footer class="pub-footer" style="flex-wrap:wrap; gap:2.5rem;">
-  <div style="flex:1 1 220px;">
-    <div style="display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem;">
-      <img src="/assets/img/logo-icon.png" alt="VoiceInsights Africa" style="height:26px; width:auto;">
-      <span style="font-family:var(--font-display); font-weight:600;">VoiceInsights Africa</span>
-    </div>
-    <p style="max-width:32ch; font-size:.85rem; line-height:1.7;" data-i18n="footer.tagline">VoiceInsights Africa is an enterprise voice intelligence platform helping organizations collect, analyze, and transform multilingual voice data into decision-ready insights.</p>
-    <div style="display:flex; gap:.7rem; margin-top:1rem;">
-      <a href="https://www.linkedin.com/company/voiceinsights-africa/" target="_blank" rel="noopener" aria-label="VoiceInsights Africa on LinkedIn" style="width:32px; height:32px; border-radius:8px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.11 20.45H3.56V9h3.55v11.45z"/></svg>
-      </a>
-      <a href="https://x.com/voiceinsights_a" target="_blank" rel="noopener" aria-label="VoiceInsights Africa on X" style="width:32px; height:32px; border-radius:8px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.2 8.2L23.3 22H16.7l-5.2-6.8L5.5 22H2.4l7.7-8.8L1 2h6.8l4.7 6.2L18.9 2zm-2.3 18h1.9L7.5 3.9H5.5L16.6 20z"/></svg>
-      </a>
-    </div>
-    <p style="max-width:32ch; font-size:.75rem; color:var(--text-dim); margin-top:1rem; line-height:1.6;">VoiceInsights Africa Ltd — Registered in Tanzania.<br>&copy; 2026 VoiceInsights Africa. All rights reserved.<br><span style="font-size:.68rem;">VoiceInsights Africa&trade; and VIA Intelligence Engine&trade; are proprietary trademarks of VoiceInsights Africa Ltd.</span></p>
-    <div style="margin-top:.6rem; display:flex; gap:1rem;">
-      <a href="/privacy.html" style="font-size:.75rem; color:var(--text-dim);">Privacy Policy</a>
-      <a href="/terms.html" style="font-size:.75rem; color:var(--text-dim);">Terms of Service</a>
-      <a href="/careers.html" style="font-size:.75rem; color:var(--text-dim);">Careers</a>
-    </div>
-  </div>
-  <div><div class="nav-label" style="padding:0;" data-i18n="footer.platform">Platform</div>
-    <a href="/app/dashboard.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.dashboard">Dashboard</a>
-    <a href="/respondent.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.demo_link">Interview Demo</a>
-    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.analytics">Analytics</a>
-    <a href="/platform.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.reporting">Reporting</a>
-    <a href="/api.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.api">API &amp; Integrations</a>
-  </div>
-  <div><div class="nav-label" style="padding:0;" data-i18n="footer.solutions">Solutions</div>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.survey_automation">Survey Automation</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.me">Monitoring &amp; Evaluation</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.beneficiary">Beneficiary Feedback</a>
-    <a href="/solutions.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.grievance">Grievance Systems</a>
-  </div>
-  <div><div class="nav-label" style="padding:0;" data-i18n="footer.trust">Trust</div>
-    <a href="/safeguarding.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.safeguarding_link">Safeguarding</a>
-    <a href="/security.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.security">Security</a>
-    <a href="/faq.html" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;" data-i18n="footer.faq_link">FAQ</a>
-  </div>
-  <div><div class="nav-label" style="padding:0;" data-i18n="footer.contact">Contact</div>
-    <a href="mailto:partnerships@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">partnerships@voiceinsightsafrica.com</a>
-    <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
-    <a href="/contact.html" class="btn btn-primary btn-sm" style="margin-top:1rem;" data-i18n="topnav.book_demo">Book Demo</a>
-  </div>
+<footer class="pub-footer" data-shell="enterprise" aria-labelledby="footer-brand-title">
+  <div class="footer-primary"><section class="footer-brand"><div class="footer-brand-heading"><img src="/assets/img/logo-icon.png" alt=""><h2 id="footer-brand-title">VOICEINSIGHTS AFRICA</h2></div><p>VoiceInsights Africa is an enterprise data intelligence and publication platform helping organizations collect, understand and transform multilingual data into dashboards, reports, datasets, publications and decision-ready evidence.</p><p class="footer-company">VoiceInsights Africa Ltd — Registered in Tanzania.</p><div class="footer-emails"><a href="mailto:partnerships@voiceinsightsafrica.com">partnerships@voiceinsightsafrica.com</a><a href="mailto:hello@voiceinsightsafrica.com">hello@voiceinsightsafrica.com</a></div><a class="btn btn-primary" href="/contact.html?request=demo">Request Demo</a></section>
+  <nav class="footer-links" aria-label="Footer navigation"><section><h2>Platform</h2><a href="/platform.html">Platform</a><a href="/login.html">Workspace Login</a><a href="/platform.html">Analytics</a><a href="/sample-reports.html">Reports &amp; Publications</a><a href="/sample-reports.html">Knowledge Hub</a><a href="/developers/index.html">API &amp; Integrations</a></section><section><h2>Solutions</h2><a href="/solutions.html">Research &amp; Evaluation</a><a href="/solutions.html">Monitoring &amp; Performance</a><a href="/solutions.html">Community Voice &amp; Accountability</a><a href="/solutions.html">Enterprise Decision Intelligence</a></section><section><h2>Compliance &amp; Trust</h2><a href="/security.html">Compliance</a><a href="/safeguarding.html">Safeguarding</a><a href="/privacy.html">Privacy Policy</a><a href="/terms.html">Terms of Service</a><a href="/faq.html">FAQ</a></section><section><h2>Company</h2><a href="/about.html">About Us</a><a href="/contact.html">Contact</a><a href="/careers.html">Careers</a><a href="/procurement.html">Pricing</a></section></nav></div>
+  <div class="footer-legal"><span>© 2026 VoiceInsights Africa. All rights reserved.</span><span>VoiceInsights Africa™ and VIA Intelligence Engine™ are proprietary trademarks of VoiceInsights Africa Ltd.</span></div>
 </footer>
 
 <script src="/assets/js/config.js"></script>
 <script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/app.js"></script>
 <script>
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
 
   // Task 8.10: pre-fill the message when arriving from a "Download Sample"
   // link on the Sample Reports page, so the request is specific and
@@ -221,7 +162,7 @@
         <div style="text-align:center; padding:1.5rem 0;">
           <div style="font-size:2.5rem; margin-bottom:1rem;">✓</div>
           <h2 style="font-size:1.2rem; margin-bottom:.5rem;">Thank you — message received.</h2>
-          <p class="muted-note">Our team will get back to you within one business day.</p>
+          <p class="muted-note">Your enquiry was submitted successfully. Response timing depends on the request and agreed support pathway.</p>
         </div>`;
     } catch (err) {
       errorEl.textContent = err.message.includes('Failed to fetch')
@@ -229,7 +170,7 @@
         : 'Error: ' + err.message;
       errorEl.style.display = 'block';
       btn.disabled = false;
-      btn.textContent = t('contact.submit', 'Request Demo');
+      btn.textContent = 'Send enquiry';
     }
   });
 </script>

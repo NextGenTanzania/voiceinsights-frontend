@@ -78,7 +78,7 @@
           <option value="open_voice">Voice (Open Voice)</option>
           <option value="full_name">Respondent's Full Name</option>
         </select>
-        <button type="button" class="btn btn-ghost btn-sm remove-q">Remove</button>
+        <button type="button" class="btn btn-ghost btn-sm remove-q" data-action="remove-question">Remove</button>
       </div>
       <input aria-label="Type your question..." class="q-text" placeholder="Type your question..." value="${text ? text.replace(/"/g, '&quot;') : ''}">
       <div class="muted-note q-name-note" style="margin-top:.4rem; display:none;">This answer is saved as the respondent's name (shown across Respondents, Interviews, and Reports) — it skips sentiment/fraud analysis.</div>`;

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Knowledge Hub Workspace | VoiceInsights Africa</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" class="knowledge-catalogue">
+    <header class="section-header">
+      <span class="eyebrow">Organization knowledge</span>
+      <h1>Knowledge Hub Workspace</h1>
+      <p>Choose an Industry Module, then a Knowledge Category, to discover governed assets available to your organization.</p>
+    </header>
+
+    <nav aria-label="Knowledge location">
+      <p id="knowledge-breadcrumb">Knowledge Hub → Choose a Module</p>
+    </nav>
+
+    <section aria-labelledby="module-heading">
+      <h2 id="module-heading">1. Industry Module</h2>
+      <label><span>Current Module</span><select id="knowledge-module" name="module_id"><option value="">Choose a Module</option></select></label>
+    </section>
+
+    <section aria-labelledby="category-heading">
+      <h2 id="category-heading">2. Knowledge Category</h2>
+      <div id="knowledge-categories" role="group" aria-labelledby="category-heading"></div>
+    </section>
+
+    <section aria-labelledby="asset-heading">
+      <h2 id="asset-heading">3. Governed Assets</h2>
+      <form id="workspace-knowledge-search" class="knowledge-controls" role="search">
+        <label class="knowledge-search"><span>Search within the selected Module and Category</span><input name="query" type="search"></label>
+        <button type="submit">Search</button>
+        <button type="button" id="save-search">Save search</button>
+        <details>
+          <summary>Secondary browse options</summary>
+          <label><span>Asset type</span><select name="product_type"><option value="">All asset types</option><option value="analysis_product">Analyses</option><option value="professional_report">Reports</option><option value="premium_publication">Publications</option><option value="evidence_pack">Knowledge Resources</option></select></label>
+          <label><span>Framework</span><input name="framework"></label>
+          <label><span>Indicator</span><input name="indicator"></label>
+          <label><span>Language</span><input name="language"></label>
+          <label><span>Tags</span><input name="tag"></label>
+        </details>
+      </form>
+      <p id="workspace-knowledge-status" role="status"></p>
+      <div id="workspace-knowledge-results"></div>
+    </section>
+  </main>
+  <script src="/assets/js/knowledge-workspace.js"></script>
+</body>
+</html>

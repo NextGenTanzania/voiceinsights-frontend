@@ -9,7 +9,7 @@ import { verifyTwilioSignature } from '../src/collection-operations-workstream2.
 import { guardTwilioWebhook, reconstructTwilioUrl, isTwilioWebhookPath, TWILIO_WEBHOOK_PATHS } from '../src/twilio-security.js';
 import { requireAuth } from '../src/utils.js';
 import { signJWT } from '../src/auth.js';
-import { isSessionRevoked, revokeSession, revokeAllSessions, newSessionId } from '../src/session-registry.js';
+import { isSessionRevoked, revokeSession, revokeAllSessions, newSessionId, registerSession } from '../src/session-registry.js';
 
 const AUTH_TOKEN = 'test_twilio_auth_token_1234567890';
 
@@ -40,7 +40,7 @@ function fakeDB(seed = {}) {
             let n = 0; for (const s of sessions.values()) if (s.user_id === this._args[1] && s.status === 'active') { s.status = 'revoked'; n++; }
             return { meta: { changes: n } };
           }
-          if (/INSERT INTO user_sessions/.test(sql)) { sessions.set(this._args[0], { status: 'active', user_id: this._args[1] }); return { meta: { changes: 1 } }; }
+          if (/INSERT INTO user_sessions/.test(sql)) { sessions.set(this._args[0], { status: 'active', user_id: this._args[1], expires_at: this._args[5] || null }); return { meta: { changes: 1 } }; }
           return { meta: { changes: 0 } };
         },
         async first() {
@@ -222,6 +222,67 @@ test('legacy token works only in explicitly enabled migration mode', async () =>
   const token = await signJWT({ sub: 'u1', org: 'o1', role: 'org_admin' }, secret);
   const req = new Request('https://api.x/api/dashboard/stats', { headers: { Authorization: `Bearer ${token}` } });
   const claims = await requireAuth(req, { JWT_SECRET: secret, DB: db, ALLOW_LEGACY_SESSIONS: 'true' });
+  assert.strictEqual(claims.sub, 'u1');
+});
+
+// ===================== HOTFIX (2026-07-14): user_sessions.expires_at =====================
+// Regression coverage for the production incident where isSessionRevoked()
+// read expires_at but the column didn't exist anywhere (migration 031 /
+// schema.sql never defined it, registerSession() never wrote it) — every
+// authenticated request failed with a real D1 "no such column" error,
+// surfaced as a 503. See migrations/040_user_sessions_expires_at.sql.
+// The regex-matching fakeDB above previously accepted the SELECT regardless
+// of whether expires_at existed, which is exactly how this shipped
+// untested; these tests exercise the actual expiry behavior instead.
+
+test('registerSession persists expires_at, and an already-expired session is treated as revoked', async () => {
+  const db = fakeDB();
+  const sid = newSessionId();
+  const past = new Date(Date.now() - 1000).toISOString();
+  await registerSession({ DB: db }, { sid, userId: 'u1', organizationId: 'o1', expiresAt: past });
+  assert.strictEqual(await isSessionRevoked({ DB: db }, { sid }), true);
+});
+
+test('registerSession persists a future expires_at and the session stays valid', async () => {
+  const db = fakeDB();
+  const sid = newSessionId();
+  const future = new Date(Date.now() + 60_000).toISOString();
+  await registerSession({ DB: db }, { sid, userId: 'u1', organizationId: 'o1', expiresAt: future });
+  assert.strictEqual(await isSessionRevoked({ DB: db }, { sid }), false);
+});
+
+// ===================== HOTFIX (2026-07-14): forced password rotation =====================
+// A token issued while must_change_password was set (see
+// migrations/041_must_change_password.sql and scripts/rotate-user-password.js)
+// must only be usable to change the password, check who's logged in, or log
+// out — everything else must be rejected until the password is actually
+// changed.
+
+test('mustChangePassword claim blocks unrelated routes', async () => {
+  const secret = 's'; const sid = newSessionId();
+  const db = fakeDB({ sessions: { [await sha256Hex(sid)]: { status: 'active', user_id: 'u1' } } });
+  const token = await signJWT({ sub: 'u1', org: 'o1', role: 'org_admin', sid, mustChangePassword: true }, secret);
+  const req = new Request('https://api.x/api/dashboard/stats', { headers: { Authorization: `Bearer ${token}` } });
+  await assert.rejects(requireAuth(req, { JWT_SECRET: secret, DB: db }), e => e.status === 403);
+});
+
+test('mustChangePassword claim still allows change-password, me, and logout', async () => {
+  const secret = 's'; const sid = newSessionId();
+  const db = fakeDB({ sessions: { [await sha256Hex(sid)]: { status: 'active', user_id: 'u1' } } });
+  const token = await signJWT({ sub: 'u1', org: 'o1', role: 'org_admin', sid, mustChangePassword: true }, secret);
+  for (const path of ['/api/auth/change-password', '/api/auth/me', '/api/auth/logout']) {
+    const req = new Request(`https://api.x${path}`, { headers: { Authorization: `Bearer ${token}` } });
+    const claims = await requireAuth(req, { JWT_SECRET: secret, DB: db });
+    assert.strictEqual(claims.sub, 'u1', `${path} should be allowed`);
+  }
+});
+
+test('a normal token without mustChangePassword is unaffected', async () => {
+  const secret = 's'; const sid = newSessionId();
+  const db = fakeDB({ sessions: { [await sha256Hex(sid)]: { status: 'active', user_id: 'u1' } } });
+  const token = await signJWT({ sub: 'u1', org: 'o1', role: 'org_admin', sid }, secret);
+  const req = new Request('https://api.x/api/dashboard/stats', { headers: { Authorization: `Bearer ${token}` } });
+  const claims = await requireAuth(req, { JWT_SECRET: secret, DB: db });
   assert.strictEqual(claims.sub, 'u1');
 });
 

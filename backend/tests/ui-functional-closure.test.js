@@ -6,8 +6,8 @@ const read=p=>fs.readFileSync(new URL(p,import.meta.url),'utf8');
 test('legacy dashboards redirect to the single production dashboards',()=>{
   const f=read('../../site/admin/founder-dashboard-legacy.html');
   const o=read('../../site/admin/operations-manager-dashboard-legacy.html');
-  assert.match(f,/founder-dashboard-legacy\.html/); assert.doesNotMatch(f,/alert\(/);
-  assert.match(o,/operations-manager-dashboard-legacy\.html/); assert.doesNotMatch(o,/alert\(/);
+  assert.match(f,/url=\/admin\/founder-dashboard\.html/); assert.doesNotMatch(f,/founder-dashboard-legacy\.html/); assert.doesNotMatch(f,/alert\(/);
+  assert.match(o,/url=\/admin\/operations-manager-dashboard\.html/); assert.doesNotMatch(o,/operations-manager-dashboard-legacy\.html/); assert.doesNotMatch(o,/alert\(/);
 });
 
 test('Founder and Operations production dashboards use real API workflows',()=>{

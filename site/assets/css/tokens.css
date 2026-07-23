@@ -8,6 +8,17 @@
    ============================================================ */
 
 :root {
+  /* Canonical semantic surfaces shared by public pages and Workspace. */
+  --surface-canvas: var(--bg);
+  --surface-base: var(--surface);
+  --surface-raised: var(--surface-2);
+  --surface-emphasis: var(--surface-3);
+  --text-primary: var(--text);
+  --text-secondary: var(--text-muted);
+  --text-tertiary: var(--text-dim);
+  --border-subtle: var(--border);
+  --border-interactive: var(--border-strong);
+
   /* Spacing scale (rem) — used by new Milestone A components */
   --space-1: .25rem;
   --space-2: .5rem;
@@ -17,6 +28,30 @@
   --space-6: 2rem;
   --space-7: 3rem;
   --space-8: 4rem;
+  --space-9: 6rem;
+
+  /* Content widths */
+  --content-narrow: 720px;
+  --content-default: 1120px;
+  --content-wide: 1280px;
+
+  /* Type scale */
+  --text-xs: .72rem;
+  --text-sm: .84rem;
+  --text-base: 1rem;
+  --text-lg: 1.18rem;
+  --text-xl: clamp(1.45rem, 2vw, 2rem);
+  --text-2xl: clamp(2rem, 4vw, 3.5rem);
+  --text-hero: clamp(2.35rem, 5.6vw, 5.25rem);
+
+  /* Radius and icon scale */
+  --radius-xs: 6px;
+  --radius-md: var(--radius);
+  --radius-lg: 18px;
+  --radius-xl: 28px;
+  --icon-sm: 1rem;
+  --icon-md: 1.25rem;
+  --icon-lg: 1.75rem;
 
   /* Elevation scale — formalizes the ad hoc shadow values already
      used across style.css (card, sidebar, dropdown) into 3 reusable
@@ -47,6 +82,15 @@
   --chart-4: var(--warn);
   --chart-5: var(--danger);
   --chart-grid-line: var(--border);
+  --status-info: var(--accent-2);
+  --status-positive: var(--success);
+  --status-caution: var(--warn);
+  --status-critical: var(--danger);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-fast: 0s; --motion-base: 0s; --motion-slow: 0s; }
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
 
 /* Breakpoints are documented here for consistency, not enforced as CSS

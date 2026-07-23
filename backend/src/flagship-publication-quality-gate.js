@@ -23,3 +23,32 @@ export function evaluateFlagshipPublication(model,{human_reviewed=false,export_c
  return{status,overall,components,weights,blockers,score_basis:'Weighted evidence, statistical, visual, accessibility, export and human-review rules; never a field-count marketing score.',synthetic_status:'DEMONSTRATION_READY'};
 }
 
+// ------------------------------------------------------------
+// Specialized validator adapter (Canonical Publication Quality Gate, Part 3).
+// This engine's own `status` field is preserved above for its existing
+// caller (flagship-sample-library.js), but it no longer makes an
+// independent authoritative publication decision for anything routed
+// through the canonical gate — a route feeding
+// quality-scoring-engine.js:evaluatePublicationGate should call this
+// adapter instead. Since every caller of this engine is synthetic
+// demonstration content by construction, the result is always tagged as
+// such; a real customer report must never be scored by this validator.
+// ------------------------------------------------------------
+export function validateSyntheticSample(model, opts = {}) {
+  const gate = evaluateFlagshipPublication(model, opts);
+  const status = gate.status === 'BLOCKED' ? 'BLOCKED' : gate.blockers.length ? 'WARNING' : 'PASS';
+  return {
+    validator_id: 'flagship-publication-quality-gate.js:validateSyntheticSample',
+    validator_version: '1.0.0',
+    domain: 'data_readiness',
+    applicable: true,
+    score: gate.overall,
+    status,
+    blocking_failures: gate.status === 'BLOCKED' ? gate.blockers : [],
+    warnings: gate.status !== 'BLOCKED' ? gate.blockers : [],
+    passed_checks: Object.entries(gate.components).filter(([, v]) => v >= 90).map(([k]) => k),
+    evidence: [{ synthetic_demonstration: true, components: gate.components }],
+    evaluated_at: new Date().toISOString(),
+  };
+}
+

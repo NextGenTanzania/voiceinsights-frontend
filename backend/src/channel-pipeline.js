@@ -84,7 +84,7 @@ export async function submitAnswer(env, session, { audioBuf, mediaType, textAnsw
   if (audioBuf) {
     r2Key = `${session.channel}/${Date.now()}-${crypto.randomUUID()}.audio`;
     await env.AUDIO_BUCKET.put(r2Key, audioBuf, { httpMetadata: { contentType: mediaType || 'audio/ogg' } });
-    const sttResult = await transcribeAudio(env, audioBuf, mediaType);
+    const sttResult = await transcribeAudio(env, audioBuf, mediaType, session.language);
     transcript = sttResult.text;
     transcriptionConfidence = sttResult.confidence;
     sttEngine = 'whisper-1';
@@ -220,11 +220,11 @@ export async function submitAnswer(env, session, { audioBuf, mediaType, textAnsw
 }
 
 
-export async function transcribeAudio(env, audioBuf, mediaType) {
+export async function transcribeAudio(env, audioBuf, mediaType, language) {
   const whisperForm = new FormData();
   whisperForm.append('file', new Blob([audioBuf], { type: mediaType || 'audio/ogg' }), 'audio.ogg');
   whisperForm.append('model', 'whisper-1');
-  whisperForm.append('language', 'sw');
+  whisperForm.append('language', language || 'sw');
   whisperForm.append('response_format', 'verbose_json'); // returns per-segment avg_logprob — a real confidence signal, not a guess
   const resp = await fetch('https://api.openai.com/v1/audio/transcriptions', {
     method: 'POST', headers: { Authorization: `Bearer ${env.OPENAI_API_KEY}` }, body: whisperForm,

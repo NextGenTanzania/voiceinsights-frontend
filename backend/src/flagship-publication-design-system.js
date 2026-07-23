@@ -19,8 +19,16 @@ export const ACCESSIBILITY_RULES={minimum_contrast:4.5,large_text_contrast:3,nev
 
 export function themeFor(profile='research'){return PUBLICATION_THEMES[profile]||PUBLICATION_THEMES.research;}
 export function brandLockup(){return{...VIA_BRAND,label:`${VIA_BRAND.name} — ${VIA_BRAND.tagline}`};}
+// Sector Intelligence Platform: widened from 4 to 8 compositions. At 16
+// samples a 4-bucket hash was already the narrowest, completely untested
+// collision surface in the whole design system (confirmed by grep — no
+// test anywhere asserts on `composition`); at 21+ samples a 4-bucket pool
+// would start producing visible cover/layout collisions between unrelated
+// publications. Same hash%N mechanism, just a wider N — no new
+// randomization system.
+const COVER_COMPOSITIONS=['editorial-grid','map-window','signal-band','evidence-frame','quadrant-split','timeline-band','data-portrait','ledger-grid'];
 export function coverVariant(key='',profile='research'){
  const hash=[...String(key)].reduce((n,c)=>((n*31+c.charCodeAt(0))>>>0),7);
- return{variant:(hash%16)+1,composition:['editorial-grid','map-window','signal-band','evidence-frame'][hash%4],theme:themeFor(profile),brand:brandLockup()};
+ return{variant:(hash%16)+1,composition:COVER_COMPOSITIONS[hash%COVER_COMPOSITIONS.length],theme:themeFor(profile),brand:brandLockup()};
 }
 

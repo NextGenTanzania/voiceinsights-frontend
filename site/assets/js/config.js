@@ -4,6 +4,7 @@
 // Paste it below. This is the ONLY line you need to change to connect the frontend
 // to your real backend.
 const PRODUCTION_API_BASE_URL = 'https://voiceinsights-api.kitentyatsnp.workers.dev';
+const LOCAL_API_BASE_URL = 'http://127.0.0.1:8787';
 // Program Beta Sprint 2.1 — this frontend now genuinely gets deployed to a
 // dedicated Preview Pages project (voiceinsights-frontend-preview.pages.dev
 // / preview.voiceinsightsafrica.com) for live UAT against the Preview
@@ -13,9 +14,12 @@ const PRODUCTION_API_BASE_URL = 'https://voiceinsights-api.kitentyatsnp.workers.
 // accidentally shipping a preview URL to production. Detected purely from
 // the browser's own hostname; production is unaffected.
 const PREVIEW_API_BASE_URL = 'https://voiceinsights-api-preview.kitentyatsnp.workers.dev';
-const API_BASE_URL = (typeof window !== 'undefined' && /(^|\.)voiceinsights-frontend-preview\.pages\.dev$|^preview\.voiceinsightsafrica\.com$/.test(window.location.hostname))
-  ? PREVIEW_API_BASE_URL
-  : PRODUCTION_API_BASE_URL;
+const API_HOSTNAME = typeof window !== 'undefined' ? window.location.hostname : '';
+const API_BASE_URL = /^(localhost|127\.0\.0\.1)$/.test(API_HOSTNAME)
+  ? LOCAL_API_BASE_URL
+  : /(^|\.)voiceinsights-frontend-preview\.pages\.dev$|^preview\.voiceinsightsafrica\.com$/.test(API_HOSTNAME)
+    ? PREVIEW_API_BASE_URL
+    : PRODUCTION_API_BASE_URL;
 
 async function apiRequest(path, { method = 'GET', body, auth = true } = {}) {
   const headers = { 'Content-Type': 'application/json' };

@@ -65,7 +65,7 @@
 <script src="/assets/js/site-search.js"></script>
 <script src="/assets/js/sector-page.js"></script>
 <script>
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
   initSiteSearch('site-search-mount');
   renderSectorPage({
     id: 'health-capability-statement',

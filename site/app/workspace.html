@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Enterprise Intelligence Workspace | VoiceInsights Africa</title>
+  <link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/enterprise-workspace.css">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="shell">
+  <div id="sidebar-mount"></div>
+  <main id="main-content" class="main" tabindex="-1">
+    <div id="topbar-mount"></div>
+    <div class="ew-shell" data-enterprise-workspace>
+      <header class="ew-commandbar">
+        <div>
+          <p class="ew-eyebrow">Enterprise Intelligence Workspace™</p>
+          <h1>Your intelligence work, in one place.</h1>
+          <p class="ew-intro">Create, review, govern and discover Intelligence Products without leaving the governed product lifecycle.</p>
+        </div>
+        <div class="ew-command-actions">
+          <button class="ew-icon-button" type="button" data-command-open aria-keyshortcuts="Control+K" aria-haspopup="dialog">⌘ <span>Search</span><kbd>Ctrl K</kbd></button>
+          <button class="ew-primary" type="button" data-quick-create aria-haspopup="menu">New product</button>
+        </div>
+      </header>
+
+      <nav class="ew-workspace-nav" aria-label="Enterprise Workspace">
+        <button type="button" data-workspace-view="mission_control">Mission Control</button>
+        <button type="button" class="is-active" data-workspace-view="home" aria-current="page">Home</button>
+        <button type="button" data-workspace-view="explorer">Explorer</button>
+        <a href="/app/industry-library.html">Industry Library</a>
+        <a href="/app/analytics.html">Analysis Studio</a>
+        <a href="/app/reports.html">Report Studio</a>
+        <a href="/app/publication-studio.html">Publication Studio</a>
+        <button type="button" data-workspace-view="knowledge">Knowledge Studio</button>
+        <button type="button" data-workspace-view="workflow">Workflow</button>
+        <button type="button" data-workspace-view="review">Reviews</button>
+        <button type="button" data-workspace-view="approvals">Approvals</button>
+        <button type="button" data-workspace-view="governance">Governance</button>
+        <button type="button" data-workspace-view="investigations">Investigations</button>
+        <button type="button" data-workspace-view="risk">Risk</button>
+        <button type="button" data-workspace-view="compliance">Compliance</button>
+        <button type="button" data-workspace-view="replay">Replay</button>
+        <button type="button" data-workspace-view="tasks">Tasks</button>
+        <button type="button" data-workspace-view="collaboration">Collaboration</button>
+        <button type="button" data-workspace-view="versions">Versions</button>
+        <button type="button" data-workspace-view="notifications">Notifications</button>
+        <button type="button" data-workspace-view="executive">Executive mode</button>
+      </nav>
+
+      <p id="workspace-live-status" class="visually-hidden" role="status" aria-live="polite"></p>
+      <p class="visually-hidden">Intelligence Product Explorer</p>
+      <section id="workspace-view" aria-live="polite" aria-busy="true"></section>
+    </div>
+  </main>
+</div>
+
+<dialog id="workspace-command" class="ew-dialog" aria-labelledby="command-title">
+  <form method="dialog" class="ew-dialog-head"><h2 id="command-title">Search the Workspace</h2><button aria-label="Close search">×</button></form>
+  <label class="ew-search"><span class="visually-hidden">Search Intelligence Products</span><input id="command-input" type="search" autocomplete="off" placeholder="Search products, collections, frameworks, indicators…"></label>
+  <div id="command-results" class="ew-command-results" role="listbox" aria-label="Search results"></div>
+</dialog>
+
+<dialog id="workspace-create" class="ew-dialog" aria-labelledby="create-title">
+  <form method="dialog" class="ew-dialog-head"><h2 id="create-title">Create governed work</h2><button aria-label="Close menu">×</button></form>
+  <div class="ew-create-grid">
+    <a href="/app/analytics.html"><strong>Analysis Product</strong><span>Start from governed project data</span></a>
+    <a href="/app/reports.html"><strong>Professional Report</strong><span>Use an approved Analysis Package</span></a>
+    <a href="/app/publication-studio.html"><strong>Premium Publication</strong><span>Use an approved Canonical Report</span></a>
+    <a href="/app/knowledge-hub.html"><strong>Knowledge Product</strong><span>Organize approved intelligence</span></a>
+  </div>
+</dialog>
+
+<aside id="workspace-copilot" class="ew-copilot" aria-labelledby="copilot-title" hidden>
+  <header><div><p>Evidence-grounded assistant</p><h2 id="copilot-title">AI Copilot</h2></div><button type="button" data-copilot-close aria-label="Close AI Copilot">×</button></header>
+  <div class="ew-copilot-body" id="copilot-messages"><p class="ew-ai-note">Answers are constrained to products visible in your organization. Suggestions require human review.</p></div>
+  <form id="copilot-form"><label><span class="visually-hidden">Ask about your intelligence products</span><textarea name="question" required placeholder="Ask about lineage, quality, metrics or related work"></textarea></label><button type="submit">Ask</button></form>
+</aside>
+<button class="ew-copilot-launch" type="button" data-copilot-open aria-controls="workspace-copilot" aria-expanded="false">AI Copilot</button>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/workspace-os-config.js"></script>
+<script src="/assets/js/mission-control.js"></script>
+<script src="/assets/js/governance-center.js"></script>
+<script src="/assets/js/enterprise-workspace.js"></script>
+<script>
+  if (requireLogin()) {
+    renderShell({ role: 'client', active: '/app/workspace.html', eyebrow: 'Enterprise Workspace', title: 'Workspace' });
+    initEnterpriseWorkspace();
+  }
+</script>
+</body>
+</html>

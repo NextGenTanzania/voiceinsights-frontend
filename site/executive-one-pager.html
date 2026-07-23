@@ -30,7 +30,7 @@
     <div class="pub-nav-collapse pub-nav-row1-right">
       <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
       <button type="button" class="btn btn-ghost btn-sm" onclick="window.print()">Print / Save as PDF</button>
-      <a href="/contact.html?intent=demo" class="btn btn-primary btn-sm">Book Demo</a>
+      <a href="/contact.html?intent=demo" class="btn btn-primary btn-sm">Request Demo</a>
     </div>
   </div>
 </nav>
@@ -49,7 +49,7 @@
 <script src="/assets/js/app.js"></script>
 <script src="/assets/js/sector-page.js"></script>
 <script>
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
   renderSectorPage({
     id: 'executive-one-pager',
     meta: { title: 'Executive One-Pager | VoiceInsights Africa', description: 'VoiceInsights Africa in one page.' },

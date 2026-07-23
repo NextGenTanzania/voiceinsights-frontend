@@ -94,7 +94,7 @@
 <script src="/assets/js/app.js"></script>
 <script src="/assets/js/offline-db.js"></script>
 <script>
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {/* offline on very first visit — fine */});
   }
@@ -325,7 +325,7 @@
     playback.style.display = 'none';
     saveAnswerBtn.disabled = true;
     status.textContent = 'Tap to record the respondent\'s answer';
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
   }
 
   btn.addEventListener('click', async () => {

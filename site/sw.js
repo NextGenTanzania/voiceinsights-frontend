@@ -3,7 +3,7 @@
 // with zero network afterwards. Must be served from the site root so its
 // scope covers the whole app.
 
-const CACHE_NAME = 'voiceinsights-enumerator';
+const CACHE_NAME = 'voiceinsights-enumerator-v3';
 const SHELL_FILES = [
   '/enumerator.html',
   '/manifest.json',
@@ -43,6 +43,10 @@ self.addEventListener('fetch', (event) => {
   // Non-shell requests (API calls to the Worker) are left alone — no caching,
   // no interception. If there's no network, they simply fail and the app
   // catches that and stores the data locally instead.
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
 });
 
 // ---------- PUSH NOTIFICATIONS (Task 6.2) ----------

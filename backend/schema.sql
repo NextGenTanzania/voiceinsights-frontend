@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS users (
   full_name         TEXT NOT NULL,
   role              TEXT NOT NULL DEFAULT 'me_officer',
   is_active         INTEGER NOT NULL DEFAULT 1,
+  must_change_password INTEGER NOT NULL DEFAULT 0,
   created_at        TEXT NOT NULL DEFAULT (datetime('now')),
   last_login_at     TEXT
 );
@@ -568,7 +569,12 @@ CREATE TABLE IF NOT EXISTS generated_reports (
   demo_language         TEXT DEFAULT 'English',
   demo_downloads        INTEGER NOT NULL DEFAULT 0,
   created_at            TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at            TEXT NOT NULL DEFAULT (datetime('now'))
+  updated_at            TEXT NOT NULL DEFAULT (datetime('now')),
+  -- Migration 039: explicit scope (never inferred solely from a nullable
+  -- campaign_id) and the deterministic dataset identity this report was
+  -- generated from (see report-generator.js:buildDatasetIdentity).
+  scope_type            TEXT NOT NULL DEFAULT 'ORGANIZATION',
+  dataset_version        TEXT
 );
 
 -- Every organization's visual identity, inherited automatically by every
@@ -799,9 +805,18 @@ CREATE INDEX IF NOT EXISTS idx_answers_response ON answers(response_id);
 CREATE INDEX IF NOT EXISTS idx_respondents_phone ON respondents(phone_number);
 
 -- ============================================================
--- Seed data: one demo organization + one login you can use immediately
--- Email: kitentya.luth@voiceinsightsafrica.com
--- Password: Azaniasec@123
+-- Seed data: a demo organization only.
+--
+-- SECURITY (2026-07-14): this file used to also seed three real named admin
+-- accounts with hardcoded PBKDF2 hashes, and — worse — their matching
+-- plaintext passwords right in the comments above the INSERT. Because this
+-- file is run directly against production (see README "Load the schema"),
+-- those UPDATE statements silently re-forced known passwords onto real
+-- super_admin accounts on every rerun. That has been removed. See
+-- SECURITY_INCIDENT_2026-07-13.md for the exposure report and rotation
+-- status. Admin accounts are now created only via
+-- backend/scripts/bootstrap-admin.js, which takes credentials from the
+-- environment and never writes them to a file.
 -- ============================================================
 INSERT OR IGNORE INTO organizations (id, name, type, billing_tier)
 VALUES ('org_demo', 'VoiceInsights Africa', 'local_ngo', 'professional');
@@ -809,66 +824,12 @@ VALUES ('org_demo', 'VoiceInsights Africa', 'local_ngo', 'professional');
 -- Force the org name even on a database that already had the old seed row.
 UPDATE organizations SET name = 'VoiceInsights Africa' WHERE id = 'org_demo' AND name != 'VoiceInsights Africa';
 
-INSERT OR IGNORE INTO users (id, organization_id, email, password_hash, password_salt, full_name, role)
-VALUES (
-  'user_demo_admin',
-  'org_demo',
-  'kitentya.luth@voiceinsightsafrica.com',
-  '2f717f95d592f79ab0e328ae7dfc74a8c63b173388a7f656ca8b69c4816d0024',
-  'bfb95dcdc3381a3d6353395d33c177ea',
-  'Kitentya Luth',
-  'super_admin'
-);
-
--- Force the real admin credentials even if this row already existed from an
--- earlier deploy (INSERT OR IGNORE above would skip it on a database that
--- already has this user) — safe to re-run any number of times.
-UPDATE users SET
-  email = 'kitentya.luth@voiceinsightsafrica.com',
-  password_hash = '2f717f95d592f79ab0e328ae7dfc74a8c63b173388a7f656ca8b69c4816d0024',
-  password_salt = 'bfb95dcdc3381a3d6353395d33c177ea',
-  full_name = 'Kitentya Luth',
-  role = 'super_admin'
-WHERE id = 'user_demo_admin';
-
--- Second Super Admin account — info@voiceinsightsafrica.com — so two people
--- can independently access and oversee the entire platform.
-INSERT OR IGNORE INTO users (id, organization_id, email, password_hash, password_salt, full_name, role)
-VALUES (
-  'user_demo_admin_2',
-  'org_demo',
-  'info@voiceinsightsafrica.com',
-  'a68c6225c4f387eb5d95504c270484ef3cebcf90ab44466bbd48f8cb1a06a741',
-  'e1ba58cd84bc1e4e9162cd921a47db65',
-  'VoiceInsights Africa Team',
-  'super_admin'
-);
-
-UPDATE users SET
-  email = 'info@voiceinsightsafrica.com',
-  password_hash = 'a68c6225c4f387eb5d95504c270484ef3cebcf90ab44466bbd48f8cb1a06a741',
-  password_salt = 'e1ba58cd84bc1e4e9162cd921a47db65',
-  full_name = 'VoiceInsights Africa Team',
-  role = 'super_admin'
-WHERE id = 'user_demo_admin_2';
-
--- Second demo login with a restricted role, to test role-based UI differences.
--- Email: meofficer@nextgentanzania.com   Password: MEOfficer2026!
-INSERT OR IGNORE INTO users (id, organization_id, email, password_hash, password_salt, full_name, role)
-VALUES (
-  'user_demo_me_officer',
-  'org_demo',
-  'meofficer@nextgentanzania.com',
-  'e4282632b66fc80e1d3581b816c5daee529550d18d31dcee6e21be38aa83f6ad',
-  '628983e0b63fda25ae23f4877508f387',
-  'Amina Rashid',
-  'me_officer'
-);
-
 -- Default survey + campaign + question so the WhatsApp pipeline has somewhere
 -- to save incoming voice notes right out of the box (no manual setup needed).
+-- created_by is NULL here — no user is seeded by this file; it is set to the
+-- real admin's id by bootstrap-admin.js if run afterwards.
 INSERT OR IGNORE INTO surveys (id, organization_id, created_by, title, description, module_type, language, status)
-VALUES ('survey_default', 'org_demo', 'user_demo_admin', 'WhatsApp Inbound Interviews', 'Auto-created survey that catches all incoming WhatsApp voice notes.', 'call_research', 'en', 'active');
+VALUES ('survey_default', 'org_demo', NULL, 'WhatsApp Inbound Interviews', 'Auto-created survey that catches all incoming WhatsApp voice notes.', 'call_research', 'en', 'active');
 
 INSERT OR IGNORE INTO questions (id, survey_id, order_index, question_text, question_type)
 VALUES
@@ -1529,10 +1490,12 @@ CREATE TABLE IF NOT EXISTS user_sessions (
   revoke_reason    TEXT,
   created_at       TEXT NOT NULL DEFAULT (datetime('now')),
   last_seen_at     TEXT NOT NULL DEFAULT (datetime('now')),
-  revoked_at       TEXT
+  revoked_at       TEXT,
+  expires_at       TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_user_sessions_user   ON user_sessions(user_id, status);
 CREATE INDEX IF NOT EXISTS idx_user_sessions_status ON user_sessions(status);
+CREATE INDEX IF NOT EXISTS idx_user_sessions_expires ON user_sessions(expires_at);
 
 -- ---- Twilio replay protection ---------------------------------------------
 -- A (sid, event_key, path) tuple can be processed once. A second delivery of
@@ -1559,3 +1522,20 @@ CREATE TABLE IF NOT EXISTS security_audit_log (
 );
 CREATE INDEX IF NOT EXISTS idx_security_audit_created ON security_audit_log(created_at);
 CREATE INDEX IF NOT EXISTS idx_security_audit_type    ON security_audit_log(event_type);
+
+-- Migration 038: Canonical Publication Quality Gate evaluation history.
+-- Immutable — a new row is inserted for every evaluation, never updated in
+-- place, so a report's quality history can always be reconstructed.
+CREATE TABLE IF NOT EXISTS publication_gate_evaluations (
+ id TEXT PRIMARY KEY, report_id TEXT, report_version TEXT, dataset_version TEXT, scope_type TEXT,
+ organization_id TEXT, project_id TEXT, report_context TEXT NOT NULL DEFAULT 'CUSTOMER',
+ canonical_engine_version TEXT NOT NULL, overall_score REAL, score_state TEXT NOT NULL,
+ publication_status TEXT NOT NULL, export_allowed INTEGER NOT NULL DEFAULT 0,
+ blocking_failures_json TEXT NOT NULL DEFAULT '[]', warnings_json TEXT NOT NULL DEFAULT '[]',
+ domain_results_json TEXT NOT NULL DEFAULT '{}', validator_results_json TEXT NOT NULL DEFAULT '{}',
+ required_approvals_json TEXT NOT NULL DEFAULT '[]', completed_approvals_json TEXT NOT NULL DEFAULT '[]',
+ evaluated_by TEXT, evaluated_at TEXT NOT NULL, input_hash TEXT NOT NULL, result_hash TEXT NOT NULL,
+ is_latest INTEGER NOT NULL DEFAULT 1
+);
+CREATE INDEX IF NOT EXISTS idx_publication_gate_report ON publication_gate_evaluations(report_id, evaluated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_publication_gate_latest ON publication_gate_evaluations(report_id, is_latest);

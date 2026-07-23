@@ -1,126 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analytics — VoiceInsights Africa</title>
-<link rel="stylesheet" href="/assets/css/style.css">
-<link rel="stylesheet" href="/assets/css/enterprise-dashboard-theme.css">
-<script src="https://unpkg.com/lucide@latest"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Analysis Workspace — VoiceInsights Africa</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/enterprise-dashboard-theme.css">
+  <link rel="stylesheet" href="/assets/css/analysis-workspace.css">
 </head>
 <body>
-<h1 class="visually-hidden">Analytics — VoiceInsights Africa</h1>
-<a class="skip-link" href="#main-content">Skip to main content</a>
-<div class="shell">
-  <div id="sidebar-mount"></div>
-  <main id="main-content" class="main">
-    <div id="topbar-mount"></div>
-    <div class="content">
-
-      <div class="card" style="margin-bottom:1.5rem; background:linear-gradient(135deg, var(--surface), var(--surface-3));">
-        <div class="card-title">Insight Generator — Automated Overview (AI)</div>
-        <p id="insight-summary" style="color:var(--text); font-size:1.02rem;">Loading insights…</p>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="shell">
+    <div id="sidebar-mount"></div>
+    <main id="main-content" class="main">
+      <div id="topbar-mount"></div>
+      <div class="content analysis-workspace" data-analysis-workspace>
+        <header class="analysis-hero">
+          <div><p class="analysis-kicker">Analysis Intelligence Engine™</p><h1>Analysis Workspace</h1><p>Validate governed project data, inspect analytical outputs, review evidence and create versioned Canonical Analysis Packages before downstream reporting.</p></div>
+          <button class="btn btn-primary" type="button" data-create-package>Create Analysis Package</button>
+        </header>
+        <p class="analysis-boundary"><strong>Product boundary:</strong> this workspace produces analysis products. It does not generate reports or publications.</p>
+        <nav class="analysis-tabs" aria-label="Analysis Workspace modules" role="tablist">
+          <button role="tab" aria-selected="true" aria-controls="analysis-panel" id="analysis-tab-overview" data-analysis-tab="overview">Overview</button>
+          <button role="tab" aria-selected="false" aria-controls="analysis-panel" data-analysis-tab="quality">Data Quality</button>
+          <button role="tab" aria-selected="false" aria-controls="analysis-panel" data-analysis-tab="indicators">Indicators</button>
+          <button role="tab" aria-selected="false" aria-controls="analysis-panel" data-analysis-tab="statistics">Statistics</button>
+          <button role="tab" aria-selected="false" aria-controls="analysis-panel" data-analysis-tab="cross-tabs">Cross-tabs</button>
+          <button role="tab" aria-selected="false" aria-controls="analysis-panel" data-analysis-tab="qualitative">Qualitative</button>
+          <button role="tab" aria-selected="false" aria-controls="analysis-panel" data-analysis-tab="voice">Voice</button>
+          <button role="tab" aria-selected="false" aria-controls="analysis-panel" data-analysis-tab="evidence">Evidence</button>
+          <button role="tab" aria-selected="false" aria-controls="analysis-panel" data-analysis-tab="ai">AI Insights</button>
+          <button role="tab" aria-selected="false" aria-controls="analysis-panel" data-analysis-tab="packages">Analysis Packages</button>
+          <button role="tab" aria-selected="false" aria-controls="analysis-panel" data-analysis-tab="products">Analysis Products</button>
+          <button role="tab" aria-selected="false" aria-controls="analysis-panel" data-analysis-tab="versions">Versions</button>
+          <button role="tab" aria-selected="false" aria-controls="analysis-panel" data-analysis-tab="exports">Exports</button>
+        </nav>
+        <section id="analysis-panel" class="analysis-panel" role="tabpanel" aria-labelledby="analysis-tab-overview" tabindex="0" aria-live="polite">
+          <p class="muted-note">Loading governed analysis state…</p>
+        </section>
       </div>
-
-      <div class="grid grid-2" style="margin-bottom:1.5rem;">
-        <div class="card"><div class="card-title">Emerging Topics (Topic Tags)</div><div style="position:relative; height:220px;"><canvas id="chartTopics"></canvas></div></div>
-        <div class="card"><div class="card-title">Sentiment Breakdown</div><div style="position:relative; height:220px;"><canvas id="chartSentiment"></canvas></div></div>
-      </div>
-
-      <div class="card" style="margin-bottom:1.5rem;">
-        <div class="card-title">Responses by Region</div>
-        <p class="muted-note" style="margin-bottom:.8rem;">A true geographic heatmap needs GPS coordinates per respondent, which we don't collect today. This chart uses the free-text region field instead.</p>
-        <div style="position:relative; height:220px;"><canvas id="chartRegions"></canvas></div>
-      </div>
-
-      <div class="section-head"><h2 style="font-size:1.05rem;">Key Quotes (From Transcripts)</h2></div>
-      <div class="grid grid-2" id="quotes-container">
-        <div class="card muted-note">Loading quotes…</div>
-      </div>
-    </div>
-  </main>
-</div>
-<script src="/assets/js/config.js"></script>
-<script src="/assets/js/i18n.js"></script>
-<script src="/assets/js/app.js"></script>
-<script>
-  if (!requireLogin()) { /* redirected */ }
-  renderShell({ role:'client', active:'/app/analytics.html', eyebrow:'Language Intelligence', title:'Analytics' });
-
-  const SENTIMENT_COLOR = { positive: '#6FBF8B', neutral: '#9FB3AB', negative: '#D9634A', distressed: '#E4C23A' };
-  const SENTIMENT_BADGE = { positive: 'badge-success', neutral: 'badge-neutral', negative: 'badge-danger', distressed: 'badge-warn' };
-  const SENTIMENT_LABEL = { positive: 'Positive', neutral: 'Neutral', negative: 'Negative', distressed: 'Distress' };
-
-  (async () => {
-    let data;
-    try {
-      data = await apiRequest('/api/analytics/summary');
-    } catch (e) {
-      document.getElementById('insight-summary').textContent = 'Could not load analytics: ' + e.message;
-      return;
-    }
-    const { sentiment, topics, quotes, regions } = data;
-
-    const totalResponses = sentiment.reduce((s, r) => s + r.n, 0);
-    const summaryEl = document.getElementById('insight-summary');
-    if (totalResponses === 0) {
-      summaryEl.textContent = 'No responses have come in yet. Once your campaigns start collecting voice responses, insights will appear here automatically.';
-    } else {
-      const top = [...sentiment].sort((a, b) => b.n - a.n)[0];
-      const topPct = Math.round((top.n / totalResponses) * 100);
-      const topTopic = topics[0];
-      summaryEl.textContent = `${totalResponses} response${totalResponses === 1 ? '' : 's'} analyzed so far. ${topPct}% are ${SENTIMENT_LABEL[top.overall_sentiment] || top.overall_sentiment}.` +
-        (topTopic ? ` Most discussed topic: "${topTopic.topic}" (${topTopic.count} mentions).` : '');
-    }
-
-    const quotesContainer = document.getElementById('quotes-container');
-    if (!quotes.length) {
-      quotesContainer.innerHTML = `<div class="card muted-note">No transcripts yet — quotes will appear here once responses come in.</div>`;
-    } else {
-      quotesContainer.innerHTML = quotes.map(q => `
-        <div class="card">
-          <span class="badge ${SENTIMENT_BADGE[q.overall_sentiment] || 'badge-neutral'}" style="margin-bottom:.7rem;">${SENTIMENT_LABEL[q.overall_sentiment] || 'Unrated'}</span>
-          <p style="color:var(--text);">"${q.raw_text}"</p>
-          <div class="muted-note">${new Date(q.started_at + 'Z').toLocaleDateString()}</div>
-        </div>`).join('');
-    }
-
-    // Charts are drawn separately — if Chart.js fails to load (network/firewall
-    // blocked the CDN), the text above (insights + quotes) stays correct.
-    try {
-      if (typeof Chart === 'undefined') throw new Error('Chart.js did not load');
-
-      new Chart(document.getElementById('chartTopics'), {
-        type: 'bar',
-        data: { labels: topics.length ? topics.map(t => t.topic) : ['No topics yet'],
-          datasets: [{ data: topics.length ? topics.map(t => t.count) : [0], backgroundColor: '#4FA490' }] },
-        options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB' } }, y: { grid: { display: false }, ticks: { color: '#9FB3AB' } } } }
-      });
-
-      new Chart(document.getElementById('chartSentiment'), {
-        type: 'doughnut',
-        data: {
-          labels: sentiment.length ? sentiment.map(s => SENTIMENT_LABEL[s.overall_sentiment] || s.overall_sentiment || 'Unknown') : ['No data yet'],
-          datasets: [{ data: sentiment.length ? sentiment.map(s => s.n) : [1],
-            backgroundColor: sentiment.length ? sentiment.map(s => SENTIMENT_COLOR[s.overall_sentiment] || '#9FB3AB') : ['#243731'], borderWidth: 0 }],
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9FB3AB', boxWidth: 10, padding: 14 } } } }
-      });
-
-      new Chart(document.getElementById('chartRegions'), {
-        type: 'bar',
-        data: { labels: regions.length ? regions.map(r => r.region) : ['No data yet'],
-          datasets: [{ data: regions.length ? regions.map(r => r.n) : [0], backgroundColor: '#4FA490' }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#9FB3AB' } }, y: { beginAtZero: true, grid: { color: 'rgba(244,239,230,.06)' }, ticks: { color: '#9FB3AB', precision: 0 } } } }
-      });
-    } catch (e) {
-      console.warn('Charts unavailable:', e.message);
-    }
-  })();
-</script>
-<script src="/assets/js/admin-functional-qa.js"></script>
-<script src="/assets/js/production-routing.js"></script>
+    </main>
+  </div>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/i18n.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/analysis-workspace.js"></script>
+  <script>if (requireLogin()) { renderShell({ role:'client', active:'/app/analytics.html', eyebrow:'Analysis Intelligence', title:'Analysis Workspace' }); initAnalysisWorkspace(); }</script>
 </body>
 </html>

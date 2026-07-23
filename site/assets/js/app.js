@@ -7,17 +7,23 @@ const VI = {
 
 // ---------- Theme (dark/light) — applied immediately to avoid a flash ----------
 function getTheme() {
-  return localStorage.getItem('vi_theme') || 'dark';
+  const saved = localStorage.getItem('vi_theme');
+  return saved === 'dark' || saved === 'light' ? saved : 'light';
 }
 function applyTheme(theme) {
-  if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
-  else document.documentElement.removeAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
   localStorage.setItem('vi_theme', theme);
+  document.querySelectorAll('.theme-toggle-btn').forEach((button) => {
+    const icon = button.querySelector('.theme-toggle-icon');
+    if (icon) icon.textContent = theme === 'light' ? '\u2600\uFE0F' : '\uD83C\uDF19';
+    button.setAttribute('aria-label', theme === 'light' ? 'Light mode. Switch to dark mode' : 'Dark mode. Switch to light mode');
+    button.setAttribute('title', theme === 'light' ? 'Light mode' : 'Dark mode');
+    button.setAttribute('aria-pressed', String(theme === 'dark'));
+  });
 }
 function toggleTheme() {
   const next = getTheme() === 'light' ? 'dark' : 'light';
   applyTheme(next);
-  document.querySelectorAll('.theme-toggle-icon').forEach(el => { el.textContent = next === 'light' ? '🌙' : '☀️'; });
 }
 applyTheme(getTheme()); // run immediately on script load, before DOMContentLoaded, to avoid a flash of the wrong theme
 
@@ -82,32 +88,33 @@ function makeDividerWave(bars = 60) {
 }
 
 const NAV_APP = [
-  { groupKey: 'app.nav.group.main', group: 'Main', items: [
-    { href: '/app/dashboard.html', icon: 'layout-dashboard', key: 'app.nav.dashboard', label: 'Dashboard' },
-    { href: '/app/executive-intelligence.html', icon: 'compass', key: 'app.nav.executive_intelligence', label: 'Executive Intelligence' },
-    { href: '/app/platform-intelligence.html', icon: 'sparkles', key: 'app.nav.platform_intelligence', label: 'Platform Intelligence' },
-    { href: '/app/decisions.html', icon: 'check-square', key: 'app.nav.decisions', label: 'Decision Workspace' },
+  { groupKey: 'app.nav.group.workspace', group: 'Workspace', items: [
+    { href: '/app/workspace.html', icon: 'layout-grid', key: 'app.nav.workspace', label: 'Workspace' },
+    { href: '/app/dashboard.html', icon: 'home', key: 'app.nav.home', label: 'Dashboard' },
+    { href: '/app/industry-library.html', icon: 'library-big', key: 'app.nav.industry_library', label: 'Industry Library' },
     { href: '/app/projects.html', icon: 'folder-kanban', key: 'app.nav.projects', label: 'Projects' },
+    { href: '/app/decisions.html', icon: 'check-square', key: 'app.nav.decisions', label: 'Decisions' },
+    { href: '/app/executive-intelligence.html', icon: 'compass', key: 'app.nav.executive_intelligence', label: 'Executive Intelligence' },
+  ]},
+  { groupKey: 'app.nav.group.collection', group: 'Collection', items: [
     { href: '/app/surveys.html', icon: 'list-checks', key: 'app.nav.surveys', label: 'Surveys' },
     { href: '/app/campaigns.html', icon: 'megaphone', key: 'app.nav.campaigns', label: 'Campaigns' },
-  ]},
-  { groupKey: 'app.nav.group.voice', group: 'Voice Data', items: [
     { href: '/app/respondents.html', icon: 'users', key: 'app.nav.respondents', label: 'Respondents' },
-    { href: '/admin/enumerators.html', icon: 'user-check', key: 'app.nav.enumerators', label: 'Enumerators' },
-    { href: '/admin/communications.html', icon: 'message-circle', key: 'app.nav.communications', label: 'Communications' },
-    { href: '/admin/communications-health.html', icon: 'radio-tower', key: 'app.nav.communications_health', label: 'Communications Health', superAdminOnly: true },
-    { href: '/admin/quality-control.html', icon: 'shield-check', key: 'app.nav.quality_control', label: 'Quality Control' },
     { href: '/app/interviews.html', icon: 'headphones', key: 'app.nav.interviews', label: 'Interviews' },
   ]},
-  { groupKey: 'app.nav.group.analytics', group: 'Analytics', items: [
+  { groupKey: 'app.nav.group.intelligence', group: 'Data & Intelligence', items: [
     { href: '/app/analytics.html', icon: 'bar-chart-3', key: 'app.nav.analytics', label: 'Analytics' },
-    { href: '/app/reports.html', icon: 'file-text', key: 'app.nav.reports', label: 'Reports' },
-    { href: '/app/report-library.html', icon: 'library', key: 'app.nav.report_library', label: 'Report Library' },
-    { href: '/app/compliance.html', icon: 'shield-check', key: 'app.nav.compliance', label: 'Compliance' },
+    { href: '/app/platform-intelligence.html', icon: 'sparkles', key: 'app.nav.platform_intelligence', label: 'Data Intelligence' },
+    { href: '/app/reports.html', icon: 'file-pen-line', key: 'app.nav.reports', label: 'Reports' },
+    { href: '/app/report-library.html', icon: 'book-copy', key: 'app.nav.publications', label: 'Publications' },
+    { href: '/app/knowledge-cloud.html', icon: 'library', key: 'app.nav.knowledge', label: 'Knowledge' },
   ]},
-  { groupKey: 'app.nav.group.account', group: 'Account', items: [
+  { groupKey: 'app.nav.group.governance', group: 'Governance', items: [
+    { href: '/admin/enumerators.html', icon: 'user-check', key: 'app.nav.enumerators', label: 'Enumerators' },
+    { href: '/admin/quality-control.html', icon: 'shield-check', key: 'app.nav.quality_control', label: 'Data Quality' },
+    { href: '/app/compliance.html', icon: 'shield-check', key: 'app.nav.compliance', label: 'Compliance' },
     { href: '/app/billing.html', icon: 'credit-card', key: 'app.nav.billing', label: 'Billing' },
-    { href: '/app/settings.html', icon: 'settings', key: 'app.nav.settings', label: 'Settings' },
+    { href: '/app/settings.html', icon: 'settings', key: 'app.nav.administration', label: 'Administration' },
   ]},
 ];
 
@@ -147,6 +154,7 @@ const APP_LANGS = [
 
 function renderShell({ role = 'client', active = '', title = '', eyebrow = '', breadcrumb = null }) {
   const storedUser = JSON.parse(localStorage.getItem('vi_user') || 'null');
+  document.title = `${title || 'Home'} — VoiceInsights Workspace`;
   const userRole = storedUser?.role || 'org_admin';
 
   // Full-access roles see everything; a plain M&E Officer or Enumerator gets a
@@ -169,8 +177,8 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '', b
     ] }];
   }
 
-  const brandName = 'VoiceInsights Africa';
-  const brandSub = role === 'admin' ? t('app.nav.admin_console', 'Admin Console') : t('app.nav.client_dashboard', 'Client Dashboard');
+  const brandName = 'VoiceInsights';
+  const brandSub = role === 'admin' ? t('app.nav.platform_operations', 'Platform Operations') : t('app.nav.workspace', 'Workspace');
   const currentLang = getAppLang();
 
   // While a Super Admin is viewing a specific client organization's data
@@ -222,21 +230,22 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '', b
   if (topbarMount) {
     topbarMount.innerHTML = `
       <header class="topbar">
-        <div style="display:flex; align-items:center; gap:.9rem;">
+        <div class="topbar-primary" style="display:flex; align-items:center; gap:.9rem;">
           <button class="btn btn-ghost btn-sm" id="menu-toggle" aria-label="Open menu" style="display:none;">${iconSvg('menu')}</button>
           <div>
             ${breadcrumb && breadcrumb.length ? `<nav aria-label="Breadcrumb" style="font-size:.76rem; color:var(--text-dim); margin-bottom:.2rem;">${breadcrumb.map((crumb, i) => i < breadcrumb.length - 1 ? `<a href="${crumb.href}" style="color:var(--text-dim);">${crumb.label}</a> › ` : `<span style="color:var(--text-muted);">${crumb.label}</span>`).join('')}</nav>` : (eyebrow ? `<div class="eyebrow">${eyebrow}</div>` : '')}
             <h1>${title}</h1>
           </div>
         </div>
-        <div style="display:flex; align-items:center; gap:.9rem;">
-          <a class="btn btn-ghost btn-sm" href="/faq.html" title="Help" aria-label="Help" style="padding:.5em .7em;">${iconSvg('help-circle')}</a>
+        <div class="topbar-actions" style="display:flex; align-items:center; gap:.9rem;">
+          <a class="btn btn-ghost btn-sm topbar-help" href="/faq.html" title="Help" aria-label="Help" style="padding:.5em .7em;">${iconSvg('help-circle')}</a>
+          <span class="workspace-context" title="Current organization">${storedUser?.organization_name || storedUser?.organization || VI.user.org}</span>
           <div style="position:relative;">
             <button class="btn btn-ghost btn-sm" id="notif-bell-btn" title="Notifications" aria-label="Notifications" style="padding:.5em .7em; position:relative;">🔔<span id="notif-badge" style="display:none; position:absolute; top:2px; right:2px; width:8px; height:8px; border-radius:50%; background:var(--danger);"></span></button>
             <div id="notif-dropdown" style="display:none; position:absolute; top:110%; right:0; width:320px; max-height:400px; overflow-y:auto; background:var(--surface); border:1px solid var(--border); border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.3); z-index:400; padding:.5rem;"></div>
           </div>
           <button class="btn btn-ghost btn-sm" id="cmdk-hint-btn" title="Quick jump" aria-label="Open quick navigation search" style="padding:.5em .8em; font-size:.72rem; color:var(--text-dim);">⌘K</button>
-          <button class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">${getTheme() === 'light' ? '🌙' : '☀️'}</span></button>
+          <button class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Current colour theme" aria-label="Current colour theme" style="padding:.5em .7em;"><span class="theme-toggle-icon">${getTheme() === 'light' ? '\u2600\uFE0F' : '\uD83C\uDF19'}</span></button>
           <div class="lang-toggle" id="app-lang-toggle">
             ${APP_LANGS.map(l => `<button class="${currentLang === l.code ? 'active' : ''}" data-lang="${l.code}">${l.label}</button>`).join('')}
           </div>
@@ -247,6 +256,7 @@ function renderShell({ role = 'client', active = '', title = '', eyebrow = '', b
           </div>
         </div>
       </header>`;
+    document.querySelectorAll('[data-shell-heading-fallback]').forEach((heading) => heading.remove());
   }
 
   const themeToggleBtn = document.getElementById('theme-toggle-btn');
@@ -495,7 +505,177 @@ function highlightActiveTopNav() {
     if (isMatch) a.classList.add('active-nav-link');
   });
 }
-document.addEventListener('DOMContentLoaded', highlightActiveTopNav);
+const CANONICAL_PUBLIC_NAVIGATION = [
+  ['/solutions.html', 'solutions'],
+  ['/industries.html', 'industries'],
+  ['/platform.html', 'platform'],
+  ['/sample-reports.html', 'reportLibrary'],
+  ['/procurement.html', 'pricing'],
+  ['/about.html', 'about'],
+  ['/contact.html', 'contact'],
+];
+
+const PUBLIC_SHELL_LANGUAGES = [
+  { code: 'en', nativeName: 'English' },
+  { code: 'sw', nativeName: 'Kiswahili' },
+  { code: 'fr', nativeName: 'Français' },
+  { code: 'pt', nativeName: 'Português' },
+  { code: 'ar', nativeName: 'العربية' },
+  { code: 'es', nativeName: 'Español' },
+  { code: 'de', nativeName: 'Deutsch' },
+];
+
+const PUBLIC_SHELL_COPY = {
+  en: { solutions: 'Solutions', industries: 'Industries', platform: 'Platform', reportLibrary: 'Knowledge Hub', pricing: 'Pricing', about: 'About', contact: 'Contact', login: 'Login', demo: 'Request Demo', language: 'Language', theme: 'Theme', openNav: 'Open navigation', closeNav: 'Close navigation' },
+  sw: { solutions: 'Suluhisho', industries: 'Sekta', platform: 'Jukwaa', reportLibrary: 'Kitovu cha Maarifa', pricing: 'Bei', about: 'Kuhusu', contact: 'Mawasiliano', login: 'Ingia', demo: 'Omba Onyesho', language: 'Lugha', theme: 'Mandhari', openNav: 'Fungua urambazaji', closeNav: 'Funga urambazaji' },
+  fr: { solutions: 'Solutions', industries: 'Secteurs', platform: 'Plateforme', reportLibrary: 'Centre de connaissances', pricing: 'Tarifs', about: 'À propos', contact: 'Contact', login: 'Connexion', demo: 'Demander une démonstration', language: 'Langue', theme: 'Thème', openNav: 'Ouvrir la navigation', closeNav: 'Fermer la navigation' },
+  pt: { solutions: 'Soluções', industries: 'Setores', platform: 'Plataforma', reportLibrary: 'Centro de Conhecimento', pricing: 'Preços', about: 'Sobre', contact: 'Contacto', login: 'Entrar', demo: 'Solicitar demonstração', language: 'Idioma', theme: 'Tema', openNav: 'Abrir navegação', closeNav: 'Fechar navegação' },
+  ar: { solutions: 'الحلول', industries: 'القطاعات', platform: 'المنصة', reportLibrary: 'مركز المعرفة', pricing: 'الأسعار', about: 'من نحن', contact: 'اتصل بنا', login: 'تسجيل الدخول', demo: 'اطلب عرضاً', language: 'اللغة', theme: 'المظهر', openNav: 'فتح التنقل', closeNav: 'إغلاق التنقل' },
+  es: { solutions: 'Soluciones', industries: 'Sectores', platform: 'Plataforma', reportLibrary: 'Centro de conocimiento', pricing: 'Precios', about: 'Acerca de', contact: 'Contacto', login: 'Iniciar sesión', demo: 'Solicitar demostración', language: 'Idioma', theme: 'Tema', openNav: 'Abrir navegación', closeNav: 'Cerrar navegación' },
+  de: { solutions: 'Lösungen', industries: 'Branchen', platform: 'Plattform', reportLibrary: 'Wissenszentrum', pricing: 'Preise', about: 'Über uns', contact: 'Kontakt', login: 'Anmelden', demo: 'Demo anfordern', language: 'Sprache', theme: 'Darstellung', openNav: 'Navigation öffnen', closeNav: 'Navigation schließen' },
+};
+
+function getPublicLanguage() {
+  const saved = localStorage.getItem('vi_app_lang');
+  return PUBLIC_SHELL_LANGUAGES.some((language) => language.code === saved) ? saved : 'en';
+}
+
+function publicLanguageMarkup(language) {
+  const copy = PUBLIC_SHELL_COPY[language] || PUBLIC_SHELL_COPY.en;
+  return `<div class="public-language-control">
+    <button type="button" class="public-language-trigger" id="public-language-trigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="public-language-menu" aria-label="${copy.language}: ${PUBLIC_SHELL_LANGUAGES.find(item => item.code === language).nativeName}">
+      <span aria-hidden="true">${language.toUpperCase()}</span><span class="public-language-chevron" aria-hidden="true">⌄</span>
+    </button>
+    <div class="public-language-menu" id="public-language-menu" role="listbox" aria-label="${copy.language}" tabindex="-1" hidden>
+      <strong class="public-language-heading">${copy.language}</strong>
+      ${PUBLIC_SHELL_LANGUAGES.map((item) => `<button type="button" role="option" data-language="${item.code}" aria-selected="${item.code === language}" tabindex="${item.code === language ? '0' : '-1'}"><span class="public-language-check" aria-hidden="true">${item.code === language ? '✓' : ''}</span><span lang="${item.code}" dir="${item.code === 'ar' ? 'rtl' : 'ltr'}">${item.nativeName}</span></button>`).join('')}
+    </div>
+  </div>`;
+}
+
+function applyPublicShellLanguage(language) {
+  const lang = PUBLIC_SHELL_LANGUAGES.some(item => item.code === language) ? language : 'en';
+  localStorage.setItem('vi_app_lang', lang);
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  if (typeof applySiteLanguage === 'function') applySiteLanguage(lang);
+  normalizePublicNavigation();
+  highlightActiveTopNav();
+}
+
+function bindPublicLanguageControl() {
+  const control = document.querySelector('.public-language-control');
+  const trigger = control?.querySelector('.public-language-trigger');
+  const menu = control?.querySelector('.public-language-menu');
+  if (!control || !trigger || !menu || control.dataset.bound) return;
+  control.dataset.bound = '1';
+  const options = [...menu.querySelectorAll('[role="option"]')];
+  const setOpen = (open, returnFocus = false) => {
+    trigger.setAttribute('aria-expanded', String(open));
+    menu.hidden = !open;
+    control.classList.toggle('open', open);
+    if (open) (options.find(option => option.getAttribute('aria-selected') === 'true') || options[0])?.focus();
+    else if (returnFocus) trigger.focus();
+  };
+  trigger.addEventListener('click', () => setOpen(menu.hidden));
+  options.forEach(option => option.addEventListener('click', () => applyPublicShellLanguage(option.dataset.language)));
+  menu.addEventListener('keydown', (event) => {
+    const current = options.indexOf(document.activeElement);
+    if (event.key === 'Escape') { event.preventDefault(); setOpen(false, true); return; }
+    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const next = event.key === 'Home' ? 0 : event.key === 'End' ? options.length - 1 : (current + (event.key === 'ArrowDown' ? 1 : -1) + options.length) % options.length;
+    options[next].focus();
+  });
+  document.addEventListener('click', event => { if (!control.contains(event.target)) setOpen(false); });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && !menu.hidden) setOpen(false, true); });
+}
+
+function normalizePublicNavigation() {
+  const language = getPublicLanguage();
+  const copy = PUBLIC_SHELL_COPY[language] || PUBLIC_SHELL_COPY.en;
+  document.querySelectorAll('.pub-nav').forEach((nav) => {
+    const logo = nav.querySelector('.pub-nav-logo')?.outerHTML || '<a href="/index.html" class="pub-nav-logo">VoiceInsights Africa</a>';
+    nav.innerHTML = `<div class="pub-nav-row1">
+      ${logo}
+      <div class="pub-nav-collapse pub-nav-row1-right">
+        <a href="/login.html" class="btn btn-ghost btn-sm pub-nav-login">${copy.login}</a>
+        ${publicLanguageMarkup(language)}
+        <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn public-theme-toggle" id="theme-toggle-btn" aria-label="${copy.theme}"><span class="theme-toggle-icon" aria-hidden="true">${getTheme() === 'light' ? '\u2600\uFE0F' : '\uD83C\uDF19'}</span></button>
+        <a href="/contact.html?request=demo" class="btn btn-primary btn-sm pub-nav-demo">${copy.demo}</a>
+      </div>
+      <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="${copy.openNav}" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+    <div class="pub-nav-collapse pub-nav-links">${CANONICAL_PUBLIC_NAVIGATION.map(([href, key]) => `<a href="${href}">${copy[key]}</a>`).join('')}</div>`;
+    const previous = nav.previousElementSibling;
+    if (previous?.textContent?.includes('Trusted Voice Research Infrastructure')) previous.classList.add('public-trust-strip');
+    else {
+      const strip = document.createElement('div');
+      strip.className = 'public-trust-strip';
+      strip.textContent = 'Trusted Voice Research Infrastructure for NGOs, Governments & Global Development Partners';
+      nav.before(strip);
+    }
+  });
+  applyTheme(getTheme());
+  bindPublicLanguageControl();
+  bindPublicNavigationInteractions();
+  syncPublicBrandAnchor();
+}
+
+function syncPublicBrandAnchor() {
+  document.querySelectorAll('.pub-nav').forEach((nav) => {
+    const logo = nav.querySelector('.pub-nav-logo');
+    if (!logo) return;
+    const update = () => nav.style.setProperty('--public-brand-end', `${Math.ceil(logo.getBoundingClientRect().width)}px`);
+    update();
+    if (!nav._brandResizeObserver && typeof ResizeObserver !== 'undefined') {
+      nav._brandResizeObserver = new ResizeObserver(update);
+      nav._brandResizeObserver.observe(logo);
+    }
+    if (document.fonts?.ready) document.fonts.ready.then(update);
+  });
+}
+
+function canonicalPublicFooterMarkup() {
+  return `<footer class="pub-footer enterprise-footer" aria-labelledby="footer-brand-title">
+    <div class="footer-primary">
+      <section class="footer-brand">
+        <div class="footer-brand-heading"><img src="/assets/img/logo-icon.png" alt=""><h2 id="footer-brand-title">VOICEINSIGHTS AFRICA</h2></div>
+        <p>VoiceInsights Africa is an enterprise data intelligence and publication platform helping organizations collect, understand and transform multilingual data into dashboards, reports, datasets, publications and decision-ready evidence.</p>
+        <p class="footer-company">VoiceInsights Africa Ltd — Registered in Tanzania.</p>
+        <div class="footer-emails"><a href="mailto:partnerships@voiceinsightsafrica.com">partnerships@voiceinsightsafrica.com</a><a href="mailto:hello@voiceinsightsafrica.com">hello@voiceinsightsafrica.com</a></div>
+        <a class="btn btn-primary" href="/contact.html?request=demo">Request Demo</a>
+      </section>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <section><h2>Company</h2><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/careers.html">Careers</a><a href="/safeguarding.html">Safeguarding</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a></section>
+        <section><h2>Enterprise</h2><a href="/trust-center.html">Trust Center</a><a href="/security.html">Security</a><a href="/compliance-center.html">Compliance</a><a href="/responsible-ai.html">Responsible AI</a><a href="/data-protection.html">Data Protection</a><a href="/service-levels.html">Business Continuity</a><a href="/status.html">Status</a></section>
+        <section><h2>Developers &amp; Support</h2><a href="/developers/index.html">API Documentation</a><a href="/integrations.html">Integrations</a><a href="/enterprise-architecture.html">Architecture</a><a href="/enterprise-support.html">Support</a><a href="/procurement.html">Procurement</a></section>
+        <section><h2>Knowledge</h2><a href="/sample-reports.html">Knowledge Hub</a><a href="/sample-reports.html">Collections</a><a href="/sample-reports.html">Publications</a><a href="/sample-reports.html">Methodologies</a><a href="/case-studies.html">Case Studies</a><a href="/customer-success.html">Release Notes</a></section>
+      </nav>
+    </div>
+    <div class="footer-legal"><span>© 2026 VoiceInsights Africa. All rights reserved.</span><span>VoiceInsights Africa™ and VIA Intelligence Engine™ are proprietary trademarks of VoiceInsights Africa Ltd.</span></div>
+  </footer>`;
+}
+
+function normalizePublicFooter() {
+  const publicNav = document.querySelector('.pub-nav');
+  if (!publicNav) return;
+  document.body.classList.add('public-page-shell');
+  const existingFooters = [...document.querySelectorAll('footer.pub-footer')];
+  const template = document.createElement('template');
+  template.innerHTML = canonicalPublicFooterMarkup().trim();
+  const canonicalFooter = template.content.firstElementChild;
+  if (existingFooters.length) {
+    existingFooters[0].replaceWith(canonicalFooter);
+    existingFooters.slice(1).forEach(footer => footer.remove());
+  } else document.body.appendChild(canonicalFooter);
+}
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof applySiteLanguage === 'function') applySiteLanguage(getPublicLanguage());
+  normalizePublicNavigation();
+  normalizePublicFooter();
+  highlightActiveTopNav();
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   // Accessibility: inject a "Skip to main content" link as the very first
@@ -514,31 +694,106 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
+function bindPublicNavigationInteractions() {
   const toggle = document.getElementById('mobile-nav-toggle');
   const panels = document.querySelectorAll('.pub-nav-collapse');
-  if (toggle && panels.length) {
+  if (toggle && panels.length && !toggle.dataset.bound) {
+    toggle.dataset.bound = '1';
+    const setMobileMenuState = (open) => {
+      toggle.classList.toggle('open', open);
+      panels.forEach(panel => panel.classList.toggle('open', open));
+      document.body.classList.toggle('public-menu-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      const copy = PUBLIC_SHELL_COPY[getPublicLanguage()] || PUBLIC_SHELL_COPY.en;
+      toggle.setAttribute('aria-label', open ? copy.closeNav : copy.openNav);
+    };
     toggle.addEventListener('click', () => {
-      toggle.classList.toggle('open');
-      panels.forEach(p => p.classList.toggle('open'));
+      setMobileMenuState(!toggle.classList.contains('open'));
     });
     // Close the mobile menu after tapping any link inside it.
     panels.forEach(panel => panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      toggle.classList.remove('open');
-      panels.forEach(p => p.classList.remove('open'));
+      setMobileMenuState(false);
     })));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && toggle.classList.contains('open')) {
+        setMobileMenuState(false);
+        toggle.focus();
+      }
+    });
   }
 
   // Public-site theme toggle button (app pages get their own handler in renderShell()).
   const publicThemeBtn = document.getElementById('theme-toggle-btn');
   if (publicThemeBtn && !publicThemeBtn.dataset.bound) {
     publicThemeBtn.dataset.bound = '1';
-    publicThemeBtn.querySelector('.theme-toggle-icon').textContent = getTheme() === 'light' ? '🌙' : '☀️';
+    applyTheme(getTheme());
     publicThemeBtn.addEventListener('click', toggleTheme);
   }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  bindPublicNavigationInteractions();
 });
 
 document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
+
+// Accessible, local-only product-story tabs used by the flagship homepage.
+function initProductStoryTabs() {
+  document.querySelectorAll('[role="tablist"]').forEach((tablist) => {
+    const tabs = [...tablist.querySelectorAll(':scope > [role="tab"]')];
+    if (!tabs.length || tabs.some(tab => !tab.getAttribute('aria-controls'))) return;
+    const activate = (tab, moveFocus = true) => {
+      tabs.forEach((item) => {
+        const selected = item === tab;
+        item.setAttribute('aria-selected', String(selected));
+        item.tabIndex = selected ? 0 : -1;
+        const panel = document.getElementById(item.getAttribute('aria-controls'));
+        if (panel) panel.hidden = !selected;
+      });
+      if (moveFocus) tab.focus();
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activate(tab, false));
+      tab.addEventListener('keydown', (event) => {
+        let next = index;
+        if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+        else if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
+        else if (event.key === 'Home') next = 0;
+        else if (event.key === 'End') next = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        activate(tabs[next]);
+      });
+    });
+  });
+}
+document.addEventListener('DOMContentLoaded', initProductStoryTabs);
+
+// Keep the homepage source components canonical while presenting one deliberate
+// enterprise story. The proof strip remains directly after the hero; each
+// subsequent section is moved once into the approved narrative order.
+function orderHomepageStory() {
+  const main = document.getElementById('main-content');
+  if (!main || !document.querySelector('.phase1-hero')) return;
+  [
+    'story-problem',
+    'story-channels',
+    'story-lifecycle',
+    'story-workspace',
+    'story-products',
+    'story-example',
+    'story-buyers',
+    'story-knowledge',
+    'story-trust',
+    'story-implementation',
+    'story-faq',
+    'story-final'
+  ].forEach((id) => {
+    const section = document.getElementById(id);
+    if (section) main.append(section);
+  });
+}
+document.addEventListener('DOMContentLoaded', orderHomepageStory);
 
 // ============================================================
 // PUSH NOTIFICATIONS (Task 6.2) — registration helper.

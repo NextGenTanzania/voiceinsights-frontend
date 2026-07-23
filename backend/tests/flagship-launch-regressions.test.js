@@ -6,13 +6,23 @@ import { buildDocumentComposition } from '../src/document-composer.js';
 import { renderPdfBinary } from '../src/dedicated-binary-renderer.js';
 import application from '../src/application.js';
 
+// Unified Publication Runtime, Phase 2: the old chart(v)/map(([k,v]) bugs
+// this test originally guarded against lived in the bespoke renderReport()
+// template, which is now deleted entirely — the page fetches the real
+// composePublicationRuntime(model).html instead of rebuilding a summary
+// view from raw fields, so those specific crash patterns can no longer
+// recur here by construction. The doesNotMatch assertions stay (a real,
+// still-meaningful regression guard); the stale "gains formatNumber/
+// Evidence Explorer" checks are replaced with the real current safe-
+// failure property: a missing/failed fetch renders a caught error message,
+// never an uncaught exception or raw JSON dump.
 test('interactive report viewer avoids the initialization crash and fails safely on missing fields',()=>{
   const viewer=fs.readFileSync(new URL('../../site/flagship-sample-report.html',import.meta.url),'utf8');
   assert.doesNotMatch(viewer,/map\(\(\[k,v\]\)/);
   assert.doesNotMatch(viewer,/function chart\(v\)/);
-  assert.match(viewer,/const formatNumber=/);
-  assert.match(viewer,/publication\.sample_size\?\?statistics\.sample_size/);
-  assert.match(viewer,/Evidence Explorer &amp; Lineage/);
+  assert.match(viewer,/catch\(error\)\{/);
+  assert.match(viewer,/Unable to open the full report/);
+  assert.match(viewer,/No report key was supplied/);
 });
 
 test('sample library uses responsive card widths without forced word splitting',()=>{
@@ -23,7 +33,7 @@ test('sample library uses responsive card widths without forced word splitting',
   assert.match(library,/pages_equivalent/);
 });
 
-test('all sixteen reports contain sector-specific evidence, chart data and consistent totals',()=>{
+test('all real flagship reports contain sector-specific evidence, chart data and consistent totals',()=>{
   const firstFindingTexts=new Set();const firstQuotes=new Set();const coverLayouts=new Set();
   for(const sample of FLAGSHIP_SAMPLE_REPORTS){
     const model=buildFlagshipSampleReport(sample.key);const report=model.report;const publication=model.full_publication;
@@ -38,7 +48,7 @@ test('all sixteen reports contain sector-specific evidence, chart data and consi
     assert.equal(report.export_manifest.length,9);coverLayouts.add(sample.cover.layout_variant);
     firstFindingTexts.add(report.findings[0].text);firstQuotes.add(report.evidence[0].quote);
   }
-  assert.equal(firstFindingTexts.size,16);assert.equal(firstQuotes.size,16);assert.equal(coverLayouts.size,16);
+  assert.equal(firstFindingTexts.size,FLAGSHIP_SAMPLE_REPORTS.length);assert.equal(firstQuotes.size,FLAGSHIP_SAMPLE_REPORTS.length);assert.equal(coverLayouts.size,FLAGSHIP_SAMPLE_REPORTS.length);
 });
 
 test('flagship PDF is a tagged 34-page publication generated from full report model',async()=>{

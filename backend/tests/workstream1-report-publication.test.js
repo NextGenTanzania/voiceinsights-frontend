@@ -5,7 +5,10 @@ import { renderDocxBinary, renderXlsxBinary } from '../src/office-export-engine.
 import { evaluatePublicationReadiness } from '../src/publication-acceptance-engine.js';
 import { buildExportManifest } from '../src/enterprise-reports.js';
 const report={title:'Real Project Acceptance Report',executive_summary:'Decision-ready summary.',sample_size:120,findings:['Finding'],recommendations:['Action'],methodology:{design:'mixed methods'},limitations:['Representative limitations disclosed.'],evidence:[{claim:'Finding',confidence_score:91}],kpis:[{label:'Responses',value:120}]};
-test('Report Library defines publicationScoreText and avoids forced 98 scores',async()=>{const h=await fs.readFile(new URL('../../site/sample-reports.html',import.meta.url),'utf8');assert.match(h,/function publicationScoreText/);assert.doesNotMatch(h,/Math\.max\(98/);});
+// Enterprise Market Validation Release, Part A: publicationScoreText() was
+// confirmed dead code referencing the now-removed report.quality_score
+// field, and was removed rather than left broken. Forced-98 guard retained.
+test('Report Library avoids forced 98 scores and removed score fields',async()=>{const h=await fs.readFile(new URL('../../site/sample-reports.html',import.meta.url),'utf8');assert.doesNotMatch(h,/Math\.max\(98/);assert.doesNotMatch(h,/publicationScoreText/);});
 test('publication acceptance blocks incomplete reports and passes complete projects',()=>{assert.equal(evaluatePublicationReadiness({title:'x'}).status,'BLOCK');assert.equal(evaluatePublicationReadiness(report).status,'PASS');});
 test('DOCX renderer produces a real OpenXML ZIP binary',async()=>{const a=await renderDocxBinary(report,{report_id:'r1'});assert.equal(a.binary_generated,true);assert.equal(String.fromCharCode(...a.bytes.slice(0,2)),'PK');assert.ok(a.byte_length>500);});
 test('XLSX renderer produces a real multi-sheet OpenXML ZIP binary',async()=>{const a=await renderXlsxBinary(report,{report_id:'r1'});assert.equal(a.binary_generated,true);assert.equal(String.fromCharCode(...a.bytes.slice(0,2)),'PK');assert.ok(a.quality.sheet_count>=6);});

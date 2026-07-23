@@ -4,19 +4,28 @@
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="/assets/img/logo-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Report Library — VoiceInsights Africa</title>
+<title>Reports &amp; Publications — VoiceInsights Workspace</title>
 <link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/components.css">
 <link rel="stylesheet" href="/assets/css/enterprise-dashboard-theme.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-<h1 class="visually-hidden">Report Library — VoiceInsights Africa</h1>
+<h1 class="visually-hidden" data-shell-heading-fallback>Reports and Publications — VoiceInsights Workspace</h1>
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
   <div id="sidebar-mount"></div>
   <main id="main-content" class="main">
     <div id="topbar-mount"></div>
     <div class="content">
+
+      <section class="dashboard-panel" aria-labelledby="library-foundation-title" style="margin-bottom:1rem;">
+        <span class="eyebrow">Knowledge</span>
+        <h2 id="library-foundation-title" style="margin:.35rem 0 .5rem;">Reports &amp; Publications</h2>
+        <p class="muted-note" style="max-width:70ch;">Manage operational reports through review and governed publication. Datasets, evidence packs and methodologies remain distinct related data products.</p>
+        <div class="format-list"><span class="format-badge">Report</span><span class="format-badge">Publication</span><span class="format-badge">Dataset</span><span class="format-badge">Evidence Pack</span><span class="format-badge">Methodology</span></div>
+      </section>
 
       <div class="section-head">
         <p class="muted-note" style="margin:0;">Every generated report, tracked from draft through publication.</p>
@@ -59,7 +68,7 @@
 <script src="/assets/js/app.js"></script>
 <script>
   if (!requireLogin()) { /* redirected */ }
-  renderShell({ role:'admin', active:'/app/report-library.html', eyebrow:'Reporting Platform', title:'Report Library' });
+  renderShell({ role:'client', active:'/app/report-library.html', eyebrow:'Knowledge', title:'Reports & Publications' });
 
   const myRole = JSON.parse(localStorage.getItem('vi_user') || 'null')?.role;
   const STATUS_BADGE = { draft: 'badge-neutral', review: 'badge-warn', approved: 'badge-success', published: 'badge-success', archived: 'badge-neutral' };

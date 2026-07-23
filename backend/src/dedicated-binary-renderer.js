@@ -4,11 +4,24 @@
 // Cloudflare Worker can produce real binary artifacts for controlled enterprise
 // exports while still allowing a dedicated external renderer to replace the
 // renderer implementation later without changing API contracts.
+//
+// Unified Publication Runtime migration status: LEGACY, pending migration.
+// renderFullFlagshipPdf is the current production PDF path for the flagship
+// catalogue (composePublicationRuntime/Browser Rendering is proven and
+// available but still gated to preview via PUBLICATION_RENDERER_V2_ENABLED).
+// The PPTX writer (slideXml/renderPptxBinary) is a generic OOXML renderer fed
+// by flagship-sample-library.js's buildFlagshipSampleDeck — planned Phase 4
+// PPTX migration target: reuse this OOXML writer, replace the slide-content
+// deriver with runtime.sections[].blocks. Do not delete either path until its
+// replacement has passed the same parity testing this migration has used at
+// every prior phase (see backend/tests/publication-runtime-*.test.js).
 
 import { buildDocumentComposition, normalizeRenderFormat, getRendererType } from './document-composer.js';
 import { validateRenderedDocument } from './rendering-quality-validator.js';
+import { formatOecdDacLines, formatRbmLines } from './publication-render-utils.js';
 import { buildSignedDownloadDescriptor, buildDownloadAuditRecord } from './download-infrastructure.js';
 import { transitionRenderJob } from './rendering-queue.js';
+import { computeTrustBadges } from './publication-trust-badges.js';
 
 export const V187_BINARY_RENDERER_VERSION = 'v187-dedicated-binary-rendering-worker';
 
@@ -54,7 +67,7 @@ async function renderFullFlagshipPdf(composition={},options={}) {
   // Cover page with real vector composition.
   addPage([`${pdfColor(cover.primary)} rg`,`0 0 ${W} ${H} re f`,`${pdfColor(cover.accent)} rg`,`${bandX} 0 ${bandWidth} ${H} re f`,...(topAccentHeight?[`0 ${H-topAccentHeight} ${W} ${topAccentHeight} re f`]:[]),`${pdfColor(cover.highlight||'#D4AF37')} rg`,`${stripeX} 0 ${stripeWidth} ${H} re f`,`52 650 96 7 re f`,'0.031 0.533 0.247 rg','52 770 5 18 re f','61 762 5 34 re f','70 752 5 54 re f','79 762 5 34 re f','88 770 5 18 re f','1 1 1 rg','BT','/F2 10 Tf','52 735 Td','(VOICEINSIGHTS AFRICA) Tj','/F1 8 Tf','0 -32 Td','(SYNTHETIC DEMONSTRATION PUBLICATION) Tj','/F2 25 Tf','0 -74 Td',...wrapPdf(title,24).slice(0,5).flatMap((l,i)=>[i?'0 -32 Td':'',`(${escapePdfText(l)}) Tj`]).filter(Boolean),'/F1 11 Tf','0 -42 Td',`(${escapePdfText(`${f.country||''} | ${f.sector||''}`)}) Tj`,'0 -20 Td',`(${escapePdfText(`${Number(f.sample_size||0).toLocaleString()} synthetic responses`)}) Tj`,'/F1 8 Tf','0 -58 Td','(Prepared by VoiceInsights Africa) Tj','0 -17 Td','(Every Voice. Every Language. Every Insight.) Tj','0 -48 Td','(Synthetic demonstration. Not official statistics.) Tj','ET']);
   const sectionPage=(heading,bodyLines=[],chart=null)=>{const cmd=[`${pdfColor(cover.primary)} rg`,`0 790 ${W} 52 re f`,'BT','/F2 18 Tf','42 807 Td',`(${escapePdfText(heading)}) Tj`,'/F1 10 Tf','0 -43 Td']; let y=0; for(const line of bodyLines.flatMap(x=>wrapPdf(x,88)).slice(0,26)){cmd.push(y?'0 -17 Td':'',`(${escapePdfText(line)}) Tj`);y++}cmd.push('ET'); if(chart?.data?.length){const vals=chart.data.slice(0,8), max=Math.max(1,...vals.map(x=>Number(x.value)||0)); let yy=340; vals.forEach((x,i)=>{const v=Number(x.value)||0,w=330*v/max;cmd.push(`${pdfColor(i%2?cover.accent:cover.highlight||'#D4AF37')} rg`,`180 ${yy} ${w.toFixed(1)} 13 re f`,'BT','/F1 8 Tf',`42 ${yy+3} Td`,`(${escapePdfText(String(x.label||'').slice(0,22))}) Tj`,`455 0 Td`,`(${escapePdfText(String(v))}) Tj`,'ET');yy-=27})}cmd.push('BT','/F1 8 Tf','42 28 Td',`(${escapePdfText('VoiceInsights Africa • Full Flagship Demonstration • '+(pageStreams.length+1))}) Tj`,'ET');addPage(cmd)};
-  sectionPage('Executive Intelligence',[report.executive_summary||'',`Sample: ${f.sample_size} synthetic responses • ${f.response_rate_pct}% response rate • ${f.regions_covered} regions`,`Overall score: ${f.overall_score}% • Publication quality gate: ${f.quality_gate?.score||''}/100`],f.visualizations?.[0]);
+  sectionPage('Executive Intelligence',[report.executive_summary||'',`Sample: ${f.sample_size} synthetic responses • ${f.response_rate_pct}% response rate • ${f.regions_covered} regions`,`Publication quality gate: ${String(f.quality_gate?.status||'').replaceAll('_',' ').toLowerCase()||'not assessed'}`],f.visualizations?.[0]);
   sectionPage('Regional Performance & Equity',f.regional?.map(x=>`${x.name}: ${x.primary_score}% performance, ${x.responses} responses, risk ${x.risk}`)||[],f.visualizations?.find(v=>v.id==='VIS-03'));
   sectionPage('Gender, Youth, Disability & Inclusion',[...Object.entries(f.demographics||{}).map(([k,a])=>`${k}: ${(a||[]).map(x=>`${x[0]} ${x[1]}%`).join(' • ')}`)],f.visualizations?.find(v=>v.id==='VIS-04'));
   sectionPage('Indicator Target Gaps',f.indicators?.map(x=>`${x.id} ${x.label}: ${x.value}% vs target ${x.target}% — ${x.status}`)||[],f.visualizations?.find(v=>v.id==='VIS-06'));
@@ -72,14 +85,21 @@ async function renderFullFlagshipPdf(composition={},options={}) {
   sectionPage('Peer Review & Accessibility',[...Object.entries(report.peer_review||{}).map(([k,v])=>`${k.replaceAll('_',' ')}: ${v}`),...Object.entries(report.accessibility_compliance||{}).map(([k,v])=>`${k.replaceAll('_',' ')}: ${v}`)],null);
   sectionPage('International Standards Alignment',(f.standards_compliance_matrix||[]).map(x=>`${x.standard}: ${x.status} — ${x.evidence}`),null);
   sectionPage('SDG Contribution Framework',(f.sdg_alignment||[]).map(x=>`SDG ${x.goal}: ${x.contribution} contribution — indicators ${(x.indicator_ids||[]).join(', ')} — ${x.note}`),null);
-  sectionPage('OECD-DAC Evaluation Criteria',(f.oecd_dac||[]).map(x=>`${x.criterion}: ${x.assessment} (${x.score}/100). ${x.management_implication}`),null);
-  sectionPage('Results-Based Management & Theory of Change',[`Impact: ${f.rbm_results_framework?.impact||''}`,...(f.rbm_results_framework?.outcomes||[]).map(x=>`${x.id}: ${x.statement} — indicators ${(x.indicators||[]).join(', ')}`),...(f.rbm_results_framework?.outputs||[]).map(x=>`${x.id}: ${x.statement}`),`Assumptions: ${(f.rbm_results_framework?.assumptions||[]).join('; ')}`,`Means of verification: ${(f.rbm_results_framework?.means_of_verification||[]).join('; ')}`],null);
+  sectionPage('OECD-DAC Evaluation Criteria',formatOecdDacLines(f.oecd_dac),null);
+  sectionPage('Results-Based Management & Theory of Change',formatRbmLines(f.rbm_results_framework),null);
   sectionPage('CHS Accountability Mapping',(f.chs_commitments||[]).map(x=>`Commitment ${x.commitment_number}: ${x.commitment} — ${x.status}. Action: ${x.action}`),null);
   sectionPage('Evidence Register',(report.evidence||[]).slice(0,26).map(x=>`${x.id} • ${x.type} • ${x.region||''} • confidence ${x.confidence_score||''}% • ${x.verification||''}`),null);
   sectionPage('Data Dictionary',(f.data_dictionary||[]).map(x=>`${x[0]}: ${x[1]}`),null);
   sectionPage('Limitations & Responsible Use',[f.integrity_notice||'',...(report.limitations||[])],null);
-  const assurance=report.publication_assurance||{},components=assurance.components||{};
-  sectionPage('Publication Quality Gate',[`Status: ${assurance.synthetic_status||assurance.status||'NOT ASSESSED'}`,`Evidence traceability: ${components.evidence_traceability||0}/100`,`Statistical integrity: ${components.statistical_integrity||0}/100`,`Recommendation strength: ${components.recommendation_strength||0}/100`,`Visualization quality: ${components.visual_quality||0}/100`,`Storytelling: ${components.storytelling||0}/100`,`Accessibility: ${components.accessibility||0}/100`,`Framework applicability: ${components.framework_applicability||0}/100`,`Export consistency: ${components.export_consistency||0}/100`,`Overall readiness: ${assurance.overall||0}/100`,`Open gates: ${(assurance.blockers||[]).join(', ')||'None'}`,'Scores are generated from weighted evidence, statistical, visual, accessibility, export and review rules. Synthetic samples are labelled Demonstration Ready.'],null);
+  const assurance=report.publication_assurance||{};
+  // Enterprise Market Validation Release, Part A: this page used to print
+  // every internal Quality Gate component as a raw X/100 number — an
+  // internal score with no place on a public-facing export. Detailed
+  // numeric scores remain internal-only (site/admin/quality-control.html);
+  // this page shows only the same pass/fail trust badges the interactive
+  // view and other export formats now show.
+  const trustBadges=computeTrustBadges({editorialConsensus:report.editorial_consensus,assurance});
+  sectionPage('Publication Quality Gate',[`Status: ${assurance.synthetic_status||assurance.status||'NOT ASSESSED'}`,...trustBadges.map(b=>`${b.satisfied?'Passed':'Pending'}: ${b.label}`),`Open gates: ${(assurance.blockers||[]).join(', ')||'None'}`,'Verification checks cover weighted evidence, statistical, visual, accessibility, export and review rules. Synthetic samples are labelled Demonstration Ready.'],null);
   // Build PDF objects.
   const objects=[]; const addObj=b=>{objects.push(b);return objects.length}; const catalogId=addObj(''),pagesId=addObj(''); const fontId=addObj('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>'); const boldId=addObj('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>'); const pageIds=[];
   for(const stream of pageStreams){const taggedStream=`/Sect <</MCID 0>> BDC\n${stream}\nEMC`;const contentId=addObj(`<< /Length ${bytes(taggedStream).length} >>\nstream\n${taggedStream}\nendstream`);pageIds.push(addObj(''))}

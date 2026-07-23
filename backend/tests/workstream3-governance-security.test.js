@@ -4,6 +4,23 @@ test('enterprise workflow covers complete commercial-to-campaign lifecycle',()=>
 test('approval transition requires founder role',()=>{const r=buildWorkflowTransition({id:'x',stage:'submitted_for_approval',metadata:{approval_id:'a'}},'founder_approved',{role:'operations_manager',approval_id:'a'});assert.equal(r.ok,false);});
 test('founder can approve sequential workflow with evidence',()=>{const r=buildWorkflowTransition({id:'x',stage:'submitted_for_approval',metadata:{}},'founder_approved',{role:'founder_executive',approval_id:'a'});assert.equal(r.ok,true);});
 test('MFA policy protects privileged roles and sensitive actions',()=>{const p=buildMfaPolicy();assert.ok(p.required_roles.includes('operations_manager'));assert.ok(p.challenge_for.includes('secret.rotate'));});
+// Phase 2 Enterprise Acceptance Review, Critical #4: the test above only
+// verified buildMfaPolicy()'s own shape — it never verified anything
+// actually consulted the policy at login, and nothing did. A privileged
+// account with MFA never enabled logged in exactly like any other
+// account. This regression guard reads the real login handler's source
+// (not a mock) and asserts the policy is now actually enforced, with the
+// policy's own declared grace period respected rather than an
+// unconditional hard block.
+test('the /api/auth/login handler actually enforces buildMfaPolicy() for privileged roles, honoring its grace period', () => {
+  const src = fs.readFileSync(new URL('../src/application.js', import.meta.url), 'utf8');
+  const start = src.indexOf("path === '/api/auth/login'");
+  assert.ok(start > -1, 'login route handler not found');
+  const handlerSrc = src.slice(start, src.indexOf('\n      }', start));
+  assert.ok(/buildMfaPolicy\(\)/.test(handlerSrc), 'login handler must call buildMfaPolicy()');
+  assert.ok(/required_roles\.includes\(user\.role\)/.test(handlerSrc), 'login handler must check the user\'s real role against required_roles');
+  assert.ok(/grace_period_hours/.test(handlerSrc), 'login handler must honor the policy\'s own grace period, not an unconditional block');
+});
 test('SSO callback rejects state and nonce mismatch',()=>{assert.equal(validateSsoCallback({code:'x',state:'a',expected_state:'b',nonce:'n',expected_nonce:'n'}).ok,false);});
 test('SCIM validates and normalizes enterprise users',()=>{const r=validateScimUser({userName:'USER@EXAMPLE.COM',active:true});assert.equal(r.ok,true);assert.equal(r.user.email,'user@example.com');});
 test('audit metadata recursively redacts credentials',()=>{const x=redactAuditMetadata({token:'x',nested:{password:'y'},safe:'ok'});assert.equal(x.token,'[REDACTED]');assert.equal(x.nested.password,'[REDACTED]');assert.equal(x.safe,'ok');});

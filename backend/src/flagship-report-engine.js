@@ -522,3 +522,31 @@ export function getFlagshipReportEngineCatalog() {
     sample_reports: FLAGSHIP_SAMPLE_REPORTS,
   };
 }
+
+// ------------------------------------------------------------
+// Specialized validator adapter (Canonical Publication Quality Gate, Part 3).
+// This engine no longer makes an independent authoritative publication
+// decision — evaluateFlagshipPublicationQuality's own status/
+// publication_allowed fields are preserved above for any existing caller,
+// but this adapter is what a route should call when feeding the canonical
+// gate (quality-scoring-engine.js:evaluatePublicationGate). It deliberately
+// omits export_allowed/publication_ready/enterprise_ready/final_status —
+// only the canonical gate may declare those.
+// ------------------------------------------------------------
+export function validateFlagshipDecisionIntelligence(input = {}) {
+  const gate = evaluateFlagshipPublicationQuality(input);
+  const status = gate.hard_blockers.length ? 'BLOCKED' : gate.status === 'PASS' ? 'PASS' : gate.status === 'CONDITIONAL_PASS' ? 'WARNING' : 'FAIL';
+  return {
+    validator_id: 'flagship-report-engine.js:validateFlagshipDecisionIntelligence',
+    validator_version: FLAGSHIP_REPORT_ENGINE_VERSION,
+    domain: 'decision_usefulness',
+    applicable: true,
+    score: gate.overall_score,
+    status,
+    blocking_failures: gate.hard_blockers,
+    warnings: gate.required_actions.filter(a => !gate.hard_blockers.includes(a)),
+    passed_checks: gate.dimensions.filter(d => d.score === 100).map(d => d.name),
+    evidence: gate.dimensions.map(d => ({ dimension: d.name, score: d.score, weight: d.weight })),
+    evaluated_at: new Date().toISOString(),
+  };
+}

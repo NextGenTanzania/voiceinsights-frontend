@@ -101,8 +101,20 @@ test('disaster recovery and incident response define backup, restore, rollback a
   assert.ok(dr.backup_strategy.length >= 4);
   assert.ok(dr.restore_process.length >= 5);
   assert.match(dr.rollback.backend, /wrangler rollback/);
-  const readiness = buildDRReadinessScore();
-  assert.equal(readiness.status, 'ready');
+  // Global Certification Phase 2: buildDRReadinessScore() previously
+  // defaulted every check to true, so an unparameterized call silently
+  // reported "ready" regardless of real state — the exact "invented
+  // compliance" the platform's own governance now forbids. A no-evidence
+  // call must report unready, and the real production call site
+  // (application.js's /api/ops/disaster-recovery route) must state actual,
+  // source-verified evidence for the two checks it can honestly claim.
+  const unverifiedReadiness = buildDRReadinessScore();
+  assert.equal(unverifiedReadiness.status, 'needs_attention');
+  assert.equal(unverifiedReadiness.score, 0);
+  const realReadiness = buildDRReadinessScore({ hasBackups: false, hasRollback: true, hasQueueRecovery: true, hasRunbooks: true, hasMonitoring: false });
+  assert.equal(realReadiness.status, 'needs_attention');
+  assert.equal(realReadiness.score, 60);
+  assert.equal(realReadiness.checks.hasBackups, false);
   const runbook = buildIncidentResponseRunbook({ incidentType: 'rendering' });
   assert.ok(runbook.steps.some(s => /rendering queue/i.test(s)));
   assert.equal(classifyIncident({ severity: 'critical' }).level, 'SEV1');

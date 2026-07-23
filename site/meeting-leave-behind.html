@@ -28,7 +28,7 @@
     <div class="pub-nav-collapse pub-nav-row1-right">
       <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
       <button type="button" class="btn btn-ghost btn-sm" onclick="window.print()">Print / Save as PDF</button>
-      <a href="/contact.html?intent=demo" class="btn btn-primary btn-sm">Book Demo</a>
+      <a href="/contact.html?intent=demo" class="btn btn-primary btn-sm">Request Demo</a>
     </div>
   </div>
 </nav>
@@ -47,7 +47,7 @@
 <script src="/assets/js/app.js"></script>
 <script src="/assets/js/sector-page.js"></script>
 <script>
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
   renderSectorPage({
     id: 'meeting-leave-behind',
     meta: { title: 'Meeting Leave-Behind | VoiceInsights Africa', description: 'A short recap to keep after meeting with VoiceInsights Africa.' },
@@ -63,7 +63,7 @@
       headline: 'The core idea.',
       paragraphs: ['VoiceInsights Africa collects voice-first data across phone, WhatsApp, SMS, web and an offline-first mobile app, then runs it through a sector-specific editorial pipeline into one canonical publication engine — the same object behind the interactive view, the PDF, and every other export.'],
       pillars: [
-        { title: 'Explore the Intelligence Library', description: 'See real (synthetic-demonstration) publications across 14 sectors.' },
+        { title: 'Explore the Knowledge Hub', description: 'See real (synthetic-demonstration) publications across 14 sectors.' },
         { title: 'Read the Procurement page', description: 'What evidence is verified today, and what still requires independent review — stated honestly.' },
         { title: 'Try the Offline Demo', description: 'A real, working offline-first field-collection app, no account required.' },
       ],
@@ -72,7 +72,7 @@
       headline: 'Direct links for your team.',
       items: [
         { name: 'Health Intelligence Suite', description: '/sectors/health.html' },
-        { name: 'Intelligence Library', description: '/sample-reports.html' },
+        { name: 'Knowledge Hub', description: '/sample-reports.html' },
         { name: 'Procurement Readiness', description: '/procurement.html' },
         { name: 'Mobile & Offline Capability', description: '/mobile-offline.html' },
         { name: 'Security', description: '/security.html' },

@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { FLAGSHIP_SAMPLE_REPORTS, buildFlagshipSampleReport, buildFlagshipSampleDeck } from '../src/flagship-sample-library.js';
 import { buildMeDemoBrief } from '../src/me-demo-brief.js';
 
-test('all sixteen samples expose full platinum institutional publication depth',()=>{
- assert.equal(FLAGSHIP_SAMPLE_REPORTS.length,16);
+test('all real flagship samples expose full platinum institutional publication depth',()=>{
+ assert.equal(FLAGSHIP_SAMPLE_REPORTS.length,33);
  for(const s of FLAGSHIP_SAMPLE_REPORTS){
   const m=buildFlagshipSampleReport(s.key), r=m.report;
   assert.equal(r.publication_page_equivalent,'34 generated publication pages');

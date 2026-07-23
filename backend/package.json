@@ -17,7 +17,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@napi-rs/canvas": "^1.0.2",
+    "pdfjs-dist": "^6.1.200",
+    "puppeteer-core": "^25.3.0",
     "wrangler": "^4.106.0"
+  },
+  "dependencies": {
+    "@cloudflare/puppeteer": "^1.0.2"
   },
   "type": "module"
 }

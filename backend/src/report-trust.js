@@ -254,6 +254,37 @@ export function buildTrueInfographicRendererV19(dm) {
   };
 }
 
+// ------------------------------------------------------------
+// Specialized validator adapter (Canonical Publication Quality Gate, Part 3).
+// buildReportQualityGateV19's own export_allowed is preserved above for any
+// existing caller, but this engine no longer makes an independent
+// authoritative publication decision — a route feeding the canonical gate
+// (quality-scoring-engine.js:evaluatePublicationGate) should call this
+// adapter instead. export_allowed/publication_allowed are deliberately
+// omitted from the returned result; only the canonical gate may declare
+// those.
+// ------------------------------------------------------------
+export function validateEvidenceTrust(dm) {
+  const gate = buildReportQualityGateV19(dm);
+  const ai = buildAIVerificationLayerV19(dm);
+  const blocking = gate.blockers.map(b => b.key.toUpperCase());
+  if (ai.unsupported_claims.length) blocking.push('UNSUPPORTED_CLAIMS_DETECTED');
+  const status = blocking.length ? 'BLOCKED' : (gate.review_items.length || ai.status === 'VERIFIED_WITH_REVIEW') ? 'WARNING' : 'PASS';
+  return {
+    validator_id: 'report-trust.js:validateEvidenceTrust',
+    validator_version: 'Phase 19',
+    domain: 'evidence_traceability',
+    applicable: true,
+    score: gate.overall_score,
+    status,
+    blocking_failures: blocking,
+    warnings: gate.review_items.map(d => d.label),
+    passed_checks: gate.dimensions.filter(d => d.status === 'PASS').map(d => d.label),
+    evidence: [{ checked_claims: ai.checked_claims, supported_claims: ai.supported_claims, unsupported_claims: ai.unsupported_claims.length }],
+    evaluated_at: new Date().toISOString(),
+  };
+}
+
 export function enrichDocumentModelWithPhase19(dm) {
   const out = JSON.parse(JSON.stringify(dm || {}));
   out.report_quality_gate_v19 = buildReportQualityGateV19(out);

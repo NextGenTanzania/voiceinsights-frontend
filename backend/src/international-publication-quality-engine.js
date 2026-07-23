@@ -45,7 +45,7 @@ export function buildPublicationExcellenceScoreV206(documentModel = {}, v200Suit
     if (key === 'sdg_integration' && !hasSdg) score -= 0.15;
     if (['board_publication','donor_publication','government_brief','executive_quality'].includes(key) && !hasAudienceProducts) score -= 0.14;
     if (key === 'research_quality' && !hasMethodology) score -= 0.14;
-    score = clamp(score, 9.8, 10);
+    score = clamp(score, 0, 10);
     return {
       key,
       label,
@@ -89,6 +89,34 @@ export function buildPublicationExcellenceScoreV206(documentModel = {}, v200Suit
       sdg_framework_ready: hasSdg,
       methodology_ready: hasMethodology,
     },
+  };
+}
+
+// ------------------------------------------------------------
+// Specialized validator adapter (Canonical Publication Quality Gate, Part 3).
+// buildPublicationExcellenceScoreV206's own status/quality_gate.export_allowed
+// are preserved above for any existing caller, but this engine no longer
+// makes an independent authoritative publication decision — a route
+// feeding the canonical gate (quality-scoring-engine.js:evaluatePublicationGate)
+// should call this adapter instead. export_allowed/enterprise-ready labels
+// are deliberately omitted; only the canonical gate may declare those.
+// ------------------------------------------------------------
+export function validateInternationalStandards(documentModel = {}, v200Suite = {}) {
+  const score = buildPublicationExcellenceScoreV206(documentModel, v200Suite);
+  const failing = score.dimension_scores.filter(d => d.status !== 'PASS');
+  const status = score.rating_10 < 5 ? 'BLOCKED' : failing.length ? 'WARNING' : 'PASS';
+  return {
+    validator_id: 'international-publication-quality-engine.js:validateInternationalStandards',
+    validator_version: PUBLICATION_EXCELLENCE_V206_VERSION,
+    domain: 'editorial_quality',
+    applicable: true,
+    score: score.rating_100,
+    status,
+    blocking_failures: status === 'BLOCKED' ? failing.map(d => d.key.toUpperCase()) : [],
+    warnings: status === 'WARNING' ? failing.map(d => d.key.toUpperCase()) : [],
+    passed_checks: score.dimension_scores.filter(d => d.status === 'PASS').map(d => d.key),
+    evidence: [score.evidence_summary],
+    evaluated_at: new Date().toISOString(),
   };
 }
 

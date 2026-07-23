@@ -75,3 +75,30 @@ export function evaluatePresentationQuality(report={},profileKey='un',productKey
 }
 
 export function getPresentationPublishingCatalog(){return{engine:PRESENTATION_PUBLISHING_NAME,version:PRESENTATION_PUBLISHING_VERSION,profiles:Object.values(EXPORT_PROFILES),products:Object.values(PRESENTATION_PRODUCTS),promise:'One governed dataset can produce interactive, print, editable, presentation and statistical products without duplicating evidence.'};}
+
+// ------------------------------------------------------------
+// Specialized validator adapter (Canonical Publication Quality Gate, Part 3).
+// evaluatePresentationQuality's own status/release_allowed are preserved
+// above for any existing caller, but this engine no longer makes an
+// independent authoritative publication decision — a route feeding the
+// canonical gate (quality-scoring-engine.js:evaluatePublicationGate) should
+// call this adapter instead. release_allowed is deliberately omitted; only
+// the canonical gate may declare export/publication eligibility.
+// ------------------------------------------------------------
+export function validatePresentation(report={},profileKey='un',productKey='premium_pdf'){
+  const q=evaluatePresentationQuality(report,profileKey,productKey);
+  const status=q.blockers.length?'BLOCKED':q.status==='PASS'?'PASS':'WARNING';
+  return{
+    validator_id:'presentation-publishing.js:validatePresentation',
+    validator_version:PRESENTATION_PUBLISHING_VERSION,
+    domain:'visualization_quality',
+    applicable:true,
+    score:q.score,
+    status,
+    blocking_failures:q.blockers,
+    warnings:q.failed.filter(f=>!q.blockers.includes(f)),
+    passed_checks:Object.entries(q.checks).filter(([,v])=>v).map(([k])=>k),
+    evidence:[{profile:profileKey,product:productKey}],
+    evaluated_at:new Date().toISOString(),
+  };
+}

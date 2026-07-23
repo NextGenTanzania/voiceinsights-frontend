@@ -25,7 +25,7 @@
       <div id="site-search-mount" style="width:180px;"></div>
       <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
       <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
-      <a href="/contact.html?intent=demo" class="btn btn-primary btn-sm">Book Demo</a>
+      <a href="/contact.html?intent=demo" class="btn btn-primary btn-sm">Request Demo</a>
     </div>
   </div>
   <div class="pub-nav-collapse pub-nav-links">
@@ -56,7 +56,7 @@
   <div><div class="nav-label" style="padding:0;">Contact</div>
     <a href="mailto:partnerships@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">partnerships@voiceinsightsafrica.com</a>
     <a href="/contact.html?intent=proposal" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">Request a Proposal</a>
-    <a href="/contact.html?intent=demo" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+    <a href="/contact.html?intent=demo" class="btn btn-primary btn-sm" style="margin-top:1rem;">Request Demo</a>
   </div>
 </footer>
 
@@ -66,7 +66,7 @@
 <script src="/assets/js/site-search.js"></script>
 <script src="/assets/js/sector-page.js"></script>
 <script>
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
   initSiteSearch('site-search-mount');
   renderSectorPage({
     id: 'enterprise-sales',
@@ -117,7 +117,7 @@
       headline: 'Enterprise Sales — frequently asked questions.',
       items: [
         { q: 'How quickly can we launch a project?', a: 'Most organizations go from account setup to their first live campaign within a day — build your survey, choose your channels, and share the link or number with respondents. Full enterprise rollout follows the structured implementation journey above.' },
-        { q: 'How is pricing structured?', a: 'Annual subscription plans (Starter, Professional, Enterprise) based on your expected volume and features needed. Request a demo for a tailored quote.' },
+    { q: 'How is pricing structured?', a: 'Fees, service periods and renewal terms are defined in the tailored proposal or applicable enterprise agreement. Request a demonstration to discuss scope.' },
         { q: 'Can we try it before committing?', a: 'Yes — request a demo and we\'ll walk through a live pilot on your own survey questions before any commercial discussion.' },
         { q: 'What\'s the difference between "Book a Demo" and "Request a Proposal"?', a: 'Book a Demo is a live walkthrough with no commitment. Request a Proposal is for teams ready to move toward a formal procurement or contracting process.' },
       ],

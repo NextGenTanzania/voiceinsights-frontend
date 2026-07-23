@@ -47,7 +47,15 @@ export function buildIncidentResponseRunbook({ incidentType = 'generic' } = {}) 
   return { incident_type: incidentType, steps: [...common, ...(specific[incidentType] || [])], owner: 'Platform Operations Lead', review_required: true };
 }
 
-export function buildDRReadinessScore({ hasBackups = true, hasRollback = true, hasQueueRecovery = true, hasRunbooks = true, hasMonitoring = true } = {}) {
+// Global Certification Phase 2: this function previously defaulted every
+// check to `true`, so its only real production call site
+// (application.js's /api/ops/production-readiness route) invoked it with
+// zero arguments and silently reported 100% "ready" regardless of whether
+// any of the 5 capabilities actually existed — a real, live instance of the
+// Constitution's forbidden "invented compliance." Defaults now require the
+// caller to state what it can actually verify; an unstated check counts as
+// NOT verified rather than assumed true.
+export function buildDRReadinessScore({ hasBackups = false, hasRollback = false, hasQueueRecovery = false, hasRunbooks = false, hasMonitoring = false } = {}) {
   const checks = { hasBackups, hasRollback, hasQueueRecovery, hasRunbooks, hasMonitoring };
   const passed = Object.values(checks).filter(Boolean).length;
   return { score: Math.round((passed / Object.keys(checks).length) * 100), checks, status: passed === Object.keys(checks).length ? 'ready' : 'needs_attention' };

@@ -29,18 +29,22 @@ export function sessionIdFromClaims(claims) {
   return claims && claims.sid ? claims.sid : null;
 }
 
-// Record a new active session at login. Returns nothing meaningful; failures
-// are swallowed only to the extent that they never block a legitimate login —
-// but a thrown DB error here should surface, so we let it propagate.
-export async function registerSession(env, { sid, userId, organizationId, request }) {
+// Record a new active session at login. `expiresAt` should be the same
+// instant as the signed JWT's `exp` claim (see auth.js SESSION_TOKEN_TTL_SECONDS)
+// so isSessionRevoked() below rejects a session at the same moment the token
+// itself would have expired anyway — this is a backstop, not an independent
+// clock. Returns nothing meaningful; failures are swallowed only to the
+// extent that they never block a legitimate login — but a thrown DB error
+// here should surface, so we let it propagate.
+export async function registerSession(env, { sid, userId, organizationId, request, expiresAt }) {
   const sidHash = await sha256Hex(sid);
   const ua = (request && request.headers.get('User-Agent') || '').slice(0, 200);
   const ipHash = await sha256Hex((request && request.headers.get('CF-Connecting-IP') || '') + '|' + sid);
   await env.DB.prepare(
-    `INSERT INTO user_sessions (sid_hash, user_id, organization_id, status, user_agent, ip_hash, created_at, last_seen_at)
-     VALUES (?, ?, ?, 'active', ?, ?, datetime('now'), datetime('now'))
-     ON CONFLICT(sid_hash) DO UPDATE SET status='active', last_seen_at=datetime('now')`
-  ).bind(sidHash, userId, organizationId, ua, ipHash).run();
+    `INSERT INTO user_sessions (sid_hash, user_id, organization_id, status, user_agent, ip_hash, created_at, last_seen_at, expires_at)
+     VALUES (?, ?, ?, 'active', ?, ?, datetime('now'), datetime('now'), ?)
+     ON CONFLICT(sid_hash) DO UPDATE SET status='active', last_seen_at=datetime('now'), expires_at=excluded.expires_at`
+  ).bind(sidHash, userId, organizationId, ua, ipHash, expiresAt || null).run();
 }
 
 // Called from requireAuth on every protected request. Returns true if the

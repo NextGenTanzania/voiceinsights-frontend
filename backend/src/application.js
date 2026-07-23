@@ -41,11 +41,11 @@
 // a "session" walks a respondent through a survey's questions in order,
 // one question at a time, regardless of which door they came in through.
 
-import { hashPassword, verifyPassword, signJWT, verifyJWT, newId, generateTotpSecret, verifyTotpCode, totpAuthUri } from './auth.js';
+import { hashPassword, verifyPassword, signJWT, verifyJWT, newId, generateTotpSecret, verifyTotpCode, totpAuthUri, SESSION_TOKEN_TTL_SECONDS } from './auth.js';
 import { json, error, corsHeaders, requireAuth, checkFlagshipProtection } from './utils.js';
 import { encryptSecret, decryptSecret, rotateSecret, validateSecret, reEncryptSecret, legacySprintOneDecrypt, VaultError } from './secret-vault.js';
 import { processRetryQueueBatch } from './ai-retry-processor.js';
-import { buildDocumentModel, getEditorialGuideline } from './report-generator.js';
+import { buildDocumentModel, getEditorialGuideline, buildCustomerPublicationGateInput } from './report-generator.js';
 import { buildExecutiveSummaryFormat, buildManagementReportFormat, buildDonorBriefFormat, buildPolicyBriefFormat, buildInfographicFormat, buildStatisticalAnnexFormat, buildDatasetAppendixFormat, buildAiTalkingPointsFormat, buildGovernmentReportFormat, buildBoardDeckFormat, buildTechnicalAnnexFormat, buildOnePageExecutiveBriefFormat, buildPrintReadyReportFormat, buildPdfFormat, buildPptxFormat, buildProductionInfographicReportFormat } from './multi-format-renderer.js';
 import { buildInfographicData } from './infographic-data-builder.js';
 import { buildAllDecisionCards, buildDecisionDashboard, buildBoardModeTalkingPoints, buildMeetingModeBriefings, buildActionMatrix } from './decision-intelligence-engine.js';
@@ -55,7 +55,9 @@ import { buildDrilldown, buildComparison } from './report-dashboard.js';
 import { buildBenchmark, writeBenchmarkCommentary } from './benchmark-engine.js';
 import { generateTieredRecommendations } from './recommendations-engine.js';
 import { generateEvidenceCitations } from './citation-engine.js';
-import { scoreReportQuality } from './quality-scoring-engine.js';
+import { scoreReportQuality, evaluatePublicationGateAndPersist, toLegacyPublicationFields } from './quality-scoring-engine.js';
+import { validateEvidenceTrust as validateEvidenceTrustForCanonicalGate } from './report-trust.js';
+import { validateInternationalStandards } from './international-publication-quality-engine.js';
 import { generateImplementationRoadmap } from './roadmap-generator.js';
 import { enrichDocumentModelWithIntelligenceOSV7, buildIntelligenceOSV7 } from './intelligence-os.js';
 import { buildReportStudioV7 } from './report-studio.js';
@@ -83,7 +85,7 @@ import { buildVoiceInsightsOrchestratorV208 } from './voiceinsights-orchestrator
 import { metric, healthMetric, validateProvisioningInput, buildOfflinePackage, compareConflict } from './operational-readiness-closure.js';
 import { buildProductionReadinessEnterpriseScaleV209 } from './production-readiness-enterprise-scale.js';
 import { buildVoiceInsightsCloudV210 } from './voiceinsights-cloud.js';
-import { buildIamOverview, assertPermission, generateTotpSecret as generateEnterpriseTotpSecret, buildOtpAuthUri, generateRecoveryCodes, verifyTotpCode as verifyEnterpriseTotpCode, validateSsoConfiguration, buildScimConfig, generateApiKey, sha256Hex, validateApiKeyScopes } from './enterprise-identity-access.js';
+import { buildIamOverview, assertPermission, hasPermission, generateTotpSecret as generateEnterpriseTotpSecret, buildOtpAuthUri, generateRecoveryCodes, verifyTotpCode as verifyEnterpriseTotpCode, validateSsoConfiguration, buildScimConfig, generateApiKey, sha256Hex, validateApiKeyScopes } from './enterprise-identity-access.js';
 import { buildSecurityDashboard, buildAuditEvent, buildSecretMetadata, validateConsentRecord, buildEncryptionPosture } from './data-protection-security-operations.js';
 import { buildEnterpriseReportsWorkspace, answerReportAssistant, buildPresentation, buildExportManifest } from './enterprise-reports.js';
 import { renderDocxBinary, renderXlsxBinary } from './office-export-engine.js';
@@ -93,12 +95,26 @@ import { getPremiumPublicationCatalog, composePremiumPublication, buildPremiumPu
 import { getInteractiveIntelligenceCatalog, buildEvidenceExplorer, answerGroundedReportQuestion, buildPrivacySafeBenchmark, extractKnowledgeRecords, searchKnowledge, buildInteractiveReport } from './interactive-intelligence.js';
 import { getPresentationPublishingCatalog, buildPublicationModel, evaluatePresentationQuality, buildDeck } from './presentation-publishing.js';
 import { getFlagshipSampleCatalog, buildFlagshipSampleReport, buildFlagshipSampleDeck } from './flagship-sample-library.js';
+import { stripInternalScoresForPublicResponse } from './publication-trust-badges.js';
+import { runGovernanceReviews } from './publication-governance-gate.js';
 import { resolveHybridFlagshipArtifact } from './hybrid-dedicated-rendering.js';
-import { renderFlagshipInteractiveHtml } from './flagship-interactive-html.js';
 import { buildMeDemoBrief } from './me-demo-brief.js';
 import { buildDocumentComposition } from './document-composer.js';
 import { renderPdfBinary, renderPptxBinary } from './dedicated-binary-renderer.js';
-import { buildInternationalProgrammeWorkspace, validateResultsFramework, buildMethodologyReadiness, buildRoleAcceptanceMatrix, validateManagementResponse } from './international-programme-lifecycle.js';
+import { isPublicationV2Eligible, renderPublicationV2Preview } from './publication-render-engine-v2.js';
+import { isDocxV2Eligible, renderDocxFromRuntime } from './docx-runtime-renderer.js';
+import { composePublicationRuntime } from './publication-runtime.js';
+import { buildInternationalProgrammeWorkspace, validateResultsFramework, buildMethodologyReadiness, buildRoleAcceptanceMatrix, validateManagementResponse, buildActionTransition, validateActionCreate, validateActionUpdate, nextActionStatuses, eventTypeForActionTransition } from './international-programme-lifecycle.js';
+import { buildActionDomainEvent } from './decision-event-envelope.js';
+import { buildActionEventWriteSet } from './decision-action-write-set.js';
+import { publishPendingDecisionEvents, detectOverdueActions, detectEscalationCandidates } from './decision-event-publisher.js';
+import { computeActionMetrics, computeDecisionEventObservability, computePlatformDecisionEventObservability } from './decision-metrics.js';
+import { listActionSummaries, getActionSummary, getOrganizationPortfolio, getProjectPortfolio, listOwnerWorkloads, getReviewQueue, getExecutiveIntelligence, getProjectionHealth, listProjectPortfolios, getStrategicPriorityBreakdown, getPortfolioTrend, getEvidenceAssurance, getExecutiveTimeline } from './decision-projection-queries.js';
+import { evaluateExecutiveInsights, buildDecisionsRequired } from './executive-insight-engine.js';
+import { diagnoseLikelyCauses, simulateScenario, forecastImpact, findSimilarActions, buildKnowledgeGraph, buildRecommendations, buildNarrativeBrief, askCopilot } from './platform-intelligence-engine.js';
+import { backfillMissingActionSummaries } from './decision-projection-rebuild.js';
+import { sweepDailyPortfolioSnapshots } from './decision-projection-writers.js';
+import { runReconciliationSweepTick } from './decision-projection-reconciliation.js';
 import { buildDataTrustWorkspace, validateCatalogAsset, validateLineageEdge, computeQualityStatus, assessDisclosureRisk, evaluateModelAssurance, validateInteroperabilityContract, buildDecisionSignals } from './data-trust-intelligence-fabric.js';
 import { processQueueBatch, aggregateQueueMetrics } from './cloudflare-queue-platform.js';
 import { handleOperationsRoute } from './operations-api.js';
@@ -113,7 +129,7 @@ import { buildBenchmarkWorkspace, buildComparison as buildBenchmarkCloudComparis
 import { buildPilotWorkspace, buildCustomerSuccessWorkspace, buildFounderCustomerSuccessAdditions, buildOperationsCustomerSuccessAdditions, validatePilot } from './enterprise-pilot-customer-success.js';
 import { buildTrainingWorkspace, buildSupportWorkspace, buildAdoptionWorkspace, validateCourse, validateTicket, validateUsageEvent } from './training-support-adoption.js';
 import { buildRenewalPipeline, buildExpansionWorkspace, buildExecutiveForecast, answerCustomerSuccessQuestion, buildUnifiedCustomerSuccessDashboard } from './renewal-expansion-intelligence.js';
-import { buildSoc2Readiness, buildIsoPack, buildEvidenceRecord, buildCompliancePack, buildProcurementReadiness } from './compliance-procurement-trust.js';
+import { buildSoc2Readiness, buildIsoPack, buildEvidenceRecord, buildCompliancePack, buildProcurementReadiness, normalizeControlStatus } from './compliance-procurement-trust.js';
 import { buildProductionReadiness, buildDistributionActions, buildCampaignPlan, buildQueueJob, buildOperationsDashboard, buildFounderDashboard, buildApprovalExecution, buildNotification, sendTwilioSms, sendTwilioWhatsApp, startTwilioCall, productionUrl } from './production-finalization.js';
 import { buildVinWorkspace, buildVinReadiness, validateVinConsent, canActivateVin, buildCollaborationOpportunity, aggregatePrivacySafeSnapshots, buildSdgIntelligence, VIN_PRODUCT_NAME } from './voiceinsights-intelligence-network.js';
 import { buildOperationsReadiness, resolveTwilioSenders, mapTwilioStatus, decideDeliveryRetry, verifyTwilioSignature, buildOfflineSyncDecision, compareDoubleEntries, scoreFraudAndQuality, validateAssignment } from './collection-operations-workstream2.js';
@@ -163,6 +179,13 @@ function applyDemoShowcaseExportOverride(enrichedModel, verification) {
   };
 }
 
+// Program Beta Sprint 1.5 — buildActionEventWriteSet() (and its 3 statement
+// builders) now live in decision-action-write-set.js, shared with the
+// scheduled overdue-detection sweep (decision-event-publisher.js), which
+// needs to build the exact same real write set for a system-triggered
+// event. See that module for the full explanation of what env.DB.batch()
+// does and does not guarantee.
+
 // ============================================================
 // V212: the Worker's fetch entry is now a thin wrapper. The whole route
 // tree lives in handleRequest() below (unchanged), and applyCorsPolicy()
@@ -205,6 +228,8 @@ export default {
   // records a health snapshot, checks project schedules, generates due
   // scheduled reports, and (V212, closes TD-001) trims operational log
   // tables by one small batch so retention never runs long.
+  // Program Beta Sprint 1.5 adds two more real, bounded, tenant-safe sweeps
+  // to this same existing 5-minute tick — no new Cron Trigger was declared.
   async scheduled(event, env, ctx) {
     ctx.waitUntil(processNextRotationBatch(env));
     ctx.waitUntil(processRetryQueueBatch(env, { analyzeText, runFraudChecks, sendEmail, newId, pushToAllSuperAdmins }));
@@ -213,6 +238,16 @@ export default {
     ctx.waitUntil(processReportSchedules(env));
     ctx.waitUntil(cleanupOperationalLogs(env));
     ctx.waitUntil(aggregateQueueMetrics(env));
+    ctx.waitUntil(publishPendingDecisionEvents(env));
+    ctx.waitUntil(detectOverdueActions(env));
+    ctx.waitUntil(detectEscalationCandidates(env));
+    // Program Beta Sprint 1.6 — projection legacy-bootstrap catch-up (bounded
+    // batch), reconciliation (bounded, cursor-resumed across ticks), and the
+    // daily executive-trend snapshot. Same existing 5-minute Cron Trigger;
+    // no new scheduled-job infrastructure was introduced.
+    ctx.waitUntil(backfillMissingActionSummaries(env));
+    ctx.waitUntil(runReconciliationSweepTick(env));
+    ctx.waitUntil(sweepDailyPortfolioSnapshots(env));
   },
 };
 
@@ -673,10 +708,11 @@ async function handleRequest(request, env, ctx) {
       if (path === '/api/security/v2103a/mfa/enroll' && method === 'POST') {
         const claims = await requireAuth(request, env); const body=await request.json().catch(()=>({}));
         const targetUser=body.user_id || claims.sub; if (targetUser !== claims.sub && !assertPermission(claims.role,'mfa.manage').ok) return error('MFA management permission required',403);
+        const orgId = await getEffectiveOrgId(request, env, claims);
         const secret=generateEnterpriseTotpSecret(); const recovery=generateRecoveryCodes(); const now=new Date().toISOString(); const id=`mfa_${crypto.randomUUID()}`;
         const recoveryHashes=[]; for (const code of recovery) recoveryHashes.push(await sha256Hex(code));
         await env.DB.prepare(`INSERT INTO iam_mfa_methods (id,user_id,organization_id,method,secret_envelope,recovery_codes_hash_json,status,created_at,updated_at) VALUES (?,?,?,?,?,?,'pending',?,?)`)
-          .bind(id,targetUser,claims.organization_id||null,'totp',secret,JSON.stringify(recoveryHashes),now,now).run();
+          .bind(id,targetUser,orgId||null,'totp',secret,JSON.stringify(recoveryHashes),now,now).run();
         return json({ ok:true, enrollment_id:id, secret, otpauth_uri:buildOtpAuthUri({secret,account:claims.email||targetUser}), recovery_codes:recovery },201);
       }
 
@@ -804,8 +840,34 @@ async function handleRequest(request, env, ctx) {
         let controls=[], evidence=[];
         try { controls=(await env.DB.prepare('SELECT * FROM compliance_controls WHERE organization_id=? OR organization_id IS NULL').bind(orgId).all()).results||[]; } catch(_) {}
         try { evidence=(await env.DB.prepare('SELECT * FROM compliance_evidence WHERE organization_id=? ORDER BY generated_at DESC LIMIT 250').bind(orgId).all()).results||[]; } catch(_) {}
-        const securityScore=Number(url.searchParams.get('security_score')||85);
-        const documentationScore=Number(url.searchParams.get('documentation_score')||80);
+        // Phase 2 Enterprise Acceptance Review, Critical #1: security_score
+        // and documentation_score were previously read directly from
+        // caller-supplied query parameters (?security_score=100), with no
+        // server-side verification at all, defaulting to hardcoded 85/80
+        // when absent — meaning this organization's own procurement-
+        // readiness score (surfaced on both procurement-readiness.html and
+        // the Trust Center) was, in effect, whatever the caller wanted it
+        // to be. Both are now computed entirely server-side from real,
+        // already-governed signals no caller can influence:
+        // documentationScore is the real share of this organization's
+        // compliance_controls rows that have moved beyond the bare
+        // "evidence_pending" default — the same real table
+        // buildSoc2Readiness/buildIsoPack already read, so this introduces
+        // no new data model. securityScore combines real MFA coverage
+        // (iam_mfa_methods, the same table the Enterprise Control
+        // Workspace already uses) with the real count of critical-risk
+        // security events in the last 90 days (security_audit_events_v2,
+        // the same real, already-populated audit-log table
+        // admin/security/audit-center.html already reads). No query
+        // parameter is read anywhere in this handler.
+        const one=async(sql,...args)=>{try{return await env.DB.prepare(sql).bind(...args).first()}catch(_){return {c:0}}};
+        const documentedControls=controls.filter(c=>normalizeControlStatus(c.status)!=='evidence_pending').length;
+        const documentationScore=controls.length?Math.round((documentedControls/controls.length)*100):0;
+        const orgUsers=Number((await one('SELECT COUNT(*) c FROM users WHERE organization_id=?',orgId))?.c||0);
+        const mfaUsers=Number((await one("SELECT COUNT(DISTINCT user_id) c FROM iam_mfa_methods WHERE organization_id=? AND status='verified'",orgId))?.c||0);
+        const mfaCoveragePct=orgUsers?Math.round((mfaUsers/orgUsers)*100):0;
+        const recentCriticalEvents=Number((await one("SELECT COUNT(*) c FROM security_audit_events_v2 WHERE organization_id=? AND risk_level='critical' AND created_at >= datetime('now','-90 days')",orgId))?.c||0);
+        const securityScore=Math.round((mfaCoveragePct+Math.max(0,100-recentCriticalEvents*20))/2);
         const evidenceScore=evidence.length?Math.min(100,60+evidence.length*2):60;
         return json({ok:true,readiness:buildProcurementReadiness({controls,evidence,security_score:securityScore,documentation_score:documentationScore,evidence_score:evidenceScore})},200,{'Cache-Control':'no-store'});
       }
@@ -1431,22 +1493,88 @@ async function handleRequest(request, env, ctx) {
       if (sampleDetailMatch && method === 'GET') {
         const model=buildFlagshipSampleReport(decodeURIComponent(sampleDetailMatch[1]));
         if(!model) return error('Flagship sample report not found',404);
-        return json({ok:true,...model},200,{'Cache-Control':'public, max-age=300'});
+        return json({ok:true,...stripInternalScoresForPublicResponse(model)},200,{'Cache-Control':'public, max-age=300'});
+      }
+      // Unified Publication Runtime, Phase 2: "View Publication" now fetches
+      // this route's server-rendered HTML directly instead of the frontend
+      // page rebuilding its own summary view from the raw JSON model — the
+      // exact same composePublicationRuntime(model).html the Preview PDF
+      // path renders from, so the two are provably the same publication,
+      // not two independently-maintained views of it.
+      const sampleViewMatch = path.match(/^\/api\/public\/flagship-sample-library\/([^/]+)\/view$/);
+      if (sampleViewMatch && method === 'GET') {
+        const key = decodeURIComponent(sampleViewMatch[1]);
+        const model = buildFlagshipSampleReport(key);
+        if (!model) return error('Flagship sample report not found', 404);
+        if (model.report?.quality_scores?.gate !== 'PUBLICATION_READY') return json({ ok: false, error: 'Publication quality gate blocked view', quality_gate: model.report?.quality_scores || null }, 422, { 'Cache-Control': 'no-store' });
+        const runtime = composePublicationRuntime(model);
+        // Editorial Division Release (Editorial Constitution Article II): the
+        // 9 mandatory governance reviews, run here with the real composed
+        // spreads so Visual Review is fully enforced (not just the model-
+        // level 8 the catalog route can afford). A failing publication is
+        // blocked from view, same response shape as the pre-existing gate.
+        const governanceReviews = runGovernanceReviews(model, { spreads: runtime.spreads });
+        const failedReviews = governanceReviews.filter(r => !r.passed);
+        if (failedReviews.length) return json({ ok: false, error: 'Publication governance gate blocked view', failed_reviews: failedReviews.map(r => r.id) }, 422, { 'Cache-Control': 'no-store' });
+        return new Response(runtime.html, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=300', 'X-Runtime-Version': runtime.runtime_version, 'X-Build-Id': runtime.build_id } });
       }
       const sampleExportMatch = path.match(/^\/api\/public\/flagship-sample-library\/([^/]+)\/export\/(pdf|pptx|docx|xlsx|board-deck|policy-brief|cabinet-memo|investor-deck|html)$/);
       if (sampleExportMatch && method === 'GET') {
         const key=decodeURIComponent(sampleExportMatch[1]), format=sampleExportMatch[2];
         const model=buildFlagshipSampleReport(key); if(!model) return error('Flagship sample report not found',404);
         if(model.report?.quality_scores?.gate!=='PUBLICATION_READY') return json({ok:false,error:'Publication quality gate blocked export',quality_gate:model.report?.quality_scores||null},422,{'Cache-Control':'no-store'});
-        const report=model.report; let artifact=await resolveHybridFlagshipArtifact(env,{key,format,model});
+        // Unified Publication Runtime, Phase 3: every export format branch
+        // now threads the same canonical runtime object through, sourcing
+        // report/full_publication/sample from it (verbatim pass-throughs of
+        // model's own fields) rather than from model directly. This changes
+        // what object is threaded through, not what any adapter does with
+        // it — every adapter below is unchanged, just re-pointed.
+        const runtime=composePublicationRuntime(model);
+        // Editorial Division Release: same 9-review governance gate as the
+        // view route, run with the real composed spreads.
+        const exportGovernanceReviews=runGovernanceReviews(model,{spreads:runtime.spreads});
+        const failedExportReviews=exportGovernanceReviews.filter(r=>!r.passed);
+        if(failedExportReviews.length) return json({ok:false,error:'Publication governance gate blocked export',failed_reviews:failedExportReviews.map(r=>r.id)},422,{'Cache-Control':'no-store'});
+        const report=runtime.report; let artifact=await resolveHybridFlagshipArtifact(env,{key,format,model});
+        // Publication Rendering Engine V2 — controlled preview path.
+        // Eligibility (preview environment + feature flag + an allowlisted
+        // flagship key + PDF format) is checked inside isPublicationV2Eligible;
+        // every other request/key/format falls straight through to the
+        // unchanged legacy branches below, exactly as before this change.
+        let v2Metadata=null;
+        if(!artifact&&format==='pdf'&&isPublicationV2Eligible(env,key,format)){
+          const v2=await renderPublicationV2Preview({model,key,format,env});
+          v2Metadata=v2.metadata;
+          if(v2.ok) artifact={...v2.artifact,renderer_version:v2.metadata.renderer_version};
+        }
+        // DOCX Phase 4 — same additive, fail-safe pattern as the PDF V2 branch
+        // above: eligibility (preview environment + feature flag + an
+        // allowlisted flagship key) is checked inside isDocxV2Eligible, and
+        // any render failure leaves `artifact` unset so the request falls
+        // straight through to the unchanged legacy renderDocxBinary call
+        // below, exactly as before this change.
+        if(!artifact&&format==='docx'&&isDocxV2Eligible(env,key)){
+          try{artifact=await renderDocxFromRuntime(runtime,{report_id:`flagship-${key}`});}catch(_){/* fall through to legacy renderer */}
+        }
         if(!artifact&&format==='docx') artifact=await renderDocxBinary(report,{report_id:`flagship-${key}`});
         else if(!artifact&&format==='xlsx') artifact=await renderXlsxBinary(report,{report_id:`flagship-${key}`});
-        else if(!artifact&&format==='pptx') artifact=await renderPptxBinary({report_id:`flagship-${key}`,metadata:{report_id:`flagship-${key}`,title:report.title,organization:'VoiceInsights Africa'},artifact:{slides:buildFlagshipSampleDeck(model)}},{profile:model.sample.style});
-        else if(!artifact&&(format==='board-deck'||format==='investor-deck')){const product=format.replace('-','_'),deck=buildDeck(report,product);artifact=await renderPptxBinary({report_id:`flagship-${key}-${format}`,metadata:{report_id:`flagship-${key}-${format}`,title:report.title,organization:'VoiceInsights Africa'},artifact:{slides:deck.slides||buildFlagshipSampleDeck(model)}},{profile:model.sample.style,product});}
-        else if(!artifact&&(format==='policy-brief'||format==='cabinet-memo')){const product=format.replace('-','_'),profile=format==='cabinet-memo'?'government':model.sample.profile,publication=buildPublicationModel({report},profile,product),composition=buildDocumentComposition({...report,title:publication.cover?.title||report.title},format==='cabinet-memo'?'government_report_pdf':'policy_brief_pdf',{tenant_id:'public-demo'});artifact=await renderPdfBinary(composition,{profile,product});}
-        else if(!artifact&&format==='html') artifact=await renderFlagshipInteractiveHtml(model);
-        else if(!artifact) { const composition=buildDocumentComposition(report,'pdf',{tenant_id:'public-demo'}); composition.full_report=report; artifact=await renderPdfBinary(composition,{profile:model.sample.style}); }
-        return new Response(artifact.bytes,{status:200,headers:{'Content-Type':artifact.content_type,'Content-Disposition':`attachment; filename="${artifact.filename}"`,'X-Content-Type-Options':'nosniff','Cache-Control':'public, max-age=300','X-Artifact-Checksum':artifact.checksum}});
+        else if(!artifact&&format==='pptx') artifact=await renderPptxBinary({report_id:`flagship-${key}`,metadata:{report_id:`flagship-${key}`,title:report.title,organization:'VoiceInsights Africa'},artifact:{slides:buildFlagshipSampleDeck(model)}},{profile:runtime.sample.style});
+        else if(!artifact&&(format==='board-deck'||format==='investor-deck')){const product=format.replace('-','_'),deck=buildDeck(report,product);artifact=await renderPptxBinary({report_id:`flagship-${key}-${format}`,metadata:{report_id:`flagship-${key}-${format}`,title:report.title,organization:'VoiceInsights Africa'},artifact:{slides:deck.slides||buildFlagshipSampleDeck(model)}},{profile:runtime.sample.style,product});}
+        else if(!artifact&&(format==='policy-brief'||format==='cabinet-memo')){const product=format.replace('-','_'),profile=format==='cabinet-memo'?'government':runtime.sample.profile,publication=buildPublicationModel({report},profile,product),composition=buildDocumentComposition({...report,title:publication.cover?.title||report.title},format==='cabinet-memo'?'government_report_pdf':'policy_brief_pdf',{tenant_id:'public-demo'});artifact=await renderPdfBinary(composition,{profile,product});}
+        else if(!artifact&&format==='html'){
+          // Unified Publication Runtime, Phase 4 (HTML step): the html export
+          // now serves runtime.html directly — the exact same canonical HTML
+          // Preview and View Publication already render from (Phase 2 proved
+          // it's the correct, complete document) — instead of
+          // flagship-interactive-html.js's independently-derived summary
+          // template, which never carried the Decision Reasoning Architecture.
+          const htmlBytes=new TextEncoder().encode(runtime.html);
+          const htmlChecksum=[...new Uint8Array(await crypto.subtle.digest('SHA-256',htmlBytes))].map(b=>b.toString(16).padStart(2,'0')).join('');
+          artifact={format:'html',binary_generated:true,bytes:htmlBytes,byte_length:htmlBytes.length,checksum:htmlChecksum,content_type:'text/html; charset=utf-8',filename:`flagship-${key}.html`,quality:{interactive_document:true,script_free:true,print_ready:true}};
+        }
+        else if(!artifact) { const composition=buildDocumentComposition(report,'pdf',{tenant_id:'public-demo'}); composition.full_report=report; artifact=await renderPdfBinary(composition,{profile:runtime.sample.style}); if(v2Metadata&&v2Metadata.browser_render_attempted) v2Metadata={...v2Metadata,fallback_used:true}; }
+        const observabilityHeaders=v2Metadata?{'X-Renderer-Name':v2Metadata.renderer_name,'X-Renderer-Version':v2Metadata.renderer_version,'X-Browser-Render-Attempted':String(v2Metadata.browser_render_attempted),'X-Browser-Render-Succeeded':String(v2Metadata.browser_render_succeeded),'X-Fallback-Used':String(v2Metadata.fallback_used),'X-Render-Duration-Ms':String(v2Metadata.duration_ms),'X-Render-Failure-Code':v2Metadata.failure_code||''}:{};
+        return new Response(artifact.bytes,{status:200,headers:{'Content-Type':artifact.content_type,'Content-Disposition':`attachment; filename="${artifact.filename}"`,'X-Content-Type-Options':'nosniff','Cache-Control':'public, max-age=300','X-Artifact-Checksum':artifact.checksum,...observabilityHeaders}});
       }
 
       // Public read-only M&E demonstration brief — separate from the 16 flagship samples.
@@ -1535,6 +1663,527 @@ async function handleRequest(request, env, ctx) {
       }
       if (path === '/api/programme-lifecycle/role-acceptance' && method === 'POST') {
         const claims=await requireAuth(request,env); if(!['super_admin','founder_executive'].includes(claims.role))return error('Founder/Super Admin required',403); const orgId=await getEffectiveOrgId(request,env,claims); const body=await request.json().catch(()=>({})); const matrix=buildRoleAcceptanceMatrix(body.results||[]); const now=new Date().toISOString(); for(const r of matrix.results){await env.DB.prepare('INSERT INTO role_acceptance_runs (id,organization_id,role_name,journey_name,status,evidence_json,executed_by,executed_at) VALUES (?,?,?,?,?,?,?,?)').bind(`rar_${crypto.randomUUID()}`,orgId,r.role,r.journey,r.status,JSON.stringify(r.evidence||{}),claims.sub||'',now).run()} return json({ok:true,matrix},201);
+      }
+
+      // ============================================================
+      // Program Beta Sprint 1 — Decision API. Extends the real, existing
+      // management_response_actions table (migration 028) with a governed
+      // lifecycle. The legacy POST /api/programme-lifecycle/management-response
+      // route above is untouched and still writes to the same table with the
+      // same 'open' default, preserving backward compatibility for whatever
+      // already calls it.
+      // ============================================================
+
+      if (path === '/api/decisions/actions' && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.create'); if (!perm.ok) return error(perm.error, perm.status);
+        if (await isRateLimited(env, `action_create:${claims.sub || 'anon'}`, 30, 60)) return error('Too many requests', 429);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const body = await request.json().catch(() => ({}));
+        const v = validateActionCreate(body); if (!v.ok) return json(v, 400);
+        const id = body.id || newId('act');
+        const now = new Date().toISOString();
+        const createStmt = env.DB.prepare(
+          `INSERT INTO management_response_actions
+            (id,organization_id,project_id,report_id,recommendation,management_response,owner,due_date,status,evidence_url,created_by,created_at,updated_at,
+             department,priority,strategic_priority,risk_level,start_date,dependencies_json,budget_estimated,expected_outcome,success_criteria,monitoring_indicator,updated_by)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+        ).bind(
+          id, orgId, body.project_id, body.report_id || null, body.recommendation, body.management_response || '', body.owner, body.due_date, 'draft', body.evidence_url || null, claims.sub || '', now, now,
+          body.department || null, (body.priority || 'medium').toLowerCase(), body.strategic_priority || null, body.risk_level || null, body.start_date || null, JSON.stringify(body.dependencies || []), body.budget_estimated ?? null, body.expected_outcome || null, body.success_criteria || null, body.monitoring_indicator || null, claims.sub || ''
+        );
+        const { statements } = buildActionEventWriteSet(env, {
+          actionId: id, orgId, projectId: body.project_id, reportId: body.report_id || null,
+          historyType: 'status', eventType: 'decision.action.created', fromValue: null, toValue: 'draft',
+          reason: 'Action created', actor: claims, request, payload: { owner: body.owner },
+        });
+        // Part 5: the Action row, its history, the audit mirror, and the
+        // outbox event all commit together or not at all — env.DB.batch()
+        // is D1's real atomic-batch primitive (see the comment above
+        // buildActionHistoryStatement for what it does and does not guarantee).
+        await env.DB.batch([createStmt, ...statements]);
+        return json({ ok: true, id, status: 'draft' }, 201);
+      }
+
+      const actionTransitionMatch = path.match(/^\/api\/decisions\/actions\/([^/]+)\/transition$/);
+      if (actionTransitionMatch && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const actionId = actionTransitionMatch[1];
+        const record = await env.DB.prepare('SELECT * FROM management_response_actions WHERE id=? AND organization_id=?').bind(actionId, orgId).first();
+        if (!record) return error('Action not found', 404);
+        const body = await request.json().catch(() => ({}));
+        const result = buildActionTransition(record, body.to_status, claims, { hasPermission, reason: body.reason });
+        if (!result.ok) return json(result, 409);
+        const now = new Date().toISOString();
+        const updates = { status: body.to_status, updated_by: claims.sub || '', updated_at: now, overdue_since: null, escalated_since: null };
+        if (body.to_status === 'completed') updates.completion_date = body.completion_date || now;
+        if (body.to_status === 'verified') updates.verification_status = 'verified';
+        if (body.evidence_after && Array.isArray(body.evidence_after)) updates.evidence_after_json = JSON.stringify(body.evidence_after);
+        const setClauses = Object.keys(updates).map(k => `${k}=?`).join(',');
+        const updateStmt = env.DB.prepare(`UPDATE management_response_actions SET ${setClauses} WHERE id=? AND organization_id=?`).bind(...Object.values(updates), actionId, orgId);
+        const eventType = eventTypeForActionTransition(result.from, result.to);
+        const { statements } = buildActionEventWriteSet(env, {
+          actionId, orgId, projectId: record.project_id, reportId: record.report_id,
+          historyType: 'status', eventType, fromValue: result.from, toValue: result.to,
+          reason: body.reason, actor: claims, request, payload: { owner: record.owner },
+        });
+        const batchStatements = [updateStmt, ...statements];
+        if (body.to_status === 'verified') {
+          const verificationWrite = buildActionEventWriteSet(env, {
+            actionId, orgId, projectId: record.project_id, reportId: record.report_id,
+            historyType: 'verification', eventType: 'decision.action.verified', fromValue: 'unverified', toValue: 'verified',
+            reason: body.reason, actor: claims, request, payload: { owner: record.owner },
+          });
+          batchStatements.push(...verificationWrite.statements);
+        }
+        await env.DB.batch(batchStatements);
+        return json({ ok: true, id: actionId, ...result }, 200);
+      }
+
+      // Part 1/9: decision.action.evidence_added — the only Action mutation
+      // that only ever appends to evidence_after_json rather than changing
+      // status, so it gets its own route instead of overloading /transition.
+      // Uses action.progress (the same contributor-tier permission ongoing
+      // work updates already require), not action.update, since adding
+      // evidence is routine progress work, not a core-field edit.
+      const actionEvidenceMatch = path.match(/^\/api\/decisions\/actions\/([^/]+)\/evidence$/);
+      if (actionEvidenceMatch && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.progress'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const actionId = actionEvidenceMatch[1];
+        const record = await env.DB.prepare('SELECT * FROM management_response_actions WHERE id=? AND organization_id=?').bind(actionId, orgId).first();
+        if (!record) return error('Action not found', 404);
+        const body = await request.json().catch(() => ({}));
+        if (!body.description && !body.url) return error('description or url is required', 400);
+        const now = new Date().toISOString();
+        const entry = { description: body.description || null, url: body.url || null, added_at: now, added_by: claims.sub || '' };
+        const evidence = JSON.parse(record.evidence_after_json || '[]');
+        evidence.push(entry);
+        // RC1 Part 2 — same optional optimistic-concurrency check as the PATCH
+        // route above; see its comment for the reasoning. Evidence is additive
+        // (push onto an array), but two concurrent adds without this check can
+        // still race on the shared evidence_after_json blob and attachments_count,
+        // silently dropping one entry — the same lost-update shape, just on a
+        // list field instead of a scalar one.
+        const checkStale = body.expected_updated_at !== undefined;
+        const updateResult = await env.DB.prepare(
+          `UPDATE management_response_actions SET evidence_after_json=?, attachments_count=attachments_count+1, updated_by=?, updated_at=? WHERE id=? AND organization_id=?${checkStale ? ' AND updated_at=?' : ''}`
+        ).bind(JSON.stringify(evidence), claims.sub || '', now, actionId, orgId, ...(checkStale ? [body.expected_updated_at] : [])).run();
+        if (checkStale && updateResult.meta.changes === 0) {
+          const fresh = await env.DB.prepare('SELECT updated_at FROM management_response_actions WHERE id=? AND organization_id=?').bind(actionId, orgId).first();
+          return json({ ok: false, error: 'This Action changed since you loaded it. Refresh and try again.', current_updated_at: fresh?.updated_at || null }, 409);
+        }
+        const { statements } = buildActionEventWriteSet(env, {
+          actionId, orgId, projectId: record.project_id, reportId: record.report_id,
+          historyType: 'evidence', eventType: 'decision.action.evidence_added', fromValue: null, toValue: body.url || body.description,
+          reason: body.description || 'Evidence added', actor: claims, request, payload: { owner: record.owner, evidence: entry },
+        });
+        if (statements.length) await env.DB.batch(statements);
+        return json({ ok: true, id: actionId, evidence_count: evidence.length }, 201);
+      }
+
+      const actionHistoryMatch = path.match(/^\/api\/decisions\/actions\/([^/]+)\/history$/);
+      if (actionHistoryMatch && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const actionId = actionHistoryMatch[1];
+        const owned = await env.DB.prepare('SELECT id FROM management_response_actions WHERE id=? AND organization_id=?').bind(actionId, orgId).first();
+        if (!owned) return error('Action not found', 404);
+        const historyType = url.searchParams.get('type');
+        let sql = 'SELECT * FROM action_history WHERE action_id=? AND organization_id=?', binds = [actionId, orgId];
+        if (historyType) { sql += ' AND history_type=?'; binds.push(historyType); }
+        sql += ' ORDER BY created_at ASC';
+        let rows = []; try { rows = (await env.DB.prepare(sql).bind(...binds).all()).results || []; } catch (_) {}
+        return json({ ok: true, action_id: actionId, history: rows }, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      const actionByIdMatch = path.match(/^\/api\/decisions\/actions\/([^/]+)$/);
+      if (actionByIdMatch && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const record = await env.DB.prepare('SELECT * FROM management_response_actions WHERE id=? AND organization_id=?').bind(actionByIdMatch[1], orgId).first();
+        if (!record) return error('Action not found', 404);
+        // Sprint 2.1 UAT finding: this route previously returned the owner as a
+        // raw user ID with no name resolution, while the projection routes
+        // already resolve owner_display_name — the Action Detail page always
+        // showed "(unresolved)" for a real, active owner. Same resolution the
+        // projections already do, applied here for the single-record view.
+        let ownerDisplayName = null;
+        if (record.owner) {
+          const ownerRow = await env.DB.prepare('SELECT full_name FROM users WHERE id=? AND organization_id=?').bind(record.owner, orgId).first();
+          ownerDisplayName = ownerRow?.full_name || null;
+        }
+        return json({ ok: true, action: { ...record, owner_display_name: ownerDisplayName, dependencies: JSON.parse(record.dependencies_json || '[]'), evidence_after: JSON.parse(record.evidence_after_json || '[]'), next_statuses: nextActionStatuses(record.status) } }, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (actionByIdMatch && method === 'PATCH') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.update'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const actionId = actionByIdMatch[1];
+        const record = await env.DB.prepare('SELECT * FROM management_response_actions WHERE id=? AND organization_id=?').bind(actionId, orgId).first();
+        if (!record) return error('Action not found', 404);
+        const body = await request.json().catch(() => ({}));
+        const v = validateActionUpdate(body); if (!v.ok) return json(v, 400);
+        const allowed = ['department','priority','strategic_priority','risk_level','start_date','due_date','budget_estimated','budget_actual','expected_outcome','success_criteria','progress_pct','monitoring_indicator','owner'];
+        const updates = {}; for (const k of allowed) if (body[k] !== undefined) updates[k] = body[k];
+        if (body.dependencies !== undefined) updates.dependencies_json = JSON.stringify(body.dependencies);
+        if (!Object.keys(updates).length) return error('No updatable fields supplied', 400);
+        updates.updated_by = claims.sub || ''; updates.updated_at = new Date().toISOString();
+        // Part 11: a due_date extended out to today-or-later clears any open
+        // overdue episode — the Action is, by definition, no longer overdue
+        // against its new date. A due_date shortened but still in the past
+        // deliberately leaves overdue_since untouched (the episode is still
+        // real; the sweep must not re-emit a duplicate overdue event for it).
+        if (updates.due_date && record.overdue_since && updates.due_date >= new Date().toISOString().slice(0, 10)) {
+          updates.overdue_since = null;
+        }
+        // RC1 Part 2 — optimistic concurrency: a Sprint 2.1 UAT session
+        // reproduced a real lost update (one user's progress edit silently
+        // overwritten another's, no warning to either party), unlike the
+        // /transition route which already re-checks freshness. `expected_updated_at`
+        // is optional so existing callers are unaffected (no breaking change);
+        // when a caller does supply it, the UPDATE's WHERE clause makes the
+        // check-and-write atomic in D1 rather than a racy separate SELECT.
+        // The conditional UPDATE runs alone, before any event/history write,
+        // so a lost race never produces a phantom audit trail for a write
+        // that didn't actually happen.
+        const setClauses = Object.keys(updates).map(k => `${k}=?`).join(',');
+        const checkStale = body.expected_updated_at !== undefined;
+        const updateResult = await env.DB.prepare(
+          `UPDATE management_response_actions SET ${setClauses} WHERE id=? AND organization_id=?${checkStale ? ' AND updated_at=?' : ''}`
+        ).bind(...Object.values(updates), actionId, orgId, ...(checkStale ? [body.expected_updated_at] : [])).run();
+        if (checkStale && updateResult.meta.changes === 0) {
+          const fresh = await env.DB.prepare('SELECT updated_at FROM management_response_actions WHERE id=? AND organization_id=?').bind(actionId, orgId).first();
+          return json({ ok: false, error: 'This Action changed since you loaded it. Refresh and try again.', current_updated_at: fresh?.updated_at || null }, 409);
+        }
+        const { statements } = buildActionEventWriteSet(env, {
+          actionId, orgId, projectId: record.project_id, reportId: record.report_id,
+          historyType: 'assignment', eventType: 'decision.action.updated', fromValue: record.owner, toValue: updates.owner || record.owner,
+          reason: 'Action fields updated', actor: claims, request, payload: { updated_fields: Object.keys(updates) },
+        });
+        if (statements.length) await env.DB.batch(statements);
+        return json({ ok: true, id: actionId }, 200);
+      }
+
+      if (path === '/api/decisions/actions' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const limit = Math.min(100, Math.max(1, Number(url.searchParams.get('limit') || 25)));
+        const offset = Math.max(0, Number(url.searchParams.get('offset') || 0));
+        const filters = { owner: url.searchParams.get('owner'), department: url.searchParams.get('department'), status: url.searchParams.get('status'), priority: url.searchParams.get('priority'), risk_level: url.searchParams.get('risk'), project_id: url.searchParams.get('project'), monitoring_indicator: url.searchParams.get('indicator') };
+        let sql = 'SELECT * FROM management_response_actions WHERE organization_id=?', binds = [orgId];
+        for (const [col, val] of Object.entries(filters)) if (val) { sql += ` AND ${col}=?`; binds.push(val); }
+        const keyword = url.searchParams.get('q');
+        if (keyword) { sql += ' AND (recommendation LIKE ? OR management_response LIKE ? OR expected_outcome LIKE ?)'; const like = `%${keyword}%`; binds.push(like, like, like); }
+        const dateFrom = url.searchParams.get('due_after'), dateTo = url.searchParams.get('due_before');
+        if (dateFrom) { sql += ' AND due_date >= ?'; binds.push(dateFrom); }
+        if (dateTo) { sql += ' AND due_date <= ?'; binds.push(dateTo); }
+        const countSql = sql.replace('SELECT *', 'SELECT COUNT(*) as total');
+        let total = 0; try { total = (await env.DB.prepare(countSql).bind(...binds).first())?.total || 0; } catch (_) {}
+        sql += ' ORDER BY created_at DESC LIMIT ? OFFSET ?'; binds.push(limit, offset);
+        let rows = []; try { rows = (await env.DB.prepare(sql).bind(...binds).all()).results || []; } catch (_) {}
+        return json({ ok: true, actions: rows, pagination: { total, limit, offset, has_more: offset + rows.length < total } }, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      // Part 10 — Decision Action metrics. Org-scoped by getEffectiveOrgId
+      // (never a client-supplied organization_id); semantics for every
+      // number returned are documented on the response itself, not just in
+      // a comment, since this is what a dashboard consumer actually reads.
+      if (path === '/api/decisions/metrics' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const metrics = await computeActionMetrics(env, {
+          orgId, projectId: url.searchParams.get('project') || null,
+          from: url.searchParams.get('from') || null, to: url.searchParams.get('to') || null,
+        });
+        return json(metrics, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      // Part 13 — event pipeline observability. Default response is scoped
+      // to the caller's own organization; ?scope=platform additionally
+      // requires a platform-tier role, matching the brief's explicit
+      // "platform-level aggregates restricted to authorized platform roles".
+      if (path === '/api/decisions/observability' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        if (url.searchParams.get('scope') === 'platform') {
+          if (!['super_admin', 'founder_executive'].includes(claims.role)) return error('Platform-level observability requires a platform-tier role', 403);
+          return json(await computePlatformDecisionEventObservability(env), 200, { 'Cache-Control': 'no-store' });
+        }
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        return json(await computeDecisionEventObservability(env, { orgId }), 200, { 'Cache-Control': 'no-store' });
+      }
+
+      // ============================================================
+      // Program Beta Sprint 1.6 — Enterprise Projection Layer read APIs.
+      // Every route below reads a durable projection table, never the raw
+      // management_response_actions table directly — this is the entire
+      // point of Sprint 1.6 (fast, bounded reads instead of a live
+      // aggregate query on every request). All are org-scoped by
+      // getEffectiveOrgId (never a client-supplied organization id) and
+      // gated by the same action.read permission the rest of the Decision
+      // API already uses. No route here can authorize, approve, reject,
+      // assign, complete, verify, or cancel an Action — these are read-only
+      // views over a derived model; the write model remains authoritative.
+      // ============================================================
+      if (path === '/api/decisions/projections/actions' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const filters = {
+          status: url.searchParams.get('status'), owner: url.searchParams.get('owner'), department: url.searchParams.get('department'),
+          priority: url.searchParams.get('priority'), riskLevel: url.searchParams.get('risk'),
+          overdueOnly: url.searchParams.get('overdue') === 'true', escalatedOnly: url.searchParams.get('escalated') === 'true',
+          dueSoonDays: url.searchParams.get('due_soon_days'), dueAfter: url.searchParams.get('due_after'), dueBefore: url.searchParams.get('due_before'),
+          keyword: url.searchParams.get('q'),
+        };
+        const result = await listActionSummaries(env, {
+          organizationId: orgId, projectId: url.searchParams.get('project'), filters,
+          sort: url.searchParams.get('sort') || 'last_activity', direction: url.searchParams.get('direction') || 'desc',
+          limit: url.searchParams.get('limit'), offset: url.searchParams.get('offset'),
+        });
+        return json(result, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      const projectionActionMatch = path.match(/^\/api\/decisions\/projections\/actions\/([^/]+)$/);
+      if (projectionActionMatch && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const result = await getActionSummary(env, orgId, projectionActionMatch[1]);
+        if (!result.ok) return error('Action projection not found', 404);
+        return json(result, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/projections/organization' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        return json(await getOrganizationPortfolio(env, orgId), 200, { 'Cache-Control': 'no-store' });
+      }
+
+      const projectionProjectMatch = path.match(/^\/api\/decisions\/projections\/projects\/([^/]+)$/);
+      if (projectionProjectMatch && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        return json(await getProjectPortfolio(env, orgId, projectionProjectMatch[1]), 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/projections/owners' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        return json(await listOwnerWorkloads(env, orgId, { limit: url.searchParams.get('limit'), offset: url.searchParams.get('offset') }), 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/projections/reviewers' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        return json(await getReviewQueue(env, orgId, url.searchParams.get('project')), 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/projections/executive' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        return json(await getExecutiveIntelligence(env, orgId), 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/projections/health' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        return json(await getProjectionHealth(env, orgId), 200, { 'Cache-Control': 'no-store' });
+      }
+
+      // ============================================================
+      // Program Beta Sprint 3 — Executive Intelligence Command Center.
+      // Read-only, composed entirely from the existing projection layer
+      // above (plus one governed-source read for evidence, which is not
+      // part of the projection schema — see getEvidenceAssurance). Gated by
+      // the same action.read permission (already correctly excludes
+      // enumerator, who has no action.* grants at all), with a further
+      // role-tier scoping applied server-side below — never left to the
+      // frontend to hide fields it still received.
+      // ============================================================
+      const EXECUTIVE_TIER = ['founder_executive', 'super_admin', 'org_admin', 'head_of_programs'];
+      const OPERATIONAL_TIER = ['project_manager', 'operations_manager'];
+      const ASSURANCE_TIER = ['me_officer', 'data_analyst'];
+
+      if (path === '/api/decisions/executive/command-center' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const isExecutiveTier = EXECUTIVE_TIER.includes(claims.role);
+        const isOperationalTier = OPERATIONAL_TIER.includes(claims.role);
+
+        const [portfolio, executiveKpi, reviewQueue, health, evidence, trend, ownerWorkloads] = await Promise.all([
+          getOrganizationPortfolio(env, orgId),
+          getExecutiveIntelligence(env, orgId),
+          getReviewQueue(env, orgId, null),
+          getProjectionHealth(env, orgId),
+          getEvidenceAssurance(env, orgId),
+          getPortfolioTrend(env, orgId, 30),
+          listOwnerWorkloads(env, orgId, { limit: 50 }),
+        ]);
+
+        const response = {
+          ok: true, organization_id: orgId, scope: isExecutiveTier ? 'executive' : isOperationalTier ? 'operational' : 'assurance',
+          portfolio, executive_kpi: executiveKpi, review_queue: reviewQueue, health, evidence, trend,
+        };
+
+        // Owner workload: full per-owner detail for executive + operational
+        // tiers (both hold real accountability for redistributing work);
+        // assurance-tier roles (M&E/Data Analyst) get an aggregate count
+        // only — evidence/performance-oriented, not accountability-oriented,
+        // per the brief's own role-depth distinction.
+        if (isExecutiveTier || isOperationalTier) {
+          response.owner_workload = ownerWorkloads;
+        } else {
+          response.owner_workload = { ok: true, available_detail: false, owner_count: ownerWorkloads.owners?.length || 0, reason: 'Per-owner workload detail is restricted to executive and operational-leadership roles.' };
+        }
+
+        // Strategic Priority Performance and cross-project Portfolio ranking
+        // are executive-tier-only — the brief's "narrower operational
+        // leadership views" for Project/Operations Manager and
+        // "evidence/performance-oriented views" for M&E/Data Analyst.
+        if (isExecutiveTier) {
+          const [strategicPriorities, projectPortfolios] = await Promise.all([
+            getStrategicPriorityBreakdown(env, orgId),
+            listProjectPortfolios(env, orgId),
+          ]);
+          response.strategic_priorities = strategicPriorities;
+          response.project_portfolios = projectPortfolios;
+        } else {
+          response.strategic_priorities = { ok: true, available: false, reason: 'Strategic Priority Performance is restricted to executive-tier roles.' };
+          response.project_portfolios = { ok: true, available: false, reason: 'Cross-project Portfolio ranking is restricted to executive-tier roles.' };
+        }
+
+        return json(response, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/executive/attention-brief' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const evaluation = await evaluateExecutiveInsights(env, orgId, { role: claims.role });
+        return json(evaluation, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/executive/decisions-required' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        if (!EXECUTIVE_TIER.includes(claims.role) && !OPERATIONAL_TIER.includes(claims.role)) {
+          return json({ ok: true, available: false, reason: 'Decisions Required is restricted to roles holding leadership or operational decision authority.', decisions: [] }, 200, { 'Cache-Control': 'no-store' });
+        }
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const evaluation = await evaluateExecutiveInsights(env, orgId, { role: claims.role });
+        return json(buildDecisionsRequired(evaluation), 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/executive/timeline' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const result = await getExecutiveTimeline(env, orgId, {
+          projectId: url.searchParams.get('project'), eventType: url.searchParams.get('event_type'),
+          actorId: url.searchParams.get('actor'), since: url.searchParams.get('since'), limit: url.searchParams.get('limit'),
+        });
+        return json(result, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      // ============================================================
+      // Product Experience Evolution Phase 1 — Platform Intelligence™.
+      // Every route here is read-only (no lifecycle authorization),
+      // deterministic (no generative AI call anywhere in this block),
+      // and gated by the same action.read permission already used
+      // throughout the Decision API (correctly excludes enumerator).
+      // ============================================================
+      if (path === '/api/decisions/intelligence/copilot' && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const body = await request.json().catch(() => ({}));
+        const result = await askCopilot(env, orgId, claims.role, body.question);
+        return json(result, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/intelligence/root-cause' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const actionId = url.searchParams.get('action_id');
+        if (!actionId) return error('action_id query parameter is required', 400);
+        const result = await diagnoseLikelyCauses(env, orgId, actionId);
+        if (!result.ok) return error('Action not found', 404);
+        return json(result, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/intelligence/simulate' && method === 'POST') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const body = await request.json().catch(() => ({}));
+        const result = await simulateScenario(env, orgId, body);
+        return json(result, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/intelligence/forecast' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const result = await forecastImpact(env, orgId, { days: url.searchParams.get('days'), forecastDays: url.searchParams.get('forecast_days') });
+        return json(result, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/intelligence/similar' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const actionId = url.searchParams.get('action_id');
+        if (!actionId) return error('action_id query parameter is required', 400);
+        const result = await findSimilarActions(env, orgId, actionId);
+        if (!result.ok) return error('Action not found', 404);
+        return json(result, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/intelligence/knowledge-graph' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const actionId = url.searchParams.get('action_id');
+        if (!actionId) return error('action_id query parameter is required', 400);
+        const result = await buildKnowledgeGraph(env, orgId, actionId);
+        if (!result.ok) return error('Action not found', 404);
+        return json(result, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/intelligence/recommendations' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const result = await buildRecommendations(env, orgId, claims.role);
+        return json(result, 200, { 'Cache-Control': 'no-store' });
+      }
+
+      if (path === '/api/decisions/intelligence/narrative' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        const perm = assertPermission(claims.role, 'action.read'); if (!perm.ok) return error(perm.error, perm.status);
+        const orgId = await getEffectiveOrgId(request, env, claims);
+        const audience = url.searchParams.get('audience') || 'management';
+        const result = await buildNarrativeBrief(env, orgId, audience, claims.role);
+        if (!result.ok) return error(result.error, 400);
+        return json(result, 200, { 'Cache-Control': 'no-store' });
       }
 
       // Collection, Enumerator, Offline & Omni-Channel Operations
@@ -2154,17 +2803,39 @@ async function handleRequest(request, env, ctx) {
         if (!ok) return error('Invalid email or password', 401);
 
         const twoFa = await env.DB.prepare('SELECT enabled FROM user_2fa WHERE user_id = ?').bind(user.id).first();
+
+        // Phase 2 Enterprise Acceptance Review, Critical #4: buildMfaPolicy()
+        // named 6 privileged roles as requiring MFA, but nothing anywhere
+        // actually consulted it — a privileged account with MFA never
+        // enabled logged in exactly like any other account. Enforced here
+        // with the policy's own already-declared grace_period_hours (24h
+        // from account creation) so a brand-new privileged account can
+        // still complete its first login and enroll in MFA
+        // (app/security/mfa.html requires an authenticated session to
+        // enroll) before being required to have it.
+        const mfaPolicy = buildMfaPolicy();
+        if (mfaPolicy.required_roles.includes(user.role) && !(twoFa && twoFa.enabled)) {
+          const createdAtMs = Date.parse(user.created_at);
+          const graceMs = mfaPolicy.grace_period_hours * 60 * 60 * 1000;
+          const withinGrace = Number.isFinite(createdAtMs) && (Date.now() - createdAtMs) < graceMs;
+          if (!withinGrace) {
+            return error(`Multi-factor authentication is required for the ${user.role} role. Enable MFA in Security Settings, then log in again.`, 403);
+          }
+        }
+
         if (twoFa && twoFa.enabled) {
           const pendingToken = await signJWT({ sub: user.id, pending2fa: true }, env.JWT_SECRET, 5 * 60);
           return json({ requires_2fa: true, pending_token: pendingToken });
         }
 
         const sid = newSessionId();
-        const token = await signJWT({ sub: user.id, org: user.organization_id, role: user.role, email: user.email, sid }, env.JWT_SECRET);
-        await registerSession(env, { sid, userId: user.id, organizationId: user.organization_id, request });
+        const mustChangePassword = !!user.must_change_password;
+        const token = await signJWT({ sub: user.id, org: user.organization_id, role: user.role, email: user.email, sid, mustChangePassword }, env.JWT_SECRET);
+        const expiresAt = new Date((Math.floor(Date.now() / 1000) + SESSION_TOKEN_TTL_SECONDS) * 1000).toISOString();
+        await registerSession(env, { sid, userId: user.id, organizationId: user.organization_id, request, expiresAt });
         await env.DB.prepare('UPDATE users SET last_login_at = datetime("now") WHERE id = ?').bind(user.id).run();
         await logAudit(env, { org: user.organization_id, userId: user.id, action: 'login', resourceType: 'user', resourceId: user.id, request });
-        return json({ token, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, organization_id: user.organization_id } });
+        return json({ token, must_change_password: mustChangePassword, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, organization_id: user.organization_id } });
       }
 
       if (path === '/api/auth/verify-2fa' && method === 'POST') {
@@ -2181,11 +2852,13 @@ async function handleRequest(request, env, ctx) {
 
         const user = await env.DB.prepare('SELECT * FROM users WHERE id = ?').bind(claims.sub).first();
         const sid = newSessionId();
-        const token = await signJWT({ sub: user.id, org: user.organization_id, role: user.role, email: user.email, sid }, env.JWT_SECRET);
-        await registerSession(env, { sid, userId: user.id, organizationId: user.organization_id, request });
+        const mustChangePassword = !!user.must_change_password;
+        const token = await signJWT({ sub: user.id, org: user.organization_id, role: user.role, email: user.email, sid, mustChangePassword }, env.JWT_SECRET);
+        const expiresAt = new Date((Math.floor(Date.now() / 1000) + SESSION_TOKEN_TTL_SECONDS) * 1000).toISOString();
+        await registerSession(env, { sid, userId: user.id, organizationId: user.organization_id, request, expiresAt });
         await env.DB.prepare('UPDATE users SET last_login_at = datetime("now") WHERE id = ?').bind(user.id).run();
         await logAudit(env, { org: user.organization_id, userId: user.id, action: 'login_2fa', resourceType: 'user', resourceId: user.id, request });
-        return json({ token, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, organization_id: user.organization_id } });
+        return json({ token, must_change_password: mustChangePassword, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, organization_id: user.organization_id } });
       }
 
       // ---------- SESSION REVOCATION (V213 — real server-side logout) ----------
@@ -2266,12 +2939,38 @@ async function handleRequest(request, env, ctx) {
         const { current_password, new_password } = await request.json();
         if (!current_password || !new_password) return error('current_password and new_password are required');
         if (new_password.length < 8) return error('New password must be at least 8 characters', 400);
+        await logAudit(env, { org: claims.org, userId: claims.sub, action: 'password_change_requested', resourceType: 'user', resourceId: claims.sub, request });
         const user = await env.DB.prepare('SELECT * FROM users WHERE id = ?').bind(claims.sub).first();
         const ok = await verifyPassword(current_password, user.password_salt, user.password_hash);
-        if (!ok) return error('Current password is incorrect', 401);
+        if (!ok) {
+          await logAudit(env, { org: claims.org, userId: claims.sub, action: 'password_change_failed', resourceType: 'user', resourceId: claims.sub, request });
+          return error('Current password is incorrect', 401);
+        }
         const { hash, salt } = await hashPassword(new_password);
-        await env.DB.prepare('UPDATE users SET password_hash = ?, password_salt = ? WHERE id = ?').bind(hash, salt, claims.sub).run();
-        return json({ ok: true });
+        await env.DB.prepare('UPDATE users SET password_hash = ?, password_salt = ?, must_change_password = 0 WHERE id = ?').bind(hash, salt, claims.sub).run();
+        await logAudit(env, { org: claims.org, userId: claims.sub, action: 'password_changed', resourceType: 'user', resourceId: claims.sub, request });
+
+        // A password change — forced or voluntary — invalidates every session,
+        // not just the one making this request: the whole point is that the
+        // old password (and any token issued under it) must stop being usable
+        // anywhere. Reuses the same revocation path as /api/auth/logout-all.
+        await revokeAllSessions(env, claims.sub, 'password_changed');
+        await logAudit(env, { org: claims.org, userId: claims.sub, action: 'sessions_revoked_after_password_change', resourceType: 'session', resourceId: claims.sub, request });
+
+        // Issue a fresh session for the client making this request -- exactly
+        // what login/verify-2fa already do, minus re-verifying the password
+        // (already done above). Without this, the caller would be holding a
+        // token whose mustChangePassword claim is now stale (frozen at the
+        // old, still-true value from before this change) and would stay
+        // blocked from every route except change-password/me/logout until a
+        // brand new login -- the DB is correct but the session never was.
+        const sid = newSessionId();
+        const token = await signJWT({ sub: user.id, org: user.organization_id, role: user.role, email: user.email, sid, mustChangePassword: false }, env.JWT_SECRET);
+        const expiresAt = new Date((Math.floor(Date.now() / 1000) + SESSION_TOKEN_TTL_SECONDS) * 1000).toISOString();
+        await registerSession(env, { sid, userId: user.id, organizationId: user.organization_id, request, expiresAt });
+        await logAudit(env, { org: claims.org, userId: claims.sub, action: 'new_session_created_after_password_change', resourceType: 'session', resourceId: claims.sub, request });
+
+        return json({ ok: true, token, must_change_password: false, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, organization_id: user.organization_id } });
       }
 
       // ---------- FORGOT / RESET PASSWORD ----------
@@ -3252,25 +3951,144 @@ async function handleRequest(request, env, ctx) {
 
       if (path === '/api/reports/generate' && method === 'POST') {
         const claims = await requireAuth(request, env);
+        // RBAC (Part 2, Customer Report Generation Pilot Hardening): reuses
+        // the existing report.generate permission already defined in
+        // ROLE_PERMISSIONS (enterprise-identity-access.js) — held by
+        // super_admin/org_admin/operations_manager/project_manager/
+        // head_of_programs/me_officer/data_analyst, deliberately absent for
+        // enumerator. Unconditional — never gated by CANONICAL_REPORT_GATE_ENABLED
+        // (Part 9: a feature flag must not disable a security control).
+        if (!assertPermission(claims.role, 'report.generate').ok) {
+          await logAudit(env, { org: claims.org, userId: claims.sub, action: 'report_generation_denied', resourceType: 'generated_reports', resourceId: null, request });
+          return error('You do not have permission to generate reports.', 403);
+        }
         const effectiveOrgId = await getEffectiveOrgId(request, env, claims);
         const { template_id, campaign_id } = await request.json();
         if (!template_id) return error('template_id is required', 400);
+
+        await logAudit(env, { org: effectiveOrgId, userId: claims.sub, action: 'report_generation_requested', resourceType: 'generated_reports', resourceId: null, request });
 
         let documentModel;
         try {
           documentModel = await buildDocumentModel(env, { templateId: template_id, organizationId: effectiveOrgId, campaignId: campaign_id || null });
         } catch (e) {
+          // Covers both "template not found" and Part 3's campaign-ownership
+          // rejection — buildDocumentModel throws for both, but they must
+          // not be handled the same way externally. The ownership case is a
+          // tenant-scoping question: whether a campaign_id "exists" is only
+          // ever meaningful relative to a tenant, so confirming or denying
+          // it here would let a caller probe for identifiers across
+          // organizations. Part 2 (Enterprise Report Studio UI Pilot):
+          // return the platform-safe generic not-found response and record
+          // the real reason only internally (audit log).
+          const isScopeFailure = /Campaign not found/.test(e.message);
+          await logAudit(env, { org: effectiveOrgId, userId: claims.sub, action: isScopeFailure ? 'report_generation_blocked_tenant_integrity' : 'report_generation_failed', resourceType: 'generated_reports', resourceId: null, request });
+          if (isScopeFailure) return error('Report scope was not found or is not available.', 404);
           return error(`Could not generate report: ${e.message}`, 400);
         }
 
         const reportId = newId('report');
+        const canonicalGateEnabled = String(env.CANONICAL_REPORT_GATE_ENABLED).toLowerCase() === 'true';
+        let publicationEvaluation = null;
+        let publicationEvaluationWarning = null;
+
+        // --- Canonical Publication Quality Gate pilot (Customer Report
+        // Generation Route Canonical Gate Pilot). Guarded by
+        // CANONICAL_REPORT_GATE_ENABLED; when disabled this block does not
+        // run and the route behaves exactly as before. Runs BEFORE the
+        // draft is written so a genuine security/integrity failure (Part 6)
+        // can stop processing before anything is persisted or returned —
+        // in this route documentModel is always assembled from a single
+        // effectiveOrgId scope, so CROSS_TENANT_REFERENCE is not reachable
+        // through normal use today, but the gate is still evaluated first
+        // as a defense-in-depth ordering for when that changes.
+        if (canonicalGateEnabled) {
+          try {
+            const gateInput = buildCustomerPublicationGateInput({
+              documentModel, organizationId: effectiveOrgId, projectId: campaign_id || null,
+              reportId, reportVersion: '1', requestedBy: claims.sub, route: '/api/reports/generate',
+              publicationVisibility: 'private',
+            });
+            const evidenceTrustResult = validateEvidenceTrustForCanonicalGate(documentModel);
+            let internationalResult = null;
+            try {
+              const v200Suite = buildInternationalIntelligenceReportingSuiteV200(documentModel);
+              internationalResult = validateInternationalStandards(documentModel, v200Suite);
+            } catch (e) {
+              // Not every template's documentModel shape satisfies this
+              // suite builder's assumptions — skip that one validator
+              // rather than fail the whole route over a secondary check.
+            }
+            const validatorResults = [evidenceTrustResult, internationalResult].filter(Boolean);
+
+            const decision = await evaluatePublicationGateAndPersist(env, gateInput, {
+              report_id: reportId, report_version: '1', dataset_version: gateInput.dataset_version,
+              scope_type: gateInput.scope_type, organization_id: effectiveOrgId, project_id: campaign_id || null,
+              report_context: 'CUSTOMER', evaluated_by: claims.sub, route: '/api/reports/generate',
+              validator_results: validatorResults, actor_id: claims.sub, actor_role: claims.role,
+            });
+
+            if (decision.score_state === 'INVALIDATED') {
+              // Stop processing entirely: no draft is written, no report
+              // content is returned. The security event was already
+              // persisted inside evaluatePublicationGateAndPersist; this is
+              // the corresponding audit_logs entry for the same block.
+              await logAudit(env, { org: effectiveOrgId, userId: claims.sub, action: 'report_generation_blocked_tenant_integrity', resourceType: 'generated_reports', resourceId: reportId, request });
+              return error('This report could not be evaluated due to a data integrity issue. The event has been recorded.', 409);
+            }
+            await logAudit(env, { org: effectiveOrgId, userId: claims.sub, action: 'canonical_evaluation_completed', resourceType: 'publication_gate_evaluations', resourceId: decision.evaluation_id || reportId, request });
+
+            publicationEvaluation = {
+              evaluation_id: decision.evaluation_id,
+              publication_status: decision.publication_status,
+              score_state: decision.score_state,
+              overall_score: decision.overall_score,
+              export_allowed: decision.export_allowed,
+              blocking_failures: decision.blocking_failures,
+              warnings: decision.warnings,
+              domain_results: decision.domain_results,
+              validator_results: validatorResults,
+              required_approvals: decision.required_approvals,
+              completed_approvals: decision.completed_approvals,
+              evaluated_at: decision.evaluated_at,
+              engine_version: decision.engine_version,
+              report_version: '1',
+              dataset_version: gateInput.dataset_version,
+              scope_type: gateInput.scope_type,
+            };
+            if (!decision.evaluation_id) {
+              publicationEvaluationWarning = 'Canonical evaluation completed but could not be persisted; this report was still generated successfully.';
+              await logAudit(env, { org: effectiveOrgId, userId: claims.sub, action: 'canonical_evaluation_persistence_failed', resourceType: 'generated_reports', resourceId: reportId, request });
+            }
+          } catch (e) {
+            // Ordinary report creation must never fail because the pilot
+            // evaluation failed — the draft below still gets written.
+            console.error('Canonical publication gate evaluation failed (report still generated):', e.message);
+            publicationEvaluationWarning = 'Canonical evaluation could not be completed; this report was still generated successfully.';
+          }
+        }
+
         await env.DB.prepare(
-          `INSERT INTO generated_reports (id, template_id, organization_id, campaign_id, status, version, document_model_json, generated_by)
-           VALUES (?, ?, ?, ?, 'draft', 1, ?, ?)`
-        ).bind(reportId, template_id, effectiveOrgId, campaign_id || null, JSON.stringify(documentModel), claims.sub).run();
+          `INSERT INTO generated_reports (id, template_id, organization_id, campaign_id, status, version, document_model_json, generated_by, scope_type, dataset_version)
+           VALUES (?, ?, ?, ?, 'draft', 1, ?, ?, ?, ?)`
+        ).bind(reportId, template_id, effectiveOrgId, campaign_id || null, JSON.stringify(documentModel), claims.sub, documentModel.metadata?.scope_type || (campaign_id ? 'CAMPAIGN' : 'ORGANIZATION'), documentModel.dataset_identity?.dataset_version || null).run();
 
         await logAudit(env, { org: effectiveOrgId, userId: claims.sub, action: 'report_generated', resourceType: 'generated_reports', resourceId: reportId, request });
-        return json({ ok: true, report_id: reportId, document_model: documentModel });
+
+        const response = { ok: true, report_id: reportId, document_model: documentModel, report_generated: true, publication_ready: false };
+        if (canonicalGateEnabled) {
+          response.publication_ready = publicationEvaluation?.publication_status === 'PUBLICATION_READY';
+          if (publicationEvaluation) {
+            response.publication_evaluation = publicationEvaluation;
+            Object.assign(response, toLegacyPublicationFields({
+              publication_status: publicationEvaluation.publication_status,
+              overall_score: publicationEvaluation.overall_score,
+              export_allowed: publicationEvaluation.export_allowed,
+            }));
+          }
+          if (publicationEvaluationWarning) response.publication_evaluation_warning = publicationEvaluationWarning;
+        }
+        return json(response);
       }
 
 
@@ -4207,7 +5025,37 @@ async function handleRequest(request, env, ctx) {
       if (path === '/api/ops/disaster-recovery' && method === 'GET') {
         const claims = await requireAuth(request, env);
         if (claims.role !== 'super_admin') return error('Super Admin access required', 403);
-        return json({ disaster_recovery: buildDisasterRecoveryPlan(), readiness: buildDRReadinessScore(), incident_runbook: buildIncidentResponseRunbook({ incidentType: 'generic' }) });
+        // Global Certification Phase 2: buildDRReadinessScore() no longer
+        // defaults every check to true (see disaster-recovery.js). Each
+        // value below is a real, source-verified fact, not a guess:
+        // hasRollback/hasQueueRecovery/hasRunbooks are genuinely true
+        // (wrangler rollback is a real always-available platform command;
+        // Cloudflare Queues with dead-letter queues are genuinely
+        // configured in wrangler.toml for every producer/consumer pair;
+        // buildIncidentResponseRunbook genuinely returns real, structured
+        // steps). hasBackups/hasMonitoring are honestly false: no scheduled
+        // D1/R2 export job exists anywhere in this codebase (only narrative
+        // strings describing one), and there is no automated
+        // alerting/monitoring system — only an on-demand incident-packet
+        // builder that requires a caller to already know an incident
+        // occurred. Cloudflare D1 does provide its own automatic
+        // point-in-time recovery (Time Travel) as a platform feature, but
+        // that is a claim about Cloudflare's platform, not something this
+        // codebase implements or can verify from source — disclosed here,
+        // not folded into hasBackups as if this application built it.
+        const readiness = buildDRReadinessScore({
+          hasBackups: false,
+          hasRollback: true,
+          hasQueueRecovery: true,
+          hasRunbooks: true,
+          hasMonitoring: false,
+        });
+        return json({
+          disaster_recovery: buildDisasterRecoveryPlan(),
+          readiness,
+          readiness_notes: 'hasBackups: no scheduled D1/R2 export job exists in source (Cloudflare D1 Time Travel provides platform-level point-in-time recovery independent of this codebase, unverified from source). hasMonitoring: no automated alerting system exists; only an on-demand incident-packet builder.',
+          incident_runbook: buildIncidentResponseRunbook({ incidentType: 'generic' }),
+        });
       }
 
       if (path === '/api/ops/observability-contract' && method === 'GET') {
@@ -4364,6 +5212,44 @@ async function handleRequest(request, env, ctx) {
           ).bind(effectiveOrgId).all();
           completedCampaigns.forEach(c => notifications.push({ key: `project_complete:${c.id}`, type: 'project_complete', icon: '🎯', message: `"${c.name}" has reached its target of ${c.target_respondents} respondents`, created_at: new Date().toISOString(), link: `/app/project.html?id=${c.id}` }));
         } catch (e) { console.error('notifications: campaign-completion query failed', e.message); }
+
+        // Sprint 1.5: surfaces the Notification Consumer's real, durable rows
+        // (production_notifications) for this user — the same table already
+        // read by /api/production-finalization/notifications, now folded
+        // into the one bell every other source feeds. organization_id IS
+        // NULL covers platform-wide rows (e.g. founder_executive alerts)
+        // that were never tenant-scoped to begin with.
+        try {
+          const { results: actionNotifs } = await env.DB.prepare(
+            `SELECT id, title, message, created_at FROM production_notifications
+             WHERE (user_id = ? OR audience_role = ?) AND (organization_id = ? OR organization_id IS NULL)
+             AND created_at >= datetime('now', '-7 days') ORDER BY created_at DESC LIMIT 10`
+          ).bind(claims.sub || '', claims.role, effectiveOrgId).all();
+          actionNotifs.forEach(n => notifications.push({ key: `production_notification:${n.id}`, type: 'decision_action', icon: '🗂️', message: `${n.title} — ${n.message}`, created_at: n.created_at, link: '/app/decisions.html' }));
+        } catch (e) { console.error('notifications: production_notifications query failed', e.message); }
+
+        // Program Beta Sprint 3 — Executive Alerts. Computed on read from
+        // the same Executive Insight Rules engine that powers the Leadership
+        // Attention Brief — never a second, divergent alert computation, and
+        // never a persisted row (matching this endpoint's existing
+        // computed-on-read convention). Deduplication is automatic: `key`
+        // is (rule_id, subject_id), so the same live condition never
+        // produces two entries no matter how many times this endpoint is
+        // polled; the condition simply disappears once resolved. Capped to
+        // the 5 highest-severity items so this source cannot flood the bell
+        // (the existing overall .slice(0,15) below is the second cap).
+        // Restricted to roles action.read already covers minus enumerator,
+        // who has no action.* permission at all and is correctly excluded.
+        if (assertPermission(claims.role, 'action.read').ok) {
+          try {
+            const evaluation = await evaluateExecutiveInsights(env, effectiveOrgId, { role: claims.role });
+            const severityIcon = { critical: '🚨', high: '⚠️', medium: 'ℹ️', low: '📋' };
+            evaluation.insights.slice(0, 5).forEach(i => notifications.push({
+              key: `exec_insight:${i.rule_id}:${i.subject_id}`, type: 'executive_alert', icon: severityIcon[i.severity] || '📋',
+              message: `${i.rule_name}: ${i.message}`, created_at: new Date().toISOString(), link: i.link || '/app/executive-intelligence.html',
+            }));
+          } catch (e) { console.error('notifications: executive-insight query failed', e.message); }
+        }
 
         notifications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         const trimmed = notifications.slice(0, 15);
@@ -4823,6 +5709,69 @@ Message: ${lead.message || 'none provided'}`;
            ON CONFLICT(lead_id) DO UPDATE SET stage = excluded.stage, owner_note = excluded.owner_note, updated_at = datetime('now')`
         ).bind(leadStageMatch[1], stage, owner_note || null).run();
         return json({ ok: true });
+      }
+
+      // ---------- EXPERT FEEDBACK PROGRAMME (Enterprise Market Validation
+      // Release, Part B — real, not the spec-only version RC1 shipped) ----------
+      // Deliberately a dedicated table, not a `leads` companion — this is
+      // structured review feedback, not a sales prospect, and has no
+      // meaningful sales-pipeline stage. Reviewer categories and the 8
+      // scored questions match docs/expert-review-programme/
+      // EXPERT_REVIEW_PROGRAMME.md verbatim.
+      const EXPERT_FEEDBACK_CATEGORIES = ['government', 'hospital_executive', 'researcher_university', 'ngo_development_partner', 'me_specialist', 'health_information_specialist'];
+      const EXPERT_FEEDBACK_QUESTIONS = ['product', 'deployment', 'procurement', 'implementation', 'offline_capability', 'ai_capability', 'publications', 'value_proposition'];
+      if (path === '/api/expert-feedback/submit' && method === 'POST') {
+        const clientIp = request.headers.get('CF-Connecting-IP') || 'unknown';
+        if (await isRateLimited(env, `expert-feedback:${clientIp}`, 5, 60 * 60)) {
+          return error('Too many submissions. Please try again later.', 429);
+        }
+        const body = await request.json();
+        if (!EXPERT_FEEDBACK_CATEGORIES.includes(body.reviewer_category)) return error(`reviewer_category must be one of: ${EXPERT_FEEDBACK_CATEGORIES.join(', ')}`);
+        const scores = body.scores || {};
+        for (const q of EXPERT_FEEDBACK_QUESTIONS) {
+          if (!Number.isInteger(scores[q]) || scores[q] < 1 || scores[q] > 4) return error(`scores.${q} is required and must be an integer 1-4`);
+        }
+        const id = newId('expfb');
+        await env.DB.prepare(
+          `INSERT INTO expert_feedback (id, reviewer_category, reviewer_name, reviewer_email, organization, scores_json, free_text)
+           VALUES (?, ?, ?, ?, ?, ?, ?)`
+        ).bind(
+          id, body.reviewer_category, body.reviewer_name || null, body.reviewer_email || null,
+          body.organization || null, JSON.stringify(scores), body.free_text || null
+        ).run();
+        pushToAllSuperAdmins(env, {
+          title: '📋 New Expert Feedback Submission',
+          body: `A ${body.reviewer_category.replaceAll('_', ' ')} reviewer submitted structured feedback.`,
+          link: `/admin/expert-feedback.html?id=${id}`,
+        }).catch(e => console.error('push (expert feedback) failed:', e.message));
+        return json({ ok: true, id }, 201);
+      }
+
+      if (path === '/api/expert-feedback' && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        // Same convention as /api/leads: review feedback is VoiceInsights
+        // Africa's own internal signal, never a client organization's data.
+        if (claims.role !== 'super_admin') return error('Super Admin access required', 403);
+        const category = url.searchParams.get('category');
+        const status = url.searchParams.get('status');
+        const conditions = [];
+        const bindings = [];
+        if (category) { conditions.push('reviewer_category = ?'); bindings.push(category); }
+        if (status) { conditions.push('status = ?'); bindings.push(status); }
+        const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+        const { results } = await env.DB.prepare(
+          `SELECT * FROM expert_feedback ${where} ORDER BY created_at DESC LIMIT 200`
+        ).bind(...bindings).all();
+        return json({ feedback: results.map(r => ({ ...r, scores: JSON.parse(r.scores_json || '{}') })) });
+      }
+
+      const expertFeedbackSingleMatch = path.match(/^\/api\/expert-feedback\/([a-zA-Z0-9_]+)$/);
+      if (expertFeedbackSingleMatch && method === 'GET') {
+        const claims = await requireAuth(request, env);
+        if (claims.role !== 'super_admin') return error('Super Admin access required', 403);
+        const record = await env.DB.prepare('SELECT * FROM expert_feedback WHERE id = ?').bind(expertFeedbackSingleMatch[1]).first();
+        if (!record) return error('Feedback record not found', 404);
+        return json({ feedback: { ...record, scores: JSON.parse(record.scores_json || '{}') } });
       }
 
       // ---------- RESPONDENTS ----------

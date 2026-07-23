@@ -14,6 +14,13 @@ database_id = "f317a162-ccd8-44ab-8e83-cc931f6b65cb"
 binding = "AUDIO_BUCKET"
 bucket_name = "voiceinsights-audio"
 
+# ---- Browser Rendering (Publication Rendering Engine V2) ----
+# Headless Chrome binding used to render the composed HTML publication layout
+# (see src/publication-render-engine-v2.js) to PDF bytes. Additive: no existing
+# binding, route or API contract changes.
+[browser]
+binding = "BROWSER"
+
 # ---- Cron Trigger: advances any in-progress Secret Vault key rotation by
 # one small batch every 5 minutes. This is what lets rotation scale to
 # thousands of secrets without a single request ever running too long. ----
@@ -28,6 +35,12 @@ DEFAULT_ORG_ID = ""
 DEFAULT_CAMPAIGN_ID = ""
 DEFAULT_QUESTION_ID = ""
 SITE_URL = "https://voiceinsightsafrica.com"
+# Canonical Publication Quality Gate (see src/quality-scoring-engine.js).
+# Additive only when enabled: draft report generation is identical either
+# way; this only adds publication_gate_evaluations persistence + response
+# fields. A persistence or evaluation failure never blocks the draft
+# (application.js:3397-3402). Rollback: set back to "false" and redeploy.
+CANONICAL_REPORT_GATE_ENABLED = "true"
 # ---- V212 Security Hardening (see src/security-layer.js) ----
 # Comma-separated exact origins allowed to call the API from a browser.
 # SITE_URL (+ its www. variant) is always allowed automatically.
@@ -54,6 +67,14 @@ TWILIO_PUBLIC_BASE_URL = "https://api.voiceinsightsafrica.com"
 AI_RETRY_MAX_ATTEMPTS = "5"
 AI_RETRY_BASE_BACKOFF_MINUTES = "2"
 AI_RETRY_MAX_BACKOFF_MINUTES = "60"
+# Publication Rendering Engine V2 (see src/publication-render-engine-v2.js).
+# Must remain "false" in production. Only the preview environment may set
+# this to "true", and only for the flagship publication keys in
+# V2_ELIGIBLE_PUBLICATION_KEYS (Product Experience Evolution Phase 2 widened
+# this from one approved key to the full 16-sample catalog). Every other
+# request continues through the existing dedicated-binary-renderer.js path
+# regardless of this flag. Rollback: set back to "false" and redeploy.
+PUBLICATION_RENDERER_V2_ENABLED = "false"
 
 # ---- Secrets (do NOT put real values here — set via `wrangler secret put`) ----
 # JWT_SECRET          -> wrangler secret put JWT_SECRET
@@ -179,3 +200,82 @@ max_batch_size = 20
 max_batch_timeout = 5
 max_retries = 5
 dead_letter_queue = "voiceinsights-operations-dlq"
+
+# ============================================================
+# PREVIEW ENVIRONMENT — minimal, isolated staging config.
+# Scope (Enterprise Report Studio / Canonical Publication Gate preview):
+# validate D1 migrations 038/039, auth/RBAC, POST /api/reports/generate,
+# canonical evaluation + persistence, tenant isolation, and the Report
+# Studio UI. Deliberately does NOT declare preview queues or an R2 bucket
+# yet -- see release notes for exactly which binding blocks a full
+# `wrangler deploy --env preview` (if any) and why it was left out rather
+# than auto-created.
+# ============================================================
+[env.preview]
+name = "voiceinsights-api-preview"
+
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "voiceinsights-db-preview"
+database_id = "607cc17d-9b16-4e9c-a948-2d637ebb83f7"
+
+# Named environments do not inherit the top-level [browser] binding in this
+# Wrangler version (confirmed via `wrangler deploy --dry-run --env preview`,
+# which explicitly warns "browser" exists at the top level but not on
+# env.preview) — so it must be declared here too for Part 0/6 preview wiring
+# to actually have a Browser Rendering binding to check.
+[env.preview.browser]
+binding = "BROWSER"
+
+[env.preview.vars]
+ENVIRONMENT = "preview"
+APP_VERSION = "1.0.0-preview"
+CANONICAL_REPORT_GATE_ENABLED = "true"
+# RC1 finding: these were pointing at the *production* Pages domain
+# (missing "-preview"), which meant a real browser session on the actual
+# preview frontend (preview.voiceinsightsafrica.com, a custom domain that
+# doesn't match the *.pages.dev/*.workers.dev convenience defaults in
+# security-layer.js) would get no Access-Control-Allow-Origin header at all
+# from the API — a silent CORS block layered under the CSP gap fixed
+# alongside it. Corrected to the real preview frontend's own domains.
+SITE_URL = "https://preview.voiceinsightsafrica.com"
+ALLOWED_ORIGINS = "https://preview.voiceinsightsafrica.com,https://voiceinsights-frontend-preview.pages.dev"
+STRICT_CORS = "false"
+ALLOW_LEGACY_SESSIONS = "true"
+# Part 10 tests pass (695/695) — enabled in preview only. Production remains
+# "false". See PUBLICATION_RENDERER_V2_ENABLED above for rollback.
+PUBLICATION_RENDERER_V2_ENABLED = "true"
+# Unified Publication Runtime, Phase 4 DOCX adapter (see
+# src/docx-runtime-renderer.js). Same discipline as PUBLICATION_RENDERER_V2_ENABLED:
+# gated by isDocxV2Eligible(), which independently requires ENVIRONMENT ===
+# "preview" regardless of this flag — must remain unset/"false" in the
+# top-level (production) [vars] block above. Rollback: set back to "false".
+DOCX_RENDERER_V2_ENABLED = "true"
+
+# Program Beta Sprint 2.1 — the Decision Platform's event-driven pipeline
+# (Sprint 1.5: domain_event_outbox -> enqueueJob() -> OPERATIONS_QUEUE ->
+# queue-adapters.js's processDecisionEvent) needs a real queue binding to
+# validate end-to-end in Preview. Deliberately isolated, dedicated preview
+# queue resources (voiceinsights-operations-preview / -dlq-preview) rather
+# than the production voiceinsights-operations queue, per this sprint's
+# explicit "isolated preview Queues" requirement — Preview and Production
+# never share a queue resource. Only the one queue pair Decision Platform
+# code actually uses (OPERATIONS_QUEUE/OPERATIONS_DLQ) is declared; the
+# other 9 production queues (AI/transcription/translation/whatsapp/sms/
+# voice/reports/exports/notifications/offline-sync) are out of this
+# sprint's scope and deliberately left undeclared, matching this file's
+# existing "deliberately minimal" preview philosophy.
+[[env.preview.queues.producers]]
+binding = "OPERATIONS_QUEUE"
+queue = "voiceinsights-operations-preview"
+
+[[env.preview.queues.producers]]
+binding = "OPERATIONS_DLQ"
+queue = "voiceinsights-operations-dlq-preview"
+
+[[env.preview.queues.consumers]]
+queue = "voiceinsights-operations-preview"
+max_batch_size = 10
+max_batch_timeout = 5
+max_retries = 5
+dead_letter_queue = "voiceinsights-operations-dlq-preview"

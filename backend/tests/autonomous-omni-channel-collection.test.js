@@ -89,7 +89,6 @@ test('v207C backend route and frontend pages are wired for field intelligence, d
   const enumPage = fs.readFileSync(new URL('../../site/app/enumerator-workspace.html', import.meta.url), 'utf8');
   const js = fs.readFileSync(new URL('../../site/assets/js/field-intelligence.js', import.meta.url), 'utf8');
   const css = fs.readFileSync(new URL('../../site/assets/css/field-intelligence.css', import.meta.url), 'utf8');
-  const dashboard = fs.readFileSync(new URL('../../site/app/dashboard.html', import.meta.url), 'utf8');
   assert.match(index, /field-intelligence/);
   assert.match(index, /Field Intelligence access required/);
   assert.match(page, /Survey Distribution Center/);
@@ -97,5 +96,21 @@ test('v207C backend route and frontend pages are wired for field intelligence, d
   assert.match(enumPage, /Enumerator Offline Mobile Workspace/);
   assert.match(js, /initV207CFieldIntelligence/);
   assert.match(css, /offline|touch|mobile|v207c/i);
-  assert.match(dashboard, /Open Field Intelligence Workspace/);
+});
+
+// Release 0B (2026-07-18): field-intelligence-workspace.html is actually a
+// redirect stub (location.replace into me-operational-dashboard.html, which
+// in turn calls /api/field-intelligence — confirmed absent from the backend,
+// 404 in production). This test previously asserted the broken CTA's label
+// ("Open Field Intelligence Workspace") was present on dashboard.html and the
+// broken anchor link was present on enumerator-workspace.html, treating both
+// as correct wiring; they were dead ends for every real user who clicked
+// them. Both were removed as part of the Release 0B production-safety
+// hotfix — this guards against them silently coming back.
+test('dashboard.html and enumerator-workspace.html no longer link to the confirmed-broken Field Intelligence Workspace chain', () => {
+  const dashboard = fs.readFileSync(new URL('../../site/app/dashboard.html', import.meta.url), 'utf8');
+  const enumPage = fs.readFileSync(new URL('../../site/app/enumerator-workspace.html', import.meta.url), 'utf8');
+  assert.doesNotMatch(dashboard, /Open Field Intelligence Workspace/);
+  assert.doesNotMatch(dashboard, /field-intelligence-workspace\.html/);
+  assert.doesNotMatch(enumPage, /field-intelligence-workspace\.html/);
 });

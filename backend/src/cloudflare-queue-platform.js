@@ -5,7 +5,8 @@ export const QUEUE_SCHEMA_VERSION = 1;
 export const SUPPORTED_JOB_TYPES = new Set([
   'ai.processing','audio.transcription','translation','whatsapp.delivery','sms.delivery','voice.processing',
   'report.generation','export.pdf','export.docx','export.pptx','export.xlsx','notification.delivery',
-  'offline.sync','webhook.followup','ops.aggregate'
+  'offline.sync','webhook.followup','ops.aggregate',
+  'decision.event', // Program Beta Sprint 1.5 — transports one domain_event_outbox row to its consumers
 ]);
 
 const SENSITIVE = /(authorization|token|secret|password|api[_-]?key|auth[_-]?token)/i;
@@ -59,7 +60,8 @@ export const QUEUE_BINDING_BY_JOB_TYPE = Object.freeze({
   'whatsapp.delivery':'WHATSAPP_QUEUE','sms.delivery':'SMS_QUEUE','voice.processing':'VOICE_QUEUE',
   'report.generation':'REPORT_QUEUE','export.pdf':'EXPORT_QUEUE','export.docx':'EXPORT_QUEUE',
   'export.pptx':'EXPORT_QUEUE','export.xlsx':'EXPORT_QUEUE','notification.delivery':'NOTIFICATION_QUEUE',
-  'offline.sync':'OFFLINE_SYNC_QUEUE','webhook.followup':'OPERATIONS_QUEUE','ops.aggregate':'OPERATIONS_QUEUE'
+  'offline.sync':'OFFLINE_SYNC_QUEUE','webhook.followup':'OPERATIONS_QUEUE','ops.aggregate':'OPERATIONS_QUEUE',
+  'decision.event':'OPERATIONS_QUEUE', // reuses the existing general-purpose operations queue — no new Cloudflare queue resource needed
 });
 
 export async function enqueueJob(env, input, queueBinding = null) {

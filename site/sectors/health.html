@@ -25,14 +25,14 @@
       <div id="site-search-mount" style="width:180px;"></div>
       <button type="button" class="btn btn-ghost btn-sm theme-toggle-btn" id="theme-toggle-btn" title="Toggle dark/light mode" aria-label="Toggle dark or light mode" style="padding:.5em .7em;"><span class="theme-toggle-icon">🌙</span></button>
       <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
-      <a href="/contact.html?sector=health" class="btn btn-primary btn-sm">Book Demo</a>
+      <a href="/contact.html?sector=health" class="btn btn-primary btn-sm">Request Demo</a>
     </div>
   </div>
   <div class="pub-nav-collapse pub-nav-links">
     <a href="/platform.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Platform</a>
     <a href="/solutions.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Solutions</a>
     <a href="/industries.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Industries</a>
-    <a href="/sample-reports.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Intelligence Library</a>
+    <a href="/sample-reports.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Knowledge Hub</a>
     <a href="/index.html#pricing" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Pricing</a>
     <a href="/safeguarding.html" style="color:var(--text-muted); font-size:.85rem; font-weight:600;">Compliance</a>
   </div>
@@ -75,7 +75,7 @@
   </div>
   <div><div class="nav-label" style="padding:0;">Contact</div>
     <a href="mailto:hello@voiceinsightsafrica.com" style="display:block; margin-top:.5rem; color:var(--text-muted); font-size:.85rem;">hello@voiceinsightsafrica.com</a>
-    <a href="/contact.html?sector=health" class="btn btn-primary btn-sm" style="margin-top:1rem;">Book Demo</a>
+    <a href="/contact.html?sector=health" class="btn btn-primary btn-sm" style="margin-top:1rem;">Request Demo</a>
   </div>
 </footer>
 
@@ -85,7 +85,7 @@
 <script src="/assets/js/site-search.js"></script>
 <script src="/assets/js/sector-page.js"></script>
 <script>
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
   initSiteSearch('site-search-mount');
 
   const HEALTH_DOMAINS = ['Health Intelligence','Hospital Performance Intelligence','Maternal & Child Health Intelligence','Disease Surveillance Intelligence','Nutrition Intelligence','UHC and Health Financing Intelligence'];
@@ -250,7 +250,7 @@
       headline: 'See the Health Intelligence Suite on your own use case.',
       description: 'Book a guided walkthrough using a real decision problem from your own health programme.',
       primary: { label: 'Book a Health Demo', href: '/contact.html?sector=health' },
-      secondary: { label: 'Explore the Intelligence Library', href: '/sample-reports.html' },
+      secondary: { label: 'Explore the Knowledge Hub', href: '/sample-reports.html' },
     },
     bookDemo: {
       headline: 'Ready to talk?',
@@ -267,6 +267,6 @@
 
   renderSectorPage(HEALTH_SECTOR_CONFIG);
 </script>
-<script src="/assets/js/production-routing.js"></script>
+<script src="/assets/js/intelligence-collection-components.js"></script><script src="/assets/js/industry-collection-shelf.js"></script><script src="/assets/js/production-routing.js"></script>
 </body>
 </html>

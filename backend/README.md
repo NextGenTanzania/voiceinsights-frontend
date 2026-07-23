@@ -49,17 +49,29 @@ Copy the `database_id` it prints out, and paste it into `wrangler.toml` under
 wrangler r2 bucket create voiceinsights-audio
 ```
 
-## 3. Load the schema (creates tables + a demo login)
+## 3. Load the schema (creates tables + a demo organization)
 
 ```bash
 wrangler d1 execute voiceinsights-db --remote --file=./schema.sql
 ```
 
-This creates a demo organization and a working login:
-- **Email:** `admin@nextgentanzania.com`
-- **Password:** `VoiceInsights2026!`
+This creates tables and a demo organization (`org_demo`). It does **not**
+create any user account or password — schema.sql must never contain
+credentials, because it's run directly against production (see
+`SECURITY_INCIDENT_2026-07-13.md` for why this matters).
 
-(Change this password once you're using this for real — see "Next steps" below.)
+To create your first admin login, run:
+
+```bash
+ADMIN_EMAIL=you@yourorg.com ADMIN_PASSWORD='choose-a-strong-password' \
+  node scripts/bootstrap-admin.js --remote --yes
+```
+
+This hashes the password locally (PBKDF2, matching the login path) and
+upserts the account directly via `wrangler d1 execute` — the plaintext
+password is never written to a file, migration, or git history. See
+`scripts/bootstrap-admin.js --help` for all options (org id/name, role,
+full name, database name).
 
 ## 4. Set your secrets
 

@@ -36,3 +36,13 @@ test('v206 score is computed from report package evidence, not a static card lab
   assert.equal(score.evidence_summary.sdg_framework_ready, true);
   assert.ok(score.evidence_summary.infographic_pages >= 8);
 });
+
+test('v206 quality gate can genuinely fail on a poor-quality document (score is not floored at 9.8)', () => {
+  const poorModel = { kpis: {}, findings: {} };
+  const poorSuite = {};
+  const score = buildPublicationExcellenceScoreV206(poorModel, poorSuite);
+  assert.ok(score.rating_10 < 9.8, `expected a poor document to score below the 9.8 threshold, got ${score.rating_10}`);
+  assert.equal(score.status, 'REQUIRES_PUBLICATION_REVIEW');
+  assert.equal(score.quality_gate.export_allowed, false);
+  assert.ok(score.dimension_scores.some(d => d.status === 'REVIEW'), 'expected at least one dimension to be flagged for review on a poor document');
+});
